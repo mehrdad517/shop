@@ -1,0 +1,41 @@
+.btn{
+  border-radius: 50px;
+}
+$colors: (
+        "primary" :       $blue,
+        "secondary" :     $gray-600,
+        "success" :       $green,
+        "info"  :          $cyan,
+        "warning" :       $yellow,
+        "danger"  :        $red,
+        "light" :         $gray-100,
+        "dark"  :          $gray-800
+);
+
+.btn {
+  border-radius: 50px;
+  font-size: 12px;
+  -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+  box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+  cursor: pointer;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin: 0 2.5px;
+  font-family: inherit;
+}
+.btn:hover {
+  -webkit-transition: .4s;
+  transition: .4s;
+  -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, .15)
+}
+
+@each $color, $value  in $colors {
+  .btn-#{$color} {
+    background-color: $value;
+  }
+  .btn-outline-#{$color} {
+    background-color: transparent;
+    border: 1px solid $value;
+  }
+}

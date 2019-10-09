@@ -1,0 +1,82 @@
+//@import "app";
+
+body {
+    font-size: 12px;
+    background-color: #f2f3f5;
+    font-family:  "Shabnam";
+    margin: 0;
+    padding: 0;
+}
+.content {
+    margin-bottom: 50px;
+}
+.content-header {
+    margin: 25px 0;
+}
+// content
+.content-body {
+    background-color: #ffffff;
+    min-height: 500px;
+    padding: 25px;
+    border: 1px solid #f9f9f9;
+}
+.MuiButton-root, .MuiTypography-root{
+    font-family: inherit !important;
+}
+//// end content
+//.box-shadow {
+//    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+//    box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+//}
+//.page-link {
+//    border: 0;
+//    background-color: transparent;
+//}
+//.page-item.active .page-link {
+//    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+//    box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
+//    background-color: $blue;
+//}
+//.page-link:hover {
+//    background-color: #007bff;
+//    color: #ffffff;
+//    -webkit-transition: .4s;
+//    transition: .4s;
+//    -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+//    box-shadow: 0 6px 30px rgba(0, 0, 0, .15);
+//    border-radius: 0;
+//}
+//
+///* forms*/
+//::placeholder{
+//    font-size: 12px;
+//}
+//.form-control{
+//    border: 1px solid #cecece;
+//    -webkit-box-sizing: border-box!important;
+//    box-sizing: border-box!important;
+//    text-rendering: optimizeLegibility;
+//    -webkit-font-smoothing: antialiased;
+//    -moz-osx-font-smoothing: grayscale;
+//    font-size: 12px;
+//}
+//textarea:focus,
+//input[type="text"]:focus,
+//input[type="password"]:focus,
+//input[type="datetime"]:focus,
+//input[type="datetime-local"]:focus,
+//input[type="date"]:focus,
+//input[type="month"]:focus,
+//input[type="time"]:focus,
+//input[type="week"]:focus,
+//input[type="number"]:focus,
+//input[type="email"]:focus,
+//input[type="url"]:focus,
+//input[type="search"]:focus,
+//input[type="tel"]:focus,
+//input[type="color"]:focus,
+//.uneditable-input:focus {
+//    border: 1px solid #919191;
+//    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 3px rgba(8, 16, 8, 0.74);
+//    outline: 0 none;
+//}
