@@ -88,7 +88,7 @@ class Permission extends Component {
                                         <Grid item sm={6}>
                                             {this.props.entities.roles.map((role, index) => {
                                                 return (
-                                                    <Grid item xs={12} sm={4}>
+                                                    <Grid item sm={4}>
                                                         <FormControlLabel key={index} control={
                                                             <Radio
                                                                 checked={(this.props.entities.role ? this.props.entities.role.key : false) === role.key}
@@ -155,7 +155,7 @@ function mapDispatchToProps (dispatch) {
         },
         fetchData: async function () {
             await new Promise((resolve => {
-                    resolve(dispatch(fetchPermissions()));
+                resolve(dispatch(fetchPermissions()));
 
             }));
             await new Promise((resolve => {

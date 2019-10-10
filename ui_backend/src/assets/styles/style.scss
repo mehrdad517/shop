@@ -20,8 +20,17 @@ body {
     padding: 25px;
     border: 1px solid #f9f9f9;
 }
-.MuiButton-root, .MuiTypography-root{
+.MuiButton-root, .MuiTypography-root, .MuiInputBase-root,.MuiInputLabel-animated{
     font-family: inherit !important;
+}
+.MuiInputBase-inputMarginDense{
+    padding-right: 10px !important;
+}
+.MuiInputLabel-formControl {
+    position: absolute !important;
+    top: 0;
+    right: 0 !important;
+    left: unset !important;
 }
 //// end content
 //.box-shadow {

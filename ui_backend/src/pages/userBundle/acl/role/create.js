@@ -5,16 +5,26 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import {fetchRoles} from "../../../../actions/userBundleAction";
+import {Snackbar} from "@material-ui/core";
 
 class Create extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            snackbar: {
+              open: false,
+              message: ''
+            },
+            errors : {
+                key: false,
+                title: false
+            },
             form: {
                 key: '',
                 title: '',
@@ -33,13 +43,18 @@ class Create extends Component {
     handleSubmit (event) {
         event.preventDefault();
         axios.post('http://localhost:8000/api/backend/users/roles', this.state.form).then((response) => {
-            if (response.status) {
+            if (response.data.status) {
                 this.props.fetchRoles();
                 this.setState({
                     open: false
                 })
             } else {
-
+                this.setState({
+                    snackbar : {
+                        open: true,
+                        message: response.data.msg
+                    },
+                })
             }
         }).catch((error) => {
             console.log(error);
@@ -59,6 +74,14 @@ class Create extends Component {
         })
     }
 
+    handleCloseSnackbar = () => {
+        this.setState({
+            snackbar : {
+                open : false
+            }
+        })
+    }
+
 
     render() {
         return (
@@ -67,41 +90,52 @@ class Create extends Component {
                     نقش جدید
                 </Button>
                 <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                    <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
                     <DialogTitle id="form-dialog-title">ایجاد نقش جدید</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             یک نقش جدید ایجاد کنید و سطح دسترسی لازم را برای نقش مورد نظر  قرار دهید.
-                            <form onSubmit={this.handleSubmit.bind(this)}>
                                 <TextField style={{textAlign:'right'}}
                                            name='key'
                                            autoFocus
                                            margin="dense"
                                            id="name"
-                                           label="ادمین"
+                                           label="اسلاگ"
                                            type="text"
                                            fullWidth
                                            onChange={this.handleChangeElement}
+                                           error={this.state.errors.key}
                                 />
                                 <TextField style={{textAlign:'right'}}
                                            name='title'
                                            autoFocus
                                            margin="dense"
                                            id="name"
-                                           label="ادمین"
+                                           label="عنوان"
                                            type="text"
                                            fullWidth
                                            onChange={this.handleChangeElement}
+                                           error={this.state.errors.title}
                                 />
-                                <Button  color="primary" onClick={this.handleClose}>
-                                    Cancel
-                                </Button>
-                                <Button type='submit' color="primary">
-                                    Subscribe
-                                </Button>
-                            </form>
                         </DialogContentText>
                     </DialogContent>
+                    <DialogActions>
+                        <Button color="primary" onClick={this.handleClose}>
+                            انصراف
+                        </Button>
+                        <Button color="primary" autoFocus type='submit'>
+                            ارسال اطلاعات
+                        </Button>
+                    </DialogActions>
+                    </form>
                 </Dialog>
+                <Snackbar
+                    variant="error"
+                    autoHideDuration={1500}
+                    open={this.state.snackbar.open}
+                    message={this.state.snackbar.message}
+                    onClose={this.handleCloseSnackbar}
+                />
             </div>
         );
     }

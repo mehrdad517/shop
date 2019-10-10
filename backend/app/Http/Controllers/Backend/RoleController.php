@@ -44,7 +44,7 @@ class RoleController extends Controller
             'key' => 'required',
             'title' => 'required',
         ],[
-            'key.required' => 'عنوان نمیتواند خالی باشد.',
+            'key.required' => 'اسلاگ نمیتواند خالی باشد.',
             'title.required' => 'عنوان نمیتواند خالی باشد.',
         ]);
 
