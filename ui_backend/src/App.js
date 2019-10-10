@@ -4,7 +4,6 @@ import store from "./store";
 import {Route} from 'react-router-dom';
 
 
-import Product from './pages/product'
 import Permission from './pages/userBundle/acl/permission'
 
 import 'animate.css';
@@ -18,7 +17,7 @@ import './assets/styles/style.scss'
 function App() {
   return (
       <Provider store={store}>
-              <Route component={Product} path='/' exact={true} />
+              {/*<Route component={Product} path='/' exact={true} />*/}
               <Route component={Permission} path='/permission' exact={true} />
       </Provider>
   );

@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -11,6 +10,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import {fetchRoles} from "../../../../actions/userBundleAction";
 import {Snackbar} from "@material-ui/core";
+import Add from '@material-ui/icons/Add'
 
 class Create extends Component {
 
@@ -32,6 +32,7 @@ class Create extends Component {
         }
     }
 
+
     handleChangeElement = (event) => {
         let form = this.state.form;
         form[event.target.name] = event.target.value;
@@ -42,11 +43,20 @@ class Create extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
+
         axios.post('http://localhost:8000/api/backend/users/roles', this.state.form).then((response) => {
             if (response.data.status) {
                 this.props.fetchRoles();
                 this.setState({
-                    open: false
+                    open: false,
+                    snackbar : {
+                        open: true,
+                        message: 'عملیات موفق'
+                    },
+                    form:{
+                        key: '',
+                        title: '',
+                    }
                 })
             } else {
                 this.setState({
@@ -86,8 +96,8 @@ class Create extends Component {
     render() {
         return (
             <div>
-                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-                    نقش جدید
+                <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
+                    <Add />&nbsp;نقش جدید
                 </Button>
                 <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                     <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
@@ -130,7 +140,6 @@ class Create extends Component {
                     </form>
                 </Dialog>
                 <Snackbar
-                    variant="error"
                     autoHideDuration={1500}
                     open={this.state.snackbar.open}
                     message={this.state.snackbar.message}

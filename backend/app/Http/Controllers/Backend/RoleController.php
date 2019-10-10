@@ -52,10 +52,12 @@ class RoleController extends Controller
             return response()->json(['status' => false, 'msg'  =>  $validator->errors()->first(), 'validator' => $validator->errors()]);
         }
 
-        $result = Role::firstOrCreate([
-            'key' => $request->get('key'),
-            'title' => $request->get('title'),
-        ]);
+
+
+        $result = Role::firstOrCreate(
+            ['key' => $request->get('key')],
+            ['key' => $request->get('key'), 'title' => $request->get('title')]
+        );
 
         if ($result) {
             return response()->json(['status' => true, 'result' => $result], 200);
@@ -90,15 +92,8 @@ class RoleController extends Controller
      */
     public function update($id, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-        ],[
-            'title.required' => 'عنوان نمیتواند خالی باشد.',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'msg'  =>  $validator->errors()->first(), 'validator' => $validator->errors()]);
-        }
+        dd($request->all());
 
         $result = Role::updateOrCreate([
             'title' => $request->get('title'),

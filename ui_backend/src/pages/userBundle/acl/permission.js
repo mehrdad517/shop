@@ -1,27 +1,29 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import axios from 'axios';
 import Checkbox from "@material-ui/core/Checkbox";
-import {CircularProgress, FormControlLabel, Icon, RadioGroup} from "@material-ui/core";
+import {CircularProgress, FormControlLabel} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Chip from "@material-ui/core/Chip";
 
 import Header from './../../header'
 import Container from "@material-ui/core/Container";
-import NavigationIcon from '@material-ui/icons/Navigation'
-import ArrowBack from '@material-ui/icons/ArrowBack'
-import Divider from "@material-ui/core/Divider";
+import NavigationIcon from '@material-ui/icons/Navigation';
 import Radio from "@material-ui/core/Radio";
 import CreateRole from './role/create'
 import {fetchPermissions, fetchRoles} from "../../../actions/userBundleAction";
 import {FETCH_ROLE} from "../../../actions/actionTypes";
+import axios from "axios";
 
 class Permission extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            form: {
+                permissions: []
+            }
+        }
     }
 
     componentDidMount() {
@@ -47,11 +49,34 @@ class Permission extends Component {
             if (role['key'] === event.target.value) {
                 this.props.changeRole(role);
             }
-        })
+        });
     };
 
-    render() {
+    handlePermissionChange(event) {
+        let permissions = this.state.form.permissions;
+        permissions[event.target.value] = event.target.value;
+        this.setState({
+            form: {
+                permissions
+            }
+        })
+    }
 
+    handleFormSubmit(event) {
+        event.preventDefault();
+        let permissions = this.state.form.permissions;
+        console.log(permissions);
+        axios.put('http://localhost:8000/api/backend/users/roles/' + this.props.entities.role.key, {
+            'permissions' : permissions
+        }).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+
+    }
+
+    render() {
         return (
             <div>
                 <Header />
@@ -85,10 +110,10 @@ class Permission extends Component {
                                         left: '50%',
                                     }} color='primary' /> : ''}
                                     <Grid container>
-                                        <Grid item sm={6}>
+                                        <Grid container sm={10}>
                                             {this.props.entities.roles.map((role, index) => {
                                                 return (
-                                                    <Grid item sm={4}>
+                                                    <Grid item xs={12} sm={6}>
                                                         <FormControlLabel key={index} control={
                                                             <Radio
                                                                 checked={(this.props.entities.role ? this.props.entities.role.key : false) === role.key}
@@ -102,36 +127,43 @@ class Permission extends Component {
                                                 )
                                             })}
                                         </Grid>
-                                        <Grid item  sm={6} style={{textAlign:'left'}}>
+                                        <Grid item  sm={2} style={{textAlign:'left'}}>
                                             <CreateRole />
                                         </Grid>
                                     </Grid>
-                                    {this.props.entities.permissions.map((item, index) => {
-                                        return (
-                                            <Container key={index} style={{ margin: '50px 0'}}>
-                                                <h3><Chip  color="default"   label={ item.controller} /></h3>
-                                                <Grid  container>
-                                                    {item.actions.map((action, index) => {
-                                                        return(
-                                                            <Grid key={index} item xs={12} sm={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={this.handlePermissionChecked(action) === true ? true : ''}
-                                                                            value={action.key}
-                                                                            name='ch[]'
-                                                                            color='secondary'
+                                    <Grid container>
+                                        <form onSubmit={this.handleFormSubmit.bind(this)}>
+                                            {this.props.entities.permissions.map((item, index) => {
+                                                return (
+                                                    <Container key={index} style={{ margin: '50px 0'}}>
+                                                        <h3><Chip  color="default"   label={ item.controller} /></h3>
+                                                        <Grid  container sm={12}>
+                                                            {item.actions.map((action, index) => {
+                                                                return(
+                                                                    <Grid key={index} item sm={6}>
+                                                                        <FormControlLabel
+                                                                            control={
+                                                                                <Checkbox
+                                                                                    // checked={this.handlePermissionChecked(action) === true ? true : false}
+                                                                                    value={action.id}
+                                                                                    color='secondary'
+                                                                                    onChange={this.handlePermissionChange.bind(this)}
+                                                                                />
+                                                                            }
+                                                                            label={action.title}
                                                                         />
-                                                                    }
-                                                                    label={action.title}
-                                                                />
-                                                            </Grid>
-                                                        );
-                                                    })}
-                                                </Grid>
-                                            </Container>
-                                        )
-                                    })}
+                                                                    </Grid>
+                                                                );
+                                                            })}
+                                                        </Grid>
+                                                    </Container>
+                                                )
+                                            })}
+                                            <Button variant="contained" color="secondary" type='submit' >
+                                                به روز رسانی
+                                            </Button>
+                                        </form>
+                                    </Grid>
                                 </div>
                             </Grid>
                         </Grid>
