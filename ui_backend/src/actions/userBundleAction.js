@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {CHANGE_ACLPAGELOADING, FETCH_PERMISSIONS, FETCH_ROLE, FETCH_ROLES, FETCH_USERS} from "./actionTypes";
+import {FETCH_PERMISSIONS, FETCH_ROLES, FETCH_USERS} from "./actionTypes";
 
 export function fetchRoles() {
     return function (dispatch) {

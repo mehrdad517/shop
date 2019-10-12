@@ -11,9 +11,9 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-
-
-        $entities = User::where(function ($q) use($request) {
+        $entities = User::with(['role' => function($q) {
+            $q->select('key', 'title');
+        }])->where(function ($q) use($request) {
             if ($request->has('search')) {
                 $filter = json_decode($request->get('search'), true);
                 if (@$filter['name']) {
@@ -28,9 +28,13 @@ class UserController extends Controller
                     $q->where('email', 'like', '%' . $filter['email'] . '%');
                 }
 
+                if (@$filter['role_key']) {
+                    $q->where('role_key', $filter['role_key']);
+                }
             }
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
-        ->paginate(10);
+        ->paginate($request->get('limit') ?? 10);
+
 
         return response($entities);
 

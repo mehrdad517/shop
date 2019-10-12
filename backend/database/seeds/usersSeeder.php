@@ -19,8 +19,8 @@ class usersSeeder extends Seeder
                 'email' => $faker->email(),
                 'mobile' => $faker->phoneNumber(),
                 'password'=> $faker->password(),
-                'created_at' => $faker->dateTime,
-                'updated_at' => $faker->dateTime
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ]);
         }
     }

@@ -3,7 +3,6 @@ import {Provider} from "react-redux";
 import store from "./store";
 import {Route} from 'react-router-dom';
 
-
 import UserList from './pages/userBundle/user/list';
 import Permission from './pages/userBundle/acl/permission'
 
@@ -13,14 +12,27 @@ import 'shabnam-font/dist/font-face.css';
 
 
 import './assets/styles/style.scss'
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import { ThemeProvider } from '@material-ui/styles';
+
+const muiTheme = createMuiTheme({
+    tooltip: {
+        color: '#f1f1f1',
+        rippleBackgroundColor: 'blue'
+    },
+});
 
 
 function App() {
   return (
-      <Provider store={store}>
-          <Route component={UserList} path='/users' />
-          <Route component={Permission} path='/users/acl' />
-      </Provider>
+      <ThemeProvider theme={muiTheme}>
+          <Provider store={store}>
+              <Route component={UserList} path='/users' />
+              <Route component={Permission} path='/users/acl' />
+          </Provider>
+      </ThemeProvider>
+
+
   );
 }
 

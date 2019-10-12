@@ -24,7 +24,6 @@ body {
     text-align: center;
     border-collapse: separate !important;
     border-spacing: 0 10px;
-    margin: 25px 0;
     width: 100%;
 }
 .table thead tr{
@@ -62,96 +61,54 @@ table  td{
 .pagination {
     display: flex;
     list-style: none;
-    justify-content: center;
+    justify-content: flex-end;
+
 }
 
 .pagination li a {
     color: black;
     float: left;
-    padding: 4px 8px;
+    padding: 3px 6px;
     text-decoration: none;
     transition: background-color .3s;
     margin: 0 4px;
 }
 
 .pagination li.active {
-    background-color: #443bf0;
-    border: 1px solid #443bf0;
+    background-color: #f01c49;
+    border: 1px solid #f01c49;
     color: #ffffff !important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 }
 .pagination li.active a {
     color:#ffffff;
 }
 
 
-
+.MuiCircularProgress-root{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    //transform: translate(-50px, -50px);
+}
 // material
-.MuiButton-root, .MuiTypography-root, .MuiInputBase-root,.MuiInputLabel-animated{
+.MuiButton-root, .MuiTypography-root, .MuiInputBase-root,.MuiInputLabel-animated, .MuiMenuItem-root,.MuiTooltip-popper{
     font-family: inherit !important;
 }
-//.MuiInputBase-inputMarginDense{
-//    //padding-right: 10px !important;
-//}
-//.MuiInputLabel-formControl {
-//    position: absolute !important;
-//    top: 0;
-//    right: 0 !important;
-//    left: unset !important;
-//}
-//// end content
-//.box-shadow {
-//    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
-//    box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
-//}
-//.page-link {
-//    border: 0;
-//    background-color: transparent;
-//}
-//.page-item.active .page-link {
-//    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
-//    box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);
-//    background-color: $blue;
-//}
-//.page-link:hover {
-//    background-color: #007bff;
-//    color: #ffffff;
-//    -webkit-transition: .4s;
-//    transition: .4s;
-//    -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
-//    box-shadow: 0 6px 30px rgba(0, 0, 0, .15);
-//    border-radius: 0;
-//}
-//
-///* forms*/
-//::placeholder{
-//    font-size: 12px;
-//}
-//.form-control{
-//    border: 1px solid #cecece;
-//    -webkit-box-sizing: border-box!important;
-//    box-sizing: border-box!important;
-//    text-rendering: optimizeLegibility;
-//    -webkit-font-smoothing: antialiased;
-//    -moz-osx-font-smoothing: grayscale;
-//    font-size: 12px;
-//}
-//textarea:focus,
-//input[type="text"]:focus,
-//input[type="password"]:focus,
-//input[type="datetime"]:focus,
-//input[type="datetime-local"]:focus,
-//input[type="date"]:focus,
-//input[type="month"]:focus,
-//input[type="time"]:focus,
-//input[type="week"]:focus,
-//input[type="number"]:focus,
-//input[type="email"]:focus,
-//input[type="url"]:focus,
-//input[type="search"]:focus,
-//input[type="tel"]:focus,
-//input[type="color"]:focus,
-//.uneditable-input:focus {
-//    border: 1px solid #919191;
-//    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 3px rgba(8, 16, 8, 0.74);
-//    outline: 0 none;
-//}
+.MuiTooltip-popper, .MuiTooltip-tooltip{
+    font-family: "Shabnam" !important;
+}
+.MuiFilledInput-root{
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
+.MuiInputLabel-filled.MuiInputLabel-shrink{
+    position: absolute;
+    right: 10px;
+    left: unset;
+}
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 600px) {
+    .table{
+        width: 1000px;
+    }
+}
