@@ -5,43 +5,34 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
 
-        $where = '';
-        $field = Input::get('field');
-        $type = Input::get('type');
 
-        $search = $request->get('search');
-        if ($search) {
-            foreach ($search as $key => $item) {
-                foreach ($search[$key] as $kind => $value) {
-                    if ($value == '') continue;
-                    switch ($kind) {
-                        case 'integer' :
-                            $where .= " AND `$key` = '$value'";
-                            break;
-                        case 'string':
-                            $where .= " AND `$key` like '%$value%'";
-                            break;
-                        case 'datetime':
-                            $date = \FarsiLib::j2gDate($value);
-                            $where .= " AND `$key` like '%$date%'";
-                            break;
-                        case 'date':
-                            $date = \FarsiLib::j2gDate($value);
-                            $where .= " AND `$key` = '$date'";
-                            break;
-                    }
+        $entities = User::where(function ($q) use($request) {
+            if ($request->has('search')) {
+                $filter = json_decode($request->get('search'), true);
+                if (@$filter['name']) {
+                    $q->where('name', 'like', '%' . $filter['name'] . '%');
                 }
-            }
-        }
-        $where = $where ? '1' . $where : 1;
 
-        $entities = User::with(['role'])->whereRaw($where)->orderBy($field ? $field : 'id', $type ? $type : 'DESC')->paginate(10);
+                if (@$filter['mobile']) {
+                    $q->where('mobile', 'like', '%' . $filter['mobile'] . '%');
+                }
+
+                if (@$filter['email']) {
+                    $q->where('email', 'like', '%' . $filter['email'] . '%');
+                }
+
+            }
+        })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
+        ->paginate(10);
+
+        return response($entities);
 
     }
 

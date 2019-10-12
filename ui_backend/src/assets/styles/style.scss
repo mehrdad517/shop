@@ -8,30 +8,96 @@ body {
     padding: 0;
 }
 .content {
-    margin-bottom: 50px;
-}
-.content-header {
-    margin: 25px 0;
+    margin-bottom: 25px;
 }
 // content
-.content-body {
+.box{
     background-color: #ffffff;
-    min-height: 500px;
-    padding: 25px;
-    border: 1px solid #f9f9f9;
+    min-height: 200px;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 5px;
 }
+
+//table
+.table {
+    text-align: center;
+    border-collapse: separate !important;
+    border-spacing: 0 10px;
+    margin: 25px 0;
+    width: 100%;
+}
+.table thead tr{
+    background-color: transparent;
+    padding: 0;
+    border: 0
+}
+.table thead tr th{
+    cursor: pointer;
+    padding: 0;
+    border: 0
+}
+.table thead tr th svg{
+    position: relative;
+    top: 7px;
+}
+table tbody tr {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.15);
+    box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.15);
+}
+table tbody tr:hover {
+    -webkit-transition: .4s;
+    transition: .4s;
+    -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+    cursor: pointer;
+}
+table tbody tr:hover {
+    background-color: #ffffff;
+}
+table  td{
+    padding: 10px 0;
+}
+.pagination {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+}
+
+.pagination li a {
+    color: black;
+    float: left;
+    padding: 4px 8px;
+    text-decoration: none;
+    transition: background-color .3s;
+    margin: 0 4px;
+}
+
+.pagination li.active {
+    background-color: #443bf0;
+    border: 1px solid #443bf0;
+    color: #ffffff !important;
+}
+.pagination li.active a {
+    color:#ffffff;
+}
+
+
+
+// material
 .MuiButton-root, .MuiTypography-root, .MuiInputBase-root,.MuiInputLabel-animated{
     font-family: inherit !important;
 }
-.MuiInputBase-inputMarginDense{
-    padding-right: 10px !important;
-}
-.MuiInputLabel-formControl {
-    position: absolute !important;
-    top: 0;
-    right: 0 !important;
-    left: unset !important;
-}
+//.MuiInputBase-inputMarginDense{
+//    //padding-right: 10px !important;
+//}
+//.MuiInputLabel-formControl {
+//    position: absolute !important;
+//    top: 0;
+//    right: 0 !important;
+//    left: unset !important;
+//}
 //// end content
 //.box-shadow {
 //    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, .15);

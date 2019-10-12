@@ -21,8 +21,9 @@ class Permission extends Component {
         super(props);
         this.state = {
             form: {
-                permissions: []
-            }
+                permissions: {}
+            },
+            checkedItems: new Map(),
         }
     }
 
@@ -30,31 +31,40 @@ class Permission extends Component {
         this.props.fetchData();
     }
 
-    handlePermissionChecked(action) {
-        let role = this.props.entities.role;
-        if (role) {
-            let permissions = role.permission;
-            for (let i = 0 ; i < permissions.length ; i++) {
-                if (action.id === permissions[i].key && action.method === permissions[i].method) {
-                    return true;
-                }
-            }
-        }
-
-        return  false;
-    }
 
     handleRoleChange (event) {
+        this.setState({
+            checkedItems : new Map()
+        });
+
         this.props.entities.roles.map((role) => {
             if (role['key'] === event.target.value) {
                 this.props.changeRole(role);
+                let permissions = role.permissions;
+                for (let i = 0 ; i < permissions.length ; i++) {
+                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(permissions[i].key, true) }));
+                }
+
             }
         });
+
+
     };
 
     handlePermissionChange(event) {
+
+        let value = event.target.value;
+
         let permissions = this.state.form.permissions;
-        permissions[event.target.value] = event.target.value;
+
+        if (event.target.checked) {
+            permissions[event.target.name] = value;
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, true) }));
+        } else {
+            delete permissions[event.target.name];
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, false) }));
+        }
+
         this.setState({
             form: {
                 permissions
@@ -64,11 +74,7 @@ class Permission extends Component {
 
     handleFormSubmit(event) {
         event.preventDefault();
-        let permissions = this.state.form.permissions;
-        console.log(permissions);
-        axios.put('http://localhost:8000/api/backend/users/roles/' + this.props.entities.role.key, {
-            'permissions' : permissions
-        }).then((response) => {
+        axios.put('http://localhost:8000/api/backend/users/roles/' + this.props.entities.role.key, this.state.form).then((response) => {
             console.log(response);
         }).catch((error) => {
             console.log(error);
@@ -111,7 +117,7 @@ class Permission extends Component {
                                     }} color='primary' /> : ''}
                                     <Grid container>
                                         <Grid container sm={10}>
-                                            {this.props.entities.roles.map((role, index) => {
+                                            {this.props.entities.roles && this.props.entities.roles.map((role, index) => {
                                                 return (
                                                     <Grid item xs={12} sm={6}>
                                                         <FormControlLabel key={index} control={
@@ -133,7 +139,8 @@ class Permission extends Component {
                                     </Grid>
                                     <Grid container>
                                         <form onSubmit={this.handleFormSubmit.bind(this)}>
-                                            {this.props.entities.permissions.map((item, index) => {
+
+                                            {this.props.entities.role && this.props.entities.role.permissions.map((item, index) => {
                                                 return (
                                                     <Container key={index} style={{ margin: '50px 0'}}>
                                                         <h3><Chip  color="default"   label={ item.controller} /></h3>
@@ -144,10 +151,11 @@ class Permission extends Component {
                                                                         <FormControlLabel
                                                                             control={
                                                                                 <Checkbox
-                                                                                    // checked={this.handlePermissionChecked(action) === true ? true : false}
+                                                                                    checked={this.state.checkedItems.get(action.id)}
                                                                                     value={action.id}
                                                                                     color='secondary'
                                                                                     onChange={this.handlePermissionChange.bind(this)}
+                                                                                    name={action.id}
                                                                                 />
                                                                             }
                                                                             label={action.title}
@@ -185,14 +193,8 @@ function mapDispatchToProps (dispatch) {
         changeRole: function(role) {
             dispatch({type: FETCH_ROLE, payload: role});
         },
-        fetchData: async function () {
-            await new Promise((resolve => {
-                resolve(dispatch(fetchPermissions()));
-
-            }));
-            await new Promise((resolve => {
-                resolve(dispatch(fetchRoles()));
-            }));
+        fetchData: function () {
+            dispatch(fetchRoles());
         }
     }
 }

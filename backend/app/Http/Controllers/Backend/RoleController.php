@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class RoleController extends Controller
@@ -24,11 +25,15 @@ class RoleController extends Controller
         $type = $request->get('type') ?? 'asc';
 
         $result = Role::select('key', 'title')
-            ->with(['permission' => function($q) {
-                return $q->select(['key', 'method']);
-            }])
             ->orderBy($field, $type)
             ->get();
+
+        foreach ($result as $r) {
+
+            $r['permissions'] = DB::select('SELECT p.key, p.method, p.title,case when ISNULL(c.role_key) then false ELSE true end AS checked FROM permission AS p
+                left JOIN (SELECT * FROM permission_role WHERE permission_role.role_key = "programmer") AS c ON p.`key` = c.permission_key');
+        }
+
 
         return response($result);
     }
@@ -93,16 +98,21 @@ class RoleController extends Controller
     public function update($id, Request $request)
     {
 
-        dd($request->all());
+        if ($request->get('role')) {
+            $model = Role::updateOrCreate([
+                'key' => $request->get('key'),
+                'title' => $request->get('title'),
+            ], ['id' => $id]);
+        } else {
+            $model = Role::find($id);
+        }
 
-        $result = Role::updateOrCreate([
-            'title' => $request->get('title'),
-        ], ['id' => $id]);
 
-        $result->permission()->attach($request->get('permission'));
+        $model->permission()->detach();
+        $model->permission()->attach($request->get('permissions'));
 
-        if ($result) {
-            return response()->json(['status' => true, 'result' => $result], 200);
+        if ($model) {
+            return response()->json(['status' => true, 'result' => $model], 200);
         }
 
         return response()->json(['status' => false, 'msg' => 'un success'], 200);

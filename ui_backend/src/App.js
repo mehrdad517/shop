@@ -4,6 +4,7 @@ import store from "./store";
 import {Route} from 'react-router-dom';
 
 
+import UserList from './pages/userBundle/user/list';
 import Permission from './pages/userBundle/acl/permission'
 
 import 'animate.css';
@@ -17,8 +18,8 @@ import './assets/styles/style.scss'
 function App() {
   return (
       <Provider store={store}>
-              {/*<Route component={Product} path='/' exact={true} />*/}
-              <Route component={Permission} path='/permission' exact={true} />
+          <Route component={UserList} path='/users' />
+          <Route component={Permission} path='/users/acl' />
       </Provider>
   );
 }
