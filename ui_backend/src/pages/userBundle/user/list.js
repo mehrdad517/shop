@@ -4,7 +4,7 @@ import Header from './../../header'
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import {Box} from "@material-ui/core";
+import {Box, Tooltip} from "@material-ui/core";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -24,11 +24,13 @@ import SortIcon from '@material-ui/icons/Sort';
 import Pagination from "react-js-pagination";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from '@material-ui/core/MenuItem';
-import UserView from './view'
 import UserCreate from "./create";
+import SyncIcon from '@material-ui/icons/Sync';
+import LockTwoToneIcon from '@material-ui/icons/LockTwoTone';
+import AccountBoxTwoToneIcon from '@material-ui/icons/AccountBoxTwoTone';
+import UserEdit from "./edit";
+import Dialog from "@material-ui/core/Dialog";
 
 
 class UserList extends Component {
@@ -36,8 +38,10 @@ class UserList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            editDialog: false,
+            user_id: null,
             filter: {
-                role_key: ''
+                role_key: 0
             },
             page: 1,
             limit: 10,
@@ -157,23 +161,21 @@ class UserList extends Component {
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
                                     </Grid>
+                                    {/*<Grid item xs={12} sm={4} md={3} >*/}
+                                    {/*    <TextField*/}
+                                    {/*        label="ایمیل"*/}
+                                    {/*        variant="filled"*/}
+                                    {/*        margin='dense'*/}
+                                    {/*        fullWidth*/}
+                                    {/*        name='email'*/}
+                                    {/*        InputLabelProps={{*/}
+                                    {/*            shrink: true,*/}
+                                    {/*        }}*/}
+                                    {/*        onChange={this.handleChangeSearchInput.bind(this)}*/}
+                                    {/*    />*/}
+                                    {/*</Grid>*/}
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
-                                            id="outlined-name"
-                                            label="ایمیل"
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='email'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            id="outlined-name"
                                             label="موبایل"
                                             variant="filled"
                                             margin='dense'
@@ -188,7 +190,6 @@ class UserList extends Component {
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             select
-                                            id="outlined-name"
                                             label="نقش"
                                             variant="filled"
                                             value={this.state.filter.role_key}
@@ -200,6 +201,7 @@ class UserList extends Component {
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         >
+                                            <MenuItem key={0} value={0}>انتخاب</MenuItem>
                                             {this.props.entities.roles && this.props.entities.roles.map((role, index) => {
                                                 return <MenuItem key={index} value={role.key}>{role.title ? role.title : role.key}</MenuItem>
                                             })}
@@ -246,6 +248,14 @@ class UserList extends Component {
                         </Grid>
                     </Box>
                     <Box>
+                        <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <Tooltip title="سینک">
+                                <IconButton onClick={() => this.props.fetchUsers()} >
+                                    <SyncIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <UserCreate roles={this.props.entities.roles} />
+                        </div>
                         <div style={{ overflowX: 'auto'}}>
                             <table className='table'>
                                 <thead>
@@ -253,7 +263,6 @@ class UserList extends Component {
                                     <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('name')}>نام &nbsp;{this.state.sort_field === 'name' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('role_key')}>نقش&nbsp;{this.state.sort_field === 'role_key' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('email')}>ایمیل&nbsp;{this.state.sort_field === 'email' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('mobile')}>موبایل&nbsp;{this.state.sort_field === 'mobile' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('craeted_at')}>تاریخ ثبت نام&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
@@ -266,12 +275,19 @@ class UserList extends Component {
                                             <td>{user.id}</td>
                                             <td>{user.name}</td>
                                             <td>{user.role && user.role.title ? user.role.title: user.role.key}</td>
-                                            <td>{user.email}</td>
                                             <td>{user.mobile}</td>
                                             <td>{user.created_at}</td>
-                                            <td>
-                                                    <UserView />
-                                                    <UserCreate roles={this.props.entities.roles} />
+                                            <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
+                                                <Tooltip title="ویرایش کاربر">
+                                                    <IconButton onClick={() =>this.setState({ editDialog: true, user_id: user.id})}>
+                                                        <AccountBoxTwoToneIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="تغییر رمز عبور">
+                                                    <IconButton>
+                                                        <LockTwoToneIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </td>
                                         </tr>
                                     );
@@ -288,6 +304,10 @@ class UserList extends Component {
                         />
                     </Box>
                 </Container>
+                <Dialog open={this.state.editDialog}  onClose={() => this.setState({editDialog: false})}>
+                    <UserEdit id={this.state.user_id} />
+                </Dialog>
+
             </div>
         );
     }
@@ -305,7 +325,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(fetchUsers(request));
         },
         fetchRoles: function () {
-          dispatch(fetchRoles());
+            dispatch(fetchRoles());
         }
     }
 }

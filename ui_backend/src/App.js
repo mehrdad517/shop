@@ -24,16 +24,16 @@ const muiTheme = createMuiTheme({
 
 
 function App() {
-  return (
-      <ThemeProvider theme={muiTheme}>
-          <Provider store={store}>
-              <Route component={UserList} path='/users' />
-              <Route component={Permission} path='/users/acl' />
-          </Provider>
-      </ThemeProvider>
+    return (
+        <ThemeProvider theme={muiTheme}>
+            <Provider store={store}>
+                <Route component={UserList} path='/users' />
+                <Route component={Permission} path='/users/acl' />
+            </Provider>
+        </ThemeProvider>
 
 
-  );
+    );
 }
 
 export default App;

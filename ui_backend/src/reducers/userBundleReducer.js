@@ -3,6 +3,8 @@ import {FETCH_ROLES} from "../actions/actionTypes";
 import {FETCH_ROLE} from "../actions/actionTypes";
 import {FETCH_PERMISSIONS} from "../actions/actionTypes";
 import {FETCH_USERS} from "../actions/actionTypes";
+import {CREATE_USER} from "../actions/actionTypes";
+import {FETCH_USER} from "../actions/actionTypes";
 
 const initialState = {
     users: [],
@@ -10,7 +12,10 @@ const initialState = {
     permissions:[],
     roles: [],
     role: null,
-    aclPageLoading: false
+    crud: {
+        status: '',
+        msg: ''
+    }
 };
 
 export default  function userReducer(state = initialState, action) {
@@ -19,6 +24,11 @@ export default  function userReducer(state = initialState, action) {
             return  {
                 ...state,
                 users: action.payload
+            };
+        case FETCH_USER:
+            return  {
+                ...state,
+                user: action.payload
             };
         case FETCH_PERMISSIONS:
             return {
@@ -29,7 +39,6 @@ export default  function userReducer(state = initialState, action) {
         case FETCH_ROLES:
             return {
                 ...state,
-                aclPageLoading: true,
                 roles: action.payload,
             };
         case FETCH_ROLE:
