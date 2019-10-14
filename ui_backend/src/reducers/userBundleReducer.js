@@ -12,10 +12,6 @@ const initialState = {
     permissions:[],
     roles: [],
     role: null,
-    crud: {
-        status: '',
-        msg: ''
-    }
 };
 
 export default  function userReducer(state = initialState, action) {
@@ -33,7 +29,6 @@ export default  function userReducer(state = initialState, action) {
         case FETCH_PERMISSIONS:
             return {
                 ...state,
-                aclPageLoading: true,
                 permissions: action.payload,
             };
         case FETCH_ROLES:

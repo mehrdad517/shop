@@ -139,7 +139,6 @@ class Permission extends Component {
                                     </Grid>
                                     <Grid container>
                                         <form onSubmit={this.handleFormSubmit.bind(this)}>
-
                                             {this.props.entities.role && this.props.entities.role.permissions.map((item, index) => {
                                                 return (
                                                     <Container key={index} style={{ margin: '50px 0'}}>

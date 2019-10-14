@@ -11,9 +11,13 @@ use Validator;
 
 class UserController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        $entities = User::with(['role' => function($q) {
+        $entities = User::select(['id','name', 'mobile', 'created_at', 'role_key', 'status'])->with(['role' => function($q) {
             $q->select('key', 'title');
         }])->where(function ($q) use($request) {
             if ($request->has('search')) {
@@ -33,6 +37,13 @@ class UserController extends Controller
                 if (@$filter['role_key']) {
                     $q->where('role_key', $filter['role_key']);
                 }
+
+                if (@$filter['status']) {
+                    if (@$filter['status'] != -1) {
+
+                        $q->where('status', $filter['status']);
+                    }
+                }
             }
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
             ->paginate($request->get('limit') ?? 10);
@@ -42,6 +53,10 @@ class UserController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -73,24 +88,30 @@ class UserController extends Controller
     }
 
 
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function show($id) {
-        $entities = User::with(['role' => function($q) {
+        $entities = User::select(['id', 'name', 'mobile', 'created_at', 'role_key', 'status'])->with(['role' => function($q) {
             $q->select('key', 'title');
         }])->where('id', $id)->first();
 
         return response($entities);
     }
 
+    /***
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-//            'mobile' => 'required|unique:users|min:11|max:11',
+            'role_key' => 'required'
         ], [
             'name.required' => 'نام خود را وارد نکرده اید.',
-//            'mobile.required' => 'شماره موبایل خود را وارد نکرده اید.',
-//            'mobile.unique' => 'شماره موبایل قبلا در سیستم ثبت شده است.',
-//            'mobile.min' => 'شماره وارد شده نامعتبر است',
-//            'mobile.max' => 'شماره وارد شده نامعتبر است',
+            'role_key.required' => 'نقش را وارد نکرده اید.',
         ]);
 
         if ($validator->fails()) {
@@ -106,5 +127,66 @@ class UserController extends Controller
         }
         return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
     }
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changePassword($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+        ], [
+            'name.required' => 'پسورد را وارد نکرده اید.',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $model = User::where('id', $id)->update([
+            'password' => bcrypt($request->get('password'))
+        ]);
+
+        if ($model) {
+
+            return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+        }
+        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+    }
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changestatus($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ], [
+            'name.required' => 'وضعیت را وارد نکرده اید.',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $model = User::where('id', $id)->update([
+            'status' => $request->get('status')
+        ]);
+
+        if ($model) {
+
+            return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+        }
+        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+    }
+
 
 }

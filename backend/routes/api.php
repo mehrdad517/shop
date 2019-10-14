@@ -124,7 +124,8 @@ Route::group(['prefix' => '/backend'], function () {
         Route::post('/', 'Backend\UserController@store');
         Route::get('/{id}', 'Backend\UserController@show');
         Route::put('/{id}', 'Backend\UserController@update');
-        Route::delete('/{id}', 'Backend\UserController@delete');
+        Route::put('/{id}/change/password', 'Backend\UserController@changePassword');
+        Route::put('/{id}/change/status', 'Backend\UserController@changeStatus');
 
     });
 

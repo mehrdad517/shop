@@ -30,7 +30,7 @@ export function fetchUser(id) {
 
 export function fetchRoles() {
     return function (dispatch) {
-        axios.get('http://localhost:8000/api/backend/users/roles').then((response) => {
+        axios.get('http://localhost:8000/api/backend/users/roles/programmer').then((response) => {
             dispatch({'type' : FETCH_ROLES, 'payload' : response.data});
         }).catch((error) => {
             console.log(error);

@@ -24,15 +24,12 @@ class RoleController extends Controller
         $field = $request->get('field') ?? 'created_at';
         $type = $request->get('type') ?? 'asc';
 
+        dd(xxx);
+
         $result = Role::select('key', 'title')
+            ->with(['permission'])
             ->orderBy($field, $type)
             ->get();
-
-        foreach ($result as $r) {
-
-            $r['permissions'] = DB::select('SELECT p.key, p.method, p.title,case when ISNULL(c.role_key) then false ELSE true end AS checked FROM permission AS p
-                left JOIN (SELECT * FROM permission_role WHERE permission_role.role_key = "programmer") AS c ON p.`key` = c.permission_key');
-        }
 
 
         return response($result);

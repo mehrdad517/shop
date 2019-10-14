@@ -7,20 +7,19 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {Snackbar} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import Api from "../../../api";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {fetchUser} from "../../../actions/userBundleAction";
+import {FETCH_USER} from "../../../actions/actionTypes";
 
 
-class UserEdit extends Component {
+class ChangePassword extends Component {
 
     constructor(props) {
         super(props);
         this.state =  {
             form: {
-                name: '',
-                mobile: '',
-                role_key: ''
+                password: ''
             },
             snackbar: {
                 open: false,
@@ -32,17 +31,8 @@ class UserEdit extends Component {
     }
 
     componentDidMount() {
-        this.api.fetchUser(this.props.id).then((response) => {
-            this.setState({
-                form: {
-                    name: response.name,
-                    role_key: response.role_key
-                }
-            })
-        }).catch((errors) => {
-            console.log(errors);
-        })
-
+        this.props.resetUser();
+        this.props.fetchUser(this.props.id)
     }
 
     handleChangeElement(event) {
@@ -55,10 +45,7 @@ class UserEdit extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        this.api.editUser(this.props.id ,this.state.form).then((response) => {
-            if (response.status) {
-                this.props.handleRequest();
-            }
+        this.api.changePasswordUser(this.props.id ,this.state.form).then((response) => {
             this.setState({
                 snackbar: {
                     open: true,
@@ -76,53 +63,34 @@ class UserEdit extends Component {
     }
 
     render() {
-        if (!this.state.form) {
+        if (!this.props.states.user) {
             return ( <div><DialogContent style={{ minHeight: '300px', width: '300px'}}><CircularProgress /></DialogContent></div>);
         }
         return (
             <div>
-                <DialogTitle id="alert-dialog-title">ویرایش کاربر</DialogTitle>
+                <DialogTitle id="alert-dialog-title">کاربر <span>{this.props.states.user.name}</span></DialogTitle>
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <DialogContent>
                         <Grid container spacing={2}>
                             <Grid item xs={12} >
                                 <TextField
-                                    label="نام کاربر"
+                                    label="رمز عبور"
                                     variant="filled"
-                                    value={this.state.form.name}
+                                    value={this.state.form.password}
                                     margin='dense'
                                     fullWidth
-                                    name='name'
+                                    name='password'
                                     onChange={this.handleChangeElement.bind(this)}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    select
-                                    label="نقش"
-                                    value={this.state.form.role_key}
-                                    variant="filled"
-                                    margin='dense'
-                                    fullWidth
-                                    name='role_key'
-                                    onChange={this.handleChangeElement.bind(this)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                >
-                                    {this.props.states.roles && this.props.states.roles.map((role, index) => {
-                                        return <MenuItem key={index} value={role.key}>{role.title ? role.title : role.key}</MenuItem>
-                                    })}
-                                </TextField>
-                            </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
                         <Button type='submit' color="primary">
-                            ذخیره اطلاعات
+                            تغییر رمز
                         </Button>
                     </DialogActions>
                 </form>
@@ -144,10 +112,17 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {}
+    return {
+        fetchUser: function (id) {
+            dispatch(fetchUser(id))
+        },
+        resetUser: function () {
+            dispatch({type: FETCH_USER, payload: null});
+        }
+    }
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserEdit);
+)(ChangePassword);

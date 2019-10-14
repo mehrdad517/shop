@@ -18,7 +18,8 @@ class usersSeeder extends Seeder
                 'name' => $faker->name(),
                 'email' => $faker->email(),
                 'mobile' => $faker->phoneNumber(),
-                'password'=> $faker->password(),
+                'role_key' => 'programmer',
+                'password'=> bcrypt($faker->password()),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]);

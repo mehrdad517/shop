@@ -14,6 +14,7 @@ import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { ThemeProvider } from '@material-ui/styles';
+import Acl from "./pages/userBundle/acl/acl";
 
 const muiTheme = createMuiTheme({
     tooltip: {
@@ -27,8 +28,8 @@ function App() {
     return (
         <ThemeProvider theme={muiTheme}>
             <Provider store={store}>
-                <Route component={UserList} path='/users' />
-                <Route component={Permission} path='/users/acl' />
+                <Route component={UserList} path='/users' exact={true} />
+                <Route component={Acl} path='/users/acl' />
             </Provider>
         </ThemeProvider>
 

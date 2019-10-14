@@ -4,7 +4,7 @@ import Header from './../../header'
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import {Box, Tooltip} from "@material-ui/core";
+import {Box, Snackbar, Tooltip} from "@material-ui/core";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -16,7 +16,6 @@ import Divider from '@material-ui/core/Divider';
 import TextField from "@material-ui/core/TextField";
 import {fetchRoles, fetchUsers} from "../../../actions/userBundleAction";
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import FormControl from "@material-ui/core/FormControl";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -31,7 +30,10 @@ import LockTwoToneIcon from '@material-ui/icons/LockTwoTone';
 import AccountBoxTwoToneIcon from '@material-ui/icons/AccountBoxTwoTone';
 import UserEdit from "./edit";
 import Dialog from "@material-ui/core/Dialog";
-
+import ChangePassword from "./changePassword";
+import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
+import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCheckBoxTwoTone';
+import Api from "../../../api";
 
 class UserList extends Component {
 
@@ -39,15 +41,23 @@ class UserList extends Component {
         super(props);
         this.state = {
             editDialog: false,
+            changePasswordDialog: false,
             user_id: null,
+            snackbar: {
+              open: false,
+              msg: ''
+            },
             filter: {
-                role_key: 0
+                role_key: 0,
+                status: -1
             },
             page: 1,
             limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
         };
+
+        this.api = new Api();
 
         this.handleRequest = this.handleRequest.bind(this);
     }
@@ -62,17 +72,27 @@ class UserList extends Component {
         let limit = event.target.value;
         await new Promise((resolve => {
             resolve(this.setState({
-                limit: parseInt(limit)
+                limit: parseInt(limit),
+                page:  1
             }));
         }));
 
         await this.handleRequest()
     }
 
-    handleChangeSearchInput(event) {
+    async handleChangeSearchInput(event) {
         let filter = this.state.filter;
 
         filter[event.target.name] = event.target.value;
+
+        await new Promise((resolve => {
+            resolve(this.setState({
+                filter,
+                page: 1
+            }));
+        }));
+
+
 
         this.handleRequest();
 
@@ -82,7 +102,8 @@ class UserList extends Component {
         await new Promise((resolve => {
             resolve(this.setState({
                 sort_field : parameter,
-                sort_type : (this.state.sort_type === 'desc' ? 'asc' : 'desc')
+                sort_type : (this.state.sort_type === 'desc' ? 'asc' : 'desc'),
+                page: 1
             }));
         }));
 
@@ -99,8 +120,22 @@ class UserList extends Component {
         }));
 
         await this.handleRequest()
+    }
 
-
+    changeStatus(id, status) {
+        this.api.changeStatus(id, {'status' : status}).then((response) => {
+            if (response.status) {
+                this.handleRequest();
+            }
+            this.setState({
+                snackbar: {
+                    open: true,
+                    msg: response.msg
+                }
+            });
+        }).catch((error) => {
+            console.log(error);
+        })
     }
 
     handleRequest(request) {
@@ -117,7 +152,6 @@ class UserList extends Component {
         if (!this.props.entities.users.data) {
             return (<CircularProgress color='secondary' />);
         }
-        
         return (
             <div className='content'>
                 <Header />
@@ -126,7 +160,7 @@ class UserList extends Component {
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
                                 <h2>مدیریت کاربران</h2>
-                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید سطح دسترسی برای هر نقش تعیین کنید.</p>
+                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کاربران را مدیریت کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
@@ -197,6 +231,25 @@ class UserList extends Component {
                                             })}
                                         </TextField>
                                     </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="وضعیت"
+                                            variant="filled"
+                                            value={this.state.filter.status}
+                                            margin='dense'
+                                            fullWidth
+                                            name='status'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            <MenuItem key={1} value={1}>فعال</MenuItem>
+                                            <MenuItem key={2} value={0}>غیرفعال</MenuItem>
+                                        </TextField>
+                                    </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>
                             <Divider />
@@ -228,7 +281,7 @@ class UserList extends Component {
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <Pagination
-                                    activePage={this.props.entities.users.data.length > 0 ? this.state.page : 1}
+                                    activePage={this.state.page}
                                     itemsCountPerPage={this.props.entities.users.per_page}
                                     totalItemsCount={this.props.entities.users.total}
                                     pageRangeDisplayed={5}
@@ -255,6 +308,7 @@ class UserList extends Component {
                                     <th onClick={() => this.handleChangeSort('role_key')}>نقش&nbsp;{this.state.sort_field === 'role_key' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('mobile')}>موبایل&nbsp;{this.state.sort_field === 'mobile' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('craeted_at')}>تاریخ ثبت نام&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
                                 </tr>
                                 </thead>
@@ -264,9 +318,16 @@ class UserList extends Component {
                                         <tr key={index}>
                                             <td>{user.id}</td>
                                             <td>{user.name}</td>
-                                            <td>{user.role && user.role.title ? user.role.title: user.role.key}</td>
+                                            <td>{user.role ? user.role.title ? user.role.title: user.role.key : '-'}</td>
                                             <td>{user.mobile}</td>
                                             <td>{user.created_at}</td>
+                                            <td>
+                                                <Tooltip title="تغییر وضعیت">
+                                                    <IconButton onClick={() => this.changeStatus(user.id, !user.status)}>
+                                                        {user.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
                                                 <Tooltip title="ویرایش کاربر">
                                                     <IconButton onClick={() =>this.setState({ editDialog: true, user_id: user.id})}>
@@ -274,7 +335,7 @@ class UserList extends Component {
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip title="تغییر رمز عبور">
-                                                    <IconButton>
+                                                    <IconButton onClick={() =>this.setState({ changePasswordDialog: true, user_id: user.id})}>
                                                         <LockTwoToneIcon />
                                                     </IconButton>
                                                 </Tooltip>
@@ -286,7 +347,7 @@ class UserList extends Component {
                             </table>
                         </div>
                         <Pagination
-                            activePage={this.props.entities.users.data.length > 0 ? this.state.page : 1}
+                            activePage={this.state.page}
                             itemsCountPerPage={this.props.entities.users.per_page}
                             totalItemsCount={this.props.entities.users.total}
                             pageRangeDisplayed={5}
@@ -297,7 +358,15 @@ class UserList extends Component {
                 <Dialog open={this.state.editDialog}  onClose={() => this.setState({editDialog: false})}>
                     <UserEdit id={this.state.user_id}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({editDialog: false})} />
                 </Dialog>
-
+                <Dialog open={this.state.changePasswordDialog}  onClose={() => this.setState({changePasswordDialog: false})}>
+                    <ChangePassword id={this.state.user_id}  onClose={() => this.setState({changePasswordDialog: false})} />
+                </Dialog>
+                <Snackbar
+                    autoHideDuration={4500}
+                    open={this.state.snackbar.open}
+                    message={this.state.snackbar.msg}
+                    onClose={() => this.setState({snackbar:{open: false,msg: ''}})}
+                />
             </div>
         );
     }
