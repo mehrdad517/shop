@@ -37,16 +37,24 @@ class UserEdit extends Component {
         this.api = new Api();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+        this.api.fetchUser(this.props.id).then((response) => {
+            this.setState({
+                form: {
+                    name: response.name,
+                    role_key: response.role_key
+                }
+            })
+        }).catch((errors) => {
+            console.log(errors);
+        })
 
-        this.props.resetUser();
-
-        this.props.fetchUser(this.props.id);
     }
 
     handleChangeElement(event) {
         let form = this.state.form;
         form[event.target.name] = event.target.value;
+        console.log(form);
         this.setState({
             form
         });
@@ -56,35 +64,33 @@ class UserEdit extends Component {
         event.preventDefault();
         this.api.editUser(this.props.id ,this.state.form).then((response) => {
             if (response.status) {
-                this.setState({
-                    open: false,
-                    snackbar: {
-                        open: true,
-                        msg: response.msg,
-                    }
-                }, () => {
-                    this.props.fetchUsers();
-                });
-            } else {
-                this.setState({
-                    snackbar: {
-                        open: true,
-                        msg: response.msg,
-                    }
-                });
+                this.props.handleRequest();
+
             }
+
+            this.setState({
+                snackbar: {
+                    open: true,
+                    msg: response.msg,
+                }
+            });
+
+            setTimeout( () => {
+                this.props.onClose();
+            }, 500)
+
         }).catch((error) => {
             console.log(error);
         })
     }
 
     render() {
-        if (!this.props.states.user) {
+        if (!this.state.form) {
             return ( <div><DialogContent style={{ minHeight: '300px', width: '300px'}}><CircularProgress /></DialogContent></div>);
         }
         return (
             <div>
-                <DialogTitle id="alert-dialog-title">کاربر <span>{this.props.states.user.name}</span></DialogTitle>
+                <DialogTitle id="alert-dialog-title">ویرایش کاربر</DialogTitle>
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <DialogContent>
                         <Grid container spacing={2}>
@@ -92,7 +98,7 @@ class UserEdit extends Component {
                                 <TextField
                                     label="نام کاربر"
                                     variant="filled"
-                                    value={this.state.form.name ? this.state.form.name : this.props.states.user.name}
+                                    value={this.state.form.name}
                                     margin='dense'
                                     fullWidth
                                     name='name'
@@ -102,25 +108,25 @@ class UserEdit extends Component {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} >
-                                <TextField
-                                    label="موبایل"
-                                    variant="filled"
-                                    value={this.state.form.mobile ? this.state.form.mobile : this.props.states.user.mobile}
-                                    margin='dense'
-                                    fullWidth
-                                    name='mobile'
-                                    onChange={this.handleChangeElement.bind(this)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
+                            {/*<Grid item xs={12} >*/}
+                            {/*    <TextField*/}
+                            {/*        label="موبایل"*/}
+                            {/*        variant="filled"*/}
+                            {/*        value={this.state.form.mobile}*/}
+                            {/*        margin='dense'*/}
+                            {/*        fullWidth*/}
+                            {/*        name='mobile'*/}
+                            {/*        onChange={this.handleChangeElement.bind(this)}*/}
+                            {/*        InputLabelProps={{*/}
+                            {/*            shrink: true,*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</Grid>*/}
                             <Grid item xs={12}>
                                 <TextField
                                     select
                                     label="نقش"
-                                    value={this.state.form.role_key ? this.state.form.role_key : this.props.states.user.role_key}
+                                    value={this.state.form.role_key}
                                     variant="filled"
                                     margin='dense'
                                     fullWidth
@@ -144,7 +150,7 @@ class UserEdit extends Component {
                     </DialogActions>
                 </form>
                 <Snackbar
-                    autoHideDuration={1500}
+                    autoHideDuration={4500}
                     open={this.state.snackbar.open}
                     message={this.state.snackbar.msg}
                     onClose={() => this.setState({snackbar:{open: false,msg: ''}})}
@@ -161,14 +167,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchUser: function (id) {
-            dispatch(fetchUser(id));
-        },
-        resetUser: function () {
-            dispatch({type: FETCH_USER, payload: null});
-        }
-    }
+    return {}
 }
 
 export default connect(

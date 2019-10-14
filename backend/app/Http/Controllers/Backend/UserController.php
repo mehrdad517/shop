@@ -84,13 +84,13 @@ class UserController extends Controller
     public function update($id, Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'mobile' => 'required|unique:users|min:11|max:11',
+//            'mobile' => 'required|unique:users|min:11|max:11',
         ], [
             'name.required' => 'نام خود را وارد نکرده اید.',
-            'mobile.required' => 'شماره موبایل خود را وارد نکرده اید.',
-            'mobile.unique' => 'شماره موبایل قبلا در سیستم ثبت شده است.',
-            'mobile.min' => 'شماره وارد شده نامعتبر است',
-            'mobile.max' => 'شماره وارد شده نامعتبر است',
+//            'mobile.required' => 'شماره موبایل خود را وارد نکرده اید.',
+//            'mobile.unique' => 'شماره موبایل قبلا در سیستم ثبت شده است.',
+//            'mobile.min' => 'شماره وارد شده نامعتبر است',
+//            'mobile.max' => 'شماره وارد شده نامعتبر است',
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +98,7 @@ class UserController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        $model = User::update($request->all(), ['id' => $id]);
+        $model = User::where('id', $id)->update($request->all());
 
         if ($model) {
 

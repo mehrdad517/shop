@@ -48,6 +48,8 @@ class UserList extends Component {
             sort_field: 'id',
             sort_type: 'desc',
         };
+
+        this.handleRequest = this.handleRequest.bind(this);
     }
 
     componentDidMount() {
@@ -115,6 +117,7 @@ class UserList extends Component {
         if (!this.props.entities.users.data) {
             return (<CircularProgress color='secondary' />);
         }
+        
         return (
             <div className='content'>
                 <Header />
@@ -161,19 +164,6 @@ class UserList extends Component {
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
                                     </Grid>
-                                    {/*<Grid item xs={12} sm={4} md={3} >*/}
-                                    {/*    <TextField*/}
-                                    {/*        label="ایمیل"*/}
-                                    {/*        variant="filled"*/}
-                                    {/*        margin='dense'*/}
-                                    {/*        fullWidth*/}
-                                    {/*        name='email'*/}
-                                    {/*        InputLabelProps={{*/}
-                                    {/*            shrink: true,*/}
-                                    {/*        }}*/}
-                                    {/*        onChange={this.handleChangeSearchInput.bind(this)}*/}
-                                    {/*    />*/}
-                                    {/*</Grid>*/}
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             label="موبایل"
@@ -238,7 +228,7 @@ class UserList extends Component {
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <Pagination
-                                    activePage={this.state.page}
+                                    activePage={this.props.entities.users.data.length > 0 ? this.state.page : 1}
                                     itemsCountPerPage={this.props.entities.users.per_page}
                                     totalItemsCount={this.props.entities.users.total}
                                     pageRangeDisplayed={5}
@@ -296,7 +286,7 @@ class UserList extends Component {
                             </table>
                         </div>
                         <Pagination
-                            activePage={this.state.page}
+                            activePage={this.props.entities.users.data.length > 0 ? this.state.page : 1}
                             itemsCountPerPage={this.props.entities.users.per_page}
                             totalItemsCount={this.props.entities.users.total}
                             pageRangeDisplayed={5}
@@ -305,7 +295,7 @@ class UserList extends Component {
                     </Box>
                 </Container>
                 <Dialog open={this.state.editDialog}  onClose={() => this.setState({editDialog: false})}>
-                    <UserEdit id={this.state.user_id} />
+                    <UserEdit id={this.state.user_id}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({editDialog: false})} />
                 </Dialog>
 
             </div>
