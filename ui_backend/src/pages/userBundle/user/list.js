@@ -40,12 +40,13 @@ class UserList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             editDialog: false,
             changePasswordDialog: false,
             user_id: null,
             snackbar: {
-              open: false,
-              msg: ''
+                open: false,
+                msg: ''
             },
             filter: {
                 role_key: 0,
@@ -64,7 +65,7 @@ class UserList extends Component {
 
     componentDidMount() {
         this.props.fetchRoles();
-        this.props.fetchUsers();
+        this.handleRequest()
     }
 
     async handleChangeLimit(event) {
@@ -91,8 +92,6 @@ class UserList extends Component {
                 page: 1
             }));
         }));
-
-
 
         this.handleRequest();
 
@@ -138,23 +137,28 @@ class UserList extends Component {
         })
     }
 
-    handleRequest(request) {
-        this.props.fetchUsers({
-            search: this.state.filter,
-            page: this.state.page,
-            limit: this.state.limit,
-            sort_field: this.state.sort_field,
-            sort_type: this.state.sort_type
-        });
+    async handleRequest() {
+            await this.props.fetchUsers({
+                search: this.state.filter,
+                page: this.state.page,
+                limit: this.state.limit,
+                sort_field: this.state.sort_field,
+                sort_type: this.state.sort_type
+            });
+
+        await new Promise(resolve => {
+            resolve(this.setState({
+                loading: true
+            }));
+        })
     }
 
     render() {
-        if (!this.props.entities.users.data) {
+        if (typeof this.props.entities.users.data === "undefined") {
             return (<CircularProgress color='secondary' />);
         }
         return (
             <div className='content'>
-                <Header />
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
@@ -313,7 +317,7 @@ class UserList extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.props.entities.users.data.map((user, index) => {
+                                {this.props.entities.users.data && this.props.entities.users.data.map((user, index) => {
                                     return(
                                         <tr key={index}>
                                             <td>{user.id}</td>
@@ -380,8 +384,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchUsers: function (request) {
-            dispatch(fetchUsers(request));
+        fetchUsers: async function (request) {
+            await new Promise(resolve => {
+                resolve(dispatch(fetchUsers(request)))
+            });
         },
         fetchRoles: function () {
             dispatch(fetchRoles());

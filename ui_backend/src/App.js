@@ -4,7 +4,6 @@ import store from "./store";
 import {Route} from 'react-router-dom';
 
 import UserList from './pages/userBundle/user/list';
-import Permission from './pages/userBundle/acl/permission'
 
 import 'animate.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -12,28 +11,19 @@ import 'shabnam-font/dist/font-face.css';
 
 
 import './assets/styles/style.scss'
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import { ThemeProvider } from '@material-ui/styles';
 import Acl from "./pages/userBundle/acl/acl";
+import MainLayout from "./pages/layout/main";
 
-const muiTheme = createMuiTheme({
-    tooltip: {
-        color: '#f1f1f1',
-        rippleBackgroundColor: 'blue'
-    },
-});
 
 
 function App() {
     return (
-        <ThemeProvider theme={muiTheme}>
             <Provider store={store}>
-                <Route component={UserList} path='/users' exact={true} />
-                <Route component={Acl} path='/users/acl' />
+                <MainLayout>
+                    <Route component={UserList} path='/users' exact={true} />
+                    <Route component={Acl} path='/users/acl' />
+                </MainLayout>
             </Provider>
-        </ThemeProvider>
-
-
     );
 }
 

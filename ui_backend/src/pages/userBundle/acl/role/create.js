@@ -9,14 +9,18 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import {fetchRoles} from "../../../../actions/userBundleAction";
-import {Snackbar} from "@material-ui/core";
-import Add from '@material-ui/icons/Add'
+import {Snackbar, Tooltip} from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Grid from "@material-ui/core/Grid";
+import Api from "../../../../api";
 
-class Create extends Component {
+class RoleCreate extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            open: false,
             snackbar: {
               open: false,
               message: ''
@@ -30,6 +34,8 @@ class Create extends Component {
                 title: '',
             }
         }
+
+        this.api = new Api();
     }
 
 
@@ -44,8 +50,8 @@ class Create extends Component {
     handleSubmit (event) {
         event.preventDefault();
 
-        axios.post('http://localhost:8000/api/backend/users/roles', this.state.form).then((response) => {
-            if (response.data.status) {
+       this.api.createRole(this.state.form).then((response) => {
+            if (response.status) {
                 this.props.fetchRoles();
                 this.setState({
                     open: false,
@@ -62,7 +68,7 @@ class Create extends Component {
                 this.setState({
                     snackbar : {
                         open: true,
-                        message: response.data.msg
+                        message: response.msg
                     },
                 })
             }
@@ -96,38 +102,43 @@ class Create extends Component {
     render() {
         return (
             <div>
-                <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-                    <Add />&nbsp;نقش جدید
-                </Button>
+                <Tooltip title="افزودن نقش">
+                    <IconButton onClick={this.handleClickOpen}>
+                        <AddCircleOutlineIcon />
+                    </IconButton>
+                </Tooltip>
                 <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                     <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
                     <DialogTitle id="form-dialog-title">ایجاد نقش جدید</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            یک نقش جدید ایجاد کنید و سطح دسترسی لازم را برای نقش مورد نظر  قرار دهید.
-                                <TextField style={{textAlign:'right'}}
-                                           name='key'
-                                           autoFocus
-                                           margin="dense"
-                                           id="name"
-                                           label="اسلاگ"
-                                           type="text"
-                                           fullWidth
-                                           onChange={this.handleChangeElement}
-                                           error={this.state.errors.key}
-                                />
-                                <TextField style={{textAlign:'right'}}
-                                           name='title'
-                                           autoFocus
-                                           margin="dense"
-                                           id="name"
-                                           label="عنوان"
-                                           type="text"
-                                           fullWidth
-                                           onChange={this.handleChangeElement}
-                                           error={this.state.errors.title}
-                                />
-                        </DialogContentText>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="اسلاگ"
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='key'
+                                        onChange={this.handleChangeElement.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="نام کاربر"
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='title'
+                                        onChange={this.handleChangeElement.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
                     </DialogContent>
                     <DialogActions>
                         <Button color="primary" onClick={this.handleClose}>
@@ -165,4 +176,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Create);
+)(RoleCreate);

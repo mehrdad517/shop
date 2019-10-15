@@ -17,17 +17,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-
-        $limit = $request->get('limit') ?? 20;
-
-        // sort parameter
-        $field = $request->get('field') ?? 'created_at';
-        $type = $request->get('type') ?? 'asc';
-
-
         $result = Role::select('key', 'title')
             ->with(['permission'])
-            ->orderBy($field, $type)
+            ->orderBy('created_at','asc')
             ->get();
 
 
@@ -54,11 +46,17 @@ class RoleController extends Controller
         }
 
 
+        if (Role::find($request->get('key'))) {
+            $result = Role::where(['key' => $request->get('key')])->update(
+                ['title' => $request->get('title')]
+            );
+        } else {
+            $result = Role::create(
+                ['key' => $request->get('key'), 'title' => $request->get('title')],
+                ['key' => $request->get('key')]
+            );
+        }
 
-        $result = Role::firstOrCreate(
-            ['key' => $request->get('key')],
-            ['key' => $request->get('key'), 'title' => $request->get('title')]
-        );
 
         if ($result) {
             return response()->json(['status' => true, 'result' => $result], 200);
@@ -82,7 +80,7 @@ class RoleController extends Controller
             return response()->json(['status' => true, 'result' => $result], 200);
         }
 
-        return response()->json(['status' => false, 'msg' => 'request is invalid'], 200);
+        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است'], 200);
     }
 
 
@@ -102,41 +100,14 @@ class RoleController extends Controller
         } else {
             $model = Role::find($id);
         }
-
-
         $model->permission()->detach();
         $model->permission()->attach($request->get('permissions'));
 
         if ($model) {
-            return response()->json(['status' => true, 'result' => $model], 200);
+            return response()->json(['status' => true, 'msg' => 'تغییرات با موفقیت اعمال شد.'], 200);
         }
-
-        return response()->json(['status' => false, 'msg' => 'un success'], 200);
+        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.'], 200);
 
     }
 
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
-     */
-    public function delete($id)
-    {
-
-        $role = Role::find($id);
-
-        if ($role) {
-
-            $role->permission()->dettach();
-            $result = $role->delete();
-            if ($result) {
-                return response()->json(['status'  =>  true, 'msg' => 'success']);
-            }
-        }
-
-
-        return response()->json(['status'  =>  false, 'msg'=> 'error']);
-
-    }
 }
