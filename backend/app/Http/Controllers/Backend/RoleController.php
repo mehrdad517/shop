@@ -24,7 +24,6 @@ class RoleController extends Controller
         $field = $request->get('field') ?? 'created_at';
         $type = $request->get('type') ?? 'asc';
 
-        dd(xxx);
 
         $result = Role::select('key', 'title')
             ->with(['permission'])

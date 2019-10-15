@@ -25,6 +25,7 @@ import Pagination from "react-js-pagination";
 import IconButton from "@material-ui/core/IconButton";
 import UserCreate from "../user/create";
 import Chip from "@material-ui/core/Chip";
+import Radio from "@material-ui/core/Radio";
 
 class Acl extends Component {
 
@@ -34,6 +35,10 @@ class Acl extends Component {
             permissions : [],
             checkedItems : new Map(),
             loading: false,
+            form:{
+                role_key: '',
+                permissions: {}
+            }
         };
         this.api = new Api();
     }
@@ -53,12 +58,6 @@ class Acl extends Component {
                 });
             }));
         }));
-
-        await new Promise((resolve) => {
-            resolve(this.props.states.roles.result.permission.map((permission) => {
-                this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(permission.key, true) }));
-            }));
-        });
 
         await new Promise(resolve => {
             resolve(this.setState({
@@ -80,6 +79,16 @@ class Acl extends Component {
 
     handleChangeInput(event)  {
         let val = event.target.value;
+
+        let permissions = this.state.form.permissions;
+        permissions[event.target.name] = val;
+
+        this.setState({
+            form: {
+                permissions: permissions
+            }
+        });
+
         if (event.target.checked) {
             this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, true)}));
         }else {
@@ -88,7 +97,29 @@ class Acl extends Component {
 
     };
 
+    handleRoleChange(event) {
+        this.setState({
+            form:{
+                role_key : event.target.value
+            }
+        });
+        this.props.states.roles.map((role) => {
+            if (role.key === event.target.value) {
+                this.state.permissions.map((permission) => {
+                    permission.actions.map((action) => {
+                        role.permission.map((item) => {
+                            if (item.key === action.id) {
+                                this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, true) }));
+                            }
+                        });
+                    });
+                });
+            }
+        });
+    };
+
     render() {
+        console.log(this.state.form);
         if (!this.state.loading) {
             return null
         }
@@ -111,7 +142,23 @@ class Acl extends Component {
                             </Grid>
                         </Grid>
                     </Box>
-                    <Box boxShadow={2} style={{ backgroundColor: '#fff'}}>
+                    <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px'}}>
+
+                        {this.props.states.roles && this.props.states.roles.map((role, index) => {
+                            return (
+                                <Grid item xs={12} sm={6}>
+                                    <FormControlLabel key={index} control={
+                                        <Radio
+                                            key={index}
+                                            value={role.key}
+                                            name="role[]"
+                                            onChange={this.handleRoleChange.bind(this)}
+                                        />
+                                    } label={role.title ? role.title : role.key} />
+                                </Grid>
+                            )
+                        })}
+
                         {this.state.permissions.map((permission) => {
                             return(
                                 <Grid container>
@@ -126,6 +173,7 @@ class Acl extends Component {
                                                         <Checkbox
                                                             key={index}
                                                             value={action.id}
+                                                            name={action.id}
                                                             checked={this.state.checkedItems.get(action.id)}
                                                             onChange={this.handleChangeInput.bind(this)}
                                                         />
