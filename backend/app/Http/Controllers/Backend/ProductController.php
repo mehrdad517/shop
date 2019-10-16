@@ -11,22 +11,45 @@ use Validator;
 class ProductController extends Controller
 {
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
 
-        $limit = $request->get('limit') ?? 10;
+        $entities = Product::with(['brand'])->where(function ($q) use($request) {
+            if ($request->has('filter')) {
+                $filter = json_decode($request->get('filter'), true);
+                if (@$filter['title']) {
+                    $q->where('title', 'like', '%' . $filter['title'] . '%');
+                }
 
-        // sort parameter
-        $field = $request->get('field') ?? 'id';
-        $type = $request->get('type') ?? 'desc';
+                if (@$filter['id']) {
+                    $q->where('id', '=', $filter['id']);
+                }
 
-        $result = Product::orderBy($field, $type)->paginate($limit);
+                if ($filter['count'] != -1) {
+                    if ($filter['count'] == 1) {
+                        $q->where('count', '>', 0);
+                    } else {
+                        $q->where('count', '=', 0);
+                    }
+                }
 
-        return response($result);
+                if ($filter['discount'] != -1) {
+                    if ($filter['discount'] == 1) {
+                        $q->where('discount', '>', 0);
+                    } else {
+                        $q->where('discount', '=', 0);
+                    }
+                }
+
+                if (@$filter['status'] != -1) {
+                    $q->where('status', $filter['status']);
+                }
+            }
+        })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
+            ->paginate($request->get('limit') ?? 10);
+
+        return response($entities);
+
     }
 
 
@@ -137,6 +160,35 @@ class ProductController extends Controller
 
         return response()->json(['status'  =>  false, 'msg'=> 'error']);
 
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changestatus($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ], [
+            'status.required' => 'وضعیت را وارد نکرده اید.',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $model = Product::where('id', $id)->update([
+            'status' => $request->get('status')
+        ]);
+
+        if ($model) {
+
+            return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+        }
+        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
     }
 
 }

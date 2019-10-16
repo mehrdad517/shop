@@ -65,49 +65,4 @@ class RoleController extends Controller
         return response()->json(['status' => false, 'msg' => 'un success'], 200);
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        $result = Role::select('key', 'title')->with(['permission' => function($q) {
-            $q->select('title', 'key');
-        }])->find($id);
-
-        if ($result) {
-
-            return response()->json(['status' => true, 'result' => $result], 200);
-        }
-
-        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است'], 200);
-    }
-
-
-    /**
-     * @param $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update($id, Request $request)
-    {
-
-        if ($request->get('role')) {
-            $model = Role::updateOrCreate([
-                'key' => $request->get('key'),
-                'title' => $request->get('title'),
-            ], ['id' => $id]);
-        } else {
-            $model = Role::find($id);
-        }
-        $model->permission()->detach();
-        $model->permission()->attach($request->get('permissions'));
-
-        if ($model) {
-            return response()->json(['status' => true, 'msg' => 'تغییرات با موفقیت اعمال شد.'], 200);
-        }
-        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.'], 200);
-
-    }
-
 }

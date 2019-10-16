@@ -23,11 +23,35 @@ class Api {
         return response.data;
     }
 
+    // change product status
+    // change password
+    async  changeProductStatus(id, object) {
+        return  axios.put(`http://localhost:8000/api/backend/products/${id}/change/status`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
 
 
     // fetch user form db
     async fetchUsers(object) {
         return axios.get('http://localhost:8000/api/backend/users', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    // fetch products form db
+    async fetchProducts(object) {
+        return axios.get('http://localhost:8000/api/backend/products/', {
             headers: this.haeders(),
             params: object
         }).then( (response) => {

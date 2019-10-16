@@ -81,9 +81,6 @@ class Acl extends Component {
     };
 
     handleRoleChange(event) {
-        this.setState({
-            loading: false
-        });
         let val = event.target.value;
         this.state.checkedItems.forEach((key, value) => {
             this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, false)}));
@@ -105,7 +102,6 @@ class Acl extends Component {
             form:{
                 role_key: val,
             },
-            loading: true
         })
     };
 
@@ -119,6 +115,10 @@ class Acl extends Component {
             return;
         }
 
+        this.setState({
+            loading: false
+        });
+
         let permissions = [];
         let i = 0;
         this.state.checkedItems.forEach((key, value) => {
@@ -129,12 +129,15 @@ class Acl extends Component {
         }) ;
 
         this.api.roleSetPermissions(this.state.form.role_key, {'permissions': permissions}).then((response) => {
+            this.setState({
+                snackbar: {open: true, msg: response.msg},
+            });
+            this.setState({
+                loading: true
+            });
             if (response.status) {
                 this.props.fetchRoles();
             }
-            this.setState({
-                snackbar: {open: true, msg: response.msg}
-            })
         }).catch((error) => {
             console.log(error);
         })
@@ -147,7 +150,7 @@ class Acl extends Component {
             this.state.permissions.map((permission) => {
                 if (controller === permission.controller) {
                     permission.actions.map((action) => {
-                        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, (!this.state.checkedItems.get(action.id) ? true : false) )}));
+                            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, !this.state.checkedItems.get(action.id) )}));
                     })
                 }
             })
@@ -163,7 +166,7 @@ class Acl extends Component {
     }
 
     render() {
-        if (!this.state.loading) {
+        if (this.state.loading === false) {
             return(<CircularProgress color={"secondary"} />);
         }
         return (

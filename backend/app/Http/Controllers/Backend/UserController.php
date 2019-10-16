@@ -48,8 +48,6 @@ class UserController extends Controller
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
             ->paginate($request->get('limit') ?? 10);
 
-//        dd('cxxx');
-
 
         return response($entities);
 
@@ -171,7 +169,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'status' => 'required',
         ], [
-            'name.required' => 'وضعیت را وارد نکرده اید.',
+            'status.required' => 'وضعیت را وارد نکرده اید.',
         ]);
 
         if ($validator->fails()) {

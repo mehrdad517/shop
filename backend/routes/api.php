@@ -115,9 +115,6 @@ Route::group(['prefix' => '/backend'], function () {
         Route::group(['prefix' => '/roles'], function () {
             Route::get('/', 'Backend\RoleController@index');
             Route::post('/', 'Backend\RoleController@store');
-            Route::get('/{id}', 'Backend\RoleController@show');
-            Route::put('/{id}', 'Backend\RoleController@update');
-            Route::delete('/{id}', 'Backend\RoleController@delete');
         });
 
         Route::get('/', 'Backend\UserController@index');
@@ -129,20 +126,12 @@ Route::group(['prefix' => '/backend'], function () {
 
     });
 
-
-
     Route::group([ 'prefix' => '/products'], function () {
         Route::get('/', 'Backend\ProductController@index');
         Route::post('/', 'Backend\ProductController@store');
         Route::get('/{id}', 'Backend\ProductController@show');
         Route::put('/{id}', 'Backend\ProductController@update');
-        Route::delete('/{id}', 'Backend\ProductController@delete');
-
-        Route::group(['prefix' => 'category'], function () {
-            Route::get('/', 'Backend\ProductCategoryController@index');
-            Route::post('/', 'Backend\ProductCategoryController@store');
-        });
-
+        Route::put('/{id}/change/status', 'Backend\ProductController@changeStatus');
     });
 
 });

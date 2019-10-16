@@ -16,7 +16,6 @@ class usersSeeder extends Seeder
         foreach (range(1,50) as $index) {
             \Illuminate\Support\Facades\DB::table('users')->insert([
                 'name' => $faker->name(),
-                'email' => $faker->email(),
                 'mobile' => $faker->phoneNumber(),
                 'role_key' => 'programmer',
                 'password'=> bcrypt($faker->password()),
