@@ -25,8 +25,6 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import SortIcon from '@material-ui/icons/Sort';
 import SyncIcon from '@material-ui/icons/Sync';
-import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
-import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCheckBoxTwoTone';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 
@@ -36,17 +34,15 @@ class ProductList extends Component {
         this.state= {
             entities : [],
             loading: false,
-            default: {
-                filter: {
-                    status: -1,
-                    count: -1,
-                    discount: -1
-                },
-                page: 1,
-                limit: 10,
-                sort_field: 'id',
-                sort_type: 'desc',
+            filter: {
+                status: -1,
+                count: -1,
+                discount: -1
             },
+            page: 1,
+            limit: 10,
+            sort_field: 'id',
+            sort_type: 'desc',
             snackbar: {
               open: false,
               msg: null
@@ -62,10 +58,8 @@ class ProductList extends Component {
         let limit = event.target.value;
         await new Promise((resolve => {
             resolve(this.setState({
-                default: {
                     limit: parseInt(limit),
                     page:  1
-                }
             }));
         }));
 
@@ -73,14 +67,12 @@ class ProductList extends Component {
     }
 
     async handleChangeSearchInput(event) {
-        let filter = this.state.default.filter;
+        let filter = this.state.filter;
         filter[event.target.name] = event.target.value;
         await new Promise((resolve => {
             resolve(this.setState({
-                default: {
-                    filter,
-                    page: 1
-                }
+                filter,
+                page: 1
             }));
         }));
 
@@ -91,11 +83,9 @@ class ProductList extends Component {
     async handleChangeSort(parameter) {
         await new Promise((resolve => {
             resolve(this.setState({
-                default: {
                     sort_field : parameter,
-                    sort_type : (this.state.default.sort_type === 'desc' ? 'asc' : 'desc'),
+                    sort_type : (this.state.sort_type === 'desc' ? 'asc' : 'desc'),
                     page: 1
-                }
             }));
         }));
 
@@ -107,9 +97,7 @@ class ProductList extends Component {
 
         await new Promise((resolve => {
             resolve(this.setState({
-                default : {
                     page: page
-                }
             }));
         }));
 
@@ -140,7 +128,13 @@ class ProductList extends Component {
 
     async handleRequest() {
         let instance = new Api();
-        instance.fetchProducts(this.state.default).then((response) => {
+        instance.fetchProducts({
+            filter: this.state.filter,
+            sort_field: this.state.sort_field,
+            sort_type: this.state.sort_type,
+            page: this.state.page,
+            limit: this.state.limit
+        }).then((response) => {
                 this.setState({
                     entities: response,
                     loading: true,
@@ -155,6 +149,7 @@ class ProductList extends Component {
     }
 
     render() {
+        console.log(this.state);
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -221,7 +216,7 @@ class ProductList extends Component {
                                         <TextField
                                             select
                                             label="موجودی"
-                                            value={this.state.default.filter.count }
+                                            value={this.state.filter.count}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
@@ -240,7 +235,7 @@ class ProductList extends Component {
                                         <TextField
                                             select
                                             label="وضعیت"
-                                            value={this.state.default.filter.status}
+                                            value={this.state.filter.status}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
@@ -259,7 +254,7 @@ class ProductList extends Component {
                                         <TextField
                                             select
                                             label="تخفیف"
-                                            value={this.state.default.filter.discount}
+                                            value={this.state.filter.discount}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
@@ -289,7 +284,7 @@ class ProductList extends Component {
                             <Grid item xs={4} sm={6}>
                                 <FormControl>
                                     <NativeSelect
-                                        value={this.state.default.limit}
+                                        value={this.state.limit}
                                         onChange={this.handleChangeLimit.bind(this)}
                                         name="age"
                                         inputProps={{ 'aria-label': 'age' }}
@@ -305,7 +300,7 @@ class ProductList extends Component {
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <Pagination
-                                    activePage={this.state.default.page}
+                                    activePage={this.state.page}
                                     itemsCountPerPage={this.state.entities.per_page}
                                     totalItemsCount={this.state.entities.total}
                                     pageRangeDisplayed={5}
@@ -326,14 +321,14 @@ class ProductList extends Component {
                             <table className='table'>
                                 <thead>
                                 <tr>
-                                    <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.default.sort_field === 'id' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('title')}>نام &nbsp;{this.state.default.sort_field === 'title' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('brand_id')}>برند &nbsp;{this.state.default.sort_field === 'brand_id' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('count')}>موجودی&nbsp;{this.state.default.sort_field === 'count' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('price')}>قیمت&nbsp;{this.state.default.sort_field === 'price' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('discount')}>تخفیف&nbsp;{this.state.default.sort_field === 'discount' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('sales_number')}>تعداد فروش&nbsp;{this.state.default.sort_field === 'sales_number' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.default.sort_field === 'status' ? (this.state.default.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('title')}>نام &nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('brand_id')}>برند &nbsp;{this.state.sort_field === 'brand_id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('count')}>موجودی&nbsp;{this.state.sort_field === 'count' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('price')}>قیمت&nbsp;{this.state.sort_field === 'price' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('discount')}>تخفیف&nbsp;{this.state.sort_field === 'discount' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('sales_number')}>تعداد فروش&nbsp;{this.state.sort_field === 'sales_number' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
                                 </tr>
                                 </thead>
@@ -364,7 +359,7 @@ class ProductList extends Component {
                             </table>
                         </div>
                         <Pagination
-                            activePage={this.state.default.page}
+                            activePage={this.state.page}
                             itemsCountPerPage={this.state.entities.per_page}
                             totalItemsCount={this.state.entities.total}
                             pageRangeDisplayed={5}
