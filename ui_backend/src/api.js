@@ -24,7 +24,6 @@ class Api {
     }
 
     // change product status
-    // change password
     async  changeProductStatus(id, object) {
         return  axios.put(`http://localhost:8000/api/backend/products/${id}/change/status`, object, {
             headers: this.haeders()
@@ -60,6 +59,59 @@ class Api {
             console.log(error);
         })
     }
+
+    async fetchAttributes(object) {
+        return axios.get('http://localhost:8000/api/backend/products/attributes', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async fetchAttribute(id) {
+        return axios.get('http://localhost:8000/api/backend/products/attributes/' + id,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async createAttribute(object) {
+        return axios.post('http://localhost:8000/api/backend/products/attributes', object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async updateAttribute(id, object) {
+        return axios.put('http://localhost:8000/api/backend/products/attributes/' + id, object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+    async fetchProductCategories(object) {
+        return axios.get('http://localhost:8000/api/backend/products/categories', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+
 
 
     // fetch user form db

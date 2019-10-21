@@ -10,4 +10,8 @@ class ProductCategory extends Model
     use NodeTrait;
 
     protected $table = 'product_category';
+
+    protected $fillable=['title'];
+
+
 }

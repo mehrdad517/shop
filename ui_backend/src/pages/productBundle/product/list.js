@@ -32,6 +32,7 @@ class ProductList extends Component {
     constructor(props) {
         super(props);
         this.state= {
+            news: '',
             entities : [],
             loading: false,
             filter: {
@@ -128,6 +129,12 @@ class ProductList extends Component {
 
     async handleRequest() {
         let instance = new Api();
+
+        instance.fetchProductCategories().then((response) => {
+            this.setState({
+                news : response
+            });
+        })
         instance.fetchProducts({
             filter: this.state.filter,
             sort_field: this.state.sort_field,
@@ -149,7 +156,6 @@ class ProductList extends Component {
     }
 
     render() {
-        console.log(this.state);
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -159,6 +165,7 @@ class ProductList extends Component {
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
+                                {this.state.news}
                                 <h2>مدیریت محصولات</h2>
                                 <p style={{ color: '#8e8e8e'}}>کلیه محصولات در این صفحه لیست شده اند.</p>
                             </Grid>
@@ -171,114 +178,114 @@ class ProductList extends Component {
                             </Grid>
                         </Grid>
                     </Box>
-                    <Box style={{ margin: '20px 0'}} boxShadow={0}>
-                        <ExpansionPanel>
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1c-content"
-                                id="panel1c-header"
-                            >
-                                <div>
-                                    <Typography>جستجو در لیست</Typography>
-                                </div>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails >
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            id="outlined-name"
-                                            label="کد محصول"
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='id'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            id="outlined-name"
-                                            label="نام محصول"
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='title'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="موجودی"
-                                            value={this.state.filter.count}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='count'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>دارد</MenuItem>
-                                            <MenuItem key={2} value={0}>ندارد</MenuItem>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="وضعیت"
-                                            value={this.state.filter.status}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='status'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>فعال</MenuItem>
-                                            <MenuItem key={2} value={0}>غیرفعال</MenuItem>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="تخفیف"
-                                            value={this.state.filter.discount}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='discount'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>دارد</MenuItem>
-                                            <MenuItem key={2} value={0}>ندارد</MenuItem>
-                                        </TextField>
-                                    </Grid>
+                <Box style={{ margin: '20px 0'}} boxShadow={0}>
+                    <ExpansionPanel>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1c-content"
+                            id="panel1c-header"
+                        >
+                            <div>
+                                <Typography>جستجو در لیست</Typography>
+                            </div>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={4} md={3} >
+                                    <TextField
+                                        id="outlined-name"
+                                        label="کد محصول"
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='id'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeSearchInput.bind(this)}
+                                    />
                                 </Grid>
-                            </ExpansionPanelDetails>
-                            <Divider />
-                            <ExpansionPanelActions>
-                                <Button color="primary">
-                                    جستجو
-                                </Button>
-                            </ExpansionPanelActions>
-                        </ExpansionPanel>
-                    </Box>
+                                <Grid item xs={12} sm={4} md={3} >
+                                    <TextField
+                                        id="outlined-name"
+                                        label="نام محصول"
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='title'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeSearchInput.bind(this)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={4} md={3} >
+                                    <TextField
+                                        select
+                                        label="موجودی"
+                                        value={this.state.filter.count}
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='count'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeSearchInput.bind(this)}
+                                    >
+                                        <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                        <MenuItem key={1} value={1}>دارد</MenuItem>
+                                        <MenuItem key={2} value={0}>ندارد</MenuItem>
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} sm={4} md={3} >
+                                    <TextField
+                                        select
+                                        label="وضعیت"
+                                        value={this.state.filter.status}
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='status'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeSearchInput.bind(this)}
+                                    >
+                                        <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                        <MenuItem key={1} value={1}>فعال</MenuItem>
+                                        <MenuItem key={2} value={0}>غیرفعال</MenuItem>
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} sm={4} md={3} >
+                                    <TextField
+                                        select
+                                        label="تخفیف"
+                                        value={this.state.filter.discount}
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='discount'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeSearchInput.bind(this)}
+                                    >
+                                        <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                        <MenuItem key={1} value={1}>دارد</MenuItem>
+                                        <MenuItem key={2} value={0}>ندارد</MenuItem>
+                                    </TextField>
+                                </Grid>
+                            </Grid>
+                        </ExpansionPanelDetails>
+                        <Divider />
+                        <ExpansionPanelActions>
+                            <Button color="primary">
+                                جستجو
+                            </Button>
+                        </ExpansionPanelActions>
+                    </ExpansionPanel>
+                </Box>
                     <Box style={{ margin: '20px 0 0 0'}}>
                         <Grid container alignItems="center" >
                             <Grid item xs={4} sm={6}>

@@ -127,6 +127,23 @@ Route::group(['prefix' => '/backend'], function () {
     });
 
     Route::group([ 'prefix' => '/products'], function () {
+
+        Route::group(['prefix' => '/attributes'], function () {
+            Route::get('/', 'Backend\GroupAttributeController@index');
+            Route::post('/', 'Backend\GroupAttributeController@store');
+            Route::get('/{id}', 'Backend\GroupAttributeController@show');
+            Route::put('/{id}', 'Backend\GroupAttributeController@update');
+        });
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', function () {
+//                $pa = \App\ProductCategory::find(1);
+//                \App\ProductCategory::create(['title' => 'xx'], \App\ProductCategory::find(6));
+                dd();
+                return response(makeTree());
+            });
+        });
+
         Route::get('/', 'Backend\ProductController@index');
         Route::post('/', 'Backend\ProductController@store');
         Route::get('/{id}', 'Backend\ProductController@show');
@@ -136,6 +153,30 @@ Route::group(['prefix' => '/backend'], function () {
 
 });
 
+
+function makeTree()
+{
+    $nodes = \App\ProductCategory::get()->toTree();
+    if(! empty($nodes->toArray())) {
+        $tree = '<div class="tree">';
+        $traverse = function ($regions) use (&$traverse , &$tree) {
+            $tree .= '<ul>';
+            foreach ($regions as $key=>$region) {
+                $tree .= '<li class="'. ($region->status == 1 ? '' : ' tree-disabled') .'" id="node_'.$region->id.'" data-id="'.$region->id.'"><a href="'. url('Category/'. $region->id).'">'. $region->title . '</a>' ;
+                if(count($region->children) > 0) {
+                    $traverse($region->children);
+                }
+                $tree .= '</li>';
+            }
+            $tree .= '</ul>';
+        };
+        $traverse($nodes);
+        $tree .= '</div>';
+    } else {
+        $tree =  "<div class='tree'></div><div class='alert alert-info'><p>برای ایجاد نود جدید روی دکمه + کلیک کنید.</p></div>";
+    }
+    return $tree;
+}
 
 
 
