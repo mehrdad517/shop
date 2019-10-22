@@ -100,10 +100,32 @@ class Api {
             console.log(error);
         })
     }
+
+    // category
     async fetchProductCategories(object) {
         return axios.get('http://localhost:8000/api/backend/products/categories', {
             headers: this.haeders(),
             params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async fetchProductCategory(id) {
+        return axios.get('http://localhost:8000/api/backend/products/categories/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async createProductCategories(object) {
+        return axios.post('http://localhost:8000/api/backend/products/categories', object ,{
+            headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {

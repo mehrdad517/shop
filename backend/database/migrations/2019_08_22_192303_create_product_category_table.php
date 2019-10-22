@@ -14,12 +14,13 @@ class CreateProductCategoryTable extends Migration
     public function up()
     {
         Schema::create('product_category', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('title');
+            $table->bigIncrements('value');
+            $table->string('label');
             $table->string('slug')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('pic_link')->nullable();
+            $table->boolean('status')->default(true);
 
             $table->nestedSet();
             $table->timestamps();

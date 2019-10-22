@@ -10,6 +10,14 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 import Container from "@material-ui/core/Container";
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import IconButton from "@material-ui/core/IconButton";
+import SyncIcon from '@material-ui/icons/Sync';
+import ProductCategoryCreate from "./create";
+import AttributeCreate from "../GroupAttribute/create";
+import Dialog from "@material-ui/core/Dialog";
+import AttributeEdit from "../GroupAttribute/edit";
+import ProductCategoryEdit from "./edit";
+import EditIcon from "@material-ui/icons/Edit";
 
 class ProductCategory extends Component {
     constructor(props) {
@@ -30,6 +38,15 @@ class ProductCategory extends Component {
         this.handleRequest();
     }
 
+    handleSnackbar(parameter) {
+        this.setState({
+            snackbar:{
+                open: parameter.open,
+                msg: parameter.msg
+            }
+        })
+    }
+
 
     async handleRequest() {
         let instance = new Api();
@@ -43,7 +60,6 @@ class ProductCategory extends Component {
     }
 
     render() {
-
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -53,28 +69,47 @@ class ProductCategory extends Component {
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>مدیریت محصولات</h2>
-                                <p style={{ color: '#8e8e8e'}}>کلیه محصولات در این صفحه لیست شده اند.</p>
+                                <h2>دسته بندی محصولات</h2>
+                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید محصولات را دسته بندی کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Button variant="contained" color="default" >
-                                        بازگشت&nbsp;<NavigationIcon />
+                                        <NavigationIcon />
                                     </Button>
                                 </div>
                             </Grid>
                         </Grid>
                     </Box>
                     <Box>
+                        <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <ProductCategoryCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} items={this.state.checked} />
+                            <Tooltip title="ویرایش">
+                                <IconButton onClick={() => this.state.entity ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="سینک">
+                                <IconButton onClick={() => this.handleRequest()} >
+                                    <SyncIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </Box>
+                    <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <CheckboxTree
                             nodes={this.state.entities}
                             checked={this.state.checked}
                             expanded={this.state.expanded}
                             onCheck={checked => this.setState({ checked })}
                             onExpand={expanded => this.setState({ expanded })}
+                            noCascade={true}
                         />
                     </Box>
                 </Container>
+                <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>
+                    <ProductCategoryEdit entity={this.state.checked}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({dialog: false})} />
+                </Dialog>
                 <Snackbar
                     autoHideDuration={4500}
                     open={this.state.snackbar.open}

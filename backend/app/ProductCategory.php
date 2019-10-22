@@ -9,9 +9,12 @@ class ProductCategory extends Model
 {
     use NodeTrait;
 
+    protected $primaryKey = 'value';
+
     protected $table = 'product_category';
 
-    protected $fillable=['title'];
+    protected $fillable=['label'];
+
 
 
 

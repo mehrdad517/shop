@@ -136,10 +136,8 @@ Route::group(['prefix' => '/backend'], function () {
         });
 
         Route::group(['prefix' => '/categories'], function () {
-            Route::get('/', function () {
-                dd(makeTree());
-                return response();
-            });
+            Route::get('/', 'Backend\ProductCategoryController@index');
+            Route::post('/', 'Backend\ProductCategoryController@store');
         });
 
         Route::get('/', 'Backend\ProductController@index');
@@ -154,23 +152,44 @@ Route::group(['prefix' => '/backend'], function () {
 
 function makeTree()
 {
+
+    $nodes = \App\ProductCategory::get()->toTree();
+
+    $arr = [];
+    $traverse = function ($categories) use (&$traverse, &$arr) {
+        foreach ($categories as $key=>$category) {
+            $arr[$category->id] = [$category->title, $category->id];
+            if (count($category->children) > 0) {
+                $arr[$category->parent_id]['children'] =  $traverse($category->children);
+            }
+
+        }
+    };
+
+    $traverse($nodes);
+
+    dd($arr);
+    die();
     $arr = [];
     $nodes = \App\ProductCategory::get()->toTree();
-    if(! empty($nodes->toArray())) {
+    dd($nodes->toArray());
+        $level_counter = 0;
         $traverse = function ($regions) use (&$traverse , &$arr) {
             foreach ($regions as $key=>$region) {
-                $arr[$key] = ['value' => $region->id, 'label' => $region->title];
+                $arr[$region->id]['value'] = $region->id;
+                $arr[$region->id]['label'] = $region->title;
                 if(count($region->children) > 0) {
                     foreach ($region->children as $child) {
-                        $arr[$key]['children'][] = ['value' => $child->id, 'label' => $child->title];
+                        $arr[$region->id]['children'][] = ['value' => $child->id, 'label' => $child->title];
+                        if (count($child['children']) > 0) {
+                            $traverse($child['children']);
+                        }
                     }
-//                    $traverse($region->children);
                 }
 
             }
         };
         $traverse($nodes);
-    }
     return $arr;
 }
 
