@@ -137,10 +137,8 @@ Route::group(['prefix' => '/backend'], function () {
 
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/', function () {
-//                $pa = \App\ProductCategory::find(1);
-//                \App\ProductCategory::create(['title' => 'xx'], \App\ProductCategory::find(6));
-                dd();
-                return response(makeTree());
+                dd(makeTree());
+                return response();
             });
         });
 
@@ -156,26 +154,24 @@ Route::group(['prefix' => '/backend'], function () {
 
 function makeTree()
 {
+    $arr = [];
     $nodes = \App\ProductCategory::get()->toTree();
     if(! empty($nodes->toArray())) {
-        $tree = '<div class="tree">';
-        $traverse = function ($regions) use (&$traverse , &$tree) {
-            $tree .= '<ul>';
+        $traverse = function ($regions) use (&$traverse , &$arr) {
             foreach ($regions as $key=>$region) {
-                $tree .= '<li class="'. ($region->status == 1 ? '' : ' tree-disabled') .'" id="node_'.$region->id.'" data-id="'.$region->id.'"><a href="'. url('Category/'. $region->id).'">'. $region->title . '</a>' ;
+                $arr[$key] = ['value' => $region->id, 'label' => $region->title];
                 if(count($region->children) > 0) {
-                    $traverse($region->children);
+                    foreach ($region->children as $child) {
+                        $arr[$key]['children'][] = ['value' => $child->id, 'label' => $child->title];
+                    }
+//                    $traverse($region->children);
                 }
-                $tree .= '</li>';
+
             }
-            $tree .= '</ul>';
         };
         $traverse($nodes);
-        $tree .= '</div>';
-    } else {
-        $tree =  "<div class='tree'></div><div class='alert alert-info'><p>برای ایجاد نود جدید روی دکمه + کلیک کنید.</p></div>";
     }
-    return $tree;
+    return $arr;
 }
 
 

@@ -7,6 +7,7 @@ import UserList from './pages/userBundle/user/list';
 import ProductList from './pages/productBundle/product/list'
 import GroupAttributeList from './pages/productBundle/GroupAttribute/list'
 import BrandList from './pages/productBundle/brand/list';
+import ProductCategory from './pages/productBundle/productCategory/index'
 
 import 'animate.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -26,6 +27,7 @@ function App() {
                     <Route component={UserList} path='/users' exact={true} />
                     <Route component={Acl} path='/users/access/control/list' />
                     <Route component={ProductList} path='/products' exact={true} />
+                    <Route component={ProductCategory} path='/products/categories' />
                     <Route component={GroupAttributeList} path='/products/attributes' />
                     <Route component={BrandList} path='/products/brands' />
                 </MainLayout>

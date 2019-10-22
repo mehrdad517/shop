@@ -14,4 +14,5 @@ class ProductCategory extends Model
     protected $fillable=['title'];
 
 
+
 }
