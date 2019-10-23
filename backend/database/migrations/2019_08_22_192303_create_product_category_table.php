@@ -16,7 +16,7 @@ class CreateProductCategoryTable extends Migration
         Schema::create('product_category', function (Blueprint $table) {
             $table->bigIncrements('value');
             $table->string('label');
-            $table->string('slug')->nullable();
+            $table->string('slug')->nullable()->unique();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('pic_link')->nullable();

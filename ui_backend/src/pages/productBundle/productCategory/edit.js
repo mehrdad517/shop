@@ -7,6 +7,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../api";
+import MenuItem from "@material-ui/core/MenuItem";
 
 class ProductCategoryEdit extends Component {
 
@@ -16,6 +17,10 @@ class ProductCategoryEdit extends Component {
             open: false,
             form: {
                 label: '',
+                slug: '',
+                meta_title: '',
+                meta_description: '',
+                status: 1
             }
         };
 
@@ -26,7 +31,11 @@ class ProductCategoryEdit extends Component {
         this.api.fetchProductCategory(this.props.entity).then((response) => {
             this.setState({
                 form: {
-                    label: response.label
+                    label: response.label,
+                    slug: response.slug,
+                    meta_title: response.meta_title,
+                    meta_description: response.meta_description,
+                    status: response.status
                 }
             })
         }).catch((error) => {
@@ -45,13 +54,10 @@ class ProductCategoryEdit extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
-        this.api.updateAttribute(this.props.entity, this.state.form).then((response) => {
+        this.api.updateProductCategory(this.props.entity, this.state.form).then((response) => {
             if (response.status) {
                 this.setState({
                     open: false,
-                    form:{
-                        label: '',
-                    }
                 });
                 this.props.onClose();
                 this.props.handleRequest();
@@ -66,24 +72,85 @@ class ProductCategoryEdit extends Component {
 
 
     render() {
+        console.log(this.props.entity[0])
         return (
                     <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
                         <DialogTitle id="form-dialog-title">ویرایش</DialogTitle>
                         <DialogContent>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} >
+                                <TextField
+                                    label="عنوان"
+                                    variant="filled"
+                                    margin='dense'
+                                    value={this.state.form.label}
+                                    fullWidth
+                                    name='label'
+                                    onChange={this.handleChangeElement.bind(this)}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </Grid>
+                                <Grid item xs={12} >
                                     <TextField
-                                        label="عنوان"
+                                        label="اسلاگ"
                                         variant="filled"
                                         margin='dense'
-                                        value={this.state.form.label}
+                                        value={this.state.form.slug}
                                         fullWidth
-                                        name='label'
+                                        name='slug'
                                         onChange={this.handleChangeElement.bind(this)}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
                                     />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="متا عنوان"
+                                        variant="filled"
+                                        margin='dense'
+                                        value={this.state.form.meta_title}
+                                        fullWidth
+                                        name='meta_title'
+                                        onChange={this.handleChangeElement.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="متا توضیحات"
+                                        variant="filled"
+                                        margin='dense'
+                                        value={this.state.form.meta_description}
+                                        fullWidth
+                                        name='meta_description'
+                                        onChange={this.handleChangeElement.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        select
+                                        label="وضعیت"
+                                        value={this.state.form.status}
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='status'
+                                        onChange={this.handleChangeElement.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    >
+                                            <MenuItem value={1}>فعال</MenuItem>
+                                            <MenuItem value={0}>غیرفعال</MenuItem>
+                                    </TextField>
                                 </Grid>
                             </Grid>
                         </DialogContent>

@@ -53,16 +53,31 @@ class ProductCategoryController extends Controller
      * @param null $id
      * @return \Illuminate\Http\Response
      */
-    public function updateTree($id, Request $request)
+    public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'label' => 'required',
+        ], [
+            'label.required' => 'نام خود را وارد نکرده اید.',
         ]);
         if ($validator->fails()) {
-            return Response()->json(['status' => false, 'msg' => 'فیلد را پر کنید']);
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $slug = ProductCategory::where('slug', $request->get('slug'))->where('value', '<>', $id)->count();
+        if ($slug > 0) {
+            return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
         }
 
         ProductCategory::where('value', $id)->update($request->all());
+
+        $nodes = ProductCategory::descendantsAndSelf($id);
+        foreach ($nodes as $nod) {
+            $nod->status = $request->get('status');
+            $nod->save();
+        }
+
+
 
         return response()->json(['status' => true, 'msg' => 'با موفقیت به روز رسانی گردید']);
     }

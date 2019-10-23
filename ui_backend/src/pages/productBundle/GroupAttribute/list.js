@@ -44,7 +44,7 @@ class GroupAttributeList extends Component {
     }
 
     componentDidMount() {
-       this.handleRequest();
+        this.handleRequest();
     }
 
     async handleChangeSearchInput(event) {
@@ -147,7 +147,7 @@ class GroupAttributeList extends Component {
                         </ExpansionPanel>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                            <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
+                        <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
                         <Tooltip title="ویرایش">
                             <IconButton onClick={() => this.state.entity ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
                                 <EditIcon />
@@ -157,17 +157,17 @@ class GroupAttributeList extends Component {
                     <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <Grid container>
                             {this.state.entities.map((entity, index) => {
-                               return(
-                                   <Grid key={index} item xs={6} sm={2}>
-                                       <FormControlLabel  control={
-                                           <Radio
-                                               checked={this.state.entity === entity.id}
-                                               onChange={() => this.setState({ entity: entity.id})}
-                                               name='attribues'
-                                           />
-                                       } label={entity.title} />
-                                   </Grid>
-                               );
+                                return(
+                                    <Grid key={index} item xs={6} sm={2}>
+                                        <FormControlLabel  control={
+                                            <Radio
+                                                checked={this.state.entity === entity.id}
+                                                onChange={() => this.setState({ entity: entity.id})}
+                                                name='attribues'
+                                            />
+                                        } label={entity.title} />
+                                    </Grid>
+                                );
                             })}
                         </Grid>
                     </Box>

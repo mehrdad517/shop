@@ -128,6 +128,16 @@ Route::group(['prefix' => '/backend'], function () {
 
     Route::group([ 'prefix' => '/products'], function () {
 
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\ProductCategoryController@index');
+            Route::post('/', 'Backend\ProductCategoryController@store');
+            Route::get('/{id}', function ($id)  {
+                return response(\App\ProductCategory::find($id));
+            });
+            Route::put('/{id}', 'Backend\ProductCategoryController@update');
+        });
+
         Route::group(['prefix' => '/attributes'], function () {
             Route::get('/', 'Backend\GroupAttributeController@index');
             Route::post('/', 'Backend\GroupAttributeController@store');
@@ -135,10 +145,6 @@ Route::group(['prefix' => '/backend'], function () {
             Route::put('/{id}', 'Backend\GroupAttributeController@update');
         });
 
-        Route::group(['prefix' => '/categories'], function () {
-            Route::get('/', 'Backend\ProductCategoryController@index');
-            Route::post('/', 'Backend\ProductCategoryController@store');
-        });
 
         Route::get('/', 'Backend\ProductController@index');
         Route::post('/', 'Backend\ProductController@store');
@@ -149,49 +155,6 @@ Route::group(['prefix' => '/backend'], function () {
 
 });
 
-
-function makeTree()
-{
-
-    $nodes = \App\ProductCategory::get()->toTree();
-
-    $arr = [];
-    $traverse = function ($categories) use (&$traverse, &$arr) {
-        foreach ($categories as $key=>$category) {
-            $arr[$category->id] = [$category->title, $category->id];
-            if (count($category->children) > 0) {
-                $arr[$category->parent_id]['children'] =  $traverse($category->children);
-            }
-
-        }
-    };
-
-    $traverse($nodes);
-
-    dd($arr);
-    die();
-    $arr = [];
-    $nodes = \App\ProductCategory::get()->toTree();
-    dd($nodes->toArray());
-        $level_counter = 0;
-        $traverse = function ($regions) use (&$traverse , &$arr) {
-            foreach ($regions as $key=>$region) {
-                $arr[$region->id]['value'] = $region->id;
-                $arr[$region->id]['label'] = $region->title;
-                if(count($region->children) > 0) {
-                    foreach ($region->children as $child) {
-                        $arr[$region->id]['children'][] = ['value' => $child->id, 'label' => $child->title];
-                        if (count($child['children']) > 0) {
-                            $traverse($child['children']);
-                        }
-                    }
-                }
-
-            }
-        };
-        $traverse($nodes);
-    return $arr;
-}
 
 
 

@@ -133,6 +133,16 @@ class Api {
         })
     }
 
+    async updateProductCategory(id, object) {
+        return axios.put('http://localhost:8000/api/backend/products/categories/' + id, object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
 
 
 

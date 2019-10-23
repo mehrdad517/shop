@@ -9,6 +9,13 @@ body {
 }
 .content {
     margin-bottom: 100px;
+    min-height: 400px;
+}
+// tree checkbox
+.react-checkbox-tree label{
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
 }
 // content
 .box{
