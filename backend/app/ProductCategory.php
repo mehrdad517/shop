@@ -15,7 +15,10 @@ class ProductCategory extends Model
 
     protected $fillable=['label'];
 
-
+    public function attributes()
+    {
+        return $this->belongsToMany(ProductCategory::class, 'group_attributes_assign_to_product_category', 'category_id', 'attribute_id');
+    }
 
 
 }

@@ -48,6 +48,10 @@ class ProductCategoryController extends Controller
         }
     }
 
+    public function show($id){
+        return response(\App\ProductCategory::find($id));
+    }
+
 
     /**
      * @param null $id
@@ -77,9 +81,20 @@ class ProductCategoryController extends Controller
             $nod->save();
         }
 
-
-
         return response()->json(['status' => true, 'msg' => 'با موفقیت به روز رسانی گردید']);
+    }
+
+
+    public function storeAttributes(Request $request)
+    {
+        $categories = $request->get('categories');
+        foreach ($categories as $category) {
+            $entity = ProductCategory::find($category);
+            $entity->attributes()->detach();
+            $entity->attributes()->attach($request->get('attributes'));
+        }
+
+        return response()->json(['statue' => true, 'msg' => 'با موفقیت انجام شد.']);
     }
 
 }
