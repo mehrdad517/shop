@@ -39,7 +39,7 @@ class ProductCategory extends Component {
                 open: false,
                 msg: null
             },
-            checkedItems: new Map(),
+            checkedItems: new Map(), // checkbox attributes
         }
     }
 
@@ -57,19 +57,38 @@ class ProductCategory extends Component {
     }
 
     handleChangeAttr(event) {
-        let selected = [];
-        selected = this.state.checkedItems;
-        selected[event.target.value] = event.target.value;
-        this.setState({
-            checkedItems: selected
-        })
-
+        let val = parseInt(event.target.value);
+        if (event.target.checked) {
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, true)}));
+        } else {
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, false)}));
+        }
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state.checked, this.state.checkedItems);
-
+        let instance = new Api();
+        let attr = [];
+        let i = 0;
+        this.state.checkedItems.forEach((key, value) => {
+            if (key) {
+                attr[i] = value;
+                i++;
+            }
+        }) ;
+        instance.storeProductCategory({
+            categories: this.state.checked,
+            attributes: attr
+        }).then((response) => {
+            this.setState({
+                snackbar: {
+                    open: true,
+                    msg: response.msg
+                }
+            })
+        }).catch((error) => {
+            console.log(error);
+        })
 
     }
 
@@ -77,23 +96,51 @@ class ProductCategory extends Component {
     async handleRequest() {
         let instance = new Api();
 
-        instance.fetchProductCategories().then((response) => {
-            this.setState({
-                entities : response,
+        await new Promise((resolve => {
+            resolve(instance.fetchProductCategories().then((response) => {
+                this.setState({
+                    entities : response,
+                });
+            }))
+        }));
+
+        await new Promise((resolve => {
+            resolve( instance.fetchAttributes().then((response) => {
+                response.forEach((key, value) => {
+                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, false)}));
+                }) ;
+                this.setState({
+                    attributes: response
+                })
+            }).catch((error) => {
+                console.log(error);
+            }));
+        }));
+
+        await new Promise((resolve => {
+            resolve(this.setState({
                 loading: true
-            });
+            }));
+        }));
+    }
+
+    handleSelectAttr(checked) {
+        this.setState({
+            checked
         });
 
-        instance.fetchAttributes().then((response) => {
-            this.setState({
-                attributes: response
-            })
+        let instance = new Api();
+        instance.getProductCategoryAttributes(checked).then((response) => {
+            response.forEach((key, value) => {
+                this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, true)}));
+            }) ;
         }).catch((error) => {
             console.log(error);
         })
     }
 
     render() {
+        console.log(this.state.checkedItems);
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -140,7 +187,7 @@ class ProductCategory extends Component {
                                 id="panel1c-header"
                             >
                                 <div>
-                                    <Typography><b style={{ marginRight: '10px' }}>تعیین ویژگی گروهی</b></Typography>
+                                    <Typography><b style={{ marginRight: '10px' }}>تعیین ویژگی</b></Typography>
                                 </div>
                             </ExpansionPanelSummary>
                             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -178,7 +225,7 @@ class ProductCategory extends Component {
                             nodes={this.state.entities}
                             checked={this.state.checked}
                             expanded={this.state.expanded}
-                            onCheck={checked => this.setState({ checked })}
+                            onCheck={checked => this.handleSelectAttr(checked)}
                             onExpand={expanded => this.setState({ expanded })}
                             noCascade={true}
                         /> : <p>دسته جدید ایجاد نمایید.</p> }

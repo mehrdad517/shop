@@ -143,6 +143,25 @@ class Api {
         })
     }
 
+    async storeProductCategory(object) {
+        return axios.post('http://localhost:8000/api/backend/products/categories/attributes', object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    async getProductCategoryAttributes(id) {
+        return axios.get(`http://localhost:8000/api/backend/products/categories/${id}/attributes`,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
 
 
 

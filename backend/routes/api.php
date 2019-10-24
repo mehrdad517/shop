@@ -132,8 +132,9 @@ Route::group(['prefix' => '/backend'], function () {
         Route::group(['prefix' => '/categories'], function () {
             Route::get('/', 'Backend\ProductCategoryController@index');
             Route::post('/', 'Backend\ProductCategoryController@store');
-            Route::get('/{id}', 'Backend\ProductCategory@show');
+            Route::get('/{id}', 'Backend\ProductCategoryController@show');
             Route::put('/{id}', 'Backend\ProductCategoryController@update');
+            Route::get('/{id}/attributes', 'Backend\ProductCategoryController@getAttributes');
             Route::post('/attributes', 'Backend\ProductCategoryController@storeAttributes');
         });
 

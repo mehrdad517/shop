@@ -97,4 +97,9 @@ class ProductCategoryController extends Controller
         return response()->json(['statue' => true, 'msg' => 'با موفقیت انجام شد.']);
     }
 
+    public function getAttributes($id) {
+        return response(ProductCategory::find($id)->attributes);
+
+    }
+
 }

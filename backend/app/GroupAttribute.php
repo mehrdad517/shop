@@ -8,4 +8,6 @@ class GroupAttribute extends Model
 {
     protected $table = 'group_attribute';
     protected $fillable = ['title'];
+
+
 }
