@@ -5,8 +5,6 @@ import {Box, Checkbox, CircularProgress, Snackbar, Tooltip} from "@material-ui/c
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import NavigationIcon from "@material-ui/icons/Navigation";
-
-
 import Container from "@material-ui/core/Container";
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
@@ -22,8 +20,6 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -42,7 +38,8 @@ class ProductCategory extends Component {
             snackbar: {
                 open: false,
                 msg: null
-            }
+            },
+            checkedItems: new Map(),
         }
     }
 
@@ -57,6 +54,23 @@ class ProductCategory extends Component {
                 msg: parameter.msg
             }
         })
+    }
+
+    handleChangeAttr(event) {
+        let selected = [];
+        selected = this.state.checkedItems;
+        selected[event.target.value] = event.target.value;
+        this.setState({
+            checkedItems: selected
+        })
+
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        console.log(this.state.checked, this.state.checkedItems);
+
+
     }
 
 
@@ -95,9 +109,9 @@ class ProductCategory extends Component {
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Link to='/products'>
-                                    <Button variant="contained" color="default" >
-                                        <NavigationIcon />
-                                    </Button>
+                                        <Button variant="contained" color="default" >
+                                            <NavigationIcon />
+                                        </Button>
                                     </Link>
                                 </div>
                             </Grid>
@@ -129,30 +143,34 @@ class ProductCategory extends Component {
                                     <Typography><b style={{ marginRight: '10px' }}>تعیین ویژگی گروهی</b></Typography>
                                 </div>
                             </ExpansionPanelSummary>
-                            <ExpansionPanelDetails >
-                                <Grid container spacing={2}>
-                                    {this.state.attributes.map(function (attr, index) {
-                                        return(
-                                            <Grid key={index}  item sm={4}>
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            key={index}
-                                                        />
-                                                    }
-                                                    label={attr.title}
-                                                />
-                                            </Grid>
-                                        );
-                                    })}
-                                </Grid>
-                            </ExpansionPanelDetails>
-                            <Divider />
-                            <ExpansionPanelActions>
-                                <Button color="primary">
-                                    ثبت اطلاعات
-                                </Button>
-                            </ExpansionPanelActions>
+                            <form onSubmit={this.handleSubmit.bind(this)}>
+                                <ExpansionPanelDetails >
+                                    <Grid container spacing={2}>
+                                        {this.state.attributes && this.state.attributes.map((attr, index) => {
+                                            return(
+                                                <Grid key={index}  item sm={4}>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                value={attr.id}
+                                                                checked={this.state.checkedItems.get(attr.id)}
+                                                                onChange={this.handleChangeAttr.bind(this)}
+                                                            />
+                                                        }
+                                                        label={attr.title}
+                                                    />
+                                                </Grid>
+                                            );
+                                        })}
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                                <Divider />
+                                <ExpansionPanelActions>
+                                    <Button type='submit' color="primary">
+                                        ثبت اطلاعات
+                                    </Button>
+                                </ExpansionPanelActions>
+                            </form>
                         </ExpansionPanel>
                     </Box>
                     <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>

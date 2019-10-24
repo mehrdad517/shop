@@ -1,3 +1,5 @@
 .idea
 ui_backend/node_modules
 backend/vendor/*
+ui_backend/node_modules/*
+/ui_backend/node_modules
