@@ -46,13 +46,13 @@ class ProductList extends Component {
         this.state= {
             checked: [],
             expanded: [],
-            news: '',
             entities : [],
             loading: false,
             filter: {
                 status: -1,
                 count: -1,
-                discount: -1
+                discount: -1,
+                brand: -1
             },
             page: 1,
             limit: 10,
@@ -144,41 +144,33 @@ class ProductList extends Component {
     async handleRequest() {
         let instance = new Api();
 
-        instance.fetchProductCategories().then((response) => {
-            this.setState({
-                news : response
-            });
-        })
-        instance.fetchProducts({
-            filter: this.state.filter,
-            sort_field: this.state.sort_field,
-            sort_type: this.state.sort_type,
-            page: this.state.page,
-            limit: this.state.limit
-        }).then((response) => {
-            this.setState({
-                entities: response,
-                loading: true,
-                snackbar: {
-                    open: true,
-                    msg: 'لیست بارگزاری گردید.'
-                }
-            })
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
+        await new Promise(resolve => {
+            
+        });
 
-    onToggle(node, toggled){
-        const {cursor, data} = this.state;
-        if (cursor) {
-            this.setState(() => ({cursor, active: false}));
-        }
-        node.active = true;
-        if (node.children) {
-            node.toggled = toggled;
-        }
-        this.setState(() => ({cursor: node, data: Object.assign({}, data)}));
+        await new Promise((resolve => {
+            resolve(instance.fetchProducts({
+                filter: this.state.filter,
+                sort_field: this.state.sort_field,
+                sort_type: this.state.sort_type,
+                page: this.state.page,
+                limit: this.state.limit
+            }).then((response) => {
+                if (typeof response != "undefined") {
+                    this.setState({
+                        entities: response,
+                        loading: true,
+                        snackbar: {
+                            open: true,
+                            msg: 'لیست بارگزاری گردید.'
+                        }
+                    })
+                }
+            }).catch((error) => {
+                console.log(error);
+            }));
+        }));
+
     }
 
     render() {
@@ -198,7 +190,7 @@ class ProductList extends Component {
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Button variant="contained" color="default" >
-                                        بازگشت&nbsp;<NavigationIcon />
+                                        <NavigationIcon />
                                     </Button>
                                 </div>
                             </Grid>
@@ -244,6 +236,23 @@ class ProductList extends Component {
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="برند"
+                                            value={this.state.filter.brand}
+                                            variant="filled"
+                                            margin='dense'
+                                            fullWidth
+                                            name='brand_id'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                        </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
@@ -313,13 +322,6 @@ class ProductList extends Component {
                         </ExpansionPanel>
                     </Box>
                     <Box style={{ margin: '20px 0 0 0'}}>
-                        <CheckboxTree
-                            nodes={nodes}
-                            checked={this.state.checked}
-                            expanded={this.state.expanded}
-                            onCheck={checked => this.setState({ checked })}
-                            onExpand={expanded => this.setState({ expanded })}
-                        />
                         <Grid container alignItems="center" >
                             <Grid item xs={4} sm={6}>
                                 <FormControl>

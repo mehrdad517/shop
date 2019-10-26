@@ -16,7 +16,8 @@ class CreateGroupAttributeAssignToProductCategoryTable extends Migration
         Schema::create('group_attribute_assign_to_product_category', function (Blueprint $table) {
             $table->integer('category_id');
             $table->integer('attribute_id');
-            $table->timestamps();
+
+            $table->primary(['category_id', 'attribute_id']);
         });
     }
 

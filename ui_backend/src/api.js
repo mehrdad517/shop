@@ -1,7 +1,6 @@
 import axios from "axios";
-
+import {toast} from 'react-toastify';
 class Api {
-
     async haeders() {
         return {
             'Accept': 'application/json',
@@ -17,8 +16,6 @@ class Api {
             return function (dispatch) {
                 // sign out user
             }
-        } else if (response.status === 500) {
-            alert('500 error');
         }
         return response.data;
     }
@@ -30,7 +27,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -44,7 +41,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -56,7 +53,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -67,7 +64,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -77,7 +74,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -87,7 +84,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -97,7 +94,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -109,7 +106,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -119,7 +116,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -129,7 +126,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -139,7 +136,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -149,7 +146,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -159,7 +156,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -172,7 +169,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -183,7 +180,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -194,7 +191,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -205,7 +202,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -216,7 +213,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -228,7 +225,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
     // fetch roles
@@ -238,7 +235,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -249,7 +246,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 
@@ -260,7 +257,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            console.log(error);
+            alert(error.message);
         })
     }
 

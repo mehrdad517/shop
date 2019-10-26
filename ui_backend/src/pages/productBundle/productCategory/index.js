@@ -23,30 +23,36 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ProductCategoryHead from "./head";
+import TextField from "@material-ui/core/TextField";
+import AttributeCreate from "../GroupAttribute/create";
+import AttributeEdit from "../GroupAttribute/edit";
+import {ToastContainer, toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class ProductCategory extends Component {
+
     constructor(props) {
         super(props);
         this.state= {
-            checked: [],
-            expanded: [],
-            entities : [],
-            attributes: [],
-            loading: false,
-            dialog:false,
-            snackbar: {
+            checked: [], // tree checked or edit or  show
+            expanded: [], // expanded tree
+            categories : [], // categories tree
+            attributes: [], // attr for category
+            attribute: null, // for edit or show
+            loading: false, // page loading
+            dialog:false, // dialog open
+            snackbar: { // toaster
                 open: false,
                 msg: null
             },
             checkedItems: new Map(), // checkbox attributes
+            filter: {} // filter attribute
         }
     }
 
-    componentDidMount() {
-        this.handleRequest();
-    }
-
+    // handle snackbar for show error or notification
     handleSnackbar(parameter) {
         this.setState({
             snackbar:{
@@ -56,7 +62,68 @@ class ProductCategory extends Component {
         })
     }
 
+    // call when component loaded
+    componentDidMount() {
+        this.handleRequest();
+    }
+
+    // request handle
+    async handleRequest() {
+        let instance = new Api();
+
+        await new Promise((resolve => {
+            resolve(instance.fetchAttributes({filter: this.state.filter}).then((response) => {
+                if (typeof response != "undefined") {
+                    response.forEach((key, value) => {
+                        this.setState(prevState => ({checkedItems: prevState.checkedItems.set(key.id, false)}));
+                    });
+                    this.setState({
+                        attributes: response
+                    })
+                }
+            }).catch((error) => {
+                console.log(error);
+            }));
+        }));
+
+        await new Promise((resolve => {
+            resolve(instance.fetchProductCategories().then((response) => {
+                if (typeof response != "undefined") {
+                    this.setState({
+                        categories : response,
+                    });
+                }
+            }))
+        }));
+
+        await new Promise((resolve) => {
+            resolve(this.setState({
+                loading: true
+            }));
+        })
+    }
+
+    // search attr
+    async handleChangeAttributeSearchInput(event) {
+        let filter = this.state.filter;
+        filter[event.target.name] = event.target.value;
+        await new Promise((resolve => {
+            resolve(this.setState({
+                filter,
+            }));
+        }));
+
+        this.handleRequest();
+
+    }
+
+    // change attr and change checkedItems for edit form
     handleChangeAttr(event) {
+
+        this.setState({
+           attribute: event.target.value
+        });
+
         let val = parseInt(event.target.value);
         if (event.target.checked) {
             this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, true)}));
@@ -65,6 +132,7 @@ class ProductCategory extends Component {
         }
     }
 
+    // handle submit for change attr of categories
     handleSubmit(event) {
         event.preventDefault();
         let instance = new Api();
@@ -75,109 +143,132 @@ class ProductCategory extends Component {
                 attr[i] = value;
                 i++;
             }
-        }) ;
-        instance.storeProductCategory({
-            categories: this.state.checked,
-            attributes: attr
-        }).then((response) => {
+        });
+        if (this.state.checked.length > 0) {
             this.setState({
-                snackbar: {
-                    open: true,
-                    msg: response.msg
-                }
-            })
-        }).catch((error) => {
-            console.log(error);
-        })
+                loading: false,
+            });
 
-    }
-
-
-    async handleRequest() {
-        let instance = new Api();
-
-        await new Promise((resolve => {
-            resolve(instance.fetchProductCategories().then((response) => {
+            instance.storeProductCategory({
+                categories: this.state.checked,
+                attributes: attr
+            }).then((response) => {
                 this.setState({
-                    entities : response,
-                });
-            }))
-        }));
-
-        await new Promise((resolve => {
-            resolve( instance.fetchAttributes().then((response) => {
-                response.forEach((key, value) => {
-                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, false)}));
-                }) ;
-                this.setState({
-                    attributes: response
+                    loading: true,
+                    snackbar: {
+                        open: true,
+                        msg: response.msg
+                    }
                 })
             }).catch((error) => {
                 console.log(error);
-            }));
-        }));
+            })
+        }
 
-        await new Promise((resolve => {
-            resolve(this.setState({
-                loading: true
-            }));
-        }));
     }
 
-    handleSelectAttr(checked) {
-        this.setState({
-            checked
+    // change category and select attrubites
+    handleChangeCategoryAndSelectAttr(checked) {
+
+        this.state.checkedItems.forEach((key, value) => {
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, false)}));
         });
 
-        let instance = new Api();
-        instance.getProductCategoryAttributes(checked).then((response) => {
-            response.forEach((key, value) => {
-                this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, true)}));
-            }) ;
-        }).catch((error) => {
-            console.log(error);
-        })
+        this.setState({
+            checked,
+        });
+
+        if (checked.length > 0) {
+            let instance = new Api();
+            instance.getProductCategoryAttributes(checked).then((response) => {
+                response.forEach((key, value) => {
+                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, true)}));
+                });
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    }
+
+    getCheckedItemFromMapCounter() {
+        let counter = 0;
+        this.state.checkedItems.forEach( (key, value) => {
+            if (this.state.checkedItems.get(value) === true) {
+                counter++;
+            }
+        });
+
+        return counter;
+    }
+
+    attributeEditProvider() {
+        this.state.checkedItems.forEach( (key, value) => {
+            if (this.state.checkedItems.get(value) === true) {
+                this.setState({
+                    attribute: value,
+                    dialog: true
+                })
+            }
+        });
     }
 
     render() {
-        console.log(this.state.checkedItems);
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
         return (
             <div className='content'>
                 <Container>
-                    <Box style={{ margin: '10px 0 20px 0'}}>
-                        <Grid container alignItems="center">
-                            <Grid item xs={12} sm={6}>
-                                <h2>دسته بندی محصولات</h2>
-                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید محصولات را دسته بندی کنید.</p>
-                            </Grid>
-                            <Grid item xs={12} sm={6} >
-                                <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Link to='/products'>
-                                        <Button variant="contained" color="default" >
-                                            <NavigationIcon />
-                                        </Button>
-                                    </Link>
+                    <ProductCategoryHead />
+                    <Box style={{ margin: '20px 0'}} boxShadow={0}>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1c-content"
+                                id="panel1c-header"
+                            >
+                                <div>
+                                    <Typography><b>جستجو در ویژگیها</b></Typography>
                                 </div>
-                            </Grid>
-                        </Grid>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails >
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            id="outlined-name"
+                                            label="عنوان"
+                                            variant="filled"
+                                            margin='dense'
+                                            fullWidth
+                                            name='title'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeAttributeSearchInput.bind(this)}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </ExpansionPanelDetails>
+                            <Divider />
+                            <ExpansionPanelActions>
+                                <Button color="primary">
+                                    جستجو
+                                </Button>
+                            </ExpansionPanelActions>
+                        </ExpansionPanel>
                     </Box>
-                    <Box>
-                        <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
-                            <ProductCategoryCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} items={this.state.checked} />
-                            <Tooltip title="ویرایش">
-                                <IconButton onClick={() => this.state.checked.length === 1 ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
-                                    <EditIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="سینک">
-                                <IconButton onClick={() => this.handleRequest()} >
-                                    <SyncIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </div>
+                    <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
+                        <Tooltip title="ویرایش">
+                            <IconButton onClick={() => this.getCheckedItemFromMapCounter() === 1 ?  this.attributeEditProvider() : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="سینک">
+                            <IconButton onClick={() => this.handleRequest()} >
+                                <SyncIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                     <Box style={{ margin: '20px 0'}} boxShadow={0}>
                         <ExpansionPanel>
@@ -187,7 +278,7 @@ class ProductCategory extends Component {
                                 id="panel1c-header"
                             >
                                 <div>
-                                    <Typography><b style={{ marginRight: '10px' }}>تعیین ویژگی</b></Typography>
+                                    <Typography><b style={{ marginRight: '10px' }}>تعیین ویژگیها</b></Typography>
                                 </div>
                             </ExpansionPanelSummary>
                             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -220,19 +311,35 @@ class ProductCategory extends Component {
                             </form>
                         </ExpansionPanel>
                     </Box>
+                    <Box>
+                        <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <ProductCategoryCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} items={this.state.checked} />
+                            <Tooltip title="ویرایش">
+                                <IconButton onClick={() => this.state.checked.length === 1 ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
+                                    <EditIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="سینک">
+                                <IconButton onClick={() => this.handleRequest()} >
+                                    <SyncIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </Box>
                     <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
-                        { this.state.entities.length > 0 ?  <CheckboxTree
-                            nodes={this.state.entities}
+                        { this.state.categories.length > 0 ?  <CheckboxTree
+                            nodes={this.state.categories}
                             checked={this.state.checked}
                             expanded={this.state.expanded}
-                            onCheck={checked => this.handleSelectAttr(checked)}
+                            onCheck={checked => this.handleChangeCategoryAndSelectAttr(checked)}
                             onExpand={expanded => this.setState({ expanded })}
                             noCascade={true}
                         /> : <p>دسته جدید ایجاد نمایید.</p> }
                     </Box>
                 </Container>
                 <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>
-                    <ProductCategoryEdit entity={this.state.checked}  handleRequest={() => this.handleRequest()} handleSnackbar={this.handleSnackbar.bind(this)} onClose={() => this.setState({dialog: false})} />
+                    {this.state.attribute ? <AttributeEdit entity={this.state.attribute}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({dialog: false})} /> : ''}
+                    {this.state.checked.length > 0 ? <ProductCategoryEdit entity={this.state.checked[0]}  handleRequest={() => this.handleRequest()} handleSnackbar={this.handleSnackbar.bind(this)} onClose={() => this.setState({dialog: false})} /> : ''}
                 </Dialog>
                 <Snackbar
                     autoHideDuration={4500}
@@ -240,6 +347,7 @@ class ProductCategory extends Component {
                     message={this.state.snackbar.msg}
                     onClose={() => this.setState({snackbar:{open: false,msg: null}})}
                 />
+
             </div>
         );
     }

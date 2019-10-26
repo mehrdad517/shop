@@ -72,97 +72,96 @@ class ProductCategoryEdit extends Component {
 
 
     render() {
-        console.log(this.props.entity[0])
         return (
-                    <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
-                        <DialogTitle id="form-dialog-title">ویرایش</DialogTitle>
-                        <DialogContent>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} >
-                                <TextField
-                                    label="عنوان"
-                                    variant="filled"
-                                    margin='dense'
-                                    value={this.state.form.label}
-                                    fullWidth
-                                    name='label'
-                                    onChange={this.handleChangeElement.bind(this)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                                <Grid item xs={12} >
-                                    <TextField
-                                        label="اسلاگ"
-                                        variant="filled"
-                                        margin='dense'
-                                        value={this.state.form.slug}
-                                        fullWidth
-                                        name='slug'
-                                        onChange={this.handleChangeElement.bind(this)}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} >
-                                    <TextField
-                                        label="متا عنوان"
-                                        variant="filled"
-                                        margin='dense'
-                                        value={this.state.form.meta_title}
-                                        fullWidth
-                                        name='meta_title'
-                                        onChange={this.handleChangeElement.bind(this)}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} >
-                                    <TextField
-                                        label="متا توضیحات"
-                                        variant="filled"
-                                        margin='dense'
-                                        value={this.state.form.meta_description}
-                                        fullWidth
-                                        name='meta_description'
-                                        onChange={this.handleChangeElement.bind(this)}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        select
-                                        label="وضعیت"
-                                        value={this.state.form.status}
-                                        variant="filled"
-                                        margin='dense'
-                                        fullWidth
-                                        name='status'
-                                        onChange={this.handleChangeElement.bind(this)}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                    >
-                                            <MenuItem value={1}>فعال</MenuItem>
-                                            <MenuItem value={0}>غیرفعال</MenuItem>
-                                    </TextField>
-                                </Grid>
-                            </Grid>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button color="primary" onClick={() => this.props.onClose()}>
-                                انصراف
-                            </Button>
-                            <Button color="primary" autoFocus type='submit'>
-                                ارسال اطلاعات
-                            </Button>
-                        </DialogActions>
-                    </form>
+            <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
+                <DialogTitle id="form-dialog-title">ویرایش</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} >
+                            <TextField
+                                label="عنوان"
+                                variant="filled"
+                                margin='dense'
+                                value={this.state.form.label}
+                                fullWidth
+                                name='label'
+                                onChange={this.handleChangeElement.bind(this)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                                label="اسلاگ"
+                                variant="filled"
+                                margin='dense'
+                                value={this.state.form.slug}
+                                fullWidth
+                                name='slug'
+                                onChange={this.handleChangeElement.bind(this)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                                label="متا عنوان"
+                                variant="filled"
+                                margin='dense'
+                                value={this.state.form.meta_title}
+                                fullWidth
+                                name='meta_title'
+                                onChange={this.handleChangeElement.bind(this)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} >
+                            <TextField
+                                label="متا توضیحات"
+                                variant="filled"
+                                margin='dense'
+                                value={this.state.form.meta_description}
+                                fullWidth
+                                name='meta_description'
+                                onChange={this.handleChangeElement.bind(this)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                select
+                                label="وضعیت"
+                                value={this.state.form.status}
+                                variant="filled"
+                                margin='dense'
+                                fullWidth
+                                name='status'
+                                onChange={this.handleChangeElement.bind(this)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            >
+                                <MenuItem value={1}>فعال</MenuItem>
+                                <MenuItem value={0}>غیرفعال</MenuItem>
+                            </TextField>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="primary" onClick={() => this.props.onClose()}>
+                        انصراف
+                    </Button>
+                    <Button color="primary" autoFocus type='submit'>
+                        ارسال اطلاعات
+                    </Button>
+                </DialogActions>
+            </form>
         );
     }
 }

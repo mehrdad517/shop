@@ -2,7 +2,6 @@ import React from 'react';
 import {Provider} from "react-redux";
 import store from "./store";
 import {Route} from 'react-router-dom';
-
 import UserList from './pages/userBundle/user/list';
 import ProductList from './pages/productBundle/product/list'
 import GroupAttributeList from './pages/productBundle/GroupAttribute/list'
@@ -19,19 +18,18 @@ import Acl from "./pages/userBundle/acl/acl";
 import MainLayout from "./pages/layout/main";
 
 
-
 function App() {
     return (
-            <Provider store={store}>
-                <MainLayout>
-                    <Route component={UserList} path='/users' exact={true} />
-                    <Route component={Acl} path='/users/access/control/list' />
-                    <Route component={ProductList} path='/products' exact={true} />
-                    <Route component={ProductCategory} path='/products/categories' />
-                    <Route component={GroupAttributeList} path='/products/attributes' />
-                    <Route component={BrandList} path='/products/brands' />
-                </MainLayout>
-            </Provider>
+        <Provider store={store}>
+            <MainLayout>
+                <Route component={UserList} path='/users' exact={true} />
+                <Route component={Acl} path='/users/access/control/list' />
+                <Route component={ProductList} path='/products' exact={true} />
+                <Route component={ProductCategory} path='/products/categories' />
+                <Route component={GroupAttributeList} path='/products/attributes' />
+                <Route component={BrandList} path='/products/brands' />
+            </MainLayout>
+        </Provider>
     );
 }
 

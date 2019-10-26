@@ -49,7 +49,18 @@ class ProductCategoryController extends Controller
     }
 
     public function show($id){
-        return response(\App\ProductCategory::find($id));
+        $entity = \App\ProductCategory::find($id);
+        $list = [
+            'value' => $entity->value,
+            'label' => $entity->label,
+            'slug' => $entity->slug ?? '',
+            'meta_title' => $entity->meta_title ?? '',
+            'meta_description' => $entity->meta_description ?? '',
+            'status' => $entity->status,
+
+
+        ];
+        return response($list);
     }
 
 
@@ -68,9 +79,11 @@ class ProductCategoryController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        $slug = ProductCategory::where('slug', $request->get('slug'))->where('value', '<>', $id)->count();
-        if ($slug > 0) {
-            return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
+        if ($request->get('slug')) {
+            $slug = ProductCategory::where('slug', $request->get('slug'))->where('value', '<>', $id)->count();
+            if ($slug > 0) {
+                return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
+            }
         }
 
         ProductCategory::where('value', $id)->update($request->all());
@@ -97,8 +110,16 @@ class ProductCategoryController extends Controller
         return response()->json(['statue' => true, 'msg' => 'با موفقیت انجام شد.']);
     }
 
-    public function getAttributes($id) {
-        return response(ProductCategory::find($id)->attributes);
+    public function getAttributes($id)
+    {
+        $list = [];
+        $items = explode(',', $id);
+        foreach ($items as $item) {
+            foreach (ProductCategory::find($item)->attributes as $attr) {
+                $list[] = $attr;
+            }
+        }
+        return response($list);
 
     }
 
