@@ -10,26 +10,21 @@ import Button from "@material-ui/core/Button";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {Link} from 'react-router-dom'
-import AttributeCreate from "./create";
+import AttributeCreate from "./../GroupAttribute/create";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from '@material-ui/icons/Edit';
-import Dialog from "@material-ui/core/Dialog";
-import UserEdit from "../../userBundle/user/edit";
-import AttributeEdit from "./edit";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Pagination from "react-js-pagination";
+import Checkbox from "@material-ui/core/Checkbox";
+import {toast} from "react-toastify";
 
-class GroupAttributeList extends Component {
+class ProductCategoryAttribute extends Component {
 
     constructor(props) {
         super(props);
@@ -37,10 +32,10 @@ class GroupAttributeList extends Component {
             entities: [],
             entity: null,
             page: 1,
-            dialog: false,
             loading: false,
             filter: {},
-            snackbar: {open: false, msg: null}
+            snackbar: {open: false, msg: null},
+            checkedItems : new Map(),
         };
         this.api = new Api();
     }
@@ -56,7 +51,7 @@ class GroupAttributeList extends Component {
             resolve(this.setState({
                 filter,
                 page: 1,
-                // loading: false,
+                loading: false,
             }));
         }));
 
@@ -75,19 +70,56 @@ class GroupAttributeList extends Component {
         await this.handleRequest()
     }
 
-    handleRequest() {
-        this.api.fetchAttributes({filter: this.state.filter, page: this.state.page}).then((response) => {
-            this.setState({
-                entities: response,
+    async handleRequest() {
+
+        this.setState({
+            loading: false
+        });
+
+        await new Promise((resolve => {
+            resolve( this.api.fetchProductCategory(this.props.match.params.id).then((response) => {
+                if (typeof  response != "undefined") {
+                    this.setState({
+                        entity: response,
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            }));
+        }));
+
+        await new Promise((resolve => {
+            resolve( this.api.fetchAttributes({filter: this.state.filter, page: this.state.page}).then((response) => {
+                if (typeof  response != "undefined") {
+                    this.setState({
+                        entities: response,
+                    });
+                }
+            }).catch((error) => {
+                console.log(error);
+            }));
+        }));
+
+        await new Promise(resolve => {
+            resolve(this.api.getProductCategoryAttributes(this.props.match.params.id).then((response) => {
+                response.forEach((key, value) => {
+                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(key.id, true)}));
+                });
+            }).catch((error) => {
+                console.log(error);
+            }));
+        });
+
+        await new Promise((resolve => {
+            resolve(this.setState({
                 loading: true,
                 snackbar: {
                     open: true,
                     msg: 'لیست بارگزاری شد.'
                 }
-            });
-        }).catch((error) => {
-            console.log(error);
-        })
+            }));
+        }));
+
     }
 
     handleSnackbar(parameter) {
@@ -99,23 +131,45 @@ class GroupAttributeList extends Component {
         })
     }
 
+    handleChangeAttr(event) {
+        let val = parseInt(event.target.value);
+
+        if (event.target.checked) {
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, true)}));
+        } else {
+            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, false)}));
+        }
+        let instance = new Api();
+        instance.storeProductCategoryAttribute(this.props.match.params.id, {
+            attributes: event.target.value
+        }).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    this.setState({
+                        loading: true,
+                    });
+                    toast.success(response.msg);
+                }
+            }
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
 
     render() {
-        if (this.state.loading === false) {
-            return(<CircularProgress color={"secondary"} />);
-        }
         return (
             <div className={'content'}>
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0', borderRadius: '30px'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>ویژگی گروهی</h2>
-                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید به صورت گروهی ویژگی تعریف کنید.</p>
+                                <h2>دسته بندی <b style={{ color:'blue'}}>{this.state.entity ? this.state.entity.label : ''}</b></h2>
+                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید به صورت گروهی ویژگی دسته بندی ها را تغییر دهید.</p>
+                                <p style={{ color: '#8e8e8e'}}>کلیه زیر شاخه ها ویژگیها را به ارث میبرند.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Link to='/products'>
+                                    <Link to='/products/categories'>
                                         <Button variant="contained" color="default" >
                                             <NavigationIcon />
                                         </Button>
@@ -137,7 +191,7 @@ class GroupAttributeList extends Component {
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails >
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={4} md={3} >
+                                    <Grid item xs={12} sm={4} md={4} >
                                         <TextField
                                             id="outlined-name"
                                             label="عنوان"
@@ -145,10 +199,11 @@ class GroupAttributeList extends Component {
                                             margin='dense'
                                             fullWidth
                                             name='title'
+                                            helperText='پس از تغییر روی دکمه جستجو کلیک کنید'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                            onBlur={this.handleChangeSearchInput.bind(this)}
                                         />
                                     </Grid>
                                 </Grid>
@@ -163,25 +218,18 @@ class GroupAttributeList extends Component {
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
-                        <Tooltip title="ویرایش">
-                            {this.state.entity ? <Link to={`/products/attributes/${this.state.entity}`}>
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </Link> : <IconButton onClick={() => this.state.entity ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
-                                <EditIcon />
-                            </IconButton>}
-                        </Tooltip>
                     </Box>
-                    <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
+                    {!this.state.loading ? <CircularProgress color={"secondary"} /> : <div>
+                        <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <Grid container>
                             {this.state.entities.data.map((entity, index) => {
                                 return(
                                     <Grid key={index} item xs={6} sm={3}>
                                         <FormControlLabel  control={
-                                            <Radio
-                                                checked={this.state.entity === entity.id}
-                                                onChange={() => this.setState({ entity: entity.id})}
+                                            <Checkbox
+                                                value={entity.id}
+                                                checked={this.state.checkedItems.get(entity.id)}
+                                                onChange={this.handleChangeAttr.bind(this)}
                                                 name='attribues'
                                             />
                                         } label={entity.title} />
@@ -190,23 +238,15 @@ class GroupAttributeList extends Component {
                             })}
                         </Grid>
                     </Box>
-                    <Pagination
-                        activePage={this.state.page}
-                        itemsCountPerPage={this.state.entities.per_page}
-                        totalItemsCount={this.state.entities.total}
-                        pageRangeDisplayed={5}
-                        onChange={this.handlePageChange.bind(this)}
-                    />
+                        <Pagination
+                            activePage={this.state.page}
+                            itemsCountPerPage={this.state.entities.per_page}
+                            totalItemsCount={this.state.entities.total}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)}
+                        /></div> }
+
                 </Container>
-                <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>
-                    <AttributeEdit entity={this.state.entity}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({dialog: false})} />
-                </Dialog>
-                <Snackbar
-                    autoHideDuration={4500}
-                    open={this.state.snackbar.open}
-                    message={this.state.snackbar.msg}
-                    onClose={() => this.setState({snackbar:{open: false,msg: null}})}
-                />
             </div>
         );
     }
@@ -229,4 +269,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(GroupAttributeList);
+)(ProductCategoryAttribute);

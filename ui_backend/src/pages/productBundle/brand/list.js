@@ -16,6 +16,7 @@ import Radio from "@material-ui/core/Radio";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
 import Dialog from "@material-ui/core/Dialog";
+import UserEdit from "../../userBundle/user/edit";
 import AttributeEdit from "./edit";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -23,8 +24,10 @@ import ExpandMoreIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
+import Pagination from "react-js-pagination";
 
 class BrandList extends Component {
 
@@ -33,6 +36,7 @@ class BrandList extends Component {
         this.state = {
             entities: [],
             entity: null,
+            page: 1,
             dialog: false,
             loading: false,
             filter: {},
@@ -42,7 +46,7 @@ class BrandList extends Component {
     }
 
     componentDidMount() {
-       this.handleRequest();
+        this.handleRequest();
     }
 
     async handleChangeSearchInput(event) {
@@ -51,6 +55,8 @@ class BrandList extends Component {
         await new Promise((resolve => {
             resolve(this.setState({
                 filter,
+                page: 1,
+                // loading: false,
             }));
         }));
 
@@ -58,8 +64,19 @@ class BrandList extends Component {
 
     }
 
+    async handlePageChange(page) {
+
+        await new Promise((resolve => {
+            resolve(this.setState({
+                page: page
+            }));
+        }));
+
+        await this.handleRequest()
+    }
+
     handleRequest() {
-        this.api.fetchAttributes({filter: this.state.filter}).then((response) => {
+        this.api.fetchBrands({filter: this.state.filter, page: this.state.page}).then((response) => {
             this.setState({
                 entities: response,
                 loading: true,
@@ -93,7 +110,7 @@ class BrandList extends Component {
                     <Box style={{ margin: '10px 0 20px 0', borderRadius: '30px'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>مدیریت برندها</h2>
+                                <h2>برندها</h2>
                                 <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید برندها را تعریف کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
@@ -145,30 +162,41 @@ class BrandList extends Component {
                         </ExpansionPanel>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                            <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
+                        <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
                         <Tooltip title="ویرایش">
-                            <IconButton onClick={() => this.state.entity ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
+                            {this.state.entity ? <Link to={`/products/attributes/${this.state.entity}`}>
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </Link> : <IconButton onClick={() => this.state.entity ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
                                 <EditIcon />
-                            </IconButton>
+                            </IconButton>}
                         </Tooltip>
                     </Box>
                     <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <Grid container>
-                            {this.state.entities.map((entity, index) => {
-                               return(
-                                   <Grid key={index} item xs={6} sm={2}>
-                                       <FormControlLabel  control={
-                                           <Radio
-                                               checked={this.state.entity === entity.id}
-                                               onChange={() => this.setState({ entity: entity.id})}
-                                               name='attribues'
-                                           />
-                                       } label={entity.title} />
-                                   </Grid>
-                               );
+                            {this.state.entities.data.map((entity, index) => {
+                                return(
+                                    <Grid key={index} item xs={6} sm={3}>
+                                        <FormControlLabel  control={
+                                            <Radio
+                                                checked={this.state.entity === entity.id}
+                                                onChange={() => this.setState({ entity: entity.id})}
+                                                name='attribues'
+                                            />
+                                        } label={entity.title} />
+                                    </Grid>
+                                );
                             })}
                         </Grid>
                     </Box>
+                    <Pagination
+                        activePage={this.state.page}
+                        itemsCountPerPage={this.state.entities.per_page}
+                        totalItemsCount={this.state.entities.total}
+                        pageRangeDisplayed={5}
+                        onChange={this.handlePageChange.bind(this)}
+                    />
                 </Container>
                 <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>
                     <AttributeEdit entity={this.state.entity}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({dialog: false})} />

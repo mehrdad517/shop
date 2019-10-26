@@ -42,6 +42,9 @@ export default function NestedList() {
             <Link to='/products/brands'>برندها</Link>
             </div>
             <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
+                <Link to='/products/attributes'>ویژگی ها</Link>
+            </div>
+            <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
             <Link to='/products/categories'>دسته بندی محصولات</Link>
             </div>
         </div>

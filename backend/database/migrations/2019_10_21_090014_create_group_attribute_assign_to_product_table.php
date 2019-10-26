@@ -13,7 +13,7 @@ class CreateGroupAttributeAssignToProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('group_attribute_assign_to_product', function (Blueprint $table) {
+        Schema::create('group_attribute_product', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('product_id')->index();
             $table->integer('attribute_id')->index();

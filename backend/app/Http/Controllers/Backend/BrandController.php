@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\GroupAttribute;
+use App\Brand;
 use App\Http\Controllers\Controller;
-use App\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Validator;
 
-class GroupAttributeController extends Controller
+class BrandController extends Controller
 {
     public function index(Request $request)
     {
-        $result = GroupAttribute::select('id', 'title')
+        $result = Brand::select('id', 'title')
             ->where(function ($q) use ($request) {
                 if ($request->has('filter')) {
                     $filter = json_decode($request->get('filter'), true);
@@ -42,9 +39,9 @@ class GroupAttributeController extends Controller
         }
 
 
-            $result = GroupAttribute::create(
-                ['title' => $request->get('title')]
-            );
+        $result = Brand::create(
+            ['title' => $request->get('title')]
+        );
 
 
         if ($result) {
@@ -59,7 +56,7 @@ class GroupAttributeController extends Controller
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function show($id) {
-        $entities = GroupAttribute::find($id);
+        $entities = Brand::find($id);
 
         $list = [
             'id' => $entities->id,
@@ -87,13 +84,13 @@ class GroupAttributeController extends Controller
         }
 
         if ($request->get('slug')) {
-            $slug = GroupAttribute::where('slug', $request->get('slug'))->where('id', '<>', $id)->count();
+            $slug = Brand::where('slug', $request->get('slug'))->where('id', '<>', $id)->count();
             if ($slug > 0) {
                 return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
             }
         }
 
-        $model = GroupAttribute::where('id', $id)->update($request->all());
+        $model = Brand::where('id', $id)->update($request->all());
 
         if ($model) {
 

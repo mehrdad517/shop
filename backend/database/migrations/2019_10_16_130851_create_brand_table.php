@@ -20,7 +20,7 @@ class CreateBrandTable extends Migration
             $table->text('content')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->boolean('status')->default(1);
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';

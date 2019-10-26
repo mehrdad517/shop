@@ -27,7 +27,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -41,7 +41,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -53,7 +53,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -64,7 +64,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -74,7 +74,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -84,7 +84,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -94,7 +94,51 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
+        })
+    }
+
+
+
+    // brand
+    async fetchBrands(object) {
+        return axios.get('http://localhost:8000/api/backend/products/brands', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async fetchBrand(id) {
+        return axios.get('http://localhost:8000/api/backend/products/brands/' + id,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async createBrand(object) {
+        return axios.post('http://localhost:8000/api/backend/products/brands', object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateBrand(id, object) {
+        return axios.put('http://localhost:8000/api/backend/products/brands/' + id, object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
         })
     }
 
@@ -106,7 +150,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -116,7 +160,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -126,7 +170,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -136,17 +180,17 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
-    async storeProductCategory(object) {
-        return axios.post('http://localhost:8000/api/backend/products/categories/attributes', object,{
+    async storeProductCategoryAttribute(id, object) {
+        return axios.post(`http://localhost:8000/api/backend/products/categories/${id}/attributes`, object,{
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -156,7 +200,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -169,7 +213,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -180,7 +224,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -191,7 +235,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -202,7 +246,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -213,7 +257,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -225,7 +269,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
     // fetch roles
@@ -235,7 +279,7 @@ class Api {
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -246,7 +290,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 
@@ -257,7 +301,7 @@ class Api {
         }).then((response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
-            alert(error.message);
+            toast.error(error.message);
         })
     }
 

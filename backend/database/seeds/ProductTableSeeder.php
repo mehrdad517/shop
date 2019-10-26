@@ -13,6 +13,34 @@ class ProductTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('fa_IR');
+
+        foreach (range(1,20) as $index) {
+            DB::table('brand')->insert([
+                'title' => $faker->realText(25),
+            ]);
+        }
+
+        foreach (range(1,1000) as $index) {
+            DB::table('group_attribute')->insert([
+                'title' => $faker->realText(25),
+            ]);
+        }
+
+
+        foreach (range(1,100) as $index) {
+            \App\ProductCategory::create([
+                'label' => $faker->realText(25)
+            ]);
+        }
+
+        foreach (range(1,100) as $index) {
+            \App\ProductCategory::create([
+                'label' => $faker->realText(25)
+            ], \App\ProductCategory::find(rand(1, 100)));
+        }
+
+
+
         foreach (range(1,100) as $index) {
             DB::table('products')->insert([
                 'brand_id' => $faker->numberBetween(1, 20),

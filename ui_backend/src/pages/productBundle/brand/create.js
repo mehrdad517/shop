@@ -6,13 +6,13 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import {Tooltip} from "@material-ui/core";
+import {Snackbar, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../api";
 
-class CreateBrand extends Component {
+class BrandCreate extends Component {
 
     constructor(props) {
         super(props);
@@ -111,4 +111,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(CreateBrand);
+)(BrandCreate);

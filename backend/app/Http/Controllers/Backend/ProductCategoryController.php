@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\ProductCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ProductCategoryController extends Controller
@@ -17,6 +18,7 @@ class ProductCategoryController extends Controller
 
     public function store(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'label' => 'required',
         ]);
@@ -98,16 +100,19 @@ class ProductCategoryController extends Controller
     }
 
 
-    public function storeAttributes(Request $request)
+    public function storeAttributes($id, Request $request)
     {
-        $categories = $request->get('categories');
-        foreach ($categories as $category) {
-            $entity = ProductCategory::find($category);
-            $entity->attributes()->detach();
-            $entity->attributes()->attach($request->get('attributes'));
+        $entities = ProductCategory::descendantsAndSelf($id);
+        foreach ($entities as $entity) {
+            $check = DB::table('group_attribute_category')->where('category_id', $entity->value)->where('attribute_id', $request->get('attributes'));
+            if ($check->count() > 0) {
+                $check->delete();
+            } else {
+                $entity->attributes()->attach($request->get('attributes'));
+            }
         }
 
-        return response()->json(['statue' => true, 'msg' => 'با موفقیت انجام شد.']);
+        return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.']);
     }
 
     public function getAttributes($id)

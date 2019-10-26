@@ -17,7 +17,7 @@ class ProductCategory extends Model
 
     public function attributes()
     {
-        return $this->belongsToMany(GroupAttribute::class, 'group_attribute_assign_to_product_category', 'category_id', 'attribute_id');
+        return $this->belongsToMany(GroupAttribute::class, 'group_attribute_category', 'category_id', 'attribute_id');
     }
 
 

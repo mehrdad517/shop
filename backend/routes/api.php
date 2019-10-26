@@ -135,7 +135,7 @@ Route::group(['prefix' => '/backend'], function () {
             Route::get('/{id}', 'Backend\ProductCategoryController@show');
             Route::put('/{id}', 'Backend\ProductCategoryController@update');
             Route::get('/{id}/attributes', 'Backend\ProductCategoryController@getAttributes');
-            Route::post('/attributes', 'Backend\ProductCategoryController@storeAttributes');
+            Route::post('/{id}/attributes', 'Backend\ProductCategoryController@storeAttributes');
         });
 
         Route::group(['prefix' => '/attributes'], function () {
@@ -143,6 +143,13 @@ Route::group(['prefix' => '/backend'], function () {
             Route::post('/', 'Backend\GroupAttributeController@store');
             Route::get('/{id}', 'Backend\GroupAttributeController@show');
             Route::put('/{id}', 'Backend\GroupAttributeController@update');
+        });
+
+        Route::group(['prefix' => '/brands'], function () {
+            Route::get('/', 'Backend\BrandController@index');
+            Route::post('/', 'Backend\BrandController@store');
+            Route::get('/{id}', 'Backend\BrandController@show');
+            Route::put('/{id}', 'Backend\BrandController@update');
         });
 
 
