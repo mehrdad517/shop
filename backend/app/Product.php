@@ -33,6 +33,16 @@ class Product extends Model
 
     }
 
+    public function attributes()
+    {
+        return $this->belongsToMany(GroupAttribute::class, 'group_attribute_product', 'product_id', 'attribute_id')->withPivot('value', 'order', 'main');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(ProductCategory::class, 'product_categories', 'product_id', 'category_id');
+    }
+
 
     public function brand()
     {

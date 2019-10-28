@@ -20,14 +20,14 @@ class ProductTableSeeder extends Seeder
             ]);
         }
 
-        foreach (range(1,1000) as $index) {
+        foreach (range(1,5) as $index) {
             DB::table('group_attribute')->insert([
                 'title' => $faker->realText(25),
             ]);
         }
 
 
-        foreach (range(1,100) as $index) {
+        foreach (range(1,5) as $index) {
             \App\ProductCategory::create([
                 'label' => $faker->realText(25)
             ]);

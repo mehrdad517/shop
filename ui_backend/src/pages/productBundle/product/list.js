@@ -27,6 +27,8 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import {toast} from "react-toastify";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import {Link} from "react-router-dom";
 
 class ProductList extends Component {
     constructor(props) {
@@ -353,6 +355,13 @@ class ProductList extends Component {
                     </Box>
                     <Box>
                         <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <Tooltip title="افزودن">
+                                <Link to='/products/create'>
+                                <IconButton>
+                                    <AddCircleIcon />
+                                </IconButton>
+                                </Link>
+                            </Tooltip>
                             <Tooltip title="سینک">
                                 <IconButton onClick={() => this.handleRequest()} >
                                     <SyncIcon />

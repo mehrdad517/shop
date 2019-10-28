@@ -5,6 +5,7 @@ import {Route} from 'react-router-dom';
 import UserList from './pages/userBundle/user/list';
 import ProductList from './pages/productBundle/product/list'
 import CreateProduct from './pages/productBundle/product/create'
+import EditProduct from './pages/productBundle/product/edit'
 import GroupAttributeList from './pages/productBundle/GroupAttribute/list'
 import BrandList from './pages/productBundle/brand/list';
 import BrandEdit from './pages/productBundle/brand/edit';
@@ -29,6 +30,7 @@ function App() {
                 <Route component={Acl} path='/users/access/control/list' />
                 <Route component={ProductList} path='/products' exact={true} />
                 <Route component={CreateProduct} path='/products/create' />
+                <Route component={EditProduct} path='/products/edit/:id' />
                 <Route component={BrandList} path='/products/brands' exact={true} />
                 <Route component={BrandEdit} path='/products/brands/:id' />
                 <Route component={ProductCategory} path='/products/categories' exact={true} />

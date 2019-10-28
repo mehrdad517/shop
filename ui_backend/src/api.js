@@ -46,8 +46,28 @@ class Api {
         })
     }
 
+    async fetchProduct(id) {
+        return axios.get('http://localhost:8000/api/backend/products/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
     async createProduct(object) {
         return axios.post('http://localhost:8000/api/backend/products', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateProduct(id, object) {
+        return axios.put('http://localhost:8000/api/backend/products/' + id, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
