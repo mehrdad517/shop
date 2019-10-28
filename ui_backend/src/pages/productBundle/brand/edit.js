@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../api";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -13,7 +9,6 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import {Link} from "react-router-dom";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import {useHistory} from 'react-router-dom';
 import {CircularProgress} from "@material-ui/core";
 import {  toast } from 'react-toastify';
 
@@ -37,7 +32,7 @@ class BrandEdit extends Component {
     }
 
     componentDidMount() {
-        this.api.fetchAttribute(this.props.match.params.id).then((response) => {
+        this.api.fetchBrand(this.props.match.params.id).then((response) => {
             this.setState({
                 form: {
                     title: response.title,
@@ -66,11 +61,11 @@ class BrandEdit extends Component {
     handleSubmit (event) {
         // let history = useHistory();
         event.preventDefault();
-        this.api.updateAttribute(this.props.match.params.id , this.state.form).then((response) => {
+        this.api.updateBrand(this.props.match.params.id , this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
-                    this.props.history.push('/products/attributes');
+                    this.props.history.push('/products/brands');
                 } else {
                     toast.error(response.msg);
                 }
@@ -96,7 +91,7 @@ class BrandEdit extends Component {
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Link to='/products/attributes'>
+                                    <Link to='/products/brands'>
                                         <Button variant="contained" color="default" >
                                             <NavigationIcon />
                                         </Button>

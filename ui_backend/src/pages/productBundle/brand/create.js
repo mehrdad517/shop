@@ -38,7 +38,7 @@ class BrandCreate extends Component {
     handleSubmit (event) {
         event.preventDefault();
 
-        this.api.createAttribute(this.state.form).then((response) => {
+        this.api.createBrand(this.state.form).then((response) => {
             if (response.status) {
                 this.setState({
                     open: false,

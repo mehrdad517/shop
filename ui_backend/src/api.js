@@ -1,6 +1,8 @@
 import axios from "axios";
 import {toast} from 'react-toastify';
+
 class Api {
+
     async haeders() {
         return {
             'Accept': 'application/json',
@@ -32,19 +34,6 @@ class Api {
     }
 
 
-
-    // fetch user form db
-    async fetchUsers(object) {
-        return axios.get('http://localhost:8000/api/backend/users', {
-            headers: this.haeders(),
-            params: object
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
     // fetch products form db
     async fetchProducts(object) {
         return axios.get('http://localhost:8000/api/backend/products/', {
@@ -57,6 +46,18 @@ class Api {
         })
     }
 
+    async createProduct(object) {
+        return axios.post('http://localhost:8000/api/backend/products', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    // attributes
     async fetchAttributes(object) {
         return axios.get('http://localhost:8000/api/backend/products/attributes', {
             headers: this.haeders(),
@@ -299,6 +300,19 @@ class Api {
         return  axios.put('http://localhost:8000/api/backend/users/roles/' + id, object, {
             headers: this.haeders()
         }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    // fetch user form db
+    async fetchUsers(object) {
+        return axios.get('http://localhost:8000/api/backend/users', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
             toast.error(error.message);

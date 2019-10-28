@@ -5,8 +5,6 @@ import {Box, CircularProgress, Snackbar, Tooltip} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import NavigationIcon from "@material-ui/icons/Navigation";
-
-
 import Container from "@material-ui/core/Container";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -27,22 +25,12 @@ import SortIcon from '@material-ui/icons/Sort';
 import SyncIcon from '@material-ui/icons/Sync';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
-
-const nodes = [{
-    value: 'mars',
-    label: 'Mars',
-    children: [
-        { value: 'phobos', label: 'Phobos' },
-        { value: 'deimos', label: 'Deimos' },
-    ],
-}];
+import {toast} from "react-toastify";
 
 class ProductList extends Component {
     constructor(props) {
         super(props);
-        this.onToggle = this.onToggle.bind(this);
         this.state= {
             checked: [],
             expanded: [],
@@ -52,9 +40,10 @@ class ProductList extends Component {
                 status: -1,
                 count: -1,
                 discount: -1,
-                brand: -1
+                brand_id: -1
             },
             page: 1,
+            brands: [],
             limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
@@ -144,9 +133,15 @@ class ProductList extends Component {
     async handleRequest() {
         let instance = new Api();
 
-        await new Promise(resolve => {
-            
-        });
+        await new Promise((resolve => {
+            resolve(instance.fetchBrands().then((response) => {
+               this.setState({
+                   brands: response.data
+               });
+            }).catch((error) => {
+                toast(error);
+            }));
+        }));
 
         await new Promise((resolve => {
             resolve(instance.fetchProducts({
@@ -241,7 +236,7 @@ class ProductList extends Component {
                                         <TextField
                                             select
                                             label="برند"
-                                            value={this.state.filter.brand}
+                                            value={this.state.filter.brand_id}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
@@ -252,6 +247,11 @@ class ProductList extends Component {
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         >
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            {this.state.brands.map((brand, index) => {
+                                                return(
+                                                    <MenuItem key={index + 1} value={brand.id}>{brand.title}</MenuItem>
+                                                );
+                                            })}
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
@@ -380,7 +380,7 @@ class ProductList extends Component {
                                         <tr key={index}>
                                             <td>{product.id}</td>
                                             <td>{product.title}</td>
-                                            <td>{product.brand.title}</td>
+                                            <td>{product.brand ? product.brand.title : '-'}</td>
                                             <td>{product.count}</td>
                                             <td>{product.price}</td>
                                             <td>{product.discount}</td>

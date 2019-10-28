@@ -44,6 +44,10 @@ class ProductController extends Controller
                 if (@$filter['status'] != -1) {
                     $q->where('status', $filter['status']);
                 }
+
+                if (@$filter['brand_id'] != -1) {
+                    $q->where('brand_id', $filter['brand_id']);
+                }
             }
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
             ->paginate($request->get('limit') ?? 10);
@@ -59,31 +63,51 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'content' => 'required',
-            'price' => 'required',
-        ],[
-            'title.required' => 'عنوان نمیتواند خالی باشد.',
-            'content.required' => 'محتوا اولیه را وارد نکرده اید.',
-            'price.required' => 'قیمت را وارد نکرده اید'
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'code' => 'required',
+                'price' => 'required',
+                'brand_id' => 'required'
+            ],[
+                'title.required' => 'عنوان نمیتواند خالی باشد.',
+                'code.required' => 'کد محصول نمیتواند خالی باشد.',
+                'price.required' => 'قیمت را وارد نکرده اید',
+                'brand_id' => 'برند را وارد نکرده اید.'
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'msg'  =>  $validator->errors()->first(), 'validator' => $validator->errors()]);
+            if ($validator->fails()) {
+                return response()->json(['status' => false, 'msg'  =>  $validator->errors()->first()]);
+            }
+
+            if ($request->get('slug')) {
+                $slug = Product::where('slug', $request->get('slug'))->count();
+                if ($slug > 0) {
+                    return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
+                }
+            }
+
+            $result = Product::firstOrCreate([
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+                'brand_id' => $request->get('brand_id') != 0 ?? null,
+                'code' => $request->get('code'),
+                'price' => $request->get('price'),
+                'status' => $request->get('status'),
+                'slug' => $request->get('slug'),
+                'meta_title' => $request->get('meta_title'),
+                'meta_description' => $request->get('meta_description'),
+            ]);
+
+            if ($result) {
+                return response()->json(['status' => true,'msg' => 'با موفقیت انجام شد.' ,'result' => $result], 200);
+            }
+
+            return response()->json(['status' => false, 'msg' => 'un success'], 200);
+        } catch (\Exception $exception) {
+            return response()->json(['status' => false, 'msg' => $exception->getMessage()]);
         }
 
-        $result = Product::firstOrCreate([
-            'title' => $request->get('title'),
-            'content' => $request->get('content'),
-            'price' => $request->get('price')
-        ]);
-
-        if ($result) {
-            return response()->json(['status' => true, 'result' => $result], 200);
-        }
-
-        return response()->json(['status' => false, 'msg' => 'un success'], 200);
     }
 
     /**

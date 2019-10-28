@@ -164,7 +164,7 @@ class BrandList extends Component {
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <AttributeCreate handleRequest={this.handleRequest.bind(this)} handleSnackbar={this.handleSnackbar.bind(this)} />
                         <Tooltip title="ویرایش">
-                            {this.state.entity ? <Link to={`/products/attributes/${this.state.entity}`}>
+                            {this.state.entity ? <Link to={`/products/brands/${this.state.entity}`}>
                                 <IconButton>
                                     <EditIcon />
                                 </IconButton>

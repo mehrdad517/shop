@@ -121,7 +121,10 @@ class ProductCategoryController extends Controller
         $items = explode(',', $id);
         foreach ($items as $item) {
             foreach (ProductCategory::find($item)->attributes as $attr) {
-                $list[] = $attr;
+                $list[] = [
+                    'id' => $attr->id,
+                    'title' => $attr->title,
+                ];
             }
         }
         return response($list);

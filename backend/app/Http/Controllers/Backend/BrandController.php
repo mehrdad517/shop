@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Brand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Validator;
 
 class BrandController extends Controller
 {
@@ -72,6 +73,7 @@ class BrandController extends Controller
     }
 
     public function update($id, Request $request) {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
         ], [
