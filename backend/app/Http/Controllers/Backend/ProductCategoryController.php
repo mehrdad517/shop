@@ -118,15 +118,23 @@ class ProductCategoryController extends Controller
     public function getAttributes($id)
     {
         $list = [];
-        $items = explode(',', $id);
-        foreach ($items as $item) {
-            foreach (ProductCategory::find($item)->attributes as $attr) {
-                $list[] = [
-                    'id' => $attr->id,
-                    'title' => $attr->title,
-                ];
-            }
+        $result = DB::table('group_attribute_category as gac')
+            ->select(DB::raw('distinct ga.id as id'), 'ga.title as title')
+            ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gac.attribute_id')
+            ->whereIn('gac.category_id', explode(',', $id))
+            ->get()->toArray();
+
+        foreach ($result as $key => $r) {
+            $list[] = [
+                'id' => $r->id,
+                'title' => $r->title,
+                'value' => '',
+                'order' => $key,
+                'main' => false
+
+            ];
         }
+
         return response($list);
 
     }

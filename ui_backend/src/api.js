@@ -22,17 +22,6 @@ class Api {
         return response.data;
     }
 
-    // change product status
-    async  changeProductStatus(id, object) {
-        return  axios.put(`http://localhost:8000/api/backend/products/${id}/change/status`, object, {
-            headers: this.haeders()
-        }).then((response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
 
     // fetch products form db
     async fetchProducts(object) {
@@ -68,6 +57,39 @@ class Api {
 
     async updateProduct(id, object) {
         return axios.put('http://localhost:8000/api/backend/products/' + id, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async  changeProductStatus(id, object) {
+        return  axios.put(`http://localhost:8000/api/backend/products/${id}/change/status`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async getProductCategoryAttributes(id) {
+        return axios.get(`http://localhost:8000/api/backend/products/categories/${id}/attributes`,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    // in edit from get product id
+    // if checked new category send all of checked item to api
+    // result response contain all attributes (category attributes) with value (form product)
+    async getProductAttributes(id, object) {
+        return axios.get(`http://localhost:8000/api/backend/products/${id}/categories/${object}/attributes`,{
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

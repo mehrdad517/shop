@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Product;
+use App\ProductCategory;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ProductController extends Controller
@@ -68,12 +70,10 @@ class ProductController extends Controller
             $validator = Validator::make($request->all(), [
                 'title' => 'required',
                 'code' => 'required',
-                'price' => 'required',
                 'brand_id' => 'required'
             ],[
                 'title.required' => 'عنوان نمیتواند خالی باشد.',
                 'code.required' => 'کد محصول نمیتواند خالی باشد.',
-                'price.required' => 'قیمت را وارد نکرده اید',
                 'brand_id' => 'برند را وارد نکرده اید.'
             ]);
 
@@ -127,16 +127,65 @@ class ProductController extends Controller
     }
 
     /**
+     * @param $product_id
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
+     */
+    public function productAttributes($product_id, $categories)
+    {
+        $list = [];
+
+        $join = DB::table('group_attribute_product')
+            ->select('attribute_id' ,'value', 'order', 'main')
+            ->where('product_id', $product_id);
+
+        $result = DB::table('group_attribute_category as gac')
+            ->select(DB::raw('distinct ga.id as id'), 'ga.title as title', DB::raw('IFNULL(sub.value, "") as value'), DB::raw('IFNULL(sub.order, "") as ord'), DB::raw('IF(main, "true", "false") as main'))
+            ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gac.attribute_id')
+            ->leftJoinSub($join, 'sub', function ($join) {
+                $join->on('sub.attribute_id', '=', 'ga.id');
+            })
+            ->whereIn('gac.category_id', explode(',', $categories))
+            ->get();
+
+
+        foreach ($result as $key => $r) {
+            $list[] = [
+                'id' => $r->id,
+                'title' => $r->title,
+                'value' => $r->value,
+                'order' => $r->ord == '' ? $key : $r->ord,
+                'main' => $r->main == 'true' ? true : false
+
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $result = Product::with(['attributes', 'categories'])->find($id);
+        $result = Product::with(['categories' => function($q) {
+            $q->select('value', 'label');
+        }])->find($id);
 
         if ($result) {
 
-            return response($result);
+            return response([
+                'title' =>  $result->title,
+                'code' =>  $result->code,
+                'brand_id' =>  $result->brand_id,
+                'status' =>  $result->status,
+                'slug' =>  $result->slug ?? '',
+                'meta_title' =>  $result->meta_title ?? '',
+                'meta_description' =>  $result->meta_description ?? '',
+                'content' =>  $result->content ?? '',
+                'categories' => $result->categories
+            ]);
         }
 
         return response()->json(['status' => false, 'msg' => 'request is invalid'], 200);
@@ -153,12 +202,10 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'code' => 'required',
-            'price' => 'required',
             'brand_id' => 'required'
         ],[
             'title.required' => 'عنوان نمیتواند خالی باشد.',
             'code.required' => 'کد محصول نمیتواند خالی باشد.',
-            'price.required' => 'قیمت را وارد نکرده اید',
             'brand_id.required' => 'برند را وارد نکرده اید.'
         ]);
 
@@ -175,9 +222,8 @@ class ProductController extends Controller
         $result = Product::updateOrCreate(['id' => $id] ,[
             'title' => $request->get('title'),
             'content' => $request->get('content'),
-            'brand_id' => $request->get('brand_id') != 0 ?? null,
+            'brand_id' => $request->get('brand_id') > 0 ? $request->get('brand_id') : null,
             'code' => $request->get('code'),
-            'price' => $request->get('price'),
             'status' => $request->get('status'),
             'slug' => $request->get('slug'),
             'meta_title' => $request->get('meta_title'),
@@ -207,29 +253,6 @@ class ProductController extends Controller
 
     }
 
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
-     */
-    public function delete($id)
-    {
-
-        $product = Product::find($id);
-
-        if ($product) {
-
-            $result = $product->delete();
-            if ($result) {
-                return response()->json(['status'  =>  true]);
-            }
-        }
-
-
-        return response()->json(['status'  =>  false, 'msg'=> 'error']);
-
-    }
 
     /**
      * @param $id

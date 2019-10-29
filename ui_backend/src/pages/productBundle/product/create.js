@@ -38,7 +38,6 @@ class CreateProduct extends Component {
             form: {
                 title: '',
                 code: '',
-                price: '',
                 brand_id: 0,
                 status: 1,
                 slug: '',
@@ -112,6 +111,7 @@ class CreateProduct extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
+
         if (validator.isEmpty(this.state.form.title)) {
             toast.error('عجله نکن ! عنوان رو وارد کن حالا');
             return;
@@ -122,18 +122,14 @@ class CreateProduct extends Component {
             return;
         }
 
-        if (!validator.isNumeric(this.state.form.price)) {
-            toast.error('قیمت رو چی زدی؟ عدد بزن!');
-            return;
-        }
-
         if (this.state.checked.length === 0) {
             toast.error('محصول دسته بندی نداره؟ روی هوا باشه؟');
             return;
         }
 
+
         if (this.state.form.brand_id === 0) {
-            toast.info('برند نزدی ها ولی گیر نمیدم بهت...');
+            toast.info('برند نزدی ها ولی گیر نمیدم بهت');
         }
 
         if (validator.isEmpty(this.state.form.content)) {
@@ -141,11 +137,12 @@ class CreateProduct extends Component {
         }
 
         this.state.form['categories'] = this.state.checked;
+        console.log(this.state.form);
         this.api.createProduct(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
-                    //this.props.history.push('/products/brands');
+                    this.props.history.push('/products');
                 } else {
                     toast.error(response.msg);
                 }
@@ -171,16 +168,8 @@ class CreateProduct extends Component {
             await new Promise(resolve => {
                 resolve(this.api.getProductCategoryAttributes(checked).then((response) => {
                     if (typeof response != "undefined") {
-                        response.map((r, index) => {
-                            form['attributes'][index].id = r.id;
-                            form['attributes'][index].title = r.title;
-                            form['attributes'][index].value = '';
-                            form['attributes'][index].order = index;
-                            form['attributes'][index].main = false;
-                        });
-
+                        form['attributes'] = response;
                         resolve(form['attributes'].sort(this.compare));
-
                         this.setState({
                             form
                         })
@@ -353,21 +342,6 @@ class CreateProduct extends Component {
                                                 <MenuItem value={0}>غیرفعال</MenuItem>
                                             </TextField>
                                         </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <TextField
-                                                label="قیمت پایه"
-                                                variant="filled"
-                                                margin='dense'
-                                                value={this.state.form.price}
-                                                fullWidth
-                                                helperText="قیمت را به تومان وارد کنید."
-                                                name='price'
-                                                onChange={this.handleChangeElement.bind(this)}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
@@ -396,7 +370,7 @@ class CreateProduct extends Component {
                                         </Grid>
                                         {this.state.form.attributes.length > 0 ?
                                             <Grid item xs={12}>
-                                                <table className='table-duplicate-row bounceIn'>
+                                                <table className='table-duplicate-row fadeIn'>
                                                     <thead>
                                                     <tr>
                                                         <th>ردیف</th>

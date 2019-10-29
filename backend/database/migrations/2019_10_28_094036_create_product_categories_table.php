@@ -17,7 +17,7 @@ class CreateProductCategoriesTable extends Migration
             $table->integer('product_id');
             $table->integer('category_id');
 
-            $table->primary(['category_id', 'attribute_id']);
+            $table->primary(['category_id', 'product_id']);
         });
     }
 

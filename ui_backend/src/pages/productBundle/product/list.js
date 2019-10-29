@@ -29,6 +29,7 @@ import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import {toast} from "react-toastify";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Link} from "react-router-dom";
+import CreateIcon from '@material-ui/icons/Create';
 
 class ProductList extends Component {
     constructor(props) {
@@ -402,6 +403,13 @@ class ProductList extends Component {
                                                 </Tooltip>
                                             </td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
+                                                <Tooltip title="ویرایش">
+                                                    <Link to={`/products/edit/${product.id}`}>
+                                                        <IconButton>
+                                                            <CreateIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip>
                                             </td>
                                         </tr>
                                     );

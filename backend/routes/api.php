@@ -157,6 +157,7 @@ Route::group(['prefix' => '/backend'], function () {
         Route::post('/', 'Backend\ProductController@store');
         Route::get('/{id}', 'Backend\ProductController@show');
         Route::put('/{id}', 'Backend\ProductController@update');
+        Route::get('/{id}/categories/{categories}/attributes', 'Backend\ProductController@productAttributes');
         Route::put('/{id}/change/status', 'Backend\ProductController@changeStatus');
     });
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGroupAttributeAssignToProductTable extends Migration
+class CreateProductPinsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateGroupAttributeAssignToProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('group_attribute_product', function (Blueprint $table) {
+        Schema::create('product_pins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('product_id')->index();
-            $table->integer('attribute_id')->index();
-            $table->string('value');
-            $table->tinyInteger('order');
-            $table->boolean('main');
+            $table->mediumText('pins');
+            $table->integer('price')->default(0);
+            $table->integer('discount')->default(0);
+            $table->integer('count')->default(0);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateGroupAttributeAssignToProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('group_attribute_assign_to_product');
+        Schema::dropIfExists('product_pins');
     }
 }

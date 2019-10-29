@@ -39,7 +39,6 @@ class EditProduct extends Component {
             form: {
                 title: '',
                 code: '',
-                price: '',
                 brand_id: 0,
                 status: 1,
                 slug: '',
@@ -58,6 +57,7 @@ class EditProduct extends Component {
     }
 
     async handleRequest() {
+        // fetch brands
         await new Promise(resolve => {
             resolve(this.api.fetchBrands().then((response) => {
                 if (typeof response != "undefined") {
@@ -70,6 +70,7 @@ class EditProduct extends Component {
             }));
         });
 
+        // get category tree
         await new Promise(resolve => {
             resolve(this.api.fetchProductCategories().then((response) => {
                 if (typeof response != "undefined") {
@@ -83,28 +84,20 @@ class EditProduct extends Component {
         });
 
         await new Promise(resolve => {
-            resolve(this.api.fetchProduct(2).then((response) => {
+            resolve(this.api.fetchProduct(this.props.match.params.id).then((response) => {
+
                 let checked = this.state.checked;
-                let attributes = this.state.form.attributes;
+
                 response.categories.map((category) => {
                     checked.push(category.value);
                 });
-                response.attributes.map((attribute) => {
-                    attributes.push({
-                        'id' : attribute.id,
-                        'title' : attribute.title,
-                        'value' : attribute.pivot.value,
-                        'order' : attribute.pivot.order,
-                        'main' : attribute.pivot.main === 1 ? true : false
-                    });
-                });
+
                 this.setState({
                     form: {
                         categories: response.categories,
-                        attributes: attributes,
+                        attributes: response.attributes,
                         title: response.title,
                         code: response.code,
-                        price: response.price,
                         brand_id: response.brand_id,
                         status: response.status,
                         slug: response.slug,
@@ -113,8 +106,25 @@ class EditProduct extends Component {
                         content: response.content,
                     },
                     checked,
-                })
+                });
+
+
             }));
+        });
+
+        await new Promise(resolve => {
+           resolve(this.api.getProductAttributes(this.props.match.params.id, this.state.checked).then((response) => {
+               if (typeof response != "undefined") {
+                   let form = this.state.form;
+                   form.attributes = response;
+                   form.attributes.sort(this.compare);
+                   this.setState({
+                        form
+                   })
+               }
+           }).catch((error) => {
+               console.log(error);
+           }));
         });
 
         await new Promise(resolve => {
@@ -158,10 +168,6 @@ class EditProduct extends Component {
             return;
         }
 
-        if (!validator.isNumeric(this.state.form.price)) {
-            toast.error('قیمت رو چی زدی؟ عدد بزن!');
-            return;
-        }
 
         if (this.state.checked.length === 0) {
             toast.error('محصول دسته بندی نداره؟ روی هوا باشه؟');
@@ -176,16 +182,22 @@ class EditProduct extends Component {
             toast.warn('محتوا به کاربر چی نشون بدیم؟');
         }
 
+        this.setState({
+            loading: false
+        });
+
         this.state.form['categories'] = this.state.checked;
 
-        this.api.updateProduct(2, this.state.form).then((response) => {
+        this.api.updateProduct(this.props.match.params.id, this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
-                    //this.props.history.push('/products/brands');
                 } else {
                     toast.error(response.msg);
                 }
+                this.setState({
+                    loading: true
+                })
             }
         }).catch((error) => {
             console.log(error);
@@ -196,34 +208,36 @@ class EditProduct extends Component {
     async handleChangeCategory(checked) {
 
         let form = this.state.form;
+
         await new Promise(resolve => {
             resolve(this.setState({
                 checked,
-                form
             }));
         });
 
         if (this.state.checked.length > 0) {
             await new Promise(resolve => {
-                resolve(this.api.getProductCategoryAttributes(checked).then((response) => {
+                resolve(this.api.getProductAttributes(this.props.match.params.id, this.state.checked).then((response) => {
                     if (typeof response != "undefined") {
+                        let form = this.state.form;
+                        let arr = [];
                         response.map((r, index) => {
-                            form.attributes[form.attributes.length + index] = {
-                                'id' : r.id,
-                                'title' : r.title,
-                                'value' : '',
-                                'order' : '',
-                                'main' : false,
-                            }
+                            arr[index] = {
+                                'id': r.id,
+                                'title': r.title,
+                                'value': r.value,
+                                'order' : r.ord,
+                                'main' : r.main === 'true' ? true : false
+                            };
                         });
-                        resolve(form.attributes.sort(this.compare));
-
+                        arr.sort(this.compare);
+                        form.attributes = arr;
                         this.setState({
                             form
                         })
                     }
                 }).catch((error) => {
-                    console.log(error);
+                    toast.error(error);
                 }));
             });
         }
@@ -238,7 +252,6 @@ class EditProduct extends Component {
         }
         return 0;
     }
-
 
     async  duplicateRaw(id) {
         let arr = [];
@@ -287,7 +300,6 @@ class EditProduct extends Component {
     }
 
     render() {
-        console.log(this.state.form.attributes)
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -390,21 +402,6 @@ class EditProduct extends Component {
                                                 <MenuItem value={0}>غیرفعال</MenuItem>
                                             </TextField>
                                         </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <TextField
-                                                label="قیمت پایه"
-                                                variant="filled"
-                                                margin='dense'
-                                                value={this.state.form.price}
-                                                fullWidth
-                                                helperText="قیمت را به تومان وارد کنید."
-                                                name='price'
-                                                onChange={this.handleChangeElement.bind(this)}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
@@ -446,9 +443,10 @@ class EditProduct extends Component {
                                                     </thead>
                                                     <tbody>
                                                     {this.state.form.attributes.map((attribute, index) => {
+
                                                         return(<tr key={index}>
                                                             <td>{index + 1 }</td>
-                                                            <td><Checkbox checked={this.state.form.attributes[index].main} value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
+                                                            <td><Checkbox checked={Boolean(this.state.form.attributes[index].main)} value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
                                                             <td><b>{attribute.title}</b></td>
                                                             <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].value} name='value' style={{ justifyContent: 'center !important'}} /></td>
                                                             <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].order} name='order' style={{ justifyContent: 'center !important'}} /></td>
@@ -490,7 +488,7 @@ class EditProduct extends Component {
                                                 label="اسلاگ"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.slug}
+                                                value={this.state.form.slug ? this.state.form.slug : ''}
                                                 fullWidth
                                                 name='slug'
                                                 onChange={this.handleChangeElement.bind(this)}
@@ -504,7 +502,7 @@ class EditProduct extends Component {
                                                 label="متا عنوان"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.meta_title}
+                                                value={this.state.form.meta_title ? this.state.form.meta_title : ''}
                                                 fullWidth
                                                 name='meta_title'
                                                 onChange={this.handleChangeElement.bind(this)}
@@ -518,7 +516,7 @@ class EditProduct extends Component {
                                                 label="متا توضیحات"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.meta_description}
+                                                value={this.state.form.meta_description ? this.state.form.meta_description : ''}
                                                 fullWidth
                                                 name='meta_description'
                                                 onChange={this.handleChangeElement.bind(this)}
