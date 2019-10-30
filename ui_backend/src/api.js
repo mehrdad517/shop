@@ -75,6 +75,16 @@ class Api {
         })
     }
 
+    async getProductAttributesPins(id) {
+        return axios.get(`http://localhost:8000/api/backend/products/${id}/attributes`,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
     async getProductCategoryAttributes(id) {
         return axios.get(`http://localhost:8000/api/backend/products/categories/${id}/attributes`,{
             headers: this.haeders(),

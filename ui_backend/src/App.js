@@ -21,6 +21,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
+import ProductPins from "./pages/productBundle/product/pins";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
                 <Route component={ProductList} path='/products' exact={true} />
                 <Route component={CreateProduct} path='/products/create' />
                 <Route component={EditProduct} path='/products/edit/:id' />
+                <Route component={ProductPins} path='/products/pins/:id' />
                 <Route component={BrandList} path='/products/brands' exact={true} />
                 <Route component={BrandEdit} path='/products/brands/:id' />
                 <Route component={ProductCategory} path='/products/categories' exact={true} />

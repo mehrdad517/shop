@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Product;
 use App\ProductCategory;
+use Foo\Bar\Baz;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -281,6 +282,33 @@ class ProductController extends Controller
             return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
         }
         return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+    }
+
+    public function x($id)
+    {
+        $list = [];
+        $mains = DB::table('group_attribute_product as gap')
+            ->select('ga.id', 'ga.title')
+            ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+            ->where('product_id', $id)
+            ->where('main', 1)
+            ->groupBy('ga.id', 'ga.title')
+            ->get();
+
+        foreach ($mains as $key=>$main) {
+            $list[] = [
+                'title' => $main->title,
+                'children' =>DB::table('group_attribute_product as gap')
+                    ->select('gap.id', 'gap.value', 'gap.order')
+                    ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+                    ->where('product_id', $id)
+                    ->where('main', 1)
+                    ->where('attribute_id', $main->id)
+                    ->get()->toArray()
+            ];
+        }
+
+        return response($list);
     }
 
 }
