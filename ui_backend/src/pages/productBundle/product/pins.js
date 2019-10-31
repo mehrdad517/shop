@@ -20,8 +20,7 @@ class ProductPins extends Component {
         super(props);
         this.state = {
             loading: false,
-            row: 1,
-            attributes: []
+            form: []
         };
 
         this.api = new Api();
@@ -35,32 +34,47 @@ class ProductPins extends Component {
         new Promise(resolve => {
             resolve(this.api.getProductAttributesPins(1).then((response) => {
                 this.setState({
-                    attributes: response
+                    form: [response],
+                    loading: true,
                 });
             }).catch((error) => {
                 console.log(error);
             }));
         });
 
-        new Promise(resolve => {
-            resolve(this.setState({
-                loading: true,
-            }))
-        })
-
     }
 
-    createTable = () => {
-        let table = [];
-        // Outer loop to create parent
-        for (let i = 0; i < this.state.row; i++) {
-            table.push(<tr>{children}</tr>)
+    handleDuplicateRaw = (event, i, pins_key) => {
+        let form = this.state.form;
+        if (event.target.name === 'pins') {
+            form[i][event.target.name][pins_key].selected = event.target.value;
+        } else {
+            form[i][event.target.name] = event.target.value;
         }
-        return table
+        
+
+        this.setState({
+            form
+        })
+    };
+
+    async  duplicateRaw(index) {
+        let form = this.state.form;
+        await new Promise((resolve => {
+            resolve(form.push(form[index]));
+        }));
+
+        await new Promise(resolve => {
+            resolve(this.setState({
+                form
+            }));
+        });
     }
+
+
 
     render() {
-        console.log(this.state);
+        console.log(this.state)
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -89,9 +103,9 @@ class ProductPins extends Component {
                     <table className='table-duplicate-row fadeIn'>
                         <thead>
                         <tr>
-                            {this.state.attributes.map((attr, index)  => {
+                            {this.state.form[0].pins.map((pin, key) => {
                                 return(
-                                    <th width='15%'>{attr.title}</th>
+                                    <th width='15%' key={key}>{pin.title}</th>
                                 );
                             })}
                             <th>قیمت</th>
@@ -101,29 +115,37 @@ class ProductPins extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        { this.state.row.map((r, index) => {
+                        {this.state.form.map((entity, index) => {
                             return(
-                                <tr>
-                                    {this.state.attributes.map((attr, key) => {
-                                            return (
-                                                <td>
-                                                    <TextField key={key} value={0} select fullWidth={true} margin={"normal"}>
-                                                        <MenuItem key={0} value={0}>انتخاب</MenuItem>
-                                                        {attr.children.map((child, k) => {
-                                                                return (
-                                                                    <MenuItem key={k + 1} value={child.id}>{child.value}</MenuItem>
-                                                                )
-                                                            }
-                                                        )};
-                                                    </TextField>
-                                                </td>
-                                            )
-                                        }
-                                    )}
-                                    <td><TextField name={`price[${index}]`} /></td>
-                                    <td><TextField name={`count[${index}]`} /></td>
-                                    <td><TextField name={`discount[${index}]`} /></td>
-                                    <td></td>
+                                <tr key={index}>
+                                    {entity.pins.map((pin, key) => {
+                                        return(
+                                            <td key={key}>
+                                                <TextField onChange={(event) => this.handleDuplicateRaw(event, index, key)} name='pins' value={pin.selected} select fullWidth={true}>
+                                                    {pin.children.map((child, k) => {
+                                                        return(
+                                                            <MenuItem key={k} value={child.id}>{child.value}</MenuItem>
+                                                        );
+                                                    })}
+                                                </TextField>
+                                            </td>
+                                        );
+                                    })}
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='price' value={entity.price} /></td>
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='count' value={entity.count} /></td>
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='discount' value={entity.discount} /></td>
+                                    <td>
+                                        <Tooltip title={'ایجاد'}>
+                                            <IconButton color='primary' onClick={() => this.duplicateRaw(index)}>
+                                                <Add />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title={'حذف'}>
+                                            <IconButton color='secondary'>
+                                                <RemoveCircleIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </td>
                                 </tr>
                             );
                         })}

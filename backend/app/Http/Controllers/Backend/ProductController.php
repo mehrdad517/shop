@@ -287,6 +287,11 @@ class ProductController extends Controller
     public function x($id)
     {
         $list = [];
+        $list = [
+            'price' => 0,
+            'count' => 0,
+            'discount' => 0,
+        ];
         $mains = DB::table('group_attribute_product as gap')
             ->select('ga.id', 'ga.title')
             ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
@@ -296,17 +301,22 @@ class ProductController extends Controller
             ->get();
 
         foreach ($mains as $key=>$main) {
-            $list[] = [
+            $children = DB::table('group_attribute_product as gap')
+                ->select('gap.id', 'gap.value', 'gap.order')
+                ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+                ->where('product_id', $id)
+                ->where('main', 1)
+                ->where('attribute_id', $main->id)
+                ->get()->toArray();
+
+            $list['pins'][] = [
+                'id' => $main->id,
                 'title' => $main->title,
-                'children' =>DB::table('group_attribute_product as gap')
-                    ->select('gap.id', 'gap.value', 'gap.order')
-                    ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
-                    ->where('product_id', $id)
-                    ->where('main', 1)
-                    ->where('attribute_id', $main->id)
-                    ->get()->toArray()
+                'selected' => $children[0]->id,
+                'children' => $children
             ];
         }
+
 
         return response($list);
     }
