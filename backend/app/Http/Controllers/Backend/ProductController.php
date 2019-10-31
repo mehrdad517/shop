@@ -286,8 +286,7 @@ class ProductController extends Controller
 
     public function x($id)
     {
-        $list = [];
-        $list = [
+        $list[0] = [
             'price' => 0,
             'count' => 0,
             'discount' => 0,
@@ -309,13 +308,14 @@ class ProductController extends Controller
                 ->where('attribute_id', $main->id)
                 ->get()->toArray();
 
-            $list['pins'][] = [
+            $list[0]['pins'][] = [
                 'id' => $main->id,
                 'title' => $main->title,
                 'selected' => $children[0]->id,
                 'children' => $children
             ];
         }
+
 
 
         return response($list);

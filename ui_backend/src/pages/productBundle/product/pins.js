@@ -33,10 +33,15 @@ class ProductPins extends Component {
     async handleRequest() {
         new Promise(resolve => {
             resolve(this.api.getProductAttributesPins(1).then((response) => {
+                let form = this.state.form;
+                response.map((r, index) => {
+                    form[index] = r;
+                });
                 this.setState({
-                    form: [response],
+                    form,
                     loading: true,
                 });
+
             }).catch((error) => {
                 console.log(error);
             }));
@@ -45,28 +50,44 @@ class ProductPins extends Component {
     }
 
     handleDuplicateRaw = (event, i, pins_key) => {
-        let form = this.state.form;
+        let arr = this.state.form;
         if (event.target.name === 'pins') {
-            form[i][event.target.name][pins_key].selected = event.target.value;
+            arr[i][event.target.name][pins_key].selected = event.target.value;
         } else {
-            form[i][event.target.name] = event.target.value;
+            arr[i][event.target.name] = event.target.value;
         }
-        
 
         this.setState({
-            form
+            form : arr
         })
     };
 
     async  duplicateRaw(index) {
-        let form = this.state.form;
-        await new Promise((resolve => {
-            resolve(form.push(form[index]));
-        }));
+        let arr = [];
+        arr = this.state.form;
+        let p = [];
+        arr[index].pins.map((pin, i) => {
+            p[i] = {
+              'id': pin.id,
+              'title': pin.title,
+              'selected' : pin.selected,
+              'children' : pin.children
+            }
+        });
+
+        let duplicate = {
+            'count' : arr[index].count,
+            'price' : arr[index].price,
+            'discount' : arr[index].discount,
+            'pins' : p,
+        };
+
+        arr.push(duplicate);
+
 
         await new Promise(resolve => {
             resolve(this.setState({
-                form
+                form :arr
             }));
         });
     }
@@ -74,7 +95,7 @@ class ProductPins extends Component {
 
 
     render() {
-        console.log(this.state)
+        console.log(this.state.form);
         if (!this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
@@ -131,12 +152,12 @@ class ProductPins extends Component {
                                             </td>
                                         );
                                     })}
-                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='price' value={entity.price} /></td>
-                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='count' value={entity.count} /></td>
-                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} name='discount' value={entity.discount} /></td>
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index, 5)} name='price' value={entity.price} /></td>
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index, 6)} name='count' value={entity.count} /></td>
+                                    <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index, 7)} name='discount' value={entity.discount} /></td>
                                     <td>
-                                        <Tooltip title={'ایجاد'}>
-                                            <IconButton color='primary' onClick={() => this.duplicateRaw(index)}>
+                                        <Tooltip title={'ایجاد'} onClick={() => this.duplicateRaw(index)}>
+                                            <IconButton color='primary'>
                                                 <Add />
                                             </IconButton>
                                         </Tooltip>
