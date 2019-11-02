@@ -225,9 +225,10 @@ class EditProduct extends Component {
                             arr[index] = {
                                 'id': r.id,
                                 'title': r.title,
+                                'row' : r.row,
                                 'value': r.value,
                                 'order' : r.ord,
-                                'main' : r.main === 'true' ? true : false
+                                'main' : r.main
                             };
                         });
                         arr.sort(this.compare);
@@ -238,6 +239,13 @@ class EditProduct extends Component {
                     }
                 }).catch((error) => {
                     toast.error(error);
+                }));
+            });
+        } else {
+            form.attributes = [];
+            await new Promise(resolve => {
+                resolve(this.setState({
+                    form,
                 }));
             });
         }
@@ -443,7 +451,6 @@ class EditProduct extends Component {
                                                     </thead>
                                                     <tbody>
                                                     {this.state.form.attributes.map((attribute, index) => {
-
                                                         return(<tr key={index}>
                                                             <td>{index + 1 }</td>
                                                             <td><Checkbox checked={Boolean(this.state.form.attributes[index].main)} value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
@@ -456,16 +463,14 @@ class EditProduct extends Component {
                                                                         <Add />
                                                                     </IconButton>
                                                                 </Tooltip>
-                                                                <Tooltip title={'حذف اتریبیوت ' + attribute.title}>
-                                                                    <IconButton color='secondary' onClick={() => this.deleteRaw(attribute.id)}>
-                                                                        <RemoveCircleIcon />
-                                                                    </IconButton>
-                                                                </Tooltip>
                                                             </td>
                                                         </tr>);
                                                     })}
                                                     </tbody>
                                                 </table>
+                                                <p>برای حذف ویژگی کافیست فیلد مقدار را خالی بگذارید. </p>
+                                                <p>توجه داشته باشید حذف ویژگی ممکن است قیمت محصول را تحت تاثیر قرار دهد. </p>
+                                                <p>پس از تغییر اولویت ها حتما فرم قیمت و موجودی را به روز رسانی کنید.</p>
                                             </Grid>: ''}
                                     </Grid>
                                 </ExpansionPanelDetails>

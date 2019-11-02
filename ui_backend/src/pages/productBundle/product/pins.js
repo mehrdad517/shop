@@ -172,6 +172,7 @@ class ProductPins extends Component {
                             <Grid item xs={12} sm={6}>
                                 <h2>{this.state.product && this.state.product.title}</h2>
                                 <p style={{ color: '#8e8e8e'}}>موجودی قیمت تخفیف و ... را مشخص کنید.</p>
+                                <p style={{ color: '#ff5b60'}}>سطر اول پایین ترین قیمت را وارد کنید.قیمت پایه محصول از سطر اول در نظر گرفته خواهد شد.</p>
                                 <p style={{ color: '#ff5b60'}}>در صورت وارد نکردن کلیه حالات قیمت وارد شده در سطر اول به عنوان قیمت پایه در نظر گرفته خواهد شد.</p>
                                 <p style={{ color: '#ff5b60'}}>موجودی کلیه سطرها به عنوان موجودی کل در نظر گرفته خواهد شد.</p>
                             </Grid>
@@ -198,9 +199,9 @@ class ProductPins extends Component {
                                         <th width='15%' key={key}>{pin.title}</th>
                                     );
                                 })}
-                                <th>قیمت</th>
+                                <th>قیمت(تومان)</th>
                                 <th>موجودی</th>
-                                <th>تخفیف</th>
+                                <th>تخفیف(درصد)</th>
                                 <th></th>
                             </tr>
                             </thead>

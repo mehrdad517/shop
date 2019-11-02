@@ -108,7 +108,6 @@ class ProductController extends Controller
             if ($request->has('attributes')) {
                 foreach ($request->get('attributes') as $item) {
                     if ($item['value']) {
-
                         $result->attributes()->attach($item['id'], [
                             'value' => $item['value'],
                             'order' => $item['order'],
@@ -139,11 +138,11 @@ class ProductController extends Controller
         $list = [];
 
         $join = DB::table('group_attribute_product')
-            ->select('attribute_id' ,'value', 'order', 'main')
+            ->select('id as row','attribute_id' ,'value', 'order', 'main')
             ->where('product_id', $product_id);
 
         $result = DB::table('group_attribute_category as gac')
-            ->select(DB::raw('distinct ga.id as id'), 'ga.title as title', DB::raw('IFNULL(sub.value, "") as value'), DB::raw('IFNULL(sub.order, "") as ord'), DB::raw('IF(main, "true", "false") as main'))
+            ->select(DB::raw('distinct ga.id as id'), 'ga.title as title', 'sub.row',DB::raw('IFNULL(sub.value, "") as value'), DB::raw('IFNULL(sub.order, "") as ord'), DB::raw('IF(main, "true", "false") as main'))
             ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gac.attribute_id')
             ->leftJoinSub($join, 'sub', function ($join) {
                 $join->on('sub.attribute_id', '=', 'ga.id');
@@ -156,10 +155,10 @@ class ProductController extends Controller
             $list[] = [
                 'id' => $r->id,
                 'title' => $r->title,
+                'row' => $r->row,
                 'value' => $r->value,
                 'order' => $r->ord == '' ? $key : $r->ord,
                 'main' => $r->main == 'true' ? true : false
-
             ];
         }
 
@@ -236,14 +235,38 @@ class ProductController extends Controller
         $result->categories()->detach();
         $result->categories()->attach($request->get('categories'));
         if ($request->has('attributes')) {
-            $result->attributes()->detach();
             foreach ($request->get('attributes') as $item) {
                 if ($item['value']) {
-                    $result->attributes()->attach($item['id'], [
-                        'value' => $item['value'],
-                        'order' => $item['order'],
-                        'main' => $item['main']
-                    ]);
+                    $check = DB::table('group_attribute_product')->where('product_id', $id)->where('attribute_id', $item['id'])->where('value', $item['value']);
+                    if ($check->count() > 0 ) {
+                        $check->update([
+                            'value' => $item['value'],
+                            'order' => $item['order'],
+                            'main' => $item['main']
+                        ]);
+                    } else {
+                        DB::table('group_attribute_product')->insert([
+                            'product_id' => $id,
+                            'attribute_id' => $item['id'],
+                            'value' => $item['value'],
+                            'order' => $item['order'],
+                            'main' => $item['main']
+                        ]);
+                    }
+                } else {
+                    if (@$item['row']) {
+                        $check = DB::table('product_pins')->where('product_id', $id)->where('group_attribute_product_ids', 'like', "%$item[row]%");
+                        if ($check->count() == 0) {
+                            DB::table('group_attribute_product')->where('id', $item['row'])->delete();
+                        } else {
+                            foreach ($check->get() as $ch) {
+                                DB::table('product_pins')->where('id', $ch->id)->update([
+                                    'group_attribute_product_ids' => str_replace("$item[row]/", '', $ch->group_attribute_product_ids)
+                                ]);
+                            }
+                            DB::table('group_attribute_product')->where('id', $item['row'])->delete();
+                        }
+                    }
                 }
             }
         }
@@ -296,6 +319,7 @@ class ProductController extends Controller
 
         if ($product_pins->count() > 0) {
             foreach ($product_pins->get() as $pins) {
+                $select = -1;
 
                 $selected = explode('/', trim($pins->group_attribute_product_ids, '/'));
                 $row = [];
@@ -311,21 +335,28 @@ class ProductController extends Controller
 
                 foreach ($mains as $key=>$main) {
 
-
                     $children = DB::table('group_attribute_product as gap')
                         ->select('gap.id', 'gap.value', 'gap.order')
                         ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
                         ->where('product_id', $id)
                         ->where('main', 1)
                         ->where('attribute_id', $main->id)
-                        ->get()->toArray();
+                        ->get()
+                        ->toArray();
+
+                    foreach ($children as $child) {
+                        if(in_array($child->id, $selected)) {
+                            $select = $child->id;
+                        }
+                    }
 
                     $row[] = [
                         'id' => $main->id,
                         'title' => $main->title,
-                        'selected' => key_exists($key, $selected) ? (int)$selected[$key] : $children[0]->id,
+                        'selected' => @$select ? @$select : $children[0]->id,
                         'children' => $children
                     ];
+
                 }
 
                 $list[] = [
@@ -378,6 +409,8 @@ class ProductController extends Controller
 
     public function storePins($id, Request $request)
     {
+        ProductPins::where('product_id', $id)->delete();
+
         if (count($request->get('form')) == 1 && !$request->has('form')[0]['pins']) {
             Product::find($id)->update([
                 'count' => $request->get('form')[0]['count'],
