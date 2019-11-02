@@ -76,7 +76,17 @@ class Api {
     }
 
     async getProductAttributesPins(id) {
-        return axios.get(`http://localhost:8000/api/backend/products/${id}/attributes`,{
+        return axios.get(`http://localhost:8000/api/backend/products/${id}/pins`,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async storeProductPins(id, object) {
+        return axios.post(`http://localhost:8000/api/backend/products/${id}/pins`, object,{
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

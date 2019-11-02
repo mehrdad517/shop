@@ -30,6 +30,7 @@ import {toast} from "react-toastify";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import {Link} from "react-router-dom";
 import CreateIcon from '@material-ui/icons/Create';
+import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 
 class ProductList extends Component {
     constructor(props) {
@@ -403,6 +404,13 @@ class ProductList extends Component {
                                                 </Tooltip>
                                             </td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
+                                                <Tooltip title="تغییر قیمت و موجودی">
+                                                    <Link to={`/products/pins/${product.id}`}>
+                                                        <IconButton>
+                                                            <LocalOfferIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip>
                                                 <Tooltip title="ویرایش">
                                                     <Link to={`/products/edit/${product.id}`}>
                                                         <IconButton>

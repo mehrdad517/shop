@@ -159,7 +159,8 @@ Route::group(['prefix' => '/backend'], function () {
         Route::put('/{id}', 'Backend\ProductController@update');
         Route::get('/{id}/categories/{categories}/attributes', 'Backend\ProductController@productAttributes');
         Route::put('/{id}/change/status', 'Backend\ProductController@changeStatus');
-        Route::get('/{id}/attributes', 'Backend\ProductController@x');
+        Route::get('/{id}/pins', 'Backend\ProductController@pins');
+        Route::post('/{id}/pins', 'Backend\ProductController@storePins');
     });
 
 });

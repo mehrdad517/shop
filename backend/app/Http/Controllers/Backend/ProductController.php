@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Backend;
 
 use App\Product;
 use App\ProductCategory;
+use App\ProductPins;
 use Foo\Bar\Baz;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Integer;
 use Validator;
 
 class ProductController extends Controller
@@ -284,41 +286,134 @@ class ProductController extends Controller
         return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
     }
 
-    public function x($id)
+    public function pins($id)
     {
-        $list[0] = [
-            'price' => 0,
-            'count' => 0,
-            'discount' => 0,
-        ];
-        $mains = DB::table('group_attribute_product as gap')
-            ->select('ga.id', 'ga.title')
-            ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
-            ->where('product_id', $id)
-            ->where('main', 1)
-            ->groupBy('ga.id', 'ga.title')
-            ->get();
 
-        foreach ($mains as $key=>$main) {
-            $children = DB::table('group_attribute_product as gap')
-                ->select('gap.id', 'gap.value', 'gap.order')
+        $product = Product::find($id);
+        $list = [];
+
+        $product_pins = DB::table('product_pins')->where('product_id', $id);
+
+        if ($product_pins->count() > 0) {
+            foreach ($product_pins->get() as $pins) {
+
+                $selected = explode('/', trim($pins->group_attribute_product_ids, '/'));
+                $row = [];
+                // get main product attr
+                $mains = DB::table('group_attribute_product as gap')
+                    ->select('ga.id', 'ga.title')
+                    ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+                    ->where('product_id', $id)
+                    ->where('main', 1)
+                    ->groupBy('ga.id', 'ga.title')
+                    ->orderBy('order', 'asc')
+                    ->get();
+
+                foreach ($mains as $key=>$main) {
+
+
+                    $children = DB::table('group_attribute_product as gap')
+                        ->select('gap.id', 'gap.value', 'gap.order')
+                        ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+                        ->where('product_id', $id)
+                        ->where('main', 1)
+                        ->where('attribute_id', $main->id)
+                        ->get()->toArray();
+
+                    $row[] = [
+                        'id' => $main->id,
+                        'title' => $main->title,
+                        'selected' => key_exists($key, $selected) ? (int)$selected[$key] : $children[0]->id,
+                        'children' => $children
+                    ];
+                }
+
+                $list[] = [
+                    'pins' => $row,
+                    'price' => $pins->price,
+                    'count' => $pins->count,
+                    'discount' => $pins->discount
+                ];
+            }
+        } else {
+
+            $list[0] = [
+                'price' => $product->price,
+                'count' => $product->count,
+                'discount' => $product->discount,
+            ];
+
+            // get main product attr
+            $mains = DB::table('group_attribute_product as gap')
+                ->select('ga.id', 'ga.title')
                 ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
                 ->where('product_id', $id)
                 ->where('main', 1)
-                ->where('attribute_id', $main->id)
-                ->get()->toArray();
+                ->groupBy('ga.id', 'ga.title')
+                ->orderBy('order', 'asc')
+                ->get();
 
-            $list[0]['pins'][] = [
-                'id' => $main->id,
-                'title' => $main->title,
-                'selected' => $children[0]->id,
-                'children' => $children
-            ];
+            foreach ($mains as $key=>$main) {
+
+                $children = DB::table('group_attribute_product as gap')
+                    ->select('gap.id', 'gap.value', 'gap.order')
+                    ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
+                    ->where('product_id', $id)
+                    ->where('main', 1)
+                    ->where('attribute_id', $main->id)
+                    ->get()->toArray();
+
+                $list[0]['pins'][] = [
+                    'id' => $main->id,
+                    'title' => $main->title,
+                    'selected' => $children[0]->id,
+                    'children' => $children
+                ];
+            }
+        }
+
+
+        return response($list);
+    }
+
+    public function storePins($id, Request $request)
+    {
+        if (count($request->get('form')) == 1 && !$request->has('form')[0]['pins']) {
+            Product::find($id)->update([
+                'count' => $request->get('form')[0]['count'],
+                'price' => $request->get('form')[0]['price'],
+                'discount' => $request->get('form')[0]['discount'],
+            ]);
+        } else {
+            $counter = 0;
+            foreach ($request->get('form') as $frm) {
+                $counter += $frm['count'];
+
+                $pins = '/';
+                foreach ($frm['pins'] as $pin) {
+                    $pins .= "$pin[selected]/";
+                }
+                ProductPins::updateOrCreate( ['product_id' => $id, 'group_attribute_product_ids' => $pins],[
+                    'product_id' => $id,
+                    'group_attribute_product_ids' => $pins,
+                    'count' => $frm['count'],
+                    'discount' => $frm['discount'],
+                    'price' => $frm['price'],
+                    'detail' => json_encode($frm['pins']),
+                ]);
+            }
+
+            Product::find($id)->update([
+                'count' => $counter,
+                'price' => $request->get('form')[0]['price'],
+            ]);
         }
 
 
 
-        return response($list);
+
+        return response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+
     }
 
 }
