@@ -10,7 +10,6 @@ body {
 .MuiFormHelperText-root{
     font-family: inherit !important;
     text-align: right !important;
-
 }
 .Toastify__toast{
     font-family: inherit;
@@ -54,6 +53,9 @@ body {
     border-collapse: separate !important;
     border-spacing: 0 10px;
     width: 100%;
+}
+.table .MuiChip-root{
+    font-family: inherit !important;
 }
 .table thead tr{
     background-color: transparent;

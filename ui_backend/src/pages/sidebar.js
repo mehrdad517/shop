@@ -30,10 +30,7 @@ export default function NestedList() {
     return (
         <div style={{ width: '300px'}}>
             <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
-            <Link to='/users'>کاربران</Link>
-            </div>
-            <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
-            <Link to='/users/access/control/list'>سطح دسترسی</Link>
+                <Link to='/orders'>سفارشات</Link>
             </div>
             <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
             <Link to='/products'>محصولات</Link>
@@ -46,6 +43,12 @@ export default function NestedList() {
             </div>
             <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
             <Link to='/products/categories'>دسته بندی محصولات</Link>
+                <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
+                    <Link to='/users'>کاربران</Link>
+                </div>
+                <div style={{ width: '100%', padding: '20px', margin: '20px'}}>
+                    <Link to='/users/access/control/list'>سطح دسترسی</Link>
+                </div>
             </div>
         </div>
     );

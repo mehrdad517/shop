@@ -16,8 +16,7 @@ class CreateProductPinsTable extends Migration
         Schema::create('product_pins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('product_id')->index();
-            $table->string('group_attribute_product_ids');
-            $table->text('detail');
+            $table->string('group_attribute_product_ids')->nullable();
             $table->integer('price')->default(0);
             $table->integer('discount')->default(0);
             $table->integer('count')->default(0);

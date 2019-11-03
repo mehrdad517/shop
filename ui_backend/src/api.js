@@ -22,6 +22,16 @@ class Api {
         return response.data;
     }
 
+    async fetchOrders(object) {
+        return axios.get('http://localhost:8000/api/backend/orders/', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
 
     // fetch products form db
     async fetchProducts(object) {

@@ -105,6 +105,10 @@ use App\Slider;
 
 Route::group(['prefix' => '/backend'], function () {
 
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/', 'Backend\OrderController@index');
+    });
+
     Route::group(['prefix' => '/users'], function () {
 
         Route::group(['prefix' => '/permissions'], function () {

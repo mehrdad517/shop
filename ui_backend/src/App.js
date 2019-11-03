@@ -2,6 +2,9 @@ import React from 'react';
 import {Provider} from "react-redux";
 import store from "./store";
 import {Route} from 'react-router-dom';
+
+
+import OrderList from './pages/orders/list'
 import UserList from './pages/userBundle/user/list';
 import ProductList from './pages/productBundle/product/list'
 import CreateProduct from './pages/productBundle/product/create'
@@ -27,8 +30,7 @@ function App() {
     return (
         <Provider store={store}>
             <MainLayout>
-                <Route component={UserList} path='/users' exact={true} />
-                <Route component={Acl} path='/users/access/control/list' />
+                <Route component={OrderList} path='/orders' exact={true} />
                 <Route component={ProductList} path='/products' exact={true} />
                 <Route component={CreateProduct} path='/products/create' />
                 <Route component={EditProduct} path='/products/edit/:id' />
@@ -39,6 +41,8 @@ function App() {
                 <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
                 <Route component={GroupAttributeList} path='/products/attributes' exact={true} />
                 <Route component={AttributeEdit} path='/products/attributes/:id' />
+                <Route component={UserList} path='/users' exact={true} />
+                <Route component={Acl} path='/users/access/control/list' />
             </MainLayout>
             <ToastContainer position="top-left"
                             autoClose={5000}

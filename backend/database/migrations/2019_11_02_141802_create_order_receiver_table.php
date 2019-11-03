@@ -14,8 +14,8 @@ class CreateOrderReceiverTable extends Migration
     public function up()
     {
         Schema::create('order_receiver', function (Blueprint $table) {
-            $table->integer('order_id');
-            $table->integer('region_id');
+            $table->integer('order_id')->primary();
+            $table->integer('region_id')->index();
             $table->string('full_name');
             $table->string('national_code');
             $table->string('mobile');
