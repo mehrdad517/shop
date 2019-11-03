@@ -15,6 +15,11 @@ class CreateFinanceTable extends Migration
     {
         Schema::create('finance', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('user_id')->index();
+            $table->integer('financeable_id')->index();
+            $table->string('financeable_type')->index();
+            $table->decimal('debtor', 18, 2)->default(0);
+            $table->decimal('credit', 18, 2)->default(0);
             $table->timestamps();
         });
     }

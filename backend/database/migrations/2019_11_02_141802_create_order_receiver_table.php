@@ -14,7 +14,14 @@ class CreateOrderReceiverTable extends Migration
     public function up()
     {
         Schema::create('order_receiver', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->integer('order_id');
+            $table->integer('region_id');
+            $table->string('full_name');
+            $table->string('national_code');
+            $table->string('mobile');
+            $table->string('phone')->nullable();
+            $table->string('postal_code');
+            $table->mediumText('address');
             $table->timestamps();
         });
     }
