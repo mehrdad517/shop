@@ -26,7 +26,7 @@ class OrderTableSeeder extends Seeder
                 'updated_at' => $faker->dateTime
             ]);
 
-            \Illuminate\Support\Facades\DB::table('order_receiver')->insert([
+            \Illuminate\Support\Facades\DB::table('order_post_info')->insert([
                 'order_id' => $id,
                 'region_id' => $id,
                 'mobile' => $faker->phoneNumber,

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderReceiver extends Model
+class OrderPostInfo extends Model
 {
     protected $table = 'order_post_info';
 

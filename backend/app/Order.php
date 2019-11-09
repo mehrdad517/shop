@@ -113,26 +113,26 @@ class Order extends Model
 
     public function productPins()
     {
-        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id');
+        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id')->withPivot('count', 'price');
     }
 
 
-    public function orderReceiver()
+    public function postInfo()
     {
-        return $this->hasOne(OrderReceiver::class);
+        return $this->hasOne(OrderPostInfo::class);
     }
 
 
     public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->morphMany(Payment::class, 'paymentable');
     }
 
 
 
-    public function orderAttachments()
+    public function attachments()
     {
-        return $this->hasMany(OrderAttachment::class);
+        return $this->morphMany(OrderAttachment::class, 'attachmentable');
     }
 
 }

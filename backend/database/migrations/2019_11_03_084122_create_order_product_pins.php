@@ -19,6 +19,7 @@ class CreateOrderProductPins extends Migration
             $table->integer('count');
             $table->decimal('price');
             $table->text('detail');
+
             $table->timestamps();
             $table->primary(['order_id', 'product_pins_id']);
             $table->engine = 'InnoDB';

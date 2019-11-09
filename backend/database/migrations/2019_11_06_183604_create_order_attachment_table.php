@@ -15,7 +15,6 @@ class CreateOrderAttachmentTable extends Migration
     {
         Schema::create('order_attachment', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('order_id')->index();
             $table->integer('attachmentable_id');
             $table->string('attachmentable_type');
             $table->boolean('status')->default(0);

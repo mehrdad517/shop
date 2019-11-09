@@ -55,6 +55,14 @@ class OrderController extends Controller
     {
         $order = Order::with(['user' => function($q) {
             return $q->select('id', 'name', 'mobile');
+        }, 'postInfo' => function($q) {
+//            return $q->select('ord er_id','full_name');
+        }, 'payments', 'attachments', 'productPins' => function($q) {
+            return $q->with(['product' => function($q) {
+                return $q->select('id', 'title', 'brand_id')->with(['brand' => function($q) {
+                    return $q->select('id', 'title');
+                }]);
+            }]);
         }])->find($id)->toArray();
 
         dd($order);
