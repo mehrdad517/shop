@@ -22,17 +22,13 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import SortIcon from '@material-ui/icons/Sort';
 import SyncIcon from '@material-ui/icons/Sync';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import {toast} from "react-toastify";
-import {Link} from "react-router-dom";
-import CreateIcon from '@material-ui/icons/Create';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import Api from "../../api";
 import Chip from "@material-ui/core/Chip";
 import moment from 'moment-jalaali'
 import DatePicker from 'react-datepicker2';
+import {delivery, items, status, transport} from "./helper";
 
 class OrderList extends Component {
     constructor(props) {
@@ -42,14 +38,20 @@ class OrderList extends Component {
             entities : [],
             filter: {
                 id: '',
-                status: -1,
-                transport: -1,
+                order_status: -1,
+                transport_status: -1,
+                delivery_status: -1,
+                items_status: -1,
                 from_date: moment()
             },
             page: 1,
             limit: 50,
             sort_field: 'id',
             sort_type: 'desc',
+            transport: transport(),
+            delivery: delivery(),
+            items: items(),
+            status: status(),
         }
     }
 
@@ -72,12 +74,12 @@ class OrderList extends Component {
     setSelectedDay = (value) => {
         let filter = this.state.filter;
         filter.from_date = value;
-        this.setState({
-            filter
-        });
+        //this.setState({
+        //    filter
+        //});
 
-        this.handleRequest();
-    }
+        //this.handleRequest();
+    };
 
     async handleChangeSearchInput(event) {
         let filter = this.state.filter;
@@ -119,7 +121,6 @@ class OrderList extends Component {
 
 
     async handleRequest() {
-        console.log('xxx')
         let instance = new Api();
 
         await new Promise((resolve => {
@@ -127,8 +128,10 @@ class OrderList extends Component {
                 filter: {
                     id: this.state.filter.id,
                     from_date : this.state.filter.from_date.locale('es').format('YYYY/M/D HH:mm:ss'),
-                    status: this.state.filter.status,
-                    transport: this.state.filter.transport,
+                    order_status: this.state.filter.order_status,
+                    transport_status: this.state.filter.transport_status,
+                    delivery_status: this.state.filter.delivery_status,
+                    items_status: this.state.filter.items_status,
                 },
                 sort_field: this.state.sort_field,
                 sort_type: this.state.sort_type,
@@ -140,6 +143,7 @@ class OrderList extends Component {
                         entities: response,
                         loading: false,
                     })
+                    toast.success('لیست بارگزاری شد.')
                 }
             }).catch((error) => {
                 console.log(error);
@@ -152,6 +156,7 @@ class OrderList extends Component {
         if (this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
+        console.log(this.state);
         return (
             <div className='content'>
                 <Container>
@@ -197,51 +202,100 @@ class OrderList extends Component {
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
                                     </Grid>
-                                    <DatePicker
-                                        value={this.state.filter.from_date}
-                                        isGregorian={false}
-                                        onChange={this.setSelectedDay.bind(this)}
-                                    />
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             select
                                             label="وضعیت"
-                                            value={this.state.filter.status}
+                                            value={this.state.filter.order_status}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='status'
+                                            name='order_status'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         >
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>تایید شده</MenuItem>
-                                            <MenuItem key={2} value={0}>در انتظار</MenuItem>
+                                            {this.state.status.map((sts, key) => {
+                                                return(
+                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                );
+                                            })}
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             select
                                             label="حمل و نقل"
-                                            value={this.state.filter.transport}
+                                            value={this.state.filter.transport_status}
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='discount'
+                                            name='transport_status'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         >
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={0}>در انتظار</MenuItem>
-                                            <MenuItem key={2} value={1}>در صف ارسال</MenuItem>
-                                            <MenuItem key={3} value={2}>خروج از انبار</MenuItem>
-                                            <MenuItem key={4} value={3}>مرجوعی</MenuItem>
-                                            <MenuItem key={5} value={4}>تحویل مشتری</MenuItem>
+                                            {this.state.transport.map((sts, key) => {
+                                                return(
+                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                );
+                                            })}
                                         </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="تحویل مرسوله"
+                                            value={this.state.filter.delivery_status}
+                                            variant="filled"
+                                            margin='dense'
+                                            fullWidth
+                                            name='delivery_status'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            {this.state.delivery.map((sts, key) => {
+                                                return(
+                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                );
+                                            })}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="تعدیل کالا"
+                                            value={this.state.filter.items_status}
+                                            variant="filled"
+                                            margin='dense'
+                                            fullWidth
+                                            name='items_status'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            {this.state.items.map((sts, key) => {
+                                                return(
+                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                );
+                                            })}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item>
+                                        <DatePicker
+                                            value={this.state.filter.from_date}
+                                            isGregorian={false}
+                                            onChange={this.setSelectedDay.bind(this)}
+                                        />
                                     </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>
@@ -298,8 +352,10 @@ class OrderList extends Component {
                                     <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('user_id')}>کاربر&nbsp;{this.state.sort_field === 'user_id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('total_price')}>قیمت کل&nbsp;{this.state.sort_field === 'total_price' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('transport')}>حمل و نقل&nbsp;{this.state.sort_field === 'transport' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('order_status')}>وضعیت&nbsp;{this.state.sort_field === 'order_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('transport_status')}>حمل و نقل&nbsp;{this.state.sort_field === 'transport_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('delivery_status')}>تحویل&nbsp;{this.state.sort_field === 'delivery_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('items_status')}>تعدیل کالا&nbsp;{this.state.sort_field === 'items_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('created_at')}>تاریخ&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
                                 </tr>
@@ -313,15 +369,25 @@ class OrderList extends Component {
                                             <td>{entity.total_price}</td>
                                             <td>
                                                 <Tooltip title="وضعیت">
-                                                        {entity.status === 1 ?   <Chip size={"small"} variant={"outlined"} color="primary"  label="تایید شده" /> :    <Chip size={"small"} variant={"outlined"} color="secondary" label="در انتظار" /> }
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.status[entity.order_status] && this.state.status[entity.order_status].color}  label={this.state.status[entity.order_status] && this.state.status[entity.order_status].title} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="حمل و نقل">
-                                                    {entity.transport === 1 ?   <Chip size={"small"} variant={"outlined"} color="primary"  label="تحویل مشتری" /> :    <Chip size={"small"} variant={"outlined"} color="secondary" label="خروج از انبار" /> }
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.transport[entity.transport_status] && this.state.transport[entity.transport_status].color}  label={this.state.transport[entity.transport_status] && this.state.transport[entity.transport_status].title} />
                                                 </Tooltip>
                                             </td>
-                                            <td>{entity.created_at}</td>
+                                            <td>
+                                                <Tooltip title="تحویل">
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.delivery[entity.delivery_status] && this.state.delivery[entity.delivery_status].color}  label={this.state.delivery[entity.delivery_status] && this.state.delivery[entity.delivery_status].title} />
+                                                </Tooltip>
+                                            </td>
+                                            <td>
+                                                <Tooltip title="سلامت کالا">
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.items[entity.items_status] && this.state.items[entity.items_status].color}  label={this.state.items[entity.items_status] && this.state.items[entity.items_status].title} />
+                                                </Tooltip>
+                                            </td>
+                                            <td style={{ direction:'rtl'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
                                             </td>
                                         </tr>

@@ -13,7 +13,7 @@ class CreateOrderReceiverTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_receiver', function (Blueprint $table) {
+        Schema::create('order_post_info', function (Blueprint $table) {
             $table->integer('order_id')->primary();
             $table->integer('region_id')->index();
             $table->string('full_name');

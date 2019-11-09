@@ -107,6 +107,7 @@ Route::group(['prefix' => '/backend'], function () {
 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'Backend\OrderController@index');
+        Route::get('/{id}', 'Backend\OrderController@show');
     });
 
     Route::group(['prefix' => '/users'], function () {

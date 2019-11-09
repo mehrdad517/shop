@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentTable extends Migration
+class CreateOrderAttachmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreatePaymentTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment', function (Blueprint $table) {
+        Schema::create('order_attachment', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->integer('paymentable_id');
-            $table->string('paymentable_type');
-            $table->decimal('amount', 18, 2);
-            $table->string('ref_id');
-            $table->enum('type', ['online'])->default('online');
+            $table->integer('order_id')->index();
+            $table->integer('attachmentable_id');
+            $table->string('attachmentable_type');
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
@@ -33,6 +30,6 @@ class CreatePaymentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment');
+        Schema::dropIfExists('order_attachment');
     }
 }

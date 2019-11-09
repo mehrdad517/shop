@@ -25,12 +25,29 @@ import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
 import ProductPins from "./pages/productBundle/product/pins";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+
+const theme = createMuiTheme({
+    overrides: {
+        // Style sheet name ⚛️
+        MuiButton: {
+            // Name of the rule
+            text: {
+                // Some CSS
+                color: 'red',
+            },
+        },
+    },
+});
 
 function App() {
     return (
         <Provider store={store}>
+            <MuiThemeProvider theme = { theme }>
             <MainLayout>
                 <Route component={OrderList} path='/orders' exact={true} />
+                <Route component={OrderList} path='/orders/:id' />
                 <Route component={ProductList} path='/products' exact={true} />
                 <Route component={CreateProduct} path='/products/create' />
                 <Route component={EditProduct} path='/products/edit/:id' />
@@ -53,6 +70,7 @@ function App() {
                             pauseOnVisibilityChange
                             draggable={false}
                             pauseOnHover />
+            </MuiThemeProvider>
         </Provider>
     );
 }

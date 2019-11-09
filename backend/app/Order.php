@@ -14,6 +14,7 @@ class Order extends Model
     const ORDER_STATUS_ACCEPTED = 1;
     const ORDER_STATUS_REJECTED = 2;
     const ORDER_STATUS_RETURNED = 3;
+    const ORDER_STATUS_ADJUSTMENT= 4;
 
     const TRANSPORT_STATUS_DEFAULT = 0;
     const TRANSPORT_STATUS_EXIT_THE_STOREROOM = 1;
@@ -105,16 +106,33 @@ class Order extends Model
     }
 
 
-    public function productPins()
-    {
-        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id');
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function productPins()
+    {
+        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id');
+    }
 
+
+    public function orderReceiver()
+    {
+        return $this->hasOne(OrderReceiver::class);
+    }
+
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+
+
+    public function orderAttachments()
+    {
+        return $this->hasMany(OrderAttachment::class);
+    }
 
 }

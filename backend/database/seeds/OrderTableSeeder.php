@@ -21,7 +21,7 @@ class OrderTableSeeder extends Seeder
                 'discount' => 0,
                 'pure_price' => $faker->numberBetween(40000, 1000000),
                 'total_price' => $faker->numberBetween(40000, 1000000),
-                'status' => $faker->numberBetween(0,1),
+                'order_status' => $faker->numberBetween(0,4),
                 'created_at' => $faker->dateTime,
                 'updated_at' => $faker->dateTime
             ]);

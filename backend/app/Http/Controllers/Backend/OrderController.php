@@ -15,22 +15,32 @@ class OrderController extends Controller
     {
 
 
-        $entities = Order::select('order.id', 'order.user_id' ,'order.status', 'order.transport', 'order.total_price', 'created_at')
+        $entities = Order::select('order.id', 'order.user_id' ,'order.order_status', 'order.transport_status','order.delivery_status', 'order.items_status', 'order.total_price', 'created_at')
            ->with(['user' => function($q) {
             return $q->select('id', 'name');
         }])->where(function ($q) use($request) {
 
             if ($request->has('filter')) {
+
                 $filter = json_decode($request->get('filter'));
+
                 if ($filter->id) {
                     $q->where('id', $filter->id);
                 }
-                if ($filter->status != -1) {
-                    $q->where('status', $filter->status);
+                if ($filter->order_status != -1) {
+                    $q->where('order_status', $filter->order_status);
                 }
 
-                if ($filter->transport != -1) {
-                    $q->where('status', $filter->transport);
+                if ($filter->transport_status != -1) {
+                    $q->where('transport_status', $filter->transport_status);
+                }
+
+                if ($filter->delivery_status != -1) {
+                    $q->where('delivery_status', $filter->delivery_status);
+                }
+
+                if ($filter->items_status != -1) {
+                    $q->where('items_status', $filter->items_status);
                 }
             }
             })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
@@ -38,5 +48,15 @@ class OrderController extends Controller
 
         return response($entities);
 
+    }
+
+
+    public function show($id)
+    {
+        $order = Order::with(['user' => function($q) {
+            return $q->select('id', 'name', 'mobile');
+        }])->find($id)->toArray();
+
+        dd($order);
     }
 }
