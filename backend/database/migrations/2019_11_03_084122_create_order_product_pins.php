@@ -22,6 +22,7 @@ class CreateOrderProductPins extends Migration
 
             $table->timestamps();
             $table->primary(['order_id', 'product_pins_id']);
+            //$table->foreign('order_id')->references('id')->on('order')->onDelete('cascade')->onUpdate('cascade');
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collation = 'utf8_persian_ci';

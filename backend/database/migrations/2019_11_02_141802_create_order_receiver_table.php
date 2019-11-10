@@ -22,6 +22,9 @@ class CreateOrderReceiverTable extends Migration
             $table->string('phone')->nullable();
             $table->string('postal_code');
             $table->mediumText('address');
+
+            //$table->foreign('order_id')->references('id')->on('order')->onDelete('cascade')->onUpdate('cascade');
+            //$table->foreign('region_id')->references('id')->on('region')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

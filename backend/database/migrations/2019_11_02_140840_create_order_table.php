@@ -27,6 +27,8 @@ class CreateOrderTable extends Migration
             $table->smallInteger('delivery_status')->default(0);
             $table->smallInteger('items_status')->default(0);
 
+            //$table->foreign('user_id')->references('id')->on('users');
+
             $table->timestamps();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
