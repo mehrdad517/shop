@@ -65,6 +65,7 @@ class OrderController extends Controller
             }]);
         }])->find($id)->toArray();
 
-        dd($order);
+
+        return response($order);
     }
 }

@@ -33,6 +33,16 @@ class Api {
         })
     }
 
+    async fetchOrder(id) {
+        return axios.get('http://localhost:8000/api/backend/orders/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
     // fetch products form db
     async fetchProducts(object) {
         return axios.get('http://localhost:8000/api/backend/products/', {

@@ -132,7 +132,7 @@ class Order extends Model
 
     public function attachments()
     {
-        return $this->morphMany(OrderAttachment::class, 'attachmentable');
+        return $this->morphMany(Attachment::class, 'attachmentable');
     }
 
 }

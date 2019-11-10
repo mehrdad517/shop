@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderAttachment extends Model
+class Attachment extends Model
 {
 
     protected $primaryKey = 'id';
 
-    protected $table = 'order_attachment';
+    protected $table = 'attachment';
 
     public function attachmentable()
     {

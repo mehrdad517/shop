@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from "react-redux";
 import store from "./store";
-import {Route} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 
 
 import OrderList from './pages/orders/list'
@@ -27,8 +27,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductPins from "./pages/productBundle/product/pins";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
+import OrderView from "./pages/orders/show";
+import { create } from 'jss';
+import rtl from 'jss-rtl';
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
+    direction: "rtl",
     overrides: {
         // Style sheet name ⚛️
         MuiButton: {
@@ -40,38 +45,42 @@ const theme = createMuiTheme({
         },
     },
 });
-
+const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 function App() {
     return (
-        <Provider store={store}>
-            <MuiThemeProvider theme = { theme }>
-            <MainLayout>
-                <Route component={OrderList} path='/orders' exact={true} />
-                <Route component={OrderList} path='/orders/:id' />
-                <Route component={ProductList} path='/products' exact={true} />
-                <Route component={CreateProduct} path='/products/create' />
-                <Route component={EditProduct} path='/products/edit/:id' />
-                <Route component={ProductPins} path='/products/pins/:id' />
-                <Route component={BrandList} path='/products/brands' exact={true} />
-                <Route component={BrandEdit} path='/products/brands/:id' />
-                <Route component={ProductCategory} path='/products/categories' exact={true} />
-                <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
-                <Route component={GroupAttributeList} path='/products/attributes' exact={true} />
-                <Route component={AttributeEdit} path='/products/attributes/:id' />
-                <Route component={UserList} path='/users' exact={true} />
-                <Route component={Acl} path='/users/access/control/list' />
-            </MainLayout>
-            <ToastContainer position="top-left"
-                            autoClose={5000}
-                            hideProgressBar={true}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl
-                            pauseOnVisibilityChange
-                            draggable={false}
-                            pauseOnHover />
-            </MuiThemeProvider>
-        </Provider>
+            <Provider store={store}>
+                <StylesProvider jss={jss}>
+                <MuiThemeProvider theme = { theme }>
+                    <MainLayout>
+                        <BrowserRouter>
+                        <Route component={OrderList} path='/orders' exact={true} />
+                        <Route component={OrderView} path='/orders/:id' />
+                        <Route component={ProductList} path='/products' exact={true} />
+                        <Route component={CreateProduct} path='/products/create' />
+                        <Route component={EditProduct} path='/products/edit/:id' />
+                        <Route component={ProductPins} path='/products/pins/:id' />
+                        <Route component={BrandList} path='/products/brands' exact={true} />
+                        <Route component={BrandEdit} path='/products/brands/:id' />
+                        <Route component={ProductCategory} path='/products/categories' exact={true} />
+                        <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
+                        <Route component={GroupAttributeList} path='/products/attributes' exact={true} />
+                        <Route component={AttributeEdit} path='/products/attributes/:id' />
+                        <Route component={UserList} path='/users' exact={true} />
+                        <Route component={Acl} path='/users/access/control/list' />
+                        </BrowserRouter>
+                    </MainLayout>
+                    <ToastContainer position="top-left"
+                                    autoClose={5000}
+                                    hideProgressBar={true}
+                                    newestOnTop={false}
+                                    closeOnClick
+                                    rtl
+                                    pauseOnVisibilityChange
+                                    draggable={false}
+                                    pauseOnHover />
+                </MuiThemeProvider>
+                </StylesProvider>
+            </Provider>
     );
 }
 

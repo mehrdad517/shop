@@ -7,6 +7,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.MuiTab-root{
+    font-family: inherit !important;
+}
 .MuiFormHelperText-root{
     font-family: inherit !important;
     text-align: right !important;
@@ -17,6 +20,18 @@ body {
 .content {
     margin-bottom: 100px;
     min-height: 400px;
+}
+.content-inner {
+    margin: 50px 0;
+}
+.tab-inner{
+    padding: 50px;
+    min-height: 300px;
+    margin: 25px 0;
+    background-color: #f5f5f5;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    border-radius: 5px;
+
 }
 // tree checkbox
 .react-checkbox-tree label{

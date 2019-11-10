@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -19,12 +19,13 @@ USE `517_shop`;
 -- Dumping structure for table 517_shop.attachment
 CREATE TABLE IF NOT EXISTS `attachment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `attachmentable_id` int(11) NOT NULL,
+  `attachmentable_id` bigint(20) unsigned NOT NULL,
   `attachmentable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `attachmentable_id` (`attachmentable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table 517_shop.attachment: ~0 rows (approximately)
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `attachment` (
 
 -- Dumping structure for table 517_shop.brand
 CREATE TABLE IF NOT EXISTS `brand` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
   `content` text COLLATE utf8_persian_ci DEFAULT NULL,
@@ -44,10 +45,12 @@ CREATE TABLE IF NOT EXISTS `brand` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `brand_slug_unique` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.brand: ~0 rows (approximately)
+-- Dumping data for table 517_shop.brand: ~1 rows (approximately)
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
+INSERT INTO `brand` (`id`, `title`, `slug`, `content`, `meta_title`, `meta_description`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 'مای', 'سمعل', 'سیبسی', NULL, NULL, 1, '2019-11-10 11:57:50', '2019-11-10 11:57:50');
 /*!40000 ALTER TABLE `brand` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.failed_jobs
@@ -68,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- Dumping structure for table 517_shop.finance
 CREATE TABLE IF NOT EXISTS `finance` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT 0,
   `financeable_id` int(11) NOT NULL,
   `financeable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `debtor` decimal(18,2) NOT NULL DEFAULT 0.00,
@@ -76,9 +79,9 @@ CREATE TABLE IF NOT EXISTS `finance` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `finance_user_id_index` (`user_id`),
-  KEY `finance_financeable_id_index` (`financeable_id`),
-  KEY `finance_financeable_type_index` (`financeable_type`)
+  KEY `financeable_id` (`financeable_id`),
+  KEY `FK_finance_user` (`user_id`),
+  CONSTRAINT `FK_finance_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table 517_shop.finance: ~0 rows (approximately)
@@ -260,10 +263,10 @@ CREATE TABLE IF NOT EXISTS `oauth_refresh_tokens` (
 CREATE TABLE IF NOT EXISTS `order` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `tax_id` int(11) NOT NULL,
+  `increment_id` int(11) NOT NULL,
+  `discount` decimal(18,2) NOT NULL DEFAULT 0.00,
   `post_cost` decimal(18,2) NOT NULL DEFAULT 0.00,
   `tax` decimal(18,2) NOT NULL DEFAULT 0.00,
-  `discount` decimal(18,2) NOT NULL DEFAULT 0.00,
   `pure_price` decimal(18,2) NOT NULL,
   `total_price` decimal(18,2) NOT NULL,
   `order_status` smallint(6) NOT NULL DEFAULT 0,
@@ -279,8 +282,8 @@ CREATE TABLE IF NOT EXISTS `order` (
 
 -- Dumping data for table 517_shop.order: ~1 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
-INSERT INTO `order` (`id`, `user_id`, `tax_id`, `post_cost`, `tax`, `discount`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
-	(1, 1, 0, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, NULL, NULL);
+INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
+	(1, 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00, 1, 1, 1, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_post_info
@@ -311,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `order_product_pins` (
   `product_pins_id` bigint(20) unsigned NOT NULL,
   `count` int(11) NOT NULL,
   `price` decimal(8,2) NOT NULL,
-  `detail` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `detail` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`order_id`,`product_pins_id`),
@@ -320,8 +323,11 @@ CREATE TABLE IF NOT EXISTS `order_product_pins` (
   CONSTRAINT `FK_order_product_pins_product_pins` FOREIGN KEY (`product_pins_id`) REFERENCES `product_pins` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.order_product_pins: ~0 rows (approximately)
+-- Dumping data for table 517_shop.order_product_pins: ~2 rows (approximately)
 /*!40000 ALTER TABLE `order_product_pins` DISABLE KEYS */;
+INSERT INTO `order_product_pins` (`order_id`, `product_pins_id`, `count`, `price`, `detail`, `created_at`, `updated_at`) VALUES
+	(1, 1, 5, 100000.00, NULL, '2019-11-10 12:05:10', '2019-11-10 12:05:11'),
+	(1, 2, 2, 20000.00, NULL, '2019-11-10 12:05:08', '2019-11-10 12:05:09');
 /*!40000 ALTER TABLE `order_product_pins` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.password_resets
@@ -339,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 -- Dumping structure for table 517_shop.payment
 CREATE TABLE IF NOT EXISTS `payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `paymentable_id` int(11) NOT NULL,
+  `paymentable_id` bigint(20) unsigned NOT NULL,
   `paymentable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `amount` decimal(18,2) NOT NULL,
   `ref_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -349,10 +355,13 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `paymentable_id` (`paymentable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.payment: ~0 rows (approximately)
+-- Dumping data for table 517_shop.payment: ~2 rows (approximately)
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` (`id`, `paymentable_id`, `paymentable_type`, `amount`, `ref_id`, `type`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 1, 'App\\Order', 140000.00, '1221135445', 'online', 0, '2019-11-10 11:54:44', '2019-11-10 11:54:45'),
+	(2, 1, 'App\\Order', 120000.00, '1254878', 'online', 1, '2019-11-10 15:52:04', '2019-11-10 15:52:05');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.permission
@@ -382,12 +391,12 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 /*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
 
--- Dumping structure for table 517_shop.products
-CREATE TABLE IF NOT EXISTS `products` (
+-- Dumping structure for table 517_shop.product
+CREATE TABLE IF NOT EXISTS `product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `brand_id` int(11) NOT NULL,
-  `slug` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
   `title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
+  `brand_id` int(11) unsigned NOT NULL,
+  `slug` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
   `code` varchar(50) COLLATE utf8_persian_ci DEFAULT NULL,
   `price` int(11) NOT NULL DEFAULT 0,
   `count` int(11) NOT NULL DEFAULT 0,
@@ -402,12 +411,16 @@ CREATE TABLE IF NOT EXISTS `products` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_slug_unique` (`slug`),
-  KEY `products_brand_id_index` (`brand_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+  KEY `FK_products_brand` (`brand_id`),
+  CONSTRAINT `FK_products_brand` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.products: ~0 rows (approximately)
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+-- Dumping data for table 517_shop.product: ~2 rows (approximately)
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` (`id`, `title`, `brand_id`, `slug`, `code`, `price`, `count`, `discount`, `content`, `meta_title`, `meta_description`, `sales_number`, `visitor`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 'محصول شماره یک', 1, 'pro', 'fsdfsdf', 0, 0, 0, NULL, NULL, NULL, 0, 0, 1, '2019-11-10 11:58:14', '2019-11-10 11:58:15'),
+	(2, 'محصول شمار دو', 1, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, 0, 1, '2019-11-10 12:04:13', '2019-11-10 12:04:13');
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_categories
 CREATE TABLE IF NOT EXISTS `product_categories` (
@@ -446,18 +459,23 @@ CREATE TABLE IF NOT EXISTS `product_category` (
 -- Dumping structure for table 517_shop.product_pins
 CREATE TABLE IF NOT EXISTS `product_pins` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL DEFAULT 0,
   `group_attribute_product_ids` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` int(11) NOT NULL DEFAULT 0,
   `discount` int(11) NOT NULL DEFAULT 0,
   `count` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `FK_product_pins_product` (`product_id`),
+  CONSTRAINT `FK_product_pins_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_pins: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product_pins: ~2 rows (approximately)
 /*!40000 ALTER TABLE `product_pins` DISABLE KEYS */;
+INSERT INTO `product_pins` (`id`, `product_id`, `group_attribute_product_ids`, `price`, `discount`, `count`, `created_at`, `updated_at`) VALUES
+	(1, 1, NULL, 100000, 0, 50, '2019-11-10 12:03:33', '2019-11-10 12:03:34'),
+	(2, 2, NULL, 0, 0, 0, '2019-11-10 12:03:50', '2019-11-10 12:03:50');
 /*!40000 ALTER TABLE `product_pins` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.region
@@ -486,8 +504,10 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~0 rows (approximately)
+-- Dumping data for table 517_shop.role: ~1 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
+	('admin', 'ادمین', '2019-11-10 11:43:47', '2019-11-10 11:43:48');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.user
@@ -495,15 +515,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   `mobile` varchar(11) COLLATE utf8_persian_ci NOT NULL,
-  `role_key` varchar(20) COLLATE utf8_persian_ci NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `role_key` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `password` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_persian_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_mobile_unique` (`mobile`),
-  KEY `users_role_key_index` (`role_key`)
+  KEY `role_key` (`role_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
 -- Dumping data for table 517_shop.user: ~1 rows (approximately)
