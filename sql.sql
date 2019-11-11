@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         localhost
+-- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `brand` (
   UNIQUE KEY `brand_slug_unique` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.brand: ~1 rows (approximately)
+-- Dumping data for table 517_shop.brand: ~0 rows (approximately)
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
 INSERT INTO `brand` (`id`, `title`, `slug`, `content`, `meta_title`, `meta_description`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 'مای', 'سمعل', 'سیبسی', NULL, NULL, 1, '2019-11-10 11:57:50', '2019-11-10 11:57:50');
@@ -280,10 +280,10 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `FK_order_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.order: ~1 rows (approximately)
+-- Dumping data for table 517_shop.order: ~0 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
-	(1, 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00, 1, 1, 1, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47');
+	(1, 1, 1, 0.00, 7500.00, 2500.00, 250000.00, 256000.00, 1, 1, 1, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_post_info
@@ -306,6 +306,8 @@ CREATE TABLE IF NOT EXISTS `order_post_info` (
 
 -- Dumping data for table 517_shop.order_post_info: ~0 rows (approximately)
 /*!40000 ALTER TABLE `order_post_info` DISABLE KEYS */;
+INSERT INTO `order_post_info` (`order_id`, `region_id`, `full_name`, `national_code`, `mobile`, `phone`, `postal_code`, `address`, `created_at`, `updated_at`) VALUES
+	(1, 1, 'مهرداد معصومی', '3920206231', '09361753251', '0215486455', '3920206231', 'تهران، تهران، تهران-م.ونک-خ.ملاصدرا-خ.شیخ بهایی شمالی-خ.صائب تبریزی-پلاک 1', '2019-11-10 23:45:03', '2019-11-10 23:45:03');
 /*!40000 ALTER TABLE `order_post_info` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_product_pins
@@ -489,10 +491,12 @@ CREATE TABLE IF NOT EXISTS `region` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `region__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table 517_shop.region: ~0 rows (approximately)
 /*!40000 ALTER TABLE `region` DISABLE KEYS */;
+INSERT INTO `region` (`id`, `title`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
+	(1, 'تهران', 1, 2, 0, '2019-11-10 23:44:31', '2019-11-10 23:44:31');
 /*!40000 ALTER TABLE `region` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.role
@@ -504,7 +508,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~1 rows (approximately)
+-- Dumping data for table 517_shop.role: ~0 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('admin', 'ادمین', '2019-11-10 11:43:47', '2019-11-10 11:43:48');
@@ -526,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   KEY `role_key` (`role_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.user: ~1 rows (approximately)
+-- Dumping data for table 517_shop.user: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `mobile`, `role_key`, `status`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(1, 'مهرداد', '09120246217', '', 1, '', NULL, '2019-11-09 20:37:55', '2019-11-09 20:37:55');

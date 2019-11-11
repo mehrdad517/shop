@@ -48,39 +48,40 @@ const theme = createMuiTheme({
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 function App() {
     return (
+        <BrowserRouter>
             <Provider store={store}>
                 <StylesProvider jss={jss}>
-                <MuiThemeProvider theme = { theme }>
-                    <MainLayout>
-                        <BrowserRouter>
-                        <Route component={OrderList} path='/orders' exact={true} />
-                        <Route component={OrderView} path='/orders/:id' />
-                        <Route component={ProductList} path='/products' exact={true} />
-                        <Route component={CreateProduct} path='/products/create' />
-                        <Route component={EditProduct} path='/products/edit/:id' />
-                        <Route component={ProductPins} path='/products/pins/:id' />
-                        <Route component={BrandList} path='/products/brands' exact={true} />
-                        <Route component={BrandEdit} path='/products/brands/:id' />
-                        <Route component={ProductCategory} path='/products/categories' exact={true} />
-                        <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
-                        <Route component={GroupAttributeList} path='/products/attributes' exact={true} />
-                        <Route component={AttributeEdit} path='/products/attributes/:id' />
-                        <Route component={UserList} path='/users' exact={true} />
-                        <Route component={Acl} path='/users/access/control/list' />
-                        </BrowserRouter>
-                    </MainLayout>
-                    <ToastContainer position="top-left"
-                                    autoClose={5000}
-                                    hideProgressBar={true}
-                                    newestOnTop={false}
-                                    closeOnClick
-                                    rtl
-                                    pauseOnVisibilityChange
-                                    draggable={false}
-                                    pauseOnHover />
-                </MuiThemeProvider>
+                    <MuiThemeProvider theme = { theme }>
+                        <MainLayout>
+
+                            <Route component={OrderList} path='/orders' exact={true} />
+                            <Route component={OrderView} path='/orders/:id' />
+                            <Route component={ProductList} path='/products' exact={true} />
+                            <Route component={CreateProduct} path='/products/create' />
+                            <Route component={EditProduct} path='/products/edit/:id' />
+                            <Route component={ProductPins} path='/products/pins/:id' />
+                            <Route component={BrandList} path='/products/brands' exact={true} />
+                            <Route component={BrandEdit} path='/products/brands/:id' />
+                            <Route component={ProductCategory} path='/products/categories' exact={true} />
+                            <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
+                            <Route component={GroupAttributeList} path='/products/attributes' exact={true} />
+                            <Route component={AttributeEdit} path='/products/attributes/:id' />
+                            <Route component={UserList} path='/users' exact={true} />
+                            <Route component={Acl} path='/users/access/control/list' />
+                        </MainLayout>
+                        <ToastContainer position="top-left"
+                                        autoClose={5000}
+                                        hideProgressBar={true}
+                                        newestOnTop={false}
+                                        closeOnClick
+                                        rtl
+                                        pauseOnVisibilityChange
+                                        draggable={false}
+                                        pauseOnHover />
+                    </MuiThemeProvider>
                 </StylesProvider>
             </Provider>
+        </BrowserRouter>
     );
 }
 

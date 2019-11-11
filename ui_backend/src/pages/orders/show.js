@@ -12,8 +12,18 @@ import {delivery, items, status, transport} from "./helper";
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-
-
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import ArrowDownwardIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
+import DatePicker from "react-datepicker2";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
+import ExpandMoreIcon from "@material-ui/core/SvgIcon/SvgIcon";
 class OrderView extends Component {
 
     constructor(props) {
@@ -91,7 +101,185 @@ class OrderView extends Component {
                             </Step>
                         </Stepper>
                     </Box>
-
+                    <Box style={{ margin: '50px 0'}}>
+                        <Grid container>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '25px'}}>
+                                    <Typography variant="button">
+                                        مشخصات سفارش دهنده:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.user.name} - {this.state.entity.user.mobile}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '25px'}}>
+                                    <Typography variant="button">
+                                        تحویل گیرنده:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.post_info.full_name}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '25px'}}>
+                                    <Typography variant="button">
+                                        شماره ملی:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.post_info.national_code}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '25px'}}>
+                                    <Typography variant="button">
+                                        اطلاعات تماس:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.post_info.mobile} - {this.state.entity.post_info.phone}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={12}>
+                                <Paper style={{ padding: '25px'}}>
+                                    <Typography variant="button">
+                                        آدرس:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.post_info.address}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <Box>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1c-content"
+                                id="panel1c-header"
+                            >
+                                <div>
+                                    <Typography>رکورد های مالی</Typography>
+                                </div>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails >
+                            </ExpansionPanelDetails>
+                            <Divider />
+                            <ExpansionPanelActions>
+                                <Button color="primary">
+                                    جستجو
+                                </Button>
+                            </ExpansionPanelActions>
+                        </ExpansionPanel>
+                    </Box>
+                    <Box>
+                        <div style={{ overflowX: 'auto'}}>
+                            <table className='table'>
+                                <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام محصول</th>
+                                    <th>برند</th>
+                                    <th>تعداد</th>
+                                    <th>قیمت واحد</th>
+                                    <th>قیمت کل</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.entity && this.state.entity.product_pins.map(( pins, index) => {
+                                    return(
+                                        <tr key={index}>
+                                            <td>{pins.id}</td>
+                                            <td>{pins.product.title}</td>
+                                            <td>{pins.product.brand.title}</td>
+                                            <td>{pins.pivot.count}</td>
+                                            <td>{pins.pivot.price}</td>
+                                            <td>{pins.pivot.price * pins.pivot.count}</td>
+                                        </tr>
+                                    );
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </Box>
+                    <Box style={{ margin: '5px 0'}}>
+                        <Grid container>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '10px 25px'}}>
+                                    <Typography variant="button">
+                                        قیمت خالص:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.pure_price}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '10px 25px'}}>
+                                    <Typography variant="button">
+                                        هزینه پستی:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.post_cost}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '10px 25px'}}>
+                                    <Typography variant="button">
+                                        مالیات بر ارزش افزوده:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.tax}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={6}>
+                                <Paper style={{ padding: '10px 25px'}}>
+                                    <Typography variant="button">
+                                        تخفیف:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.discount}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                            <Grid item md={12}>
+                                <Paper style={{ padding: '25px', textAlign: 'center'}}>
+                                    <Typography variant="button">
+                                        قیمت کل:
+                                    </Typography>
+                                    <Typography variant="button" display="block" gutterBottom>
+                                        <b>
+                                        {this.state.entity.total_price}
+                                        </b>
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Box>
                 </Container>
             </div>
         );
