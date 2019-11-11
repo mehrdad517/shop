@@ -49,6 +49,7 @@ export function delivery(key = null) {
 
 export function items(key = null) {
     let status = [
+        {'title' : 'پیش فرض', 'color' : 'default'},
         {'title' : 'فاقد مشکل', 'color' : 'primary'},
         {'title' : 'کسری کالا', 'color' : 'secondary'},
         {'title' : 'معیوبی کالا', 'color' : 'secondary'},

@@ -27,10 +27,11 @@ class Order extends Model
     const DELIVERY_STATUS_RETURN_TO_STOREROOM =3;
 
     const ITEMS_STATUS_DEFAULT = 0;
-    const ITEMS_STATUS_FRACTIONAL = 1;
-    const ITEMS_STATUS_DEFECTIVE =2;
+    const ITEMS_STATUS_ACCEPTED  = 1;
+    const ITEMS_STATUS_FRACTIONAL = 2;
+    const ITEMS_STATUS_DEFECTIVE =3;
 
-    public function status($key= null)
+    public static function status($key= null)
     {
         $list = [
             self::ORDER_STATUS_PENDING  => 'در انتظار',
@@ -38,37 +39,35 @@ class Order extends Model
             self::ORDER_STATUS_REJECTED => 'لغو شده',
             self::ORDER_STATUS_RETURNED => 'مرجوعی',
         ];
-        if ($key) {
+
             if (isset($list[$key])) {
                 return $list[$key];
             } else {
                 return 'نامشخص';
             }
-        } else {
+
             return $list;
-        }
+
     }
 
-    public function transport($key= null)
+    public static function transport($key= null)
     {
+
         $list = [
             self::TRANSPORT_STATUS_DEFAULT => 'پیش فرض',
             self::TRANSPORT_STATUS_EXIT_THE_STOREROOM => 'خروج از انبار',
             self::TRANSPORT_STATUS_IN_QUEUE => 'در صف ارسال',
             self::TRANSPORT_STATUS_RESEND => 'در صف ارسال مجدد',
         ];
-        if ($key) {
             if (isset($list[$key])) {
                 return $list[$key];
             } else {
                 return 'نامشخص';
             }
-        } else {
             return $list;
-        }
     }
 
-    public function delivery($key= null)
+    public static function delivery($key= null)
     {
         $list = [
             self::DELIVERY_STATUS_DEFAULT => 'پیش فرض',
@@ -76,33 +75,31 @@ class Order extends Model
             self::DELIVERY_STATUS_POST_OFFICE  => 'تحویل پست',
             self::DELIVERY_STATUS_RETURN_TO_STOREROOM  => 'بازگشت به انبار',
         ];
-        if ($key) {
-            if (isset($list[$key])) {
-                return $list[$key];
-            } else {
-                return 'نامشخص';
-            }
+        if (isset($list[$key])) {
+            return $list[$key];
         } else {
-            return $list;
+            return 'نامشخص';
         }
+        return $list;
     }
 
-    public function items($key = null)
+    public static function items($key = null)
     {
         $list = [
             self::ITEMS_STATUS_DEFAULT =>  'پیش فرض',
+            self::ITEMS_STATUS_ACCEPTED  =>  'فاقد مشکل',
             self::ITEMS_STATUS_FRACTIONAL =>  'کسری کالا',
             self::ITEMS_STATUS_DEFECTIVE => 'معیوبی کالا',
         ];
-        if ($key) {
+
             if (isset($list[$key])) {
                 return $list[$key];
             } else {
                 return 'نامشخص';
             }
-        } else {
+
             return $list;
-        }
+
     }
 
 
@@ -113,7 +110,7 @@ class Order extends Model
 
     public function productPins()
     {
-        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id')->withPivot('count', 'price');
+        return $this->belongsToMany(ProductPins::class, 'order_product_pins', 'order_id', 'product_pins_id')->withPivot('count', 'price', 'discount');
     }
 
 
@@ -133,6 +130,105 @@ class Order extends Model
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachmentable');
+    }
+
+    /**
+     * @param $order
+     * @return array
+     *
+     * generate order array full
+     */
+    public static function g($order)
+    {
+        $list = [
+            'id' => '',
+            'discount' => '',
+            'post_cost' => '',
+            'tax' => '',
+            'pure_price' => '',
+            'total_price' => '',
+            'order_status' => [],
+            'transport_status' => [],
+            'delivery_status' => [],
+            'items_status' => [],
+            'created_at' => '',
+            'payments' => [],
+            'user' => [],
+            'post_info' => [],
+            'product_pins' => [],
+            'attachments' => [],
+        ];
+
+
+        $list['id'] =  $order->id;
+        $list['discount'] =  number_format($order->discount);
+        $list['post_cost'] =  number_format($order->post_cost);
+        $list['tax'] =  number_format($order->tax);
+        $list['pure_price'] =  number_format($order->pure_price);
+        $list['total_price'] =  number_format($order->total_price);
+        $list['order_status'] =  ['key' => $order->order_status, 'value' => Order::status($order->order_status)];
+        $list['transport_status'] =  ['key' => $order->transport_status, 'value' => Order::transport($order->transport_status)];
+        $list['delivery_status'] =  ['key' => $order->delivery_status, 'value' => Order::delivery($order->delivery_status)];
+        $list['items_status'] =  ['key' => $order->items_status, 'value' => Order::items($order->items_status)];
+        $list['created_at'] =  $order->created_at;
+
+        $list['user']= [
+            'id' => $order->user->id,
+            'name' => $order->user->name,
+            'mobile' => $order->user->mobile,
+        ];
+
+        if ($order->postInfo) {
+            $list['post_info'] =  [
+                'full_name' => $order->postInfo->full_name,
+                'national_code' => $order->postInfo->national_code,
+                'mobile' => $order->postInfo->mobile,
+                'phone' => $order->postInfo->phone,
+                'region' => [
+                    'id' => $order->postInfo->region->id,
+                    'title' => $order->postInfo->region->title,
+                ],
+                'postal_code' => $order->postInfo->postal_code,
+                'address' => $order->postInfo->address,
+            ];
+        }
+
+
+        if ($order->payments) {
+            foreach ($order->payments as $payment) {
+                $list['payments'][] = [
+                    'id' => $payment->id,
+                    'amount' => number_format($payment->amount),
+                    'ref_id' => $payment->ref_id,
+                    'type' => ['key' => $payment->type, 'value' => Payment::type($payment->type)],
+                    'status' => ['key' => $payment->status, 'value' => Payment::status($payment->status)],
+                    'created_at' => $payment->created_at,
+                    'updated_at' => $payment->updated_at,
+                ];
+            }
+        }
+
+        if ($order->productPins) {
+            foreach ($order->productPins as $pins) {
+                $list['product_pins'][] = [
+                    'product' => [
+                        'id' => $pins->product->id,
+                        'title' => $pins->product->title
+                    ],
+                    'brand' => [
+                        'id' => $pins->product->brand->id,
+                        'title' => $pins->product->brand->title
+                    ],
+                    'count' => $pins->pivot->count,
+                    'price' => number_format($pins->pivot->price),
+                    'discount' => number_format($pins->pivot->discount),
+                    'total' => number_format($pins->pivot->count * $pins->pivot->price - $pins->pivot->discount)
+                ];
+            }
+        }
+
+
+        return $list;
     }
 
 }

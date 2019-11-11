@@ -369,22 +369,22 @@ class OrderList extends Component {
                                             <td>{entity.total_price}</td>
                                             <td>
                                                 <Tooltip title="وضعیت">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.status[entity.order_status] && this.state.status[entity.order_status].color}  label={this.state.status[entity.order_status] && this.state.status[entity.order_status].title} />
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.status[entity.order_status.key].color}  label={entity.order_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="حمل و نقل">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.transport[entity.transport_status] && this.state.transport[entity.transport_status].color}  label={this.state.transport[entity.transport_status] && this.state.transport[entity.transport_status].title} />
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.transport[entity.transport_status.key].color}  label={entity.transport_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="تحویل">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.delivery[entity.delivery_status] && this.state.delivery[entity.delivery_status].color}  label={this.state.delivery[entity.delivery_status] && this.state.delivery[entity.delivery_status].title} />
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.delivery[entity.delivery_status.key].color}  label={entity.delivery_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="سلامت کالا">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.items[entity.items_status] && this.state.items[entity.items_status].color}  label={this.state.items[entity.items_status] && this.state.items[entity.items_status].title} />
+                                                    <Chip size={"small"} variant={"outlined"} color={this.state.items[entity.items_status.key].color}  label={entity.items_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td style={{ direction:'rtl'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>

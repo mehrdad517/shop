@@ -14,16 +14,14 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ArrowDownwardIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import DatePicker from "react-datepicker2";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import ExpandMoreIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {Link} from "react-router-dom";
+
 class OrderView extends Component {
 
     constructor(props) {
@@ -43,12 +41,22 @@ class OrderView extends Component {
         let instance = new Api();
         instance.fetchOrder(1).then((response) => {
             if (typeof response != "undefined") {
+                let active = 0;
+                if (response.items_status === 1) {
+                    active = 3;
+                } else if (response.delivery_status === 1) {
+                    active = 2;
+                } else if (response.transport_status === 1) {
+                    active = 1
+                }
+
                 this.setState({
                     entity: response,
-                    loading: false
+                    loading: false,
+                    active
                 })
             }
-        })
+        });
     }
 
     render() {
@@ -61,47 +69,49 @@ class OrderView extends Component {
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>سفارش DKC-22745405</h2>
-                                <p style={{ color: '#8e8e8e'}}>ثبت شده در تاریخ ۱۸ آذر ۱۳۹۶</p>
+                                <h2>شناسه سفارش <span>#{this.state.entity.id}</span></h2>
+                                <p style={{ color: '#8e8e8e'}}>ثبت شده در تاریخ <span>{moment(this.state.entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</span></p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                    <Link to='/orders'>
                                     <Button variant="contained" color="default" >
                                         <NavigationIcon />
                                     </Button>
+                                    </Link>
                                 </div>
                             </Grid>
                         </Grid>
                     </Box>
                     <Box>
-                        <Stepper alternativeLabel activeStep={2}>
+                        <Stepper alternativeLabel activeStep={this.state.active}>
                             <Step key={0}>
                                 <StepLabel>
                                     <span>وضعیت</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.status[this.state.entity.order_status].title}</b>
+                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.order_status.title}</b>
                                 </StepLabel>
                             </Step>
                             <Step key={1}>
                                 <StepLabel>
                                     <span>حمل و نقل</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}> {this.state.transport[this.state.entity.transport_status].title}</b>
+                                    <b style={{ position: 'relative', 'top': '10px'}}> {this.state.entity.transport_status.title}</b>
                                 </StepLabel>
                             </Step>
                             <Step key={2}>
                                 <StepLabel>
                                     <span>تحویل مرسوله</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.delivery[this.state.entity.delivery_status].title}</b>
+                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.delivery_status.title}</b>
                                 </StepLabel>
                             </Step>
                             <Step key={3}>
                                 <StepLabel>
                                     <span>سلامت کالا</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.items[this.state.entity.items_status].title}</b>
+                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.items_status.title}</b>
                                 </StepLabel>
                             </Step>
                         </Stepper>
                     </Box>
-                    <Box style={{ margin: '50px 0'}}>
+                    <Box style={{ marginTop: '30px'}}>
                         <Grid container>
                             <Grid item md={6}>
                                 <Paper style={{ padding: '25px'}}>
@@ -158,14 +168,14 @@ class OrderView extends Component {
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
                                         <b>
-                                        {this.state.entity.post_info.address}
+                                        {this.state.entity.post_info.address} - { 'کد پستی ' + this.state.entity.post_info.postal_code}
                                         </b>
                                     </Typography>
                                 </Paper>
                             </Grid>
                         </Grid>
                     </Box>
-                    <Box>
+                    <Box style={{ margin: '30px 0'}}>
                         <ExpansionPanel>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -173,96 +183,132 @@ class OrderView extends Component {
                                 id="panel1c-header"
                             >
                                 <div>
-                                    <Typography>رکورد های مالی</Typography>
+                                    <Typography variant={"button"}><b>بخش مالی</b></Typography>
                                 </div>
                             </ExpansionPanelSummary>
-                            <ExpansionPanelDetails >
+                            <ExpansionPanelDetails>
+                                <Grid xs={12}>
+                                <div style={{ overflowX: 'auto'}}>
+                                    <table className='table'>
+                                        <thead>
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>شماره پیگیری</th>
+                                            <th>نوع پرداخت</th>
+                                            <th>تاریخ (تومان)</th>
+                                            <th>به روز رسانی</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {this.state.entity.payments && this.state.entity.payments.map((payment, index) => {
+                                            return(
+                                                <tr key={index}>
+                                                    <td>{payment.id}</td>
+                                                    <td>{payment.ref_id}</td>
+                                                    <td>{payment.type.value}</td>
+                                                    <td>{payment.amount}</td>
+                                                    <td style={{ direction:'rtl'}}>{moment(payment.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
+                                                    <td style={{ direction:'rtl'}}>{moment(payment.updated_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
+                                                    <td><Chip size={"small"} variant={"outlined"} color={this.state.status[payment.status.key].color}  label={payment.status.value} /></td>
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </Grid>
                             </ExpansionPanelDetails>
                             <Divider />
-                            <ExpansionPanelActions>
-                                <Button color="primary">
-                                    جستجو
-                                </Button>
-                            </ExpansionPanelActions>
                         </ExpansionPanel>
                     </Box>
-                    <Box>
-                        <div style={{ overflowX: 'auto'}}>
-                            <table className='table'>
-                                <thead>
-                                <tr>
-                                    <th>ردیف</th>
-                                    <th>نام محصول</th>
-                                    <th>برند</th>
-                                    <th>تعداد</th>
-                                    <th>قیمت واحد</th>
-                                    <th>قیمت کل</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.entity && this.state.entity.product_pins.map(( pins, index) => {
-                                    return(
-                                        <tr key={index}>
-                                            <td>{pins.id}</td>
-                                            <td>{pins.product.title}</td>
-                                            <td>{pins.product.brand.title}</td>
-                                            <td>{pins.pivot.count}</td>
-                                            <td>{pins.pivot.price}</td>
-                                            <td>{pins.pivot.price * pins.pivot.count}</td>
-                                        </tr>
-                                    );
-                                })}
-                                </tbody>
-                            </table>
-                        </div>
+                    <Box  style={{ margin: '30px 0'}}>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1c-content"
+                                id="panel1c-header"
+                            >
+                                <div>
+                                    <Typography variant={"button"}><b>سبد خرید</b></Typography>
+                                </div>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Grid xs={12}>
+                                    <div style={{ overflowX: 'auto'}}>
+                                        <table className='table'>
+                                            <thead>
+                                            <tr>
+                                                <th>ردیف</th>
+                                                <th>نام محصول</th>
+                                                <th>برند</th>
+                                                <th>تعداد</th>
+                                                <th>قیمت واحد</th>
+                                                <th>تخفیف</th>
+                                                <th>قیمت کل</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {this.state.entity && this.state.entity.product_pins.map(( pins, index) => {
+                                                return(
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{pins.product.title}</td>
+                                                        <td>{pins.brand.title}</td>
+                                                        <td>{pins.count}</td>
+                                                        <td>{pins.price}</td>
+                                                        <td>{pins.discount}</td>
+                                                        <td>{pins.total}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </Grid>
+                            </ExpansionPanelDetails>
+                            <Divider />
+                        </ExpansionPanel>
                     </Box>
                     <Box style={{ margin: '5px 0'}}>
                         <Grid container>
                             <Grid item md={6}>
-                                <Paper style={{ padding: '10px 25px'}}>
+                                <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         قیمت خالص:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
-                                        <b>
-                                        {this.state.entity.pure_price}
-                                        </b>
+                                        <b>{this.state.entity.pure_price}&nbsp;<span>تومان</span></b>
                                     </Typography>
                                 </Paper>
                             </Grid>
                             <Grid item md={6}>
-                                <Paper style={{ padding: '10px 25px'}}>
+                                <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         هزینه پستی:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
-                                        <b>
-                                        {this.state.entity.post_cost}
-                                        </b>
+                                        <b>{this.state.entity.post_cost}&nbsp;<span>تومان</span></b>
                                     </Typography>
                                 </Paper>
                             </Grid>
                             <Grid item md={6}>
-                                <Paper style={{ padding: '10px 25px'}}>
+                                <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         مالیات بر ارزش افزوده:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
-                                        <b>
-                                        {this.state.entity.tax}
-                                        </b>
+                                        <b>{this.state.entity.tax}&nbsp;<span>تومان</span></b>
                                     </Typography>
                                 </Paper>
                             </Grid>
                             <Grid item md={6}>
-                                <Paper style={{ padding: '10px 25px'}}>
+                                <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         تخفیف:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
-                                        <b>
-                                        {this.state.entity.discount}
-                                        </b>
+                                        <b>{this.state.entity.discount}&nbsp;<span>تومان</span></b>
                                     </Typography>
                                 </Paper>
                             </Grid>
@@ -272,9 +318,7 @@ class OrderView extends Component {
                                         قیمت کل:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
-                                        <b>
-                                        {this.state.entity.total_price}
-                                        </b>
+                                        <b>{this.state.entity.total_price}&nbsp;<span>تومان</span></b>
                                     </Typography>
                                 </Paper>
                             </Grid>

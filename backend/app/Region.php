@@ -10,6 +10,8 @@ class Region extends Model
 
     use NodeTrait;
 
+    protected $table = 'region';
+
     protected $primaryKey = 'id';
 
 }
