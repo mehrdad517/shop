@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -280,10 +280,11 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `FK_order_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.order: ~0 rows (approximately)
+-- Dumping data for table 517_shop.order: ~2 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
-	(1, 1, 1, 0.00, 7500.00, 2500.00, 250000.00, 256000.00, 1, 1, 1, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47');
+	(1, 1, 1, 0.00, 7500.00, 2500.00, 250000.00, 256000.00, 1, 1, 0, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47'),
+	(2, 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, '2019-11-11 13:33:22', '2019-11-11 13:33:22');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_post_info
@@ -307,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `order_post_info` (
 -- Dumping data for table 517_shop.order_post_info: ~0 rows (approximately)
 /*!40000 ALTER TABLE `order_post_info` DISABLE KEYS */;
 INSERT INTO `order_post_info` (`order_id`, `region_id`, `full_name`, `national_code`, `mobile`, `phone`, `postal_code`, `address`, `created_at`, `updated_at`) VALUES
-	(1, 1, 'مهرداد معصومی', '3920206231', '09361753251', '0215486455', '3920206231', 'تهران، تهران، تهران-م.ونک-خ.ملاصدرا-خ.شیخ بهایی شمالی-خ.صائب تبریزی-پلاک 1', '2019-11-10 23:45:03', '2019-11-10 23:45:03');
+	(1, 1, 'مهرداد معصومی', '3920206231', '09361753251', '0215486455', '3920206231', 'م.ونک-خ.ملاصدرا-خ.شیخ بهایی شمالی-خ.صائب تبریزی-پلاک 1', '2019-11-10 23:45:03', '2019-11-10 23:45:03');
 /*!40000 ALTER TABLE `order_post_info` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_product_pins
@@ -316,6 +317,7 @@ CREATE TABLE IF NOT EXISTS `order_product_pins` (
   `product_pins_id` bigint(20) unsigned NOT NULL,
   `count` int(11) NOT NULL,
   `price` decimal(8,2) NOT NULL,
+  `discount` decimal(8,2) NOT NULL DEFAULT 0.00,
   `detail` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -327,9 +329,9 @@ CREATE TABLE IF NOT EXISTS `order_product_pins` (
 
 -- Dumping data for table 517_shop.order_product_pins: ~2 rows (approximately)
 /*!40000 ALTER TABLE `order_product_pins` DISABLE KEYS */;
-INSERT INTO `order_product_pins` (`order_id`, `product_pins_id`, `count`, `price`, `detail`, `created_at`, `updated_at`) VALUES
-	(1, 1, 5, 100000.00, NULL, '2019-11-10 12:05:10', '2019-11-10 12:05:11'),
-	(1, 2, 2, 20000.00, NULL, '2019-11-10 12:05:08', '2019-11-10 12:05:09');
+INSERT INTO `order_product_pins` (`order_id`, `product_pins_id`, `count`, `price`, `discount`, `detail`, `created_at`, `updated_at`) VALUES
+	(1, 1, 5, 100000.00, 0.00, NULL, '2019-11-10 12:05:10', '2019-11-10 12:05:11'),
+	(1, 2, 2, 20000.00, 0.00, NULL, '2019-11-10 12:05:08', '2019-11-10 12:05:09');
 /*!40000 ALTER TABLE `order_product_pins` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.password_resets
