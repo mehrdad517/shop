@@ -21,6 +21,8 @@ import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {Link} from "react-router-dom";
+import Hidden from "@material-ui/core/Hidden";
+
 
 class OrderView extends Component {
 
@@ -39,14 +41,14 @@ class OrderView extends Component {
 
     componentDidMount() {
         let instance = new Api();
-        instance.fetchOrder(1).then((response) => {
+        instance.fetchOrder(this.props.match.params.id).then((response) => {
             if (typeof response != "undefined") {
                 let active = 0;
-                if (response.items_status === 1) {
+                if (response.items_status.key === 1) {
                     active = 3;
-                } else if (response.delivery_status === 1) {
+                } else if (response.delivery_status.key === 1) {
                     active = 2;
-                } else if (response.transport_status === 1) {
+                } else if (response.transport_status.key === 1) {
                     active = 1
                 }
 
@@ -60,6 +62,7 @@ class OrderView extends Component {
     }
 
     render() {
+        console.log(this.state);
         if (this.state.loading) {
             return <CircularProgress color={"secondary"} />
         }
@@ -88,32 +91,32 @@ class OrderView extends Component {
                             <Step key={0}>
                                 <StepLabel>
                                     <span>وضعیت</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.order_status.title}</b>
+                                    <Hidden only={"xs"}><b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.order_status.value}</b></Hidden>
                                 </StepLabel>
                             </Step>
                             <Step key={1}>
                                 <StepLabel>
                                     <span>حمل و نقل</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}> {this.state.entity.transport_status.title}</b>
+                                    <Hidden only={"xs"}><b style={{ position: 'relative', 'top': '10px'}}> {this.state.entity.transport_status.value}</b></Hidden>
                                 </StepLabel>
                             </Step>
                             <Step key={2}>
                                 <StepLabel>
                                     <span>تحویل مرسوله</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.delivery_status.title}</b>
+                                    <Hidden only={"xs"}><b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.delivery_status.value}</b></Hidden>
                                 </StepLabel>
                             </Step>
                             <Step key={3}>
                                 <StepLabel>
                                     <span>سلامت کالا</span><br/>
-                                    <b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.items_status.title}</b>
+                                    <Hidden only={"xs"}><b style={{ position: 'relative', 'top': '10px'}}>{this.state.entity.items_status.value}</b></Hidden>
                                 </StepLabel>
                             </Step>
                         </Stepper>
                     </Box>
                     <Box style={{ marginTop: '30px'}}>
                         <Grid container>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         مشخصات سفارش دهنده:
@@ -125,38 +128,38 @@ class OrderView extends Component {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         تحویل گیرنده:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
                                         <b>
-                                        {this.state.entity.post_info.full_name}
+                                        {this.state.entity.post_info && this.state.entity.post_info.full_name}
                                         </b>
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         شماره ملی:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
                                         <b>
-                                        {this.state.entity.post_info.national_code}
+                                        {this.state.entity.post_info && this.state.entity.post_info.national_code}
                                         </b>
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         اطلاعات تماس:
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
                                         <b>
-                                        {this.state.entity.post_info.mobile} - {this.state.entity.post_info.phone}
+                                        {this.state.entity.post_info && this.state.entity.post_info.mobile} - {this.state.entity.post_info && this.state.entity.post_info.phone}
                                         </b>
                                     </Typography>
                                 </Paper>
@@ -168,7 +171,7 @@ class OrderView extends Component {
                                     </Typography>
                                     <Typography variant="button" display="block" gutterBottom>
                                         <b>
-                                        {this.state.entity.post_info.address} - { 'کد پستی ' + this.state.entity.post_info.postal_code}
+                                            {this.state.entity.post_info.region && this.state.entity.post_info.region.title} - {this.state.entity.post_info && this.state.entity.post_info.address} - { 'کد پستی ' + this.state.entity.post_info && this.state.entity.post_info.postal_code}
                                         </b>
                                     </Typography>
                                 </Paper>
@@ -214,6 +217,10 @@ class OrderView extends Component {
                                                 </tr>
                                             );
                                         })}
+                                        <tr>
+                                            <td colSpan={3}>جمع کل:</td>
+                                            <td><b>{this.state.entity.sum_payments}</b></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -262,6 +269,13 @@ class OrderView extends Component {
                                                     </tr>
                                                 );
                                             })}
+                                            <tr>
+                                                <td colSpan={3}>جمع کل:</td>
+                                                <td><b>{this.state.entity.sum_count}</b></td>
+                                                <td><b>{this.state.entity.sum_price}</b></td>
+                                                <td><b>{this.state.entity.sum_discount}</b></td>
+                                                <td><b>{this.state.entity.sum_total}</b></td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -272,7 +286,7 @@ class OrderView extends Component {
                     </Box>
                     <Box style={{ margin: '5px 0'}}>
                         <Grid container>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         قیمت خالص:
@@ -282,7 +296,7 @@ class OrderView extends Component {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         هزینه پستی:
@@ -292,7 +306,7 @@ class OrderView extends Component {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         مالیات بر ارزش افزوده:
@@ -302,7 +316,7 @@ class OrderView extends Component {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Paper style={{ padding: '25px'}}>
                                     <Typography variant="button">
                                         تخفیف:
@@ -312,7 +326,7 @@ class OrderView extends Component {
                                     </Typography>
                                 </Paper>
                             </Grid>
-                            <Grid item md={12}>
+                            <Grid item xs={12}>
                                 <Paper style={{ padding: '25px', textAlign: 'center'}}>
                                     <Typography variant="button">
                                         قیمت کل:

@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         localhost
+-- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `order` (
 -- Dumping data for table 517_shop.order: ~2 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
-	(1, 1, 1, 0.00, 7500.00, 2500.00, 250000.00, 256000.00, 1, 1, 0, 0, '2019-11-10 13:02:46', '2019-11-10 13:02:47'),
+	(1, 1, 1, 0.00, 7500.00, 2500.00, 250000.00, 256000.00, 1, 1, 1, 1, '2019-11-10 13:02:46', '2019-11-10 13:02:47'),
 	(2, 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0, 0, 0, '2019-11-11 13:33:22', '2019-11-11 13:33:22');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 

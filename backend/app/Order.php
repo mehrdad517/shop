@@ -195,7 +195,9 @@ class Order extends Model
 
 
         if ($order->payments) {
+            $sum_payment = 0;
             foreach ($order->payments as $payment) {
+                $sum_payment += $payment->amount;
                 $list['payments'][] = [
                     'id' => $payment->id,
                     'amount' => number_format($payment->amount),
@@ -206,9 +208,12 @@ class Order extends Model
                     'updated_at' => $payment->updated_at,
                 ];
             }
+
+            $list['sum_payments'] = number_format($sum_payment);
         }
 
         if ($order->productPins) {
+            $sum_total = $sum_count = $sum_price = $sum_discount = 0;
             foreach ($order->productPins as $pins) {
                 $list['product_pins'][] = [
                     'product' => [
@@ -224,7 +229,18 @@ class Order extends Model
                     'discount' => number_format($pins->pivot->discount),
                     'total' => number_format($pins->pivot->count * $pins->pivot->price - $pins->pivot->discount)
                 ];
+
+                $sum_total += ($pins->pivot->count * $pins->pivot->price) - $pins->pivot->discount;
+                $sum_count += $pins->pivot->count;
+                $sum_discount += $pins->pivot->discount;
+                $sum_price += $pins->pivot->price;
+
             }
+
+            $list['sum_total'] = number_format($sum_total);
+            $list['sum_price'] = number_format($sum_price);
+            $list['sum_discount'] = number_format($sum_discount);
+            $list['sum_count'] = number_format($sum_count);
         }
 
 

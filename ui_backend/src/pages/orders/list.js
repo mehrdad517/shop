@@ -29,6 +29,10 @@ import Chip from "@material-ui/core/Chip";
 import moment from 'moment-jalaali'
 import DatePicker from 'react-datepicker2';
 import {delivery, items, status, transport} from "./helper";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import {Link} from "react-router-dom";
+
+import ExcelDownload from './excel/excel'
 
 class OrderList extends Component {
     constructor(props) {
@@ -142,7 +146,7 @@ class OrderList extends Component {
                     this.setState({
                         entities: response,
                         loading: false,
-                    })
+                    });
                     toast.success('لیست بارگزاری شد.')
                 }
             }).catch((error) => {
@@ -156,7 +160,6 @@ class OrderList extends Component {
         if (this.state.loading) {
             return (<CircularProgress color={"secondary"} />);
         }
-        console.log(this.state);
         return (
             <div className='content'>
                 <Container>
@@ -339,6 +342,7 @@ class OrderList extends Component {
                     </Box>
                     <Box>
                         <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <ExcelDownload data={this.state.entities.data} />
                             <Tooltip title="سینک">
                                 <IconButton onClick={() => this.handleRequest()} >
                                     <SyncIcon />
@@ -351,7 +355,7 @@ class OrderList extends Component {
                                 <tr>
                                     <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('user_id')}>کاربر&nbsp;{this.state.sort_field === 'user_id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('total_price')}>قیمت کل&nbsp;{this.state.sort_field === 'total_price' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('total_price')}>قیمت کل (تومان)&nbsp;{this.state.sort_field === 'total_price' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('order_status')}>وضعیت&nbsp;{this.state.sort_field === 'order_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('transport_status')}>حمل و نقل&nbsp;{this.state.sort_field === 'transport_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('delivery_status')}>تحویل&nbsp;{this.state.sort_field === 'delivery_status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
@@ -389,6 +393,13 @@ class OrderList extends Component {
                                             </td>
                                             <td style={{ direction:'rtl'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
+                                                <Tooltip title="مشاهده سفارش">
+                                                    <Link to={`/orders/${entity.id}`}>
+                                                        <IconButton>
+                                                            <VisibilityIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip>
                                             </td>
                                         </tr>
                                     );
