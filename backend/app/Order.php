@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -40,13 +41,13 @@ class Order extends Model
             self::ORDER_STATUS_RETURNED => 'مرجوعی',
         ];
 
-            if (isset($list[$key])) {
-                return $list[$key];
-            } else {
-                return 'نامشخص';
-            }
+        if (isset($list[$key])) {
+            return $list[$key];
+        } else {
+            return 'نامشخص';
+        }
 
-            return $list;
+        return $list;
 
     }
 
@@ -59,12 +60,12 @@ class Order extends Model
             self::TRANSPORT_STATUS_IN_QUEUE => 'در صف ارسال',
             self::TRANSPORT_STATUS_RESEND => 'در صف ارسال مجدد',
         ];
-            if (isset($list[$key])) {
-                return $list[$key];
-            } else {
-                return 'نامشخص';
-            }
-            return $list;
+        if (isset($list[$key])) {
+            return $list[$key];
+        } else {
+            return 'نامشخص';
+        }
+        return $list;
     }
 
     public static function delivery($key= null)
@@ -92,13 +93,13 @@ class Order extends Model
             self::ITEMS_STATUS_DEFECTIVE => 'معیوبی کالا',
         ];
 
-            if (isset($list[$key])) {
-                return $list[$key];
-            } else {
-                return 'نامشخص';
-            }
+        if (isset($list[$key])) {
+            return $list[$key];
+        } else {
+            return 'نامشخص';
+        }
 
-            return $list;
+        return $list;
 
     }
 
@@ -215,11 +216,18 @@ class Order extends Model
         if ($order->productPins) {
             $sum_total = $sum_count = $sum_price = $sum_discount = 0;
             foreach ($order->productPins as $pins) {
+                $x = explode(',', $pins->group_attribute_product_ids);
+                $attr = DB::table('group_attribute_product')
+                    ->leftJoin('group_attribute', 'group_attribute_product.attribute_id', '=', 'group_attribute.id')
+                    ->whereIn('group_attribute_product.id', $x)
+                    ->get(['title','value']);
+
                 $list['product_pins'][] = [
                     'product' => [
                         'id' => $pins->product->id,
                         'title' => $pins->product->title
                     ],
+                    'attributes' => $attr,
                     'brand' => [
                         'id' => $pins->product->brand->id,
                         'title' => $pins->product->brand->title

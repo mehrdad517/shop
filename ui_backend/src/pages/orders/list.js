@@ -293,12 +293,16 @@ class OrderList extends Component {
                                             })}
                                         </TextField>
                                     </Grid>
-                                    <Grid item>
+                                    <Grid item xs={12} sm={4} md={3}>
+                                        <div className='datepicker-input-container '>
+                                        <label>از تاریخ</label>
                                         <DatePicker
                                             value={this.state.filter.from_date}
                                             isGregorian={false}
                                             onChange={this.setSelectedDay.bind(this)}
                                         />
+
+                                        </div>
                                     </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>

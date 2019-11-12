@@ -27,6 +27,34 @@ body {
 .content-inner {
     margin: 50px 0;
 }
+.datepicker-input-container {
+    border: 0;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #8e8e8e;
+    height: 47.5px;
+    padding: 0px 10px;
+    position: relative;
+    top: 8px;
+    font-family: Shabnam !important;
+    border-radius: 3px 3px 0 0;
+}
+.datepicker-input-container label{
+    position: relative;
+    top: 6px;
+    color: #707070;
+    transform: translate(-12px, 7px) scale(0.75);
+}
+.datepicker-input{
+    border: 0;
+    background-color: transparent;
+    margin-top: 10px;
+    width: 100% !important;
+}
+.datepicker-input:hover, .datepicker-input:focus{
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+}
 .tab-inner{
     padding: 50px;
     min-height: 300px;
@@ -154,7 +182,7 @@ body {
 }
 .MuiInputLabel-filled.MuiInputLabel-shrink{
     position: absolute;
-    right: 10px;
+    //right: 10px;
     left: unset;
 }
 /* On screens that are 992px or less, set the background color to blue */

@@ -248,6 +248,7 @@ class OrderView extends Component {
                                             <tr>
                                                 <th>ردیف</th>
                                                 <th>نام محصول</th>
+                                                <th>اتریبیوت</th>
                                                 <th>برند</th>
                                                 <th>تعداد</th>
                                                 <th>قیمت واحد</th>
@@ -260,7 +261,14 @@ class OrderView extends Component {
                                                 return(
                                                     <tr key={index}>
                                                         <td>{index + 1}</td>
-                                                        <td>{pins.product.title}</td>
+                                                        <td><b>{pins.product.title}</b></td>
+                                                        <td>
+                                                            {pins.attributes.length > 0 ? pins.attributes.map((attr) => {
+                                                                return(
+                                                                    <p>{attr.title + ' : ' + attr.value}</p>
+                                                                );
+                                                            }) : 'ندارد'}
+                                                        </td>
                                                         <td>{pins.brand.title}</td>
                                                         <td>{pins.count}</td>
                                                         <td>{pins.price}</td>
@@ -270,7 +278,7 @@ class OrderView extends Component {
                                                 );
                                             })}
                                             <tr>
-                                                <td colSpan={3}>جمع کل:</td>
+                                                <td colSpan={4}>جمع کل:</td>
                                                 <td><b>{this.state.entity.sum_count}</b></td>
                                                 <td><b>{this.state.entity.sum_price}</b></td>
                                                 <td><b>{this.state.entity.sum_discount}</b></td>
