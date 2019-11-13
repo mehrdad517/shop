@@ -46,7 +46,8 @@ class OrderList extends Component {
                 transport_status: -1,
                 delivery_status: -1,
                 items_status: -1,
-                from_date: moment()
+                from_date: '',
+                to_date: ''
             },
             page: 1,
             limit: 50,
@@ -62,6 +63,7 @@ class OrderList extends Component {
     componentDidMount() {
         this.handleRequest();
     }
+    
 
     async handleChangeLimit(event) {
         let limit = event.target.value;
@@ -75,14 +77,13 @@ class OrderList extends Component {
         await this.handleRequest()
     }
 
-    setSelectedDay = (value) => {
+    setSelectedDay(value, name) {
         let filter = this.state.filter;
-        filter.from_date = value;
-        //this.setState({
-        //    filter
-        //});
-
-        //this.handleRequest();
+        filter[name] = value;
+        this.setState({
+            filter,
+        });
+        this.handleRequest();
     };
 
     async handleChangeSearchInput(event) {
@@ -131,7 +132,8 @@ class OrderList extends Component {
             resolve(instance.fetchOrders({
                 filter: {
                     id: this.state.filter.id,
-                    from_date : this.state.filter.from_date.locale('es').format('YYYY/M/D HH:mm:ss'),
+                    from_date : this.state.filter.from_date ? this.state.filter.from_date.locale('es').format('YYYY/M/D HH:mm:ss') : '',
+                    to_date : this.state.filter.to_date ? this.state.filter.to_date.locale('es').format('YYYY/M/D HH:mm:ss'): '',
                     order_status: this.state.filter.order_status,
                     transport_status: this.state.filter.transport_status,
                     delivery_status: this.state.filter.delivery_status,
@@ -295,12 +297,23 @@ class OrderList extends Component {
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3}>
                                         <div className='datepicker-input-container '>
-                                        <label>از تاریخ</label>
-                                        <DatePicker
-                                            value={this.state.filter.from_date}
-                                            isGregorian={false}
-                                            onChange={this.setSelectedDay.bind(this)}
-                                        />
+                                            <label>از تاریخ</label>
+                                            <DatePicker
+                                                value={this.state.filter.from_date}
+                                                isGregorian={false}
+                                                onChange={(value) => this.setSelectedDay(value,'from_date')}
+                                            />
+
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3}>
+                                        <div className='datepicker-input-container '>
+                                            <label>تا تاریخ</label>
+                                            <DatePicker
+                                                value={this.state.filter.to_date}
+                                                isGregorian={false}
+                                                onChange={(value) => this.setSelectedDay(value,'to_date')}
+                                            />
 
                                         </div>
                                     </Grid>

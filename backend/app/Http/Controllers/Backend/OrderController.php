@@ -45,6 +45,15 @@ class OrderController extends Controller
                     if ($filter->items_status != -1) {
                         $q->where('items_status', $filter->items_status);
                     }
+
+                    if ($filter->from_date && $filter->to_date) {
+                        $q->where('created_at', '>=', $filter->from_date);
+                        $q->where('created_at', '<=', $filter->to_date);
+                    } elseif ($filter->from_date) {
+                        $q->where('created_at', '>=', $filter->from_date);
+                    } elseif ($filter->to_date) {
+                        $q->where('created_at', '<=', $filter->to_date);
+                    }
                 }
             })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
             ->paginate($request->get('limit') ?? 50);
