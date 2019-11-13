@@ -22,6 +22,22 @@ class Api {
         return response.data;
     }
 
+    // auto complete
+
+    async autoComplete(table, term) {
+        return axios.get(`http://localhost:8000/api/backend/filter/${table}`, {
+            headers: this.haeders(),
+            params: term
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    // orders
+
     async fetchOrders(object) {
         return axios.get('http://localhost:8000/api/backend/orders/', {
             headers: this.haeders(),

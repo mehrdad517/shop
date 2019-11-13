@@ -30,6 +30,9 @@ class OrderController extends Controller
                     if ($filter->id) {
                         $q->where('id', $filter->id);
                     }
+                    if ($filter->user_id) {
+                        $q->where('user_id', $filter->user_id);
+                    }
                     if ($filter->order_status != -1) {
                         $q->where('order_status', $filter->order_status);
                     }

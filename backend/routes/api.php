@@ -105,6 +105,18 @@ use App\Slider;
 
 Route::group(['prefix' => '/backend'], function () {
 
+    Route::group(['prefix' => 'filter'], function () {
+        Route::get('/users', function (Request $request) {
+            $response = \App\User::select('id', 'name', 'mobile')
+                ->where('name', 'like', '%'.$request->get('term').'%')
+                ->orWhere('mobile', 'like', '%'.$request->get('mobile').'%')
+                ->where("status", 1)
+                ->take(10)
+                ->get();
+            return response($response);
+        });
+    });
+
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/', 'Backend\OrderController@index');
         Route::get('/{id}', 'Backend\OrderController@show');
