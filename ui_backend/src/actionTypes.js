@@ -1,6 +1,5 @@
+export const AUTH_PERMISSIONS = 'AUTH_PERMISSIONS';
 export const CHANGE_HTTP_CODE = 'CHANGE_HTTP_CODE';
-
-
 export const FETCH_ROLES = 'FETCH_ROLES';
 export const FETCH_PERMISSIONS = 'FETCH_PERMISSIONS';
 export const FETCH_ROLE = 'FETCH_ROLE';

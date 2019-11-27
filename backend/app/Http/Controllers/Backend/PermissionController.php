@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
@@ -73,18 +74,35 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
+
         $list = [];
         $parents = Permission::select(['parent'])->groupBy('parent')->orderBy('created_at', 'asc')->pluck('parent');
         foreach ($parents as $parent) {
+            $actions = [];
+            $join = Permission::select(['key as id', 'parent', 'method', 'title', 'url'])->where('parent', $parent)->orderBy('created_at', 'asc')->get();
+
+            foreach ($join as $item) {
+                $actions[] = [
+                    'id' => $item->id,
+                    'parent' => $parent,
+                    'title' => $item->title,
+                    'access' => 0,
+                    'method' => $item->method,
+                    'url' => $item->url
+                ];
+            }
+
             $list[] = [
                 'controller' => $parent,
-                'actions' => Permission::select(['key as id', 'parent', 'method', 'title', 'url'])->where('parent', $parent)->orderBy('created_at', 'asc')->get()
+                'actions' => $actions
             ];
+
         }
 
         return response($list);
 
     }
+
 
 
 

@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import {fetchRoles} from "../../../../actions/userBundleAction";
 import {Snackbar, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -33,7 +30,7 @@ class RoleCreate extends Component {
                 key: '',
                 title: '',
             }
-        }
+        };
 
         this.api = new Api();
     }
@@ -51,27 +48,30 @@ class RoleCreate extends Component {
         event.preventDefault();
 
        this.api.createRole(this.state.form).then((response) => {
-            if (response.status) {
-                this.props.fetchRoles();
-                this.setState({
-                    open: false,
-                    snackbar : {
-                        open: true,
-                        message: 'عملیات موفق'
-                    },
-                    form:{
-                        key: '',
-                        title: '',
-                    }
-                })
-            } else {
-                this.setState({
-                    snackbar : {
-                        open: true,
-                        message: response.msg
-                    },
-                })
-            }
+           if (typeof response != "undefined") {
+               if (response.status) {
+                   this.setState({
+                       open: false,
+                       snackbar : {
+                           open: true,
+                           message: 'عملیات موفق'
+                       },
+                       form:{
+                           key: '',
+                           title: '',
+                       }
+                   })
+                   this.props.handleRequest();
+               } else {
+                   this.setState({
+                       snackbar : {
+                           open: true,
+                           message: response.msg
+                       },
+                   })
+               }
+           }
+
         }).catch((error) => {
             console.log(error);
         })
@@ -96,7 +96,7 @@ class RoleCreate extends Component {
                 open : false
             }
         })
-    }
+    };
 
 
     render() {
@@ -166,11 +166,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchRoles : function () {
-            dispatch(fetchRoles());
-        }
-    }
+    return {}
 }
 
 export default connect(

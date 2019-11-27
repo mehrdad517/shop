@@ -6,9 +6,9 @@ import Button from "@material-ui/core/Button";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import AppBar from '@material-ui/core/AppBar';
 import Chip from "@material-ui/core/Chip";
-import Api from "../../api";
+import Api from "../../../api";
 import moment from 'moment-jalaali'
-import {delivery, items, status, transport} from "./helper";
+import {delivery, items, status, transport} from "../helper";
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -43,6 +43,7 @@ class OrderView extends Component {
         let instance = new Api();
         instance.fetchOrder(this.props.match.params.id).then((response) => {
             if (typeof response != "undefined") {
+
                 let active = 0;
                 if (response.items_status.key === 1) {
                     active = 3;
@@ -62,7 +63,6 @@ class OrderView extends Component {
     }
 
     render() {
-        console.log(this.state);
         if (this.state.loading) {
             return <CircularProgress color={"secondary"} />
         }
@@ -253,6 +253,8 @@ class OrderView extends Component {
                                                 <th>تعداد</th>
                                                 <th>قیمت واحد</th>
                                                 <th>تخفیف</th>
+                                                <th>تعداد کسری</th>
+                                                <th>تعداد معیوبی</th>
                                                 <th>قیمت کل</th>
                                             </tr>
                                             </thead>
@@ -273,6 +275,8 @@ class OrderView extends Component {
                                                         <td>{pins.count}</td>
                                                         <td>{pins.price}</td>
                                                         <td>{pins.discount}</td>
+                                                        <td>{pins.fractional_count}</td>
+                                                        <td>{pins.defactive_count}</td>
                                                         <td>{pins.total}</td>
                                                     </tr>
                                                 );
@@ -282,6 +286,8 @@ class OrderView extends Component {
                                                 <td><b>{this.state.entity.sum_count}</b></td>
                                                 <td><b>{this.state.entity.sum_price}</b></td>
                                                 <td><b>{this.state.entity.sum_discount}</b></td>
+                                                <td></td>
+                                                <td></td>
                                                 <td><b>{this.state.entity.sum_total}</b></td>
                                             </tr>
                                             </tbody>

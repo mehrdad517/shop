@@ -1,4 +1,4 @@
-import { FETCH_ROLES, FETCH_USER, FETCH_USERS} from "./actionTypes";
+import { FETCH_ROLES, FETCH_USER, FETCH_USERS} from "./../actionTypes";
 import Api from "../api";
 
 export function fetchUser(id) {

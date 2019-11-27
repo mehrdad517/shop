@@ -23,7 +23,6 @@ class Api {
     }
 
     // auto complete
-
     async autoComplete(table, term) {
         return axios.get(`http://localhost:8000/api/backend/filter/${table}`, {
             headers: this.haeders(),
@@ -36,8 +35,20 @@ class Api {
     }
 
 
-    // orders
 
+    /* anbar */
+    async fetchAnbar(object) {
+        return axios.get('http://localhost:8000/api/backend/anbar/', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    // orderBundle
     async fetchOrders(object) {
         return axios.get('http://localhost:8000/api/backend/orders/', {
             headers: this.haeders(),
@@ -51,6 +62,38 @@ class Api {
 
     async fetchOrder(id) {
         return axios.get('http://localhost:8000/api/backend/orders/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async fetchOrderStatus()
+    {
+        return axios.get('http://localhost:8000/api/backend/orders/status', {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    async updateOrder(id, object) {
+        return axios.put('http://localhost:8000/api/backend/orders/' + id, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async orderFractiveRequest(id, object) {
+        return axios.post(`http://localhost:8000/api/backend/orders/${id}/fractive/request`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
@@ -306,6 +349,19 @@ class Api {
 
 
     // fetch user form db
+
+    // fetch user form db
+    async fetchUsers(object) {
+        return axios.get('http://localhost:8000/api/backend/users', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
     async fetchUser(id) {
         return axios.get('http://localhost:8000/api/backend/users/' + id, {
             headers: this.haeders(),
@@ -361,7 +417,7 @@ class Api {
     }
 
 
-    //    fetch permissions
+    //    fetch all permissions
     async fetchPermissions() {
         return axios.get('http://localhost:8000/api/backend/users/permissions', {
             headers: this.haeders(),
@@ -395,7 +451,7 @@ class Api {
 
     // set permissions for role
     async  roleSetPermissions(id, object) {
-        return  axios.put('http://localhost:8000/api/backend/users/roles/' + id, object, {
+        return  axios.put('http://localhost:8000/api/backend/users/roles/' + id + '/permissions', object, {
             headers: this.haeders()
         }).then((response) => {
             return this.dispatchResponse(response);
@@ -404,18 +460,19 @@ class Api {
         })
     }
 
-
-    // fetch user form db
-    async fetchUsers(object) {
-        return axios.get('http://localhost:8000/api/backend/users', {
+    /* auth api */
+    async rolePermissions(role, map = false){
+        return axios.get(`http://localhost:8000/api/backend/users/roles/${role}/permissions`, {
             headers: this.haeders(),
-            params: object
+            params: {map: map}
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
             toast.error(error.message);
         })
     }
+
+
 
 }
 

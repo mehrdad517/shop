@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Api from "../../../api";
 import {Checkbox, Snackbar} from "@material-ui/core";
-import {fetchRoles} from "../../../actions/userBundleAction";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
@@ -14,54 +13,71 @@ import Radio from "@material-ui/core/Radio";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import RoleCreate from "./role/create";
 import {Link} from 'react-router-dom'
+import {toast} from "react-toastify";
 
 class Acl extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            permissions : [],
-            checkedItems : new Map(),
-            loading: false,
-            form:{role_key: null}, // role and permission
-            snackbar: {open: false, msg: ''}
+            loading: true,
+            roles: [],
+            permissions: [],
+            checkedItems: new Map(),
+            form: {
+                role_key : '',
+            }
         };
+
         this.api = new Api();
-    }
-
-    async setAttr(response) {
-        await new Promise((resolve => {
-            resolve(this.setState({
-                permissions : response
-            }));
-        }));
-
-        await new Promise((resolve => {
-            resolve(response.map((permission) => {
-                permission.actions.map((action) => {
-                    this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, false) }));
-                });
-            }));
-        }));
-
-        await new Promise(resolve => {
-            resolve(this.setState({
-                loading: true
-            }));
-        })
     }
 
 
     componentDidMount() {
-        this.props.fetchRoles();
-        this.api.fetchPermissions().then((response) => {
-            this.setAttr(response);
-        }).catch((error) => {
-            console.log(error);
+        this.handleRequest();
+    }
+
+    async fetchRoles() {
+        let roles;
+        await new Promise(resolve => {
+            resolve(this.api.fetchRoles().then((response) => {
+                if (typeof response != "undefined") {
+                    roles = response;
+                }
+            }));
+        });
+        this.setState({
+            roles
         })
     }
 
-    handleChangeInput(event)  {
+
+    async handleRequest()
+    {
+        let permissions;
+
+        this.fetchRoles();
+
+        await this.api.fetchPermissions().then((response) => {
+            if (typeof response != "undefined") {
+                permissions = response;
+                response.map((permission) => {
+                    permission.actions.map((action) => {
+                        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, false)}));
+                    });
+                });
+            }
+        });
+
+        await new Promise(resolve => {
+            resolve(this.setState({
+                permissions,
+                loading: false
+            }));
+        })
+    }
+
+    handleChangeInput(event) {
         if (this.state.form.role_key) {
             let val = event.target.value;
             if (event.target.checked) {
@@ -70,53 +86,63 @@ class Acl extends Component {
                 this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(val, false)}));
             }
         } else {
-            this.setState({
-                snackbar: {
-                    open: true,
-                    msg: 'هیچ نقشی انتخاب نشده است.'
-                }
-            })
+            toast.error('هیچ نقشی را انتخاب نکرده اید.');
         }
 
     };
 
     handleRoleChange(event) {
+        this.setState({
+           loading : true,
+        });
         let val = event.target.value;
         this.state.checkedItems.forEach((key, value) => {
             this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, false)}));
-        }) ;
-        this.props.states.roles.map((role) => {
-            if (role.key === val) {
-                this.state.permissions.map((permission) => {
-                    permission.actions.map((action) => {
-                        role.permission.map((item, index) => {
-                            if (item.key === action.id) {
-                                this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, true)}));
-                            }
-                        });
-                    });
-                });
-            }
         });
-        this.setState({
-            form:{
-                role_key: val,
-            },
+
+        this.api.rolePermissions(val, true).then((response) => {
+            response.map((permission) => {
+                permission.actions.map((action) => {
+                    if (parseInt(action.access) === 1) {
+                        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, true)}));
+                    }
+                });
+            });
+            this.setState({
+                form: {
+                    role_key: val
+                },
+                permissions: response,
+                loading: false
+            });
         })
     };
+
+
+    handleCheckAll(controller)
+    {
+        if (this.state.form.role_key) {
+            this.state.permissions.map((permission) => {
+                if (controller === permission.controller) {
+                    permission.actions.map((action) => {
+                        this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, !this.state.checkedItems.get(action.id) )}));
+                    })
+                }
+            })
+        }
+
+    }
 
     handleSubmit(event) {
         event.preventDefault();
 
         if (!this.state.form.role_key) {
-            this.setState({
-                snackbar: {open: true, msg: 'هیچ نقشی انتخاب نشده است.'}
-            })
+            toast.error('هیچ نقشی انتخاب نشده است.');
             return;
         }
 
         this.setState({
-            loading: false
+            loading: true
         });
 
         let permissions = [];
@@ -129,14 +155,15 @@ class Acl extends Component {
         }) ;
 
         this.api.roleSetPermissions(this.state.form.role_key, {'permissions': permissions}).then((response) => {
-            this.setState({
-                snackbar: {open: true, msg: response.msg},
-            });
-            this.setState({
-                loading: true
-            });
-            if (response.status) {
-                this.props.fetchRoles();
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    toast.success(response.msg);
+                    this.setState({
+                        loading: false
+                    });
+                } else {
+                    toast.error(response.msg);
+                }
             }
         }).catch((error) => {
             console.log(error);
@@ -144,31 +171,8 @@ class Acl extends Component {
     }
 
 
-    handleCheckAll(controller)
-    {
-        if (this.state.form.role_key) {
-            this.state.permissions.map((permission) => {
-                if (controller === permission.controller) {
-                    permission.actions.map((action) => {
-                            this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, !this.state.checkedItems.get(action.id) )}));
-                    })
-                }
-            })
-        } else {
-            this.setState({
-                snackbar: {
-                    open: true,
-                    msg: 'یک نقش را انتخاب کنید.'
-                }
-            })
-        }
-
-    }
-
     render() {
-        if (this.state.loading === false) {
-            return(<CircularProgress color={"secondary"} />);
-        }
+
         return (
             <div className={'content'}>
                 <Container>
@@ -181,21 +185,21 @@ class Acl extends Component {
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Link to='/users'>
-                                    <Button variant="contained" color="default" >
-                                        <NavigationIcon />
-                                    </Button>
+                                        <Button variant="contained" color="default" >
+                                            <NavigationIcon />
+                                        </Button>
                                     </Link>
                                 </div>
                             </Grid>
                         </Grid>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <RoleCreate />
+                        <RoleCreate handleRequest={() => this.fetchRoles()} />
                     </Box>
-                    <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
+                    <Box className='animated fadeIn' boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <form onSubmit={this.handleSubmit.bind(this)}>
                             <Grid container>
-                                {this.props.states.roles && this.props.states.roles.map((role, i) => {
+                                {this.state.roles && this.state.roles.map((role, i) => {
                                     return (
                                         <Grid  key={i} item xs={12} sm={3}>
                                             <FormControlLabel key={i} control={
@@ -210,7 +214,7 @@ class Acl extends Component {
                                     )
                                 })}
                             </Grid>
-                            {this.state.permissions.map((permission, index) => {
+                            {this.state.permissions && this.state.permissions.map((permission, index) => {
                                 return(
                                     <Grid style={{margin: '30px 0'}} key={index}  container>
                                         <Grid  item xs={12}>
@@ -238,19 +242,14 @@ class Acl extends Component {
                                 )
                             })}
                             <Grid item xs={12} style={{ justifyContent: 'flex-end', display: 'flex'}}>
-                                <Button variant="outlined" color="secondary" type='submit' >
+                                <Button disabled={this.state.loading} variant="outlined" color="secondary" type='submit' >
                                     به روز رسانی
                                 </Button>
                             </Grid>
                         </form>
+                        {this.state.loading ? <CircularProgress style={{ zIndex: 9999}} color={"secondary"} /> : ''}
                     </Box>
                 </Container>
-                <Snackbar
-                    autoHideDuration={4500}
-                    open={this.state.snackbar.open}
-                    message={this.state.snackbar.msg}
-                    onClose={() => this.setState({snackbar:{open: false,msg: ''}})}
-                />
             </div>
         );
     }
@@ -258,16 +257,11 @@ class Acl extends Component {
 
 function mapStateToProps(state) {
     return {
-        states: state.userBundleReducer
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchRoles: function () {
-            dispatch(fetchRoles());
-        }
-    }
+    return {}
 }
 
 export default connect(

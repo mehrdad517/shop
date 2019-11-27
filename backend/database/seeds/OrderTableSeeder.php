@@ -13,22 +13,23 @@ class OrderTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('fa_IR');
-        foreach (range(1,100) as $index) {
+        foreach (range(1,400) as $key=>$index) {
             $id = DB::table('order')->insertGetId([
-                'user_id' => $faker->numberBetween(1,10),
-                'tax_id' => $faker->numberBetween(40000, 1000000),
+                'user_id' => $faker->numberBetween(1,5),
+                'increment_id' => $key,
                 'tax' => 0,
                 'discount' => 0,
-                'pure_price' => $faker->numberBetween(40000, 1000000),
-                'total_price' => $faker->numberBetween(40000, 1000000),
-                'order_status' => $faker->numberBetween(0,4),
+                'post_cost' => 10000,
+                'pure_price' => 340000,
+                'total_price' => 350000,
+                'order_status' => 1,
                 'created_at' => $faker->dateTime,
                 'updated_at' => $faker->dateTime
             ]);
 
             \Illuminate\Support\Facades\DB::table('order_post_info')->insert([
                 'order_id' => $id,
-                'region_id' => $id,
+                'region_id' => 1,
                 'mobile' => $faker->phoneNumber,
                 'phone' => $faker->phoneNumber,
                 'full_name' => $faker->name,
@@ -37,13 +38,12 @@ class OrderTableSeeder extends Seeder
                 'address' => $faker->address
             ]);
 
-            foreach (range(1, 3) as $item) {
+            foreach (range(1, 1) as $item) {
                 \Illuminate\Support\Facades\DB::table('order_product_pins')->insert([
                     'order_id' => $id,
-                    'product_pins_id' => rand($id, 100),
-                    'count' => rand(1, 5),
-                    'price' => $faker->numberBetween(40000, 86000),
-                    'detail' => $faker->realText()
+                    'product_pins_id' => 1,
+                    'count' => 1,
+                    'price' => 340000,
                 ]);
             }
         }

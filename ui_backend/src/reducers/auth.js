@@ -1,18 +1,18 @@
-import {CHANGE_HTTP_CODE} from "../actions/actionTypes";
+import {AUTH_PERMISSIONS} from "./../actionTypes";
 
 const initialState = {
     login: false,
     user: null,
     token: null,
-    http_status: 200
+    permissions: [],
 };
 
 export default  function appReducer(state = initialState, action) {
     switch (action.type) {
-        case CHANGE_HTTP_CODE:
+        case AUTH_PERMISSIONS:
             return {
                 ...state,
-                http_status: action.payload
+                permissions: action.payload
             };
         default:
             return state;

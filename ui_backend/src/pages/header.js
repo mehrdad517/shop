@@ -151,9 +151,9 @@ export default function PrimarySearchAppBar() {
     });
 
     const toggleDrawer = (side, open) => event => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
+        // if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+        //     return;
+        // }
 
         setState({ ...state, [side]: open });
     };
@@ -198,8 +198,8 @@ export default function PrimarySearchAppBar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <Drawer anchor="right" open={state.right} onClose={toggleDrawer('right', false)}>
-                <Sidebar />
+            <Drawer anchor="left" open={state.right} onClose={toggleDrawer('right', false)}>
+                <Sidebar onClose={toggleDrawer('right', false)} />
             </Drawer>
             {renderMobileMenu}
         </div>

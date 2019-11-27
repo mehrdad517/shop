@@ -7,7 +7,7 @@ import NavigationIcon from "@material-ui/icons/Navigation";
 import Container from "@material-ui/core/Container";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TextField from "@material-ui/core/TextField";
@@ -23,119 +23,18 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import SortIcon from '@material-ui/icons/Sort';
 import SyncIcon from '@material-ui/icons/Sync';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
-import {toast} from "react-toastify";
-import Api from "../../api";
+import Api from "../../../api";
 import Chip from "@material-ui/core/Chip";
 import moment from 'moment-jalaali'
 import DatePicker from 'react-datepicker2';
-import {delivery, items, status, transport} from "./helper";
+import {delivery, items, status, transport} from "../helper";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import {Link} from "react-router-dom";
-import ExcelDownload from './excel/excel'
+import ExcelDownload from '../excel/excel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-
-const top100Films = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
-    { title: 'The Dark Knight', year: 2008 },
-    { title: '12 Angry Men', year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: 'Pulp Fiction', year: 1994 },
-    { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
-    { title: 'The Good, the Bad and the Ugly', year: 1966 },
-    { title: 'Fight Club', year: 1999 },
-    { title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001 },
-    { title: 'Star Wars: Episode V - The Empire Strikes Back', year: 1980 },
-    { title: 'Forrest Gump', year: 1994 },
-    { title: 'Inception', year: 2010 },
-    { title: 'The Lord of the Rings: The Two Towers', year: 2002 },
-    { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-    { title: 'Goodfellas', year: 1990 },
-    { title: 'The Matrix', year: 1999 },
-    { title: 'Seven Samurai', year: 1954 },
-    { title: 'Star Wars: Episode IV - A New Hope', year: 1977 },
-    { title: 'City of God', year: 2002 },
-    { title: 'Se7en', year: 1995 },
-    { title: 'The Silence of the Lambs', year: 1991 },
-    { title: "It's a Wonderful Life", year: 1946 },
-    { title: 'Life Is Beautiful', year: 1997 },
-    { title: 'The Usual Suspects', year: 1995 },
-    { title: 'Léon: The Professional', year: 1994 },
-    { title: 'Spirited Away', year: 2001 },
-    { title: 'Saving Private Ryan', year: 1998 },
-    { title: 'Once Upon a Time in the West', year: 1968 },
-    { title: 'American History X', year: 1998 },
-    { title: 'Interstellar', year: 2014 },
-    { title: 'Casablanca', year: 1942 },
-    { title: 'City Lights', year: 1931 },
-    { title: 'Psycho', year: 1960 },
-    { title: 'The Green Mile', year: 1999 },
-    { title: 'The Intouchables', year: 2011 },
-    { title: 'Modern Times', year: 1936 },
-    { title: 'Raiders of the Lost Ark', year: 1981 },
-    { title: 'Rear Window', year: 1954 },
-    { title: 'The Pianist', year: 2002 },
-    { title: 'The Departed', year: 2006 },
-    { title: 'Terminator 2: Judgment Day', year: 1991 },
-    { title: 'Back to the Future', year: 1985 },
-    { title: 'Whiplash', year: 2014 },
-    { title: 'Gladiator', year: 2000 },
-    { title: 'Memento', year: 2000 },
-    { title: 'The Prestige', year: 2006 },
-    { title: 'The Lion King', year: 1994 },
-    { title: 'Apocalypse Now', year: 1979 },
-    { title: 'Alien', year: 1979 },
-    { title: 'Sunset Boulevard', year: 1950 },
-    { title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb', year: 1964 },
-    { title: 'The Great Dictator', year: 1940 },
-    { title: 'Cinema Paradiso', year: 1988 },
-    { title: 'The Lives of Others', year: 2006 },
-    { title: 'Grave of the Fireflies', year: 1988 },
-    { title: 'Paths of Glory', year: 1957 },
-    { title: 'Django Unchained', year: 2012 },
-    { title: 'The Shining', year: 1980 },
-    { title: 'WALL·E', year: 2008 },
-    { title: 'American Beauty', year: 1999 },
-    { title: 'The Dark Knight Rises', year: 2012 },
-    { title: 'Princess Mononoke', year: 1997 },
-    { title: 'Aliens', year: 1986 },
-    { title: 'Oldboy', year: 2003 },
-    { title: 'Once Upon a Time in America', year: 1984 },
-    { title: 'Witness for the Prosecution', year: 1957 },
-    { title: 'Das Boot', year: 1981 },
-    { title: 'Citizen Kane', year: 1941 },
-    { title: 'North by Northwest', year: 1959 },
-    { title: 'Vertigo', year: 1958 },
-    { title: 'Star Wars: Episode VI - Return of the Jedi', year: 1983 },
-    { title: 'Reservoir Dogs', year: 1992 },
-    { title: 'Braveheart', year: 1995 },
-    { title: 'M', year: 1931 },
-    { title: 'Requiem for a Dream', year: 2000 },
-    { title: 'Amélie', year: 2001 },
-    { title: 'A Clockwork Orange', year: 1971 },
-    { title: 'Like Stars on Earth', year: 2007 },
-    { title: 'Taxi Driver', year: 1976 },
-    { title: 'Lawrence of Arabia', year: 1962 },
-    { title: 'Double Indemnity', year: 1944 },
-    { title: 'Eternal Sunshine of the Spotless Mind', year: 2004 },
-    { title: 'Amadeus', year: 1984 },
-    { title: 'To Kill a Mockingbird', year: 1962 },
-    { title: 'Toy Story 3', year: 2010 },
-    { title: 'Logan', year: 2017 },
-    { title: 'Full Metal Jacket', year: 1987 },
-    { title: 'Dangal', year: 2016 },
-    { title: 'The Sting', year: 1973 },
-    { title: '2001: A Space Odyssey', year: 1968 },
-    { title: "Singin' in the Rain", year: 1952 },
-    { title: 'Toy Story', year: 1995 },
-    { title: 'Bicycle Thieves', year: 1948 },
-    { title: 'The Kid', year: 1921 },
-    { title: 'Inglourious Basterds', year: 2009 },
-    { title: 'Snatch', year: 2000 },
-    { title: '3 Idiots', year: 2009 },
-    { title: 'Monty Python and the Holy Grail', year: 1975 },
-];
+import zIndex from "@material-ui/core/styles/zIndex";
+import FindReplaceIcon from '@material-ui/icons/FindReplace';
+import EditIcon from '@material-ui/icons/Edit';
 
 class OrderList extends Component {
     constructor(props) {
@@ -154,19 +53,32 @@ class OrderList extends Component {
                 user_id: ''
             },
             page: 1,
-            limit: 50,
+            limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
 
-            status: status(),
-            transport: transport(),
-            delivery: delivery(),
-            items: items(),
+            status: [],
+            transport: [],
+            delivery: [],
+            items: [],
             options: [],
         }
     }
 
     componentDidMount() {
+
+        let instance = new Api();
+        instance.fetchOrderStatus().then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    status: response.order_status,
+                    transport: response.transport_status,
+                    delivery: response.delivery_status,
+                    items: response.items_status,
+                })
+            }
+        });
+
         this.handleRequest();
     }
 
@@ -180,7 +92,7 @@ class OrderList extends Component {
 
         this.handleRequest();
 
-    }
+    };
 
     async autoCompleteHandleChange(event)
     {
@@ -202,7 +114,8 @@ class OrderList extends Component {
         await new Promise((resolve => {
             resolve(this.setState({
                 limit: parseInt(limit),
-                page:  1
+                page:  1,
+                loading:true,
             }));
         }));
 
@@ -292,11 +205,10 @@ class OrderList extends Component {
     }
 
     render() {
-        if (this.state.loading) {
-            return (<CircularProgress color={"secondary"} />);
-        }
+
         return (
             <div className='content'>
+                <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
@@ -344,7 +256,7 @@ class OrderList extends Component {
                                         <Autocomplete
                                             onChange={((event, value) => this.autoCompleteHandleSelect(value ? value.id : ''))}
                                             options={this.state.options}
-                                            getOptionLabel={option => option.name + ' ' + option.mobile}
+                                            getOptionLabel={option => option.name + ' - ' + option.mobile}
                                             renderInput={params => (
                                                 <TextField
                                                     {...params}
@@ -377,7 +289,7 @@ class OrderList extends Component {
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
                                             {this.state.status.map((sts, key) => {
                                                 return(
-                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                    <MenuItem key={key} value={sts.key}>{sts.value}</MenuItem>
                                                 );
                                             })}
                                         </TextField>
@@ -399,7 +311,7 @@ class OrderList extends Component {
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
                                             {this.state.transport.map((sts, key) => {
                                                 return(
-                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                    <MenuItem key={key} value={sts.key}>{sts.value}</MenuItem>
                                                 );
                                             })}
                                         </TextField>
@@ -421,7 +333,7 @@ class OrderList extends Component {
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
                                             {this.state.delivery.map((sts, key) => {
                                                 return(
-                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                    <MenuItem key={key} value={sts.key}>{sts.value}</MenuItem>
                                                 );
                                             })}
                                         </TextField>
@@ -443,7 +355,7 @@ class OrderList extends Component {
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
                                             {this.state.items.map((sts, key) => {
                                                 return(
-                                                    <MenuItem key={key} value={key}>{sts.title}</MenuItem>
+                                                    <MenuItem key={key} value={sts.key}>{sts.value}</MenuItem>
                                                 );
                                             })}
                                         </TextField>
@@ -537,28 +449,28 @@ class OrderList extends Component {
                                 <tbody>
                                 {this.state.entities.data && this.state.entities.data.map(( entity, index) => {
                                     return(
-                                        <tr key={index}>
+                                        <tr className={ (parseInt(index)%2 === 0) ? 'animated slideInLeft' : 'animated slideInRight'} key={index}>
                                             <td>{entity.id}</td>
                                             <td>{entity.user ? entity.user.name : '-'}</td>
                                             <td>{entity.total_price}</td>
                                             <td>
                                                 <Tooltip title="وضعیت">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.status[entity.order_status.key].color}  label={entity.order_status.value} />
+                                                    <Chip size={"small"} variant={"outlined"} color={status()[entity.order_status.key].color}  label={entity.order_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="حمل و نقل">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.transport[entity.transport_status.key].color}  label={entity.transport_status.value} />
+                                                    <Chip size={"small"} variant={"outlined"} color={transport()[entity.transport_status.key].color}  label={entity.transport_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="تحویل">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.delivery[entity.delivery_status.key].color}  label={entity.delivery_status.value} />
+                                                    <Chip size={"small"} variant={"outlined"} color={delivery()[entity.delivery_status.key].color}  label={entity.delivery_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td>
                                                 <Tooltip title="سلامت کالا">
-                                                    <Chip size={"small"} variant={"outlined"} color={this.state.items[entity.items_status.key].color}  label={entity.items_status.value} />
+                                                    <Chip size={"small"} variant={"outlined"} color={items()[entity.items_status.key].color}  label={entity.items_status.value} />
                                                 </Tooltip>
                                             </td>
                                             <td style={{ direction:'rtl'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
@@ -570,6 +482,21 @@ class OrderList extends Component {
                                                         </IconButton>
                                                     </Link>
                                                 </Tooltip>
+                                                {this.props.auth.permissions && Boolean(this.props.auth.permissions.order.update.access) ? <Tooltip title="تغییر وضعیت">
+                                                    <Link to={`/orders/${entity.id}/edit-status`}>
+                                                        <IconButton>
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip> : ''}
+                                                {this.props.auth.permissions && Boolean(this.props.auth.permissions.order.fractiveRequest.access) ? <Tooltip title="کسری و معیوبی">
+                                                    <Link to={`/orders/${entity.id}/fractive-request`}>
+                                                        <IconButton>
+                                                            <FindReplaceIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip>: ''}
+
                                             </td>
                                         </tr>
                                     );
@@ -592,7 +519,9 @@ class OrderList extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        auth: state.auth
+    };
 }
 
 export default connect(

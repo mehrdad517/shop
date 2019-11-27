@@ -117,30 +117,26 @@ Route::group(['prefix' => '/backend'], function () {
         });
     });
 
-    Route::group(['prefix' => 'orders'], function () {
-        Route::get('/', 'Backend\OrderController@index');
-        Route::get('/{id}', 'Backend\OrderController@show');
+    Route::group(['prefix' => 'anbar'], function () {
+        Route::get('/', 'Backend\AnbarController@index');
     });
 
-    Route::group(['prefix' => '/users'], function () {
+    Route::group(['prefix' => 'orders'], function () {
 
-        Route::group(['prefix' => '/permissions'], function () {
-            Route::get('/initial', 'Backend\PermissionController@initial');
-            Route::get('/', 'Backend\PermissionController@index');
+        Route::get('/status', function () {
+            $list = [
+              'order_status' => \App\Order::status(),
+              'transport_status' => \App\Order::transport(),
+              'delivery_status' => \App\Order::delivery(),
+              'items_status' => \App\Order::items(),
+            ];
+            return response($list);
         });
 
-        Route::group(['prefix' => '/roles'], function () {
-            Route::get('/', 'Backend\RoleController@index');
-            Route::post('/', 'Backend\RoleController@store');
-        });
-
-        Route::get('/', 'Backend\UserController@index');
-        Route::post('/', 'Backend\UserController@store');
-        Route::get('/{id}', 'Backend\UserController@show');
-        Route::put('/{id}', 'Backend\UserController@update');
-        Route::put('/{id}/change/password', 'Backend\UserController@changePassword');
-        Route::put('/{id}/change/status', 'Backend\UserController@changeStatus');
-
+        Route::get('/', 'Backend\OrderController@index');
+        Route::get('/{id}', 'Backend\OrderController@show');
+        Route::put('/{id}', 'Backend\OrderController@update');
+        Route::post('/{id}/fractive-request', 'Backend\OrderController@fractiveRequest');
     });
 
     Route::group([ 'prefix' => '/products'], function () {
@@ -179,6 +175,34 @@ Route::group(['prefix' => '/backend'], function () {
         Route::get('/{id}/pins', 'Backend\ProductController@pins');
         Route::post('/{id}/pins', 'Backend\ProductController@storePins');
     });
+
+    Route::group(['prefix' => '/users'], function () {
+
+
+        Route::group(['prefix' => '/permissions'], function () {
+            Route::get('/initial', 'Backend\PermissionController@initial');
+            Route::get('/', 'Backend\PermissionController@index');
+        });
+
+        Route::group(['prefix' => '/roles'], function () {
+            Route::get('/{role}/permissions', 'Backend\RoleController@permissions');
+            Route::put('/{role}/permissions', 'Backend\RoleController@setPermission');
+            Route::get('/', 'Backend\RoleController@index');
+            Route::post('/', 'Backend\RoleController@store');
+        });
+
+
+        Route::get('/', 'Backend\UserController@index');
+        Route::post('/', 'Backend\UserController@store');
+        Route::get('/{id}', 'Backend\UserController@show');
+        Route::put('/{id}', 'Backend\UserController@update');
+        Route::put('/{id}/change-password', 'Backend\UserController@changePassword');
+        Route::put('/{id}/change-status', 'Backend\UserController@changeStatus');
+
+
+
+    });
+
 
 });
 

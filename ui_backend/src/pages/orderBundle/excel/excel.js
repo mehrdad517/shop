@@ -10,19 +10,22 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 class ExcelDownload extends React.Component {
     render() {
         const data = [];
-        this.props.data.map((item, key) => {
-            data[key] = {
-                'id' : item.id,
-                'user_name': item.user.name,
-                'user_mobile': item.user.mobile,
-                'tax': item.tax,
-                'pure_price': item.pure_price,
-                'total_price': item.total_price,
-                'post_cost': item.post_cost,
-                'status': item.order_status.value,
-                'discount': item.discount
-            };
-        });
+        if (this.props.data) {
+
+            this.props.data.map((item, key) => {
+                data[key] = {
+                    'id' : item.id,
+                    'user_name': item.user.name,
+                    'user_mobile': item.user.mobile,
+                    'tax': item.tax,
+                    'pure_price': item.pure_price,
+                    'total_price': item.total_price,
+                    'post_cost': item.post_cost,
+                    'status': item.order_status.value,
+                    'discount': item.discount
+                };
+            });
+        }
 
         return (
             <ExcelFile element={<Tooltip title="خروجی اکسل">

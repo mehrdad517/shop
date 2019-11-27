@@ -3,8 +3,7 @@ export function status(key = null) {
         {'title' : 'در انتظار', 'color' : 'secondary'},
         {'title' : 'تایید شده', 'color' : 'primary'},
         {'title' : 'لغو شده', 'color' : 'secondary'},
-        {'title' : 'مرجوعی', 'color' : 'secondary'},
-        {'title' : 'تعدیلی', 'color' : 'primary'},
+        {'title' : 'رایگان', 'color' : 'secondary'},
     ];
 
     if (key != null) {
@@ -36,6 +35,7 @@ export function delivery(key = null) {
         {'title' : 'تحویل مشتری', 'color': 'primary'},
         {'title' : 'تحویل پست', 'color' : 'secondary'},
         {'title' : 'بازگشت به انبار', 'color' : 'secondary'},
+        {'title' : 'مرجوعی', 'color' : 'secondary'},
     ];
 
     if (key != null) {

@@ -10,7 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import Api from "../../../api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {fetchUser} from "../../../actions/userBundleAction";
-import {FETCH_USER} from "../../../actions/actionTypes";
+import {FETCH_USER} from "./../../../actionTypes";
 
 
 class ChangePassword extends Component {
