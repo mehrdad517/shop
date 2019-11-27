@@ -1,6 +1,6 @@
 import React from 'react';
 import {Provider} from "react-redux";
-import store from "./store";
+
 import {BrowserRouter, Route} from 'react-router-dom';
 
 import Main from './pages/main'
@@ -34,11 +34,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProductPins from "./pages/productBundle/product/pins";
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
 import { create } from 'jss';
 import rtl from 'jss-rtl';
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
-import {authPermissions} from "./actions/auth";
 
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import {store, persistor} from "./store";
 
 const theme = createMuiTheme({
     direction: "rtl",
@@ -59,17 +61,18 @@ function App() {
     return (
         <BrowserRouter>
             <Provider store={store}>
+                <PersistGate persistor={persistor}>
                 <StylesProvider jss={jss}>
                     <MuiThemeProvider theme = { theme }>
                         <MainLayout>
                             <Route component={Main} path='/' exact={true} />
-                            <Route component={OrderList} path='/orders' />
-                            <Route component={AnbarList} path='/anbar' />
+                            <Route component={OrderList} path='/orders' exact={true} />
+                            <Route component={AnbarList} path='/anbar' exact={true} />
                             <Route component={OrderView} path='/orders/:id' />
                             <Route component={OrderFractiveRequest} path='/orders/:id/fractive-request' />
                             <Route component={OrderEditStatus} path='/orders/:id/edit-status' />
 
-                            <Route component={ProductList} path='/products' />
+                            <Route component={ProductList} path='/products' exact={true} />
                             <Route component={CreateProduct} path='/products/create' />
                             <Route component={EditProduct} path='/products/edit/:id' />
                             <Route component={ProductPins} path='/products/pins/:id' />
@@ -94,6 +97,7 @@ function App() {
                                         pauseOnHover />
                     </MuiThemeProvider>
                 </StylesProvider>
+                </PersistGate>
             </Provider>
         </BrowserRouter>
     );

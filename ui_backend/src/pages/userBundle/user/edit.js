@@ -113,7 +113,7 @@ class UserEdit extends Component {
                                         shrink: true,
                                     }}
                                 >
-                                    {this.props.states.roles && this.props.states.roles.map((role, index) => {
+                                    {this.props.roles && this.props.roles.map((role, index) => {
                                         return <MenuItem key={index} value={role.key}>{role.title ? role.title : role.key}</MenuItem>
                                     })}
                                 </TextField>
@@ -138,9 +138,7 @@ class UserEdit extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        states: state.userBundleReducer
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {

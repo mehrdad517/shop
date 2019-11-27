@@ -92,10 +92,13 @@ class Acl extends Component {
     };
 
     handleRoleChange(event) {
+        let val = event.target.value;
         this.setState({
            loading : true,
+            form: {
+                role_key: val
+            },
         });
-        let val = event.target.value;
         this.state.checkedItems.forEach((key, value) => {
             this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(value, false)}));
         });
@@ -109,9 +112,7 @@ class Acl extends Component {
                 });
             });
             this.setState({
-                form: {
-                    role_key: val
-                },
+
                 permissions: response,
                 loading: false
             });

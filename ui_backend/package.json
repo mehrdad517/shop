@@ -33,6 +33,7 @@
     "react-toastify": "^5.4.1",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
+    "redux-persist": "^6.0.0",
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
     "shabnam-font": "^4.0.0",

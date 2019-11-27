@@ -396,7 +396,7 @@ class Api {
 
     // change password
     async  changePasswordUser(id, object) {
-        return  axios.put(`http://localhost:8000/api/backend/users/${id}/change/password`, object, {
+        return  axios.put(`http://localhost:8000/api/backend/users/${id}/change-password`, object, {
             headers: this.haeders()
         }).then((response) => {
             return this.dispatchResponse(response);
@@ -407,7 +407,7 @@ class Api {
 
     // change password
     async  changeStatus(id, object) {
-        return  axios.put(`http://localhost:8000/api/backend/users/${id}/change/status`, object, {
+        return  axios.put(`http://localhost:8000/api/backend/users/${id}/change-status`, object, {
             headers: this.haeders()
         }).then((response) => {
             return this.dispatchResponse(response);

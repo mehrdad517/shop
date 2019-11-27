@@ -13,6 +13,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { fetchUsers} from "../../../actions/userBundleAction";
 import Api from "../../../api";
+import {toast} from "react-toastify";
 
 class UserCreate extends Component {
 
@@ -45,23 +46,17 @@ class UserCreate extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         this.api.createUser(this.state.form).then((response) => {
-            if (response.status) {
-                this.setState({
-                    open: false,
-                    snackbar: {
-                        open: true,
-                        msg: response.msg,
-                    }
-                }, () => {
-                    this.props.fetchUsers();
-                });
-            } else {
-                this.setState({
-                    snackbar: {
-                        open: true,
-                        msg: response.msg,
-                    }
-                });
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    toast.success(response.msg);
+                    this.setState({
+                        open: false,
+                    }, () => {
+                        this.props.handleRequest();
+                    });
+                } else {
+                   toast.error(response.msg);
+                }
             }
         }).catch((error) => {
             console.log(error);
@@ -169,17 +164,11 @@ class UserCreate extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        states: state.userBundleReducer
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchUsers: function (request) {
-            dispatch(fetchUsers());
-        }
-    }
+    return {}
 }
 
 export default connect(

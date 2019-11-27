@@ -40,14 +40,12 @@ class UserList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
+            users: [],
+            roles: [],
             editDialog: false,
             changePasswordDialog: false,
             user_id: null,
-            snackbar: {
-                open: false,
-                msg: ''
-            },
             filter: {
                 role_key: 0,
                 status: -1
@@ -64,7 +62,6 @@ class UserList extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchRoles();
         this.handleRequest()
     }
 
@@ -74,7 +71,8 @@ class UserList extends Component {
         await new Promise((resolve => {
             resolve(this.setState({
                 limit: parseInt(limit),
-                page:  1
+                page:  1,
+                loading: true,
             }));
         }));
 
@@ -121,44 +119,56 @@ class UserList extends Component {
         await this.handleRequest()
     }
 
-    changeStatus(id, status) {
+    changeStatus(id, status)
+    {
+        this.setState({
+            loading:true
+        });
+
         this.api.changeStatus(id, {'status' : status}).then((response) => {
-            if (response.status) {
-                this.handleRequest();
-            }
-            this.setState({
-                snackbar: {
-                    open: true,
-                    msg: response.msg
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    this.handleRequest();
                 }
-            });
+            }
         }).catch((error) => {
             console.log(error);
         })
     }
 
     async handleRequest() {
-            await this.props.fetchUsers({
-                search: this.state.filter,
-                page: this.state.page,
-                limit: this.state.limit,
-                sort_field: this.state.sort_field,
-                sort_type: this.state.sort_type
-            });
+        let roles ;
+        let users ;
+        await this.api.fetchRoles().then((response) => {
+            if (typeof response != "undefined") {
+                roles = response
+            }
+        });
 
-        await new Promise(resolve => {
-            resolve(this.setState({
-                loading: true
-            }));
+        await this.api.fetchUsers({
+            search: this.state.filter,
+            sort_field: this.state.sort_field,
+            sort_type: this.state.sort_type,
+            page: this.state.page,
+            limit: this.state.limit
+        }).then((response) => {
+            if (typeof response != "undefined") {
+                users = response
+            }
+        });
+
+        await this.setState({
+            loading: false,
+            users,
+            roles,
         })
+
     }
 
     render() {
-        if (typeof this.props.entities.users.data === "undefined") {
-            return (<CircularProgress color='secondary' />);
-        }
         return (
             <div className='content'>
+                <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
@@ -230,7 +240,7 @@ class UserList extends Component {
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         >
                                             <MenuItem key={0} value={0}>انتخاب</MenuItem>
-                                            {this.props.entities.roles && this.props.entities.roles.map((role, index) => {
+                                            {this.state.roles && this.state.roles.map((role, index) => {
                                                 return <MenuItem key={index} value={role.key}>{role.title ? role.title : role.key}</MenuItem>
                                             })}
                                         </TextField>
@@ -286,8 +296,8 @@ class UserList extends Component {
                             <Grid item xs={8} sm={6}>
                                 <Pagination
                                     activePage={this.state.page}
-                                    itemsCountPerPage={this.props.entities.users.per_page}
-                                    totalItemsCount={this.props.entities.users.total}
+                                    itemsCountPerPage={this.state.users.per_page}
+                                    totalItemsCount={this.state.users.total}
                                     pageRangeDisplayed={5}
                                     onChange={this.handlePageChange.bind(this)}
                                 />
@@ -297,11 +307,12 @@ class UserList extends Component {
                     <Box>
                         <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
                             <Tooltip title="سینک">
-                                <IconButton onClick={() => this.props.fetchUsers()} >
+                                <IconButton onClick={() => this.handleRequest()} >
                                     <SyncIcon />
                                 </IconButton>
                             </Tooltip>
-                            <UserCreate roles={this.props.entities.roles} />
+                            {Boolean(this.props.auth.permissions.user.store.access) ? <UserCreate handleRequest={() => this.handleRequest()} roles={this.state.roles} />: ''}
+
                         </div>
                         <div style={{ overflowX: 'auto'}}>
                             <table className='table'>
@@ -311,13 +322,13 @@ class UserList extends Component {
                                     <th onClick={() => this.handleChangeSort('name')}>نام &nbsp;{this.state.sort_field === 'name' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('role_key')}>نقش&nbsp;{this.state.sort_field === 'role_key' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('mobile')}>موبایل&nbsp;{this.state.sort_field === 'mobile' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('craeted_at')}>تاریخ ثبت نام&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ثبت نام&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.props.entities.users.data && this.props.entities.users.data.map((user, index) => {
+                                {this.state.users.data && this.state.users.data.map((user, index) => {
                                     return(
                                         <tr key={index}>
                                             <td>{user.id}</td>
@@ -326,23 +337,23 @@ class UserList extends Component {
                                             <td>{user.mobile}</td>
                                             <td>{user.created_at}</td>
                                             <td>
-                                                <Tooltip title="تغییر وضعیت">
+                                                {Boolean(this.props.auth.permissions.user.changeStatus.access) ? <Tooltip title="تغییر وضعیت">
                                                     <IconButton onClick={() => this.changeStatus(user.id, !user.status)}>
                                                         {user.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }
                                                     </IconButton>
-                                                </Tooltip>
+                                                </Tooltip>: ''}
                                             </td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
-                                                <Tooltip title="ویرایش کاربر">
+                                                {Boolean(this.props.auth.permissions.user.update.access) ?  <Tooltip title="ویرایش کاربر">
                                                     <IconButton onClick={() =>this.setState({ editDialog: true, user_id: user.id})}>
                                                         <AccountBoxTwoToneIcon />
                                                     </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="تغییر رمز عبور">
+                                                </Tooltip>: '' }
+                                                {Boolean(this.props.auth.permissions.user.changePassword.access) ? <Tooltip title="تغییر رمز عبور">
                                                     <IconButton onClick={() =>this.setState({ changePasswordDialog: true, user_id: user.id})}>
                                                         <LockTwoToneIcon />
                                                     </IconButton>
-                                                </Tooltip>
+                                                </Tooltip>: '' }
                                             </td>
                                         </tr>
                                     );
@@ -352,25 +363,19 @@ class UserList extends Component {
                         </div>
                         <Pagination
                             activePage={this.state.page}
-                            itemsCountPerPage={this.props.entities.users.per_page}
-                            totalItemsCount={this.props.entities.users.total}
+                            itemsCountPerPage={this.state.users.per_page}
+                            totalItemsCount={this.state.users.total}
                             pageRangeDisplayed={5}
                             onChange={this.handlePageChange.bind(this)}
                         />
                     </Box>
                 </Container>
                 <Dialog open={this.state.editDialog}  onClose={() => this.setState({editDialog: false})}>
-                    <UserEdit id={this.state.user_id}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({editDialog: false})} />
+                    <UserEdit id={this.state.user_id} roles={this.state.roles}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({editDialog: false})} />
                 </Dialog>
                 <Dialog open={this.state.changePasswordDialog}  onClose={() => this.setState({changePasswordDialog: false})}>
                     <ChangePassword id={this.state.user_id}  onClose={() => this.setState({changePasswordDialog: false})} />
                 </Dialog>
-                <Snackbar
-                    autoHideDuration={4500}
-                    open={this.state.snackbar.open}
-                    message={this.state.snackbar.msg}
-                    onClose={() => this.setState({snackbar:{open: false,msg: ''}})}
-                />
             </div>
         );
     }
@@ -378,21 +383,12 @@ class UserList extends Component {
 
 function mapStateToProps(state) {
     return {
-        entities: state.userBundleReducer
+        auth: state.auth
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchUsers: async function (request) {
-            await new Promise(resolve => {
-                resolve(dispatch(fetchUsers(request)))
-            });
-        },
-        fetchRoles: function () {
-            dispatch(fetchRoles());
-        }
-    }
+    return {}
 }
 
 export default connect(

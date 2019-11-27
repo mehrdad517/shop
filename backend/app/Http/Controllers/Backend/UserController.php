@@ -38,12 +38,12 @@ class UserController extends Controller
                     $q->where('role_key', $filter['role_key']);
                 }
 
-                if (@$filter['status']) {
+
                     if (@$filter['status'] != -1) {
 
                         $q->where('status', $filter['status']);
                     }
-                }
+
             }
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
             ->paginate($request->get('limit') ?? 10);

@@ -11,6 +11,7 @@ import Api from "../../../api";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {fetchUser} from "../../../actions/userBundleAction";
 import {FETCH_USER} from "./../../../actionTypes";
+import {toast} from "react-toastify";
 
 
 class ChangePassword extends Component {
@@ -21,18 +22,9 @@ class ChangePassword extends Component {
             form: {
                 password: ''
             },
-            snackbar: {
-                open: false,
-                msg: ''
-            },
         };
 
         this.api = new Api();
-    }
-
-    componentDidMount() {
-        this.props.resetUser();
-        this.props.fetchUser(this.props.id)
     }
 
     handleChangeElement(event) {
@@ -46,16 +38,18 @@ class ChangePassword extends Component {
     async handleSubmit(event) {
         event.preventDefault();
         this.api.changePasswordUser(this.props.id ,this.state.form).then((response) => {
-            this.setState({
-                snackbar: {
-                    open: true,
-                    msg: response.msg,
-                }
-            });
+            if (typeof response != "undefined") {
 
-            setTimeout( () => {
-                this.props.onClose();
-            }, 500)
+                if (response.status) {
+                    toast.success(response.msg);
+                    setTimeout( () => {
+                        this.props.onClose();
+                    }, 500)
+                } else {
+                    toast.error(response.msg)
+                }
+
+            }
 
         }).catch((error) => {
             console.log(error);
@@ -63,12 +57,9 @@ class ChangePassword extends Component {
     }
 
     render() {
-        if (!this.props.states.user) {
-            return ( <div><DialogContent style={{ minHeight: '300px', width: '300px'}}><CircularProgress /></DialogContent></div>);
-        }
         return (
             <div>
-                <DialogTitle id="alert-dialog-title">کاربر <span>{this.props.states.user.name}</span></DialogTitle>
+                <DialogTitle id="alert-dialog-title">تغییر رمز عبور</DialogTitle>
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <DialogContent>
                         <Grid container spacing={2}>
@@ -94,32 +85,17 @@ class ChangePassword extends Component {
                         </Button>
                     </DialogActions>
                 </form>
-                <Snackbar
-                    autoHideDuration={4500}
-                    open={this.state.snackbar.open}
-                    message={this.state.snackbar.msg}
-                    onClose={() => this.setState({snackbar:{open: false,msg: ''}})}
-                />
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    return {
-        states: state.userBundleReducer
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        fetchUser: function (id) {
-            dispatch(fetchUser(id))
-        },
-        resetUser: function () {
-            dispatch({type: FETCH_USER, payload: null});
-        }
-    }
+    return {}
 }
 
 export default connect(
