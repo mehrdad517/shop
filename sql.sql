@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         localhost
+-- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `brand` (
   UNIQUE KEY `brand_slug_unique` (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.brand: ~1 rows (approximately)
+-- Dumping data for table 517_shop.brand: ~0 rows (approximately)
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
 INSERT INTO `brand` (`id`, `title`, `slug`, `content`, `meta_title`, `meta_description`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 'مای', 'سمعل', 'سیبسی', NULL, NULL, 1, '2019-11-10 11:57:50', '2019-11-10 11:57:50');
@@ -779,7 +779,7 @@ CREATE TABLE IF NOT EXISTS `order_fractive_request` (
   CONSTRAINT `FK_order_request__order` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci COMMENT='این جدول درخواست اپراتور به انباردار برای مشخص کردن کسری و یا معیوبی است.کلمه اخر نام جدول ترکیب کسری و معیوبی است.';
 
--- Dumping data for table 517_shop.order_fractive_request: ~1 rows (approximately)
+-- Dumping data for table 517_shop.order_fractive_request: ~0 rows (approximately)
 /*!40000 ALTER TABLE `order_fractive_request` DISABLE KEYS */;
 INSERT INTO `order_fractive_request` (`order_id`, `product_pins`, `document`, `status`, `type`, `post_barcode`, `order_weight`, `created_at`, `updated_at`) VALUES
 	(1, '[{"product":{"id":1,"title":"\\u0645\\u062d\\u0635\\u0648\\u0644 \\u0634\\u0645\\u0627\\u0631\\u0647 \\u06cc\\u06a9"},"attributes":[],"brand":{"id":1,"title":"\\u0645\\u0627\\u06cc"},"count":5,"price":"100,000","discount":"0","fractional_count":1,"defactive_count":0,"total":"500,000"},{"product":{"id":2,"title":"\\u0645\\u062d\\u0635\\u0648\\u0644 \\u0634\\u0645\\u0627\\u0631 \\u062f\\u0648"},"attributes":[],"brand":{"id":1,"title":"\\u0645\\u0627\\u06cc"},"count":2,"price":"20,000","discount":"0","fractional_count":0,"defactive_count":0,"total":"40,000"}]', NULL, 0, 0, NULL, NULL, '2019-11-21 15:16:08', '2019-11-21 15:16:08');
@@ -1701,43 +1701,44 @@ CREATE TABLE IF NOT EXISTS `permission` (
 -- Dumping data for table 517_shop.permission: ~37 rows (approximately)
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` (`key`, `title`, `url`, `method`, `parent`, `created_at`, `updated_at`) VALUES
-	('api_backend_anbar_index', 'فارسی', '/api/backend/anbar', 'GET', 'anbar', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_orders_fractiveRequest', 'api_backend_orders_fractiveRequest', '/api/backend/orders/{id}/fractive-request', 'POST', 'order', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_orders_index', 'api_backend_orders_index', '/api/backend/orders', 'GET', 'order', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_orders_show', 'api_backend_orders_show', '/api/backend/orders/{id}', 'GET', 'order', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_orders_update', 'api_backend_orders_update', '/api/backend/orders/{id}', 'PUT', 'order', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_attributes_index', 'api_backend_products_attributes_index', '/api/backend/products/attributes', 'GET', 'groupAttribute', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_attributes_show', 'api_backend_products_attributes_show', '/api/backend/products/attributes/{id}', 'GET', 'groupAttribute', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_attributes_store', 'api_backend_products_attributes_store', '/api/backend/products/attributes', 'POST', 'groupAttribute', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_attributes_update', 'api_backend_products_attributes_update', '/api/backend/products/attributes/{id}', 'PUT', 'groupAttribute', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_brands_index', 'api_backend_products_brands_index', '/api/backend/products/brands', 'GET', 'brand', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_brands_show', 'api_backend_products_brands_show', '/api/backend/products/brands/{id}', 'GET', 'brand', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_brands_store', 'api_backend_products_brands_store', '/api/backend/products/brands', 'POST', 'brand', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_brands_update', 'api_backend_products_brands_update', '/api/backend/products/brands/{id}', 'PUT', 'brand', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_categories_getAttributes', 'api_backend_products_categories_getAttributes', '/api/backend/products/categories/{id}/attributes', 'GET', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_categories_index', 'api_backend_products_categories_index', '/api/backend/products/categories', 'GET', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_categories_show', 'api_backend_products_categories_show', '/api/backend/products/categories/{id}', 'GET', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_categories_store', 'api_backend_products_categories_store', '/api/backend/products/categories', 'POST', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_categories_storeAttributes', 'api_backend_products_categories_storeAttributes', '/api/backend/products/categories/{id}/attributes', 'POST', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_categories_update', 'api_backend_products_categories_update', '/api/backend/products/categories/{id}', 'PUT', 'productCategory', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_products_changeStatus', 'api_backend_products_changeStatus', '/api/backend/products/{id}/change/status', 'PUT', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_index', 'api_backend_products_index', '/api/backend/products', 'GET', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_pins', 'api_backend_products_pins', '/api/backend/products/{id}/pins', 'GET', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_productAttributes', 'api_backend_products_productAttributes', '/api/backend/products/{id}/categories/{categories}/attributes', 'GET', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_show', 'api_backend_products_show', '/api/backend/products/{id}', 'GET', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_store', 'api_backend_products_store', '/api/backend/products', 'POST', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_storePins', 'api_backend_products_storePins', '/api/backend/products/{id}/pins', 'POST', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_products_update', 'api_backend_products_update', '/api/backend/products/{id}', 'PUT', 'product', '2019-11-23 09:45:47', '2019-11-23 09:45:47'),
-	('api_backend_users_changePassword', 'api_backend_users_changePassword', '/api/backend/users/{id}/change/password', 'PUT', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_changeStatus', 'api_backend_users_changeStatus', '/api/backend/users/{id}/change/status', 'PUT', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_index', 'api_backend_users_index', '/api/backend/users', 'GET', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_permissions_index', 'api_backend_users_permissions_index', '/api/backend/users/permissions', 'GET', 'permission', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_permissions_initial', 'api_backend_users_permissions_initial', '/api/backend/users/permissions/initial', 'GET', 'permission', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_roles_index', 'api_backend_users_roles_index', '/api/backend/users/roles', 'GET', 'role', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_roles_store', 'api_backend_users_roles_store', '/api/backend/users/roles', 'POST', 'role', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_show', 'api_backend_users_show', '/api/backend/users/{id}', 'GET', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_store', 'api_backend_users_store', '/api/backend/users', 'POST', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46'),
-	('api_backend_users_update', 'api_backend_users_update', '/api/backend/users/{id}', 'PUT', 'user', '2019-11-23 09:45:46', '2019-11-23 09:45:46');
+	('api_backend_anbar_index', 'api_backend_anbar_index', '/api/backend/anbar', 'GET', 'anbar', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_orders_fractiveRequest', 'api_backend_orders_fractiveRequest', '/api/backend/orders/{id}/fractive-request', 'POST', 'order', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_orders_index', 'api_backend_orders_index', '/api/backend/orders', 'GET', 'order', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_orders_show', 'api_backend_orders_show', '/api/backend/orders/{id}', 'GET', 'order', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_orders_update', 'api_backend_orders_update', '/api/backend/orders/{id}', 'PUT', 'order', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_attributes_index', 'api_backend_products_attributes_index', '/api/backend/products/attributes', 'GET', 'groupAttribute', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_attributes_show', 'api_backend_products_attributes_show', '/api/backend/products/attributes/{id}', 'GET', 'groupAttribute', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_attributes_store', 'api_backend_products_attributes_store', '/api/backend/products/attributes', 'POST', 'groupAttribute', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_attributes_update', 'api_backend_products_attributes_update', '/api/backend/products/attributes/{id}', 'PUT', 'groupAttribute', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_brands_index', 'api_backend_products_brands_index', '/api/backend/products/brands', 'GET', 'brand', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_brands_show', 'api_backend_products_brands_show', '/api/backend/products/brands/{id}', 'GET', 'brand', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_brands_store', 'api_backend_products_brands_store', '/api/backend/products/brands', 'POST', 'brand', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_brands_update', 'api_backend_products_brands_update', '/api/backend/products/brands/{id}', 'PUT', 'brand', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_categories_getAttributes', 'api_backend_products_categories_getAttributes', '/api/backend/products/categories/{id}/attributes', 'GET', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_categories_index', 'api_backend_products_categories_index', '/api/backend/products/categories', 'GET', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_categories_show', 'api_backend_products_categories_show', '/api/backend/products/categories/{id}', 'GET', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_categories_store', 'api_backend_products_categories_store', '/api/backend/products/categories', 'POST', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_categories_storeAttributes', 'api_backend_products_categories_storeAttributes', '/api/backend/products/categories/{id}/attributes', 'POST', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_categories_update', 'api_backend_products_categories_update', '/api/backend/products/categories/{id}', 'PUT', 'productCategory', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_products_changeStatus', 'api_backend_products_changeStatus', '/api/backend/products/{id}/change/status', 'PUT', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_index', 'api_backend_products_index', '/api/backend/products', 'GET', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_pins', 'api_backend_products_pins', '/api/backend/products/{id}/pins', 'GET', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_productAttributes', 'api_backend_products_productAttributes', '/api/backend/products/{id}/categories/{categories}/attributes', 'GET', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_show', 'api_backend_products_show', '/api/backend/products/{id}', 'GET', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_store', 'api_backend_products_store', '/api/backend/products', 'POST', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_storePins', 'api_backend_products_storePins', '/api/backend/products/{id}/pins', 'POST', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_products_update', 'api_backend_products_update', '/api/backend/products/{id}', 'PUT', 'product', '2019-11-26 18:08:53', '2019-11-26 18:08:53'),
+	('api_backend_users_changePassword', 'api_backend_users_changePassword', '/api/backend/users/{id}/change-password', 'PUT', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_changeStatus', 'api_backend_users_changeStatus', '/api/backend/users/{id}/change-status', 'PUT', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_index', 'api_backend_users_index', '/api/backend/users', 'GET', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_permissions_index', 'api_backend_users_permissions_index', '/api/backend/users/permissions', 'GET', 'permission', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_permissions_initial', 'api_backend_users_permissions_initial', '/api/backend/users/permissions/initial', 'GET', 'permission', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_roles_index', 'api_backend_users_roles_index', '/api/backend/users/roles', 'GET', 'role', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_roles_permissions', 'api_backend_users_roles_permissions', '/api/backend/users/roles/{role}/permissions', 'GET', 'role', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_roles_store', 'api_backend_users_roles_store', '/api/backend/users/roles', 'POST', 'role', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_show', 'api_backend_users_show', '/api/backend/users/{id}', 'GET', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_store', 'api_backend_users_store', '/api/backend/users', 'POST', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52'),
+	('api_backend_users_update', 'api_backend_users_update', '/api/backend/users/{id}', 'PUT', 'user', '2019-11-26 18:08:52', '2019-11-26 18:08:52');
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.permission_role
@@ -1753,8 +1754,98 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 -- Dumping data for table 517_shop.permission_role: ~2 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
+	('admin', 'api_backend_anbar_index'),
+	('admin', 'api_backend_orders_fractiveRequest'),
 	('admin', 'api_backend_orders_index'),
-	('admin', 'api_backend_orders_show');
+	('admin', 'api_backend_orders_show'),
+	('admin', 'api_backend_orders_update'),
+	('admin', 'api_backend_products_attributes_index'),
+	('admin', 'api_backend_products_attributes_show'),
+	('admin', 'api_backend_products_attributes_store'),
+	('admin', 'api_backend_products_attributes_update'),
+	('admin', 'api_backend_products_brands_index'),
+	('admin', 'api_backend_products_brands_show'),
+	('admin', 'api_backend_products_brands_store'),
+	('admin', 'api_backend_products_brands_update'),
+	('admin', 'api_backend_products_categories_getAttributes'),
+	('admin', 'api_backend_products_categories_index'),
+	('admin', 'api_backend_products_categories_show'),
+	('admin', 'api_backend_products_categories_store'),
+	('admin', 'api_backend_products_categories_storeAttributes'),
+	('admin', 'api_backend_products_categories_update'),
+	('admin', 'api_backend_products_changeStatus'),
+	('admin', 'api_backend_products_index'),
+	('admin', 'api_backend_products_pins'),
+	('admin', 'api_backend_products_productAttributes'),
+	('admin', 'api_backend_products_show'),
+	('admin', 'api_backend_products_store'),
+	('admin', 'api_backend_products_storePins'),
+	('admin', 'api_backend_products_update'),
+	('admin', 'api_backend_users_changePassword'),
+	('admin', 'api_backend_users_changeStatus'),
+	('admin', 'api_backend_users_index'),
+	('admin', 'api_backend_users_permissions_index'),
+	('admin', 'api_backend_users_permissions_initial'),
+	('admin', 'api_backend_users_roles_index'),
+	('admin', 'api_backend_users_roles_permissions'),
+	('admin', 'api_backend_users_roles_store'),
+	('admin', 'api_backend_users_show'),
+	('admin', 'api_backend_users_store'),
+	('admin', 'api_backend_users_update'),
+	('super_admin', 'api_backend_anbar_index'),
+	('super_admin', 'api_backend_orders_fractiveRequest'),
+	('super_admin', 'api_backend_orders_index'),
+	('super_admin', 'api_backend_orders_show'),
+	('super_admin', 'api_backend_orders_update'),
+	('super_admin', 'api_backend_products_attributes_index'),
+	('super_admin', 'api_backend_products_attributes_show'),
+	('super_admin', 'api_backend_products_attributes_store'),
+	('super_admin', 'api_backend_products_attributes_update'),
+	('super_admin', 'api_backend_products_brands_index'),
+	('super_admin', 'api_backend_products_brands_show'),
+	('super_admin', 'api_backend_products_brands_store'),
+	('super_admin', 'api_backend_products_brands_update'),
+	('super_admin', 'api_backend_products_categories_getAttributes'),
+	('super_admin', 'api_backend_products_categories_index'),
+	('super_admin', 'api_backend_products_categories_show'),
+	('super_admin', 'api_backend_products_categories_store'),
+	('super_admin', 'api_backend_products_categories_storeAttributes'),
+	('super_admin', 'api_backend_products_categories_update'),
+	('super_admin', 'api_backend_products_changeStatus'),
+	('super_admin', 'api_backend_products_index'),
+	('super_admin', 'api_backend_products_pins'),
+	('super_admin', 'api_backend_products_productAttributes'),
+	('super_admin', 'api_backend_products_show'),
+	('super_admin', 'api_backend_products_store'),
+	('super_admin', 'api_backend_products_storePins'),
+	('super_admin', 'api_backend_products_update'),
+	('super_admin', 'api_backend_users_changePassword'),
+	('super_admin', 'api_backend_users_changeStatus'),
+	('super_admin', 'api_backend_users_index'),
+	('super_admin', 'api_backend_users_permissions_index'),
+	('super_admin', 'api_backend_users_permissions_initial'),
+	('super_admin', 'api_backend_users_roles_index'),
+	('super_admin', 'api_backend_users_roles_permissions'),
+	('super_admin', 'api_backend_users_roles_store'),
+	('super_admin', 'api_backend_users_show'),
+	('super_admin', 'api_backend_users_store'),
+	('super_admin', 'api_backend_users_update'),
+	('ttt', 'api_backend_orders_fractiveRequest'),
+	('ttt', 'api_backend_orders_index'),
+	('ttt', 'api_backend_orders_show'),
+	('ttt', 'api_backend_orders_update'),
+	('ttt', 'api_backend_products_categories_getAttributes'),
+	('ttt', 'api_backend_products_categories_index'),
+	('ttt', 'api_backend_products_categories_show'),
+	('ttt', 'api_backend_products_categories_store'),
+	('ttt', 'api_backend_products_categories_storeAttributes'),
+	('ttt', 'api_backend_products_categories_update'),
+	('ttt', 'api_backend_users_changePassword'),
+	('ttt', 'api_backend_users_changeStatus'),
+	('ttt', 'api_backend_users_index'),
+	('ttt', 'api_backend_users_show'),
+	('ttt', 'api_backend_users_store'),
+	('ttt', 'api_backend_users_update');
 /*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product
@@ -1781,7 +1872,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `FK_products_brand` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.product: ~2 rows (approximately)
+-- Dumping data for table 517_shop.product: ~0 rows (approximately)
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 INSERT INTO `product` (`id`, `brand_id`, `slug`, `title`, `code`, `count`, `price`, `discount`, `sales_number`, `visitor`, `status`, `content`, `meta_title`, `meta_description`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'pro', 'محصول شماره یک', 'fsdfsdf', 10, 100000, 100000, 0, 0, 1, NULL, NULL, NULL, '2019-11-10 11:58:14', '2019-11-24 20:27:47'),
@@ -1818,7 +1909,7 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: ~3 rows (approximately)
+-- Dumping data for table 517_shop.product_category: ~0 rows (approximately)
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `pic_link`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'دسته بندی محصولات', NULL, NULL, NULL, NULL, 1, 1, 6, NULL, '2019-11-24 20:18:01', '2019-11-24 20:18:01'),
@@ -1841,7 +1932,7 @@ CREATE TABLE IF NOT EXISTS `product_pins` (
   CONSTRAINT `FK_product_pins_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_pins: ~2 rows (approximately)
+-- Dumping data for table 517_shop.product_pins: ~0 rows (approximately)
 /*!40000 ALTER TABLE `product_pins` DISABLE KEYS */;
 INSERT INTO `product_pins` (`id`, `product_id`, `group_attribute_product_ids`, `price`, `discount`, `count`, `created_at`, `updated_at`) VALUES
 	(1, 1, NULL, 100000, 100000, 10, '2019-11-10 12:03:33', '2019-11-10 12:03:34'),
@@ -1861,7 +1952,7 @@ CREATE TABLE IF NOT EXISTS `region` (
   KEY `region__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.region: ~1 rows (approximately)
+-- Dumping data for table 517_shop.region: ~0 rows (approximately)
 /*!40000 ALTER TABLE `region` DISABLE KEYS */;
 INSERT INTO `region` (`id`, `title`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'تهران', 1, 2, 0, '2019-11-10 23:44:31', '2019-11-10 23:44:31');
@@ -1876,13 +1967,17 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~4 rows (approximately)
+-- Dumping data for table 517_shop.role: ~0 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
+	('aaaa', 'aaaa', '2019-11-26 20:36:29', '2019-11-26 20:36:29'),
 	('admin', 'ادمین', '2019-11-10 11:43:47', '2019-11-10 11:43:48'),
 	('anbar_dar', 'انباردار', '2019-11-24 18:29:47', '2019-11-24 18:29:47'),
+	('eee', 'eeee', '2019-11-26 20:36:51', '2019-11-26 20:36:51'),
 	('programmer', 'برنامه نویس', '2019-11-26 10:08:12', '2019-11-26 10:08:12'),
-	('super_admin', 'سوپر ادمین', '2019-11-26 10:07:59', '2019-11-26 10:07:59');
+	('sadasd', 'سبسیبسیب', '2019-11-26 20:22:00', '2019-11-26 20:22:00'),
+	('super_admin', 'سوپر ادمین', '2019-11-26 10:07:59', '2019-11-26 10:07:59'),
+	('ttt', 'تی', '2019-11-26 20:41:32', '2019-11-26 20:44:57');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.user
@@ -1901,7 +1996,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   KEY `role_key` (`role_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.user: ~5 rows (approximately)
+-- Dumping data for table 517_shop.user: ~0 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`id`, `name`, `mobile`, `role_key`, `status`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(1, 'مهرداد', '09120246217', '', 1, '', NULL, '2019-11-09 20:37:55', '2019-11-09 20:37:55'),
