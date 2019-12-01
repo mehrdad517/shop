@@ -122,9 +122,10 @@ class Acl extends Component {
 
     handleCheckAll(controller)
     {
+
         if (this.state.form.role_key) {
             this.state.permissions.map((permission) => {
-                if (controller === permission.controller) {
+                if (controller === permission.controller.value) {
                     permission.actions.map((action) => {
                         this.setState(prevState => ({ checkedItems: prevState.checkedItems.set(action.id, !this.state.checkedItems.get(action.id) )}));
                     })
@@ -195,7 +196,7 @@ class Acl extends Component {
                         </Grid>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        <RoleCreate handleRequest={() => this.fetchRoles()} />
+                        {this.props.auth.permissions && this.props.auth.permissions.role.store.access ? <RoleCreate handleRequest={() => this.fetchRoles()} /> : ''}
                     </Box>
                     <Box className='animated fadeIn' boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                         <form onSubmit={this.handleSubmit.bind(this)}>
@@ -219,7 +220,7 @@ class Acl extends Component {
                                 return(
                                     <Grid style={{margin: '30px 0'}} key={index}  container>
                                         <Grid  item xs={12}>
-                                            <h3><Chip clickable={true} onClick={() => this.handleCheckAll(permission.controller)} color="default"  label={ permission.controller} /></h3>
+                                            <h3><Chip clickable={true} onClick={() => this.handleCheckAll(permission.controller.value)} color="default"  label={ permission.controller.key} /></h3>
                                         </Grid>
                                         {permission.actions.map((action, index) => {
                                             return(
@@ -242,11 +243,11 @@ class Acl extends Component {
                                     </Grid>
                                 )
                             })}
-                            <Grid item xs={12} style={{ justifyContent: 'flex-end', display: 'flex'}}>
+                            {this.props.auth.permissions && this.props.auth.permissions.role.set_permission.access ? <Grid item xs={12} style={{ justifyContent: 'flex-end', display: 'flex'}}>
                                 <Button disabled={this.state.loading} variant="outlined" color="secondary" type='submit' >
                                     به روز رسانی
                                 </Button>
-                            </Grid>
+                            </Grid> : ''}
                         </form>
                         {this.state.loading ? <CircularProgress style={{ zIndex: 9999}} color={"secondary"} /> : ''}
                     </Box>
@@ -258,6 +259,7 @@ class Acl extends Component {
 
 function mapStateToProps(state) {
     return {
+        auth: state.auth
     };
 }
 

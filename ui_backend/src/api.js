@@ -22,6 +22,7 @@ class Api {
         return response.data;
     }
 
+
     // auto complete
     async autoComplete(table, term) {
         return axios.get(`http://localhost:8000/api/backend/filter/${table}`, {
@@ -33,6 +34,20 @@ class Api {
             toast.error(error.message);
         })
     }
+
+
+    /* auth api*/
+
+    async login(object) {
+        return axios.post(`http://localhost:8000/api/login`, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
 
 
 
@@ -93,7 +108,7 @@ class Api {
     }
 
     async orderFractiveRequest(id, object) {
-        return axios.post(`http://localhost:8000/api/backend/orders/${id}/fractive/request`, object, {
+        return axios.post(`http://localhost:8000/api/backend/orders/${id}/fractive-request`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

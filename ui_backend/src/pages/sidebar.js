@@ -41,7 +41,7 @@ class Sidebar extends Component {
                         <ListItemText primary="محصولات" />
                     </ListItem>: ''}
 
-                    {Boolean(this.props.auth.permissions.productCategory.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/products/categories'>
+                    {Boolean(this.props.auth.permissions.product_category.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/products/categories'>
                         <ListItemIcon>
                             <AccountTreeIcon />
                         </ListItemIcon>
@@ -55,7 +55,7 @@ class Sidebar extends Component {
                         <ListItemText primary="برندها" />
                     </ListItem>: ''}
 
-                    {Boolean(this.props.auth.permissions.groupAttribute.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/products/attributes'>
+                    {Boolean(this.props.auth.permissions.group_attribute.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/products/attributes'>
                         <ListItemIcon>
                             <EditAttributesIcon />
                         </ListItemIcon>
@@ -85,7 +85,7 @@ class Sidebar extends Component {
                         <ListItemText primary="کاربران" />
                     </ListItem> : ''}
 
-                    {Boolean(this.props.auth.permissions.permission.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/users/access/control/list'>
+                    {Boolean(this.props.auth.permissions.role.set_permission.access) ? <ListItem component={Link} onClick={this.handleClose} to='/users/access/control/list'>
                         <ListItemIcon>
                             <LockIcon />
                         </ListItemIcon>

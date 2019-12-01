@@ -15,7 +15,7 @@ class OrderTableSeeder extends Seeder
         $faker = Faker::create('fa_IR');
         foreach (range(1,400) as $key=>$index) {
             $id = DB::table('order')->insertGetId([
-                'user_id' => $faker->numberBetween(1,5),
+                'user_id' => $faker->numberBetween(1,1),
                 'increment_id' => $key,
                 'tax' => 0,
                 'discount' => 0,

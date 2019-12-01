@@ -7,6 +7,9 @@ body {
     margin: 0;
     padding: 0;
 }
+.MuiChip-root{
+    font-family: inherit !important;
+}
 .MuiPaper-root ul li {
     line-height: 2.5;
 }

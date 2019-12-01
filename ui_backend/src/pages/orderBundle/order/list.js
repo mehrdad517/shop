@@ -489,7 +489,7 @@ class OrderList extends Component {
                                                         </IconButton>
                                                     </Link>
                                                 </Tooltip> : ''}
-                                                {this.props.auth.permissions && Boolean(this.props.auth.permissions.order.fractiveRequest.access) ? <Tooltip title="کسری و معیوبی">
+                                                {this.props.auth.permissions && Boolean(this.props.auth.permissions.order.fractive_request.access) ? <Tooltip title="کسری و معیوبی">
                                                     <Link to={`/orders/${entity.id}/fractive-request`}>
                                                         <IconButton>
                                                             <FindReplaceIcon />

@@ -296,8 +296,8 @@ class UserList extends Component {
                             <Grid item xs={8} sm={6}>
                                 <Pagination
                                     activePage={this.state.page}
-                                    itemsCountPerPage={this.state.users.per_page}
-                                    totalItemsCount={this.state.users.total}
+                                    itemsCountPerPage={this.state.users && this.state.users.per_page}
+                                    totalItemsCount={this.state.users && this.state.users.total}
                                     pageRangeDisplayed={5}
                                     onChange={this.handlePageChange.bind(this)}
                                 />
@@ -311,7 +311,7 @@ class UserList extends Component {
                                     <SyncIcon />
                                 </IconButton>
                             </Tooltip>
-                            {Boolean(this.props.auth.permissions.user.store.access) ? <UserCreate handleRequest={() => this.handleRequest()} roles={this.state.roles} />: ''}
+                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) ? <UserCreate handleRequest={() => this.handleRequest()} roles={this.state.roles} />: ''}
 
                         </div>
                         <div style={{ overflowX: 'auto'}}>
@@ -328,7 +328,7 @@ class UserList extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.state.users.data && this.state.users.data.map((user, index) => {
+                                {this.state.users.data  && this.state.users.data.map((user, index) => {
                                     return(
                                         <tr key={index}>
                                             <td>{user.id}</td>
@@ -337,19 +337,19 @@ class UserList extends Component {
                                             <td>{user.mobile}</td>
                                             <td>{user.created_at}</td>
                                             <td>
-                                                {Boolean(this.props.auth.permissions.user.changeStatus.access) ? <Tooltip title="تغییر وضعیت">
+                                                {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.change_status.access) ? <Tooltip title="تغییر وضعیت">
                                                     <IconButton onClick={() => this.changeStatus(user.id, !user.status)}>
                                                         {user.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }
                                                     </IconButton>
                                                 </Tooltip>: ''}
                                             </td>
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
-                                                {Boolean(this.props.auth.permissions.user.update.access) ?  <Tooltip title="ویرایش کاربر">
+                                                {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.update.access) ?  <Tooltip title="ویرایش کاربر">
                                                     <IconButton onClick={() =>this.setState({ editDialog: true, user_id: user.id})}>
                                                         <AccountBoxTwoToneIcon />
                                                     </IconButton>
                                                 </Tooltip>: '' }
-                                                {Boolean(this.props.auth.permissions.user.changePassword.access) ? <Tooltip title="تغییر رمز عبور">
+                                                {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.change_password.access) ? <Tooltip title="تغییر رمز عبور">
                                                     <IconButton onClick={() =>this.setState({ changePasswordDialog: true, user_id: user.id})}>
                                                         <LockTwoToneIcon />
                                                     </IconButton>
@@ -363,8 +363,8 @@ class UserList extends Component {
                         </div>
                         <Pagination
                             activePage={this.state.page}
-                            itemsCountPerPage={this.state.users.per_page}
-                            totalItemsCount={this.state.users.total}
+                            itemsCountPerPage={this.state.users && this.state.users.per_page}
+                            totalItemsCount={this.state.users && this.state.users.total}
                             pageRangeDisplayed={5}
                             onChange={this.handlePageChange.bind(this)}
                         />

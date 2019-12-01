@@ -78,6 +78,8 @@ class UserController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
+
+
         $model = User::create($request->all());
 
         if ($model) {

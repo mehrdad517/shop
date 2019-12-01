@@ -20,6 +20,13 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $result = Role::select('key', 'title')
+            ->where(function ($q) {
+                if (Auth::check()) {
+                    if (Auth::user()->role_key != 'programmer') {
+                        $q->where('key', '<>', 'programmer');
+                    }
+                }
+            })
             ->orderBy('created_at','asc')
             ->get();
 
@@ -98,13 +105,17 @@ class RoleController extends Controller
                 }
 
                 $list[] = [
-                    'controller' => $parent,
+                    'controller' => [
+                        'key' => trans('permissions.' . str_replace('_', ' ', $parent)),
+                        'value' => $parent
+                    ],
                     'actions' => $actions
                 ];
             } else {
 
                 foreach ($join as $item) {
-                    $list[$parent][last(explode('_', $item->key))] = [
+                    preg_match('/'.$parent.'_(.*)/', $item->key, $match);
+                    $list[$parent][$match[1]] = [
                         'title' => $item->title,
                         'access' => $item->access,
                         'method' => $item->method,

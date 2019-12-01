@@ -103,6 +103,7 @@ use App\Slider;
 
 
 
+
 Route::group(['prefix' => '/backend'], function () {
 
     Route::group(['prefix' => 'filter'], function () {
@@ -206,6 +207,6 @@ Route::group(['prefix' => '/backend'], function () {
 
 });
 
-
+Route::post('/login', 'Auth\LoginController@login');
 
 

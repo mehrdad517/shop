@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
@@ -14,7 +15,11 @@ class PermissionController extends Controller
      * @param Request $request
      * @return array
      */
-    public function initial(Request $request) {
+    public function initial(Request $request)
+    {
+
+
+
         $final = [];
 
         $routeCollection = \Route::getRoutes()->get();
@@ -33,13 +38,17 @@ class PermissionController extends Controller
 
                     preg_match('/(.*)Controller/',last(explode("\\", $explodedAction[0])), $matches);
 
-                    // explode controller
-                    $controller_name =  $matches[1];
+                    preg_match('/(.*)Controller/', $matches[0], $controller);
 
-                    $final[$controller_name][] = [
+
+                    preg_match_all('/(?:^|[A-Z])[a-z]+/',$controller[1],$controller_name);
+                    preg_match_all('/(?:^|[A-Z])[a-z]+/',$explodedAction[1],$action_name);
+
+                    $final[mb_strtolower(join('_', $controller_name[0]))][] = [
+                        'key' => mb_strtolower(join('_', $controller_name[0])) . '_' . mb_strtolower(join('_', $action_name[0])),
+                        'action' => trans('permissions.' . mb_strtolower(join(' ', $action_name[0]))),
                         'method' => $route->methods[0],
                         'url' => '/'.$route->uri,
-                        'key' => str_replace('/', '_', $action['prefix']) . '_' . $explodedAction[1],
                     ];
                 }
 
@@ -48,16 +57,14 @@ class PermissionController extends Controller
         }
 
         foreach ($final as $key=>$value) {
-
             foreach ($value as $k=>$item) {
-
-                \App\Permission::updateOrCreate([
+                \App\Permission::updateOrCreate(['key' => $item['key']],[
                     'key' => $item['key'],
                     'url' => $item['url'],
                     'method' => $item['method'],
-                    'title' => $item['key'],
-                    'parent' => lcfirst($key)
-                ], ['key' => $item['key']]);
+                    'title' => $item['action'],
+                    'parent' => $key
+                ]);
 
             }
         }
@@ -79,21 +86,23 @@ class PermissionController extends Controller
         $parents = Permission::select(['parent'])->groupBy('parent')->orderBy('created_at', 'asc')->pluck('parent');
         foreach ($parents as $parent) {
             $actions = [];
-            $join = Permission::select(['key as id', 'parent', 'method', 'title', 'url'])->where('parent', $parent)->orderBy('created_at', 'asc')->get();
-
+            $join = DB::select('call fetch_permissions_with_access(?, ?)', [null, $parent]);
             foreach ($join as $item) {
                 $actions[] = [
-                    'id' => $item->id,
+                    'id' => $item->key,
                     'parent' => $parent,
                     'title' => $item->title,
-                    'access' => 0,
+                    'access' => $item->access,
                     'method' => $item->method,
                     'url' => $item->url
                 ];
             }
 
             $list[] = [
-                'controller' => $parent,
+                'controller' => [
+                    'key' => trans('permissions.' . str_replace('_', ' ', $parent)),
+                    'value' => $parent
+                ],
                 'actions' => $actions
             ];
 
