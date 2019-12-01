@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from "react-redux";
 
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Router} from 'react-router-dom';
 
 import Main from './pages/main'
 import OrderList from './pages/orderBundle/order/list';
@@ -43,6 +43,8 @@ import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import {store, persistor} from "./store";
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 
 const theme = createMuiTheme({
     direction: "rtl",
@@ -60,14 +62,16 @@ const theme = createMuiTheme({
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
 function App() {
+
     return (
-        <BrowserRouter>
-            <Provider store={store}>
-                <PersistGate persistor={persistor}>
-                    <StylesProvider jss={jss}>
-                        <MuiThemeProvider theme = { theme }>
-                            {!store.getState().auth.login ? <Route component={Login} path='/login' exact={true} /> : <MainLayout>
-                                <Route component={Main} path='/' exact={true} />
+        <Provider store={store}>
+            <PersistGate persistor={persistor}>
+                <StylesProvider jss={jss}>
+                    <MuiThemeProvider theme = { theme }>
+                        <Router history={history}>
+                            <Route component={Login} path='/' exact={true} />
+                            <MainLayout>
+                                <Route component={Main} path='/dashboard' exact={true} />
                                 <Route component={OrderList} path='/orders' exact={true} />
                                 <Route component={AnbarList} path='/anbar' exact={true} />
                                 <Route component={OrderView} exact={true} path='/orders/:id' />
@@ -85,22 +89,23 @@ function App() {
                                 <Route component={AttributeEdit} path='/products/attributes/:id' />
                                 <Route component={UserList} path='/users' exact={true} />
                                 <Route component={Acl} path='/users/access/control/list' />
-                            </MainLayout>}
-                            <ToastContainer
-                                position="top-left"
-                                autoClose={5000}
-                                hideProgressBar={true}
-                                newestOnTop={false}
-                                closeOnClick
-                                rtl
-                                pauseOnVisibilityChange
-                                draggable={false}
-                                pauseOnHover />
-                        </MuiThemeProvider>
-                    </StylesProvider>
-                </PersistGate>
-            </Provider>
-        </BrowserRouter>
+                            </MainLayout>
+                        </Router>
+
+                        <ToastContainer
+                            position="top-left"
+                            autoClose={5000}
+                            hideProgressBar={true}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl
+                            pauseOnVisibilityChange
+                            draggable={false}
+                            pauseOnHover />
+                    </MuiThemeProvider>
+                </StylesProvider>
+            </PersistGate>
+        </Provider>
     );
 }
 

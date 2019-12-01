@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Api from "../../../api";
 import {Snackbar, Tooltip} from "@material-ui/core";
-import {fetchRoles} from "../../../actions/userBundleAction";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -260,9 +259,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchRoles: function () {
-            dispatch(fetchRoles());
-        }
     }
 }
 

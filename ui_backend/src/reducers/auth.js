@@ -1,4 +1,4 @@
-import {AUTH_PERMISSIONS} from "./../actionTypes";
+import {AUTH_CHANGE_LOGIN, AUTH_PERMISSIONS} from "./../actionTypes";
 
 const initialState = {
     login: false,
@@ -7,13 +7,20 @@ const initialState = {
     permissions: [],
 };
 
-export default  function appReducer(state = initialState, action) {
+export default  function auth(state = initialState, action) {
     switch (action.type) {
         case AUTH_PERMISSIONS:
             return {
                 ...state,
                 permissions: action.payload
             };
+        case AUTH_CHANGE_LOGIN:
+            return {
+                ...state,
+                login: action.payload.login,
+                user: action.payload.user,
+                token: action.payload.token
+            }
         default:
             return state;
     }

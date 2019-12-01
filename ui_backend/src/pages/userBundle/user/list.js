@@ -14,7 +14,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import TextField from "@material-ui/core/TextField";
-import {fetchRoles, fetchUsers} from "../../../actions/userBundleAction";
 import IconButton from '@material-ui/core/IconButton';
 import FormControl from "@material-ui/core/FormControl";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';

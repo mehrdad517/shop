@@ -1,15 +1,28 @@
 import React, {Component} from 'react';
-import Header from './../header';
+import {connect} from 'react-redux';
+import Header from "../header";
 
 class MainLayout extends Component {
     render() {
         return (
             <div>
-                <Header />
-                {this.props.children}
+                {this.props.auth && this.props.auth.login ? <div>
+                    <Header />
+                    {this.props.children}
+                </div>: ''}
+
             </div>
         );
     }
 }
 
-export default MainLayout;
+function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    };
+}
+
+export default connect(
+    mapStateToProps,
+)(MainLayout);
+

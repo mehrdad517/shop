@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Api from "../../../api";
 import {Snackbar, Tooltip} from "@material-ui/core";
-import {fetchRoles} from "../../../actions/userBundleAction";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -16,7 +15,6 @@ import Radio from "@material-ui/core/Radio";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
 import Dialog from "@material-ui/core/Dialog";
-import UserEdit from "../../userBundle/user/edit";
 import AttributeEdit from "./edit";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -24,7 +22,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import Divider from "@material-ui/core/Divider";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Pagination from "react-js-pagination";
@@ -220,9 +217,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchRoles: function () {
-            dispatch(fetchRoles());
-        }
     }
 }
 

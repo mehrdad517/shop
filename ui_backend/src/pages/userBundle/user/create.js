@@ -11,7 +11,6 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import { fetchUsers} from "../../../actions/userBundleAction";
 import Api from "../../../api";
 import {toast} from "react-toastify";
 
