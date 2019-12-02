@@ -3,12 +3,12 @@ import {toast} from 'react-toastify';
 
 class Api {
 
-    async haeders() {
+    haeders() {
+        let auth = JSON.parse(localStorage.getItem('persist:root')).auth;
+        let token = JSON.parse(auth).token;
         return {
             'Accept': 'application/json',
-            "cache-control": "no-cache",
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'token': ''
+            'Authorization': 'Bearer ' + token
         }
     }
 

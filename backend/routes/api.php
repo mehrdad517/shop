@@ -104,7 +104,7 @@ use App\Slider;
 
 
 
-Route::group(['prefix' => '/backend'], function () {
+Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => 'filter'], function () {
         Route::get('/users', function (Request $request) {

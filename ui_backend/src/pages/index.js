@@ -2,10 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {authPermissions} from "../actions/auth";
 
-class Main extends Component {
+class Index extends Component {
+
 
     componentDidMount() {
-        this.props.authPermissions();
+        if (this.props.auth.user) {
+            this.props.authPermissions(this.props.auth.user.role_key);
+        }
     }
 
     render() {
@@ -18,13 +21,15 @@ class Main extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        auth: state.auth
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     return{
-        authPermissions : function () {
-            dispatch(authPermissions('super_admin'))
+        authPermissions : function (role) {
+            dispatch(authPermissions(role))
         }
     }
 }
@@ -32,4 +37,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(Main);
+)(Index);

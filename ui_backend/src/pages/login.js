@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -14,12 +14,8 @@ import Api from "../api";
 import {toast} from "react-toastify";
 
 import {AUTH_CHANGE_LOGIN} from "../actionTypes";
-import { createBrowserHistory } from 'history';
-const history = createBrowserHistory();
-
 
 class Login extends Component {
-
 
     constructor(props){
         super(props);
@@ -28,6 +24,14 @@ class Login extends Component {
             username: '',
             password: '',
         }
+    }
+
+    componentDidMount() {
+
+        if (this.props.auth.login) {
+            this.props.history.push('/dashboard');
+        }
+
     }
 
 
@@ -42,21 +46,17 @@ class Login extends Component {
 
     async handleSubmit(e){
         e.preventDefault();
+        this.setState({
+            loading: true,
+        });
         new Api().login({username: this.state.username, password: this.state.password}).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success('با موفقیت وارد شدید.');
-
-                    this.props.changeLoginReducer({
-                        login: true,
-                        user: response.user,
-                        token: response.token
+                    this.setState({
+                        loading: false,
                     });
-
-                    setTimeout( () => {
-                        this.props.history.push('/dashboard');
-                    }, 3000)
-
+                    this.handleRequest(response);
                 } else {
                     toast.error(response.message);
                 }
@@ -64,12 +64,28 @@ class Login extends Component {
         })
     };
 
+    handleRequest(response)
+    {
+        this.props.changeLoginReducer({
+            login: true,
+            user: response.user,
+            token: response.token
+        });
+
+        let interval = setInterval(() => {
+            if (this.props.auth.login) {
+                this.props.history.push('/dashboard');
+                clearInterval(interval);
+            }
+        }, 1);
+    }
+
     render() {
         return (
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated fadeOut' : ''}>
                 <CssBaseline />
-                <div>
-                    <Avatar>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "Shabnam", marginTop: '25%'}}>
+                    <Avatar style={{ backgroundColor: "red"}}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
@@ -102,7 +118,7 @@ class Login extends Component {
                             value={this.state.password}
                             onChange={this.handleInputChange.bind(this)}
                         />
-                        <Button disabled={this.state.loading}
+                        <Button style={{ margin: '15px 0'}} disabled={this.state.loading}
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -132,16 +148,18 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        auth: state.auth
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeLoginReducer : function (payload) {
+        changeLoginReducer :  function (payload) {
             dispatch({
                 type : AUTH_CHANGE_LOGIN,
                 payload
-            });
+            })
         }
     }
 }

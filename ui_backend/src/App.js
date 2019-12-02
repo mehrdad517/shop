@@ -1,16 +1,20 @@
 import React from 'react';
 import {Provider} from "react-redux";
+import { Route, Router} from 'react-router-dom';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { create } from 'jss';
+import rtl from 'jss-rtl';
+import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import {store, persistor} from "./store";
+import { createBrowserHistory } from 'history';
 
-import {BrowserRouter, Route, Router} from 'react-router-dom';
-
-import Main from './pages/main'
+import Index from './pages'
 import OrderList from './pages/orderBundle/order/list';
 import AnbarList from './pages/orderBundle/anbar/list';
 import OrderView from "./pages/orderBundle/order/show";
 import OrderFractiveRequest from "./pages/orderBundle/order/fractiveReqest";
 import OrderEditStatus from "./pages/orderBundle/order/edit/status";
-
-
 import ProductList from './pages/productBundle/product/list'
 import CreateProduct from './pages/productBundle/product/create'
 import EditProduct from './pages/productBundle/product/edit'
@@ -24,6 +28,8 @@ import UserList from './pages/userBundle/user/list';
 import Acl from "./pages/userBundle/acl/acl";
 import MainLayout from "./pages/layout/main";
 import {ToastContainer} from "react-toastify";
+import ProductPins from "./pages/productBundle/product/pins";
+import Login from './pages/login';
 
 import 'animate.css';
 import 'font-awesome/css/font-awesome.min.css';
@@ -31,19 +37,7 @@ import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
 
-import ProductPins from "./pages/productBundle/product/pins";
 
-import Login from './pages/login'
-
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-
-import { create } from 'jss';
-import rtl from 'jss-rtl';
-
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import {store, persistor} from "./store";
-import { createBrowserHistory } from 'history';
 const history = createBrowserHistory();
 
 const theme = createMuiTheme({
@@ -62,16 +56,14 @@ const theme = createMuiTheme({
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
 function App() {
-
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>
                 <StylesProvider jss={jss}>
                     <MuiThemeProvider theme = { theme }>
                         <Router history={history}>
-                            <Route component={Login} path='/' exact={true} />
-                            <MainLayout>
-                                <Route component={Main} path='/dashboard' exact={true} />
+                            <MainLayout history={history}>
+                                <Route component={Index} path='/dashboard' exact={true} />
                                 <Route component={OrderList} path='/orders' exact={true} />
                                 <Route component={AnbarList} path='/anbar' exact={true} />
                                 <Route component={OrderView} exact={true} path='/orders/:id' />
@@ -90,6 +82,7 @@ function App() {
                                 <Route component={UserList} path='/users' exact={true} />
                                 <Route component={Acl} path='/users/access/control/list' />
                             </MainLayout>
+                            <Route component={Login} path='/' exact={true} />
                         </Router>
 
                         <ToastContainer

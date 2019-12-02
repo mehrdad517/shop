@@ -3,9 +3,16 @@ import {connect} from 'react-redux';
 import Header from "../header";
 
 class MainLayout extends Component {
+
+    componentDidMount() {
+        if (!this.props.auth.login) {
+            this.props.history.push('/')
+        }
+    }
+
     render() {
         return (
-            <div>
+            <div className="animated fadeIn">
                 {this.props.auth && this.props.auth.login ? <div>
                     <Header />
                     {this.props.children}

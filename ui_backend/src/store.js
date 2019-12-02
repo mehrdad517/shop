@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 
 import auth from "./reducers/auth";
 
+
 const persistConfig = {
     key: 'root',
     storage,
