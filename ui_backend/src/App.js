@@ -73,11 +73,11 @@ function App() {
                                 <Route component={CreateProduct} path='/products/create' />
                                 <Route component={EditProduct} path='/products/edit/:id' />
                                 <Route component={ProductPins} path='/products/pins/:id' />
-                                <Route component={BrandList} path='/products/brands' />
+                                <Route component={BrandList} path='/products/brands' exact />
                                 <Route component={BrandEdit} path='/products/brands/:id' />
-                                <Route component={ProductCategory} path='/products/categories' />
+                                <Route component={ProductCategory} path='/products/categories' axact />
                                 <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
-                                <Route component={GroupAttributeList} path='/products/attributes' />
+                                <Route component={GroupAttributeList} path='/products/attributes' exact />
                                 <Route component={AttributeEdit} path='/products/attributes/:id' />
                                 <Route component={UserList} path='/users' exact={true} />
                                 <Route component={Acl} path='/users/access/control/list' />

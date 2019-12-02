@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Header from "../header";
+import {CircularProgress} from "@material-ui/core";
 
 class MainLayout extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
 
     componentDidMount() {
         if (!this.props.auth.login) {
@@ -10,14 +16,15 @@ class MainLayout extends Component {
         }
     }
 
+
+
+
+
     render() {
         return (
             <div className="animated fadeIn">
-                {this.props.auth && this.props.auth.login ? <div>
-                    <Header />
-                    {this.props.children}
-                </div>: ''}
-
+                <Header />
+                {this.props.children}
             </div>
         );
     }

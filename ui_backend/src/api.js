@@ -48,6 +48,16 @@ class Api {
         })
     }
 
+    async logout() {
+        return axios.get(`http://localhost:8000/api/logout`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
 
 
 

@@ -322,7 +322,10 @@ class UserList extends Component {
                                     <th onClick={() => this.handleChangeSort('role_key')}>نقش&nbsp;{this.state.sort_field === 'role_key' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('mobile')}>موبایل&nbsp;{this.state.sort_field === 'mobile' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ثبت نام&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.change_status.access) ?
+                                        <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc' ?
+                                            <ArrowDownwardIcon/> : <ArrowUpwardIcon/>) : <SortIcon/>}</th> : ''
+                                    }
                                     <th>عملیات</th>
                                 </tr>
                                 </thead>
@@ -335,13 +338,15 @@ class UserList extends Component {
                                             <td>{user.role ? user.role.title ? user.role.title: user.role.key : '-'}</td>
                                             <td>{user.mobile}</td>
                                             <td>{user.created_at}</td>
+                                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.change_status.access) ?
                                             <td>
-                                                {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.change_status.access) ? <Tooltip title="تغییر وضعیت">
+                                                 <Tooltip title="تغییر وضعیت">
                                                     <IconButton onClick={() => this.changeStatus(user.id, !user.status)}>
                                                         {user.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }
                                                     </IconButton>
-                                                </Tooltip>: ''}
+                                                </Tooltip>
                                             </td>
+                                                    : ''}
                                             <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
                                                 {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.update.access) ?  <Tooltip title="ویرایش کاربر">
                                                     <IconButton onClick={() =>this.setState({ editDialog: true, user_id: user.id})}>

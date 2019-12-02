@@ -77,12 +77,12 @@ class Login extends Component {
                 this.props.history.push('/dashboard');
                 clearInterval(interval);
             }
-        }, 1);
+        }, 500);
     }
 
     render() {
         return (
-            <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated fadeOut' : ''}>
+            <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated zoomOut' : ''}>
                 <CssBaseline />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "Shabnam", marginTop: '25%'}}>
                     <Avatar style={{ backgroundColor: "red"}}>
@@ -91,7 +91,7 @@ class Login extends Component {
                     <Typography component="h1" variant="h5">
                         ورود به پنل
                     </Typography>
-                    <form onSubmit={this.handleSubmit.bind(this)}  noValidate>
+                    <form onSubmit={this.handleSubmit.bind(this)}  noValidate style={{ marginTop: '30px'}}>
                         <TextField
                             variant="outlined"
                             margin="normal"

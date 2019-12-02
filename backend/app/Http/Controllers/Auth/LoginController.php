@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Lcobucci\JWT\Parser;
 use phpseclib\Crypt\Hash;
+use Prophecy\Util\StringUtil;
 
 class LoginController extends Controller
 {
@@ -73,5 +76,18 @@ class LoginController extends Controller
         ]);
 
 
+    }
+
+    public function logout(Request $request)
+    {
+
+        $bearer = $request->bearerToken();
+        $id = (new Parser())->parse($bearer)->getHeaders('jti');
+        $token = $request->user()->tokens->find($id);
+        foreach ($token as $t) {
+            $t->revoke();
+        }
+
+        return response(['status' => true]);
     }
 }
