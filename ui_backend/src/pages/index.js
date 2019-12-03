@@ -4,11 +4,19 @@ import {authPermissions} from "../actions/auth";
 import Api from "../api";
 import {AUTH_CHANGE_LOGIN} from "../actionTypes";
 import Header from "./header";
+import {CircularProgress} from "@material-ui/core";
+import MainLayout from "./layout/main";
 
 class Index extends Component {
 
     constructor(props) {
+
         super(props);
+
+        this.state = {
+            loading: true,
+        };
+
         this.api = new Api();
     }
 
@@ -18,12 +26,23 @@ class Index extends Component {
             this.props.authPermissions(this.props.auth.user.role_key);
         }
 
-
+        let interval = setInterval(() => {
+            if (this.props.auth.permissions) {
+                this.setState({
+                    loading: false
+                });
+                clearInterval();
+            }
+        }, 100);
     }
 
     render() {
+        if (this.state.loading) {
+            return <CircularProgress color={"secondary"} />
+        }
         return (
             <div>
+                <Header />
             </div>
         );
     }

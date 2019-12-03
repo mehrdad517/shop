@@ -12,7 +12,7 @@ import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 import Api from "../api";
 import {toast} from "react-toastify";
-
+import { push } from 'connected-react-router'
 import {AUTH_CHANGE_LOGIN} from "../actionTypes";
 
 class Login extends Component {
@@ -29,7 +29,9 @@ class Login extends Component {
     componentDidMount() {
 
         if (this.props.auth.login) {
-            this.props.history.push('/dashboard');
+
+            this.props.redirect();
+
         }
 
     }
@@ -52,33 +54,28 @@ class Login extends Component {
         new Api().login({username: this.state.username, password: this.state.password}).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
-                    toast.success('با موفقیت وارد شدید.');
+                     toast.success('با موفقیت وارد شدید.');
                     this.setState({
                         loading: false,
                     });
-                    this.handleRequest(response);
+                    this.props.changeLoginReducer({
+                        login: true,
+                        user: response.user,
+                        token: response.token
+                    });
+
+                    let interval = setInterval(() => {
+                        if (this.props.auth.login) {
+                            this.props.redirect();
+                            clearInterval(interval);
+                        }
+                    }, 1)
                 } else {
                     toast.error(response.message);
                 }
             }
         })
     };
-
-    handleRequest(response)
-    {
-        this.props.changeLoginReducer({
-            login: true,
-            user: response.user,
-            token: response.token
-        });
-
-        let interval = setInterval(() => {
-            if (this.props.auth.login) {
-                this.props.history.push('/dashboard');
-                clearInterval(interval);
-            }
-        }, 500);
-    }
 
     render() {
         return (
@@ -159,7 +156,10 @@ function mapDispatchToProps(dispatch) {
             dispatch({
                 type : AUTH_CHANGE_LOGIN,
                 payload
-            })
+            });
+        },
+        redirect: function () {
+            dispatch(push('/dashboard'));
         }
     }
 }

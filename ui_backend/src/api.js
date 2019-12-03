@@ -4,8 +4,11 @@ import {toast} from 'react-toastify';
 class Api {
 
     haeders() {
-        let auth = JSON.parse(localStorage.getItem('persist:root')).auth;
-        let token = JSON.parse(auth).token;
+        let token = '';
+        let root = JSON.parse(localStorage.getItem('persist:root'));
+        if (root) {
+            token = JSON.parse(root.auth).token;
+        }
         return {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + token

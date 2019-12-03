@@ -10,9 +10,7 @@ import {AUTH_CHANGE_LOGIN} from "./actionTypes";
 import Api from "./api";
 import Button from "@material-ui/core/Button";
 import {CircularProgress} from "@material-ui/core";
-import {createBrowserHistory} from "history";
-
-let history = createBrowserHistory();
+import {push} from 'connected-react-router'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +24,7 @@ class Logout extends Component {
         this.state = {
             loading: false,
         };
+
         this.api = new Api();
     }
 
@@ -44,9 +43,12 @@ class Logout extends Component {
                         token: null,
                     });
 
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    let interval = setInterval(() => {
+                        if (!this.props.auth.login) {
+                            this.props.redirect();
+                            clearInterval(interval);
+                        }
+                    }, 1)
 
                 }
             }
@@ -99,6 +101,9 @@ function mapDispatchToProps(dispatch) {
                 type: AUTH_CHANGE_LOGIN,
                 payload
             });
+        },
+        redirect: function () {
+            dispatch(push('/'));
         }
     }
 }

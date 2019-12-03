@@ -10,20 +10,10 @@ class MainLayout extends Component {
     }
 
 
-    componentDidMount() {
-        if (!this.props.auth.login) {
-            this.props.history.push('/')
-        }
-    }
-
-
-
-
-
     render() {
         return (
-            <div className="animated fadeIn">
-                <Header />
+            <div>
+                {this.props.auth.login ? <Header /> : ''}
                 {this.props.children}
             </div>
         );

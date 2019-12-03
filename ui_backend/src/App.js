@@ -6,7 +6,8 @@ import { create } from 'jss';
 import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import {store, persistor} from "./store";
+import { ConnectedRouter } from 'connected-react-router'
+import configureStore, { history } from './store'
 import { createBrowserHistory } from 'history';
 
 import Index from './pages'
@@ -36,9 +37,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
-
-
-const history = createBrowserHistory();
+import Header from "./pages/header";
 
 const theme = createMuiTheme({
     direction: "rtl",
@@ -55,36 +54,36 @@ const theme = createMuiTheme({
 });
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
+const {store, persistor} = configureStore();
+
 function App() {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>
                 <StylesProvider jss={jss}>
                     <MuiThemeProvider theme = { theme }>
-                        <Router history={history}>
-                            <MainLayout history={history}>
-                                <Route component={Index} path='/dashboard' exact={true} />
-                                <Route component={OrderList} path='/orders' exact={true} />
-                                <Route component={AnbarList} path='/anbar' exact={true} />
-                                <Route component={OrderView} exact={true} path='/orders/:id' />
-                                <Route component={OrderFractiveRequest} path='/orders/:id/fractive-request' />
-                                <Route component={OrderEditStatus} path='/orders/:id/edit-status' />
-                                <Route component={ProductList} path='/products' exact={true} />
-                                <Route component={CreateProduct} path='/products/create' />
-                                <Route component={EditProduct} path='/products/edit/:id' />
-                                <Route component={ProductPins} path='/products/pins/:id' />
-                                <Route component={BrandList} path='/products/brands' exact />
-                                <Route component={BrandEdit} path='/products/brands/:id' />
-                                <Route component={ProductCategory} path='/products/categories' axact />
-                                <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
-                                <Route component={GroupAttributeList} path='/products/attributes' exact />
-                                <Route component={AttributeEdit} path='/products/attributes/:id' />
-                                <Route component={UserList} path='/users' exact={true} />
-                                <Route component={Acl} path='/users/access/control/list' />
-                            </MainLayout>
+                        <ConnectedRouter  history={history}>
                             <Route component={Login} path='/' exact={true} />
-                        </Router>
+                            <Route component={Index} path='/dashboard' exact={true} />
+                            <Route component={AnbarList} path='/anbar' exact={true} />
+                            <Route component={OrderList} path='/orders' exact={true} />
+                            <Route component={OrderView} exact={true} path='/orders/:id' />
+                            <Route component={OrderFractiveRequest} path='/orders/:id/fractive-request' />
+                            <Route component={OrderEditStatus} path='/orders/:id/edit-status' />
+                            <Route component={ProductList} path='/products' exact={true} />
+                            <Route component={CreateProduct} path='/products/create' />
+                            <Route component={EditProduct} path='/products/edit/:id' />
+                            <Route component={ProductPins} path='/products/pins/:id' />
+                            <Route component={BrandList} path='/products/brands' exact />
+                            <Route component={BrandEdit} path='/products/brands/:id' />
+                            <Route component={ProductCategory} path='/products/categories' axact />
+                            <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
+                            <Route component={GroupAttributeList} path='/products/attributes' exact />
+                            <Route component={AttributeEdit} path='/products/attributes/:id' />
+                            <Route component={UserList} path='/users' exact={true} />
+                            <Route component={Acl} path='/users/access/control/list' />
 
+                        </ConnectedRouter >
                         <ToastContainer
                             position="top-left"
                             autoClose={5000}
