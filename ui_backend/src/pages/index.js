@@ -22,6 +22,7 @@ class Index extends Component {
 
 
     componentDidMount() {
+
         if (this.props.auth.user) {
             this.props.authPermissions(this.props.auth.user.role_key);
         }
@@ -31,7 +32,7 @@ class Index extends Component {
                 this.setState({
                     loading: false
                 });
-                clearInterval();
+                clearInterval(interval);
             }
         }, 100);
     }

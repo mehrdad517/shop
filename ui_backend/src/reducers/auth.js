@@ -20,7 +20,7 @@ export default  function auth(state = initialState, action) {
                 login: action.payload.login,
                 user: action.payload.user,
                 token: action.payload.token
-            }
+            };
         default:
             return state;
     }

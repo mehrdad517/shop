@@ -77,7 +77,7 @@ class UserEdit extends Component {
 
     render() {
         if (this.state.form.name === '') {
-            return ( <div><DialogContent style={{ minHeight: '300px', width: '300px'}}><CircularProgress /></DialogContent></div>);
+            return ( <div><DialogContent style={{ minHeight: '400px', width: '400px'}}><CircularProgress color={"secondary"} /></DialogContent></div>);
         }
         return (
             <div>

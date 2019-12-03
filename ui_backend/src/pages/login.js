@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
+import {Link} from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import Api from "../api";
 import {toast} from "react-toastify";
@@ -82,7 +82,7 @@ class Login extends Component {
             <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated zoomOut' : ''}>
                 <CssBaseline />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "Shabnam", marginTop: '25%'}}>
-                    <Avatar style={{ backgroundColor: "red"}}>
+                    <Avatar style={{ backgroundColor: "#f50057"}}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
@@ -125,9 +125,9 @@ class Login extends Component {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Typography component={Link} to='/password/reset'>
                                     رمز عبور خود را فراموش کرده اید؟ کلیک کنید
-                                </Link>
+                                </Typography>
                             </Grid>
                         </Grid>
                     </form>

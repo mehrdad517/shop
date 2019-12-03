@@ -12,7 +12,12 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import {Fade} from "@material-ui/core";
-import Logout from "../logout";
+import Logout from "./logout";
+import Dialog from "@material-ui/core/Dialog";
+import UserEdit from "./userBundle/user/edit";
+import ChangePassword from "./userBundle/user/changePassword";
+import AuthChangePassword from "./change-password";
+import AuthEditProfile from "./edit-profile";
 
 
 class Header extends Component {
@@ -20,6 +25,8 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            profile: false,
+            password: false,
             logout: false, // logout dialog
             // menu
             open: false,
@@ -66,8 +73,8 @@ class Header extends Component {
                                 onClose={handleClose}
                                 TransitionComponent={Fade}
                             >
-                                <MenuItem onClick={handleClose}>ویرایش پروفایل</MenuItem>
-                                <MenuItem onClick={handleClose}>تغییر رمز</MenuItem>
+                                <MenuItem onClick={() => this.setState({profile: true})}>ویرایش پروفایل</MenuItem>
+                                <MenuItem onClick={() => this.setState({password: true})}>تغییر رمز</MenuItem>
                                 <MenuItem onClick={() => this.setState({logout: true})}>
                                     <Typography>خروج از سایت</Typography>
                                 </MenuItem>
@@ -79,6 +86,8 @@ class Header extends Component {
                     <Sidebar onClose={() => this.setState({ open: false})} />
                 </Drawer>
                 <Logout open={this.state.logout} onClose={() => this.setState({ logout: false})} />
+                <AuthChangePassword open={this.state.password} onClose={() => this.setState({ password: false})} />
+                <AuthEditProfile open={this.state.profile} onClose={() => this.setState({ profile: false})} />
             </div>
         );
     }

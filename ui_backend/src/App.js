@@ -38,6 +38,7 @@ import 'shabnam-font/dist/font-face.css';
 import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "./pages/header";
+import ResetPassword from "./pages/reset-password";
 
 const theme = createMuiTheme({
     direction: "rtl",
@@ -50,6 +51,13 @@ const theme = createMuiTheme({
                 color: 'red',
             },
         },
+        MuiDialogContent : {
+            root: {
+                '&:first-child': {
+                    paddingTop: 0
+                }
+            }
+        }
     },
 });
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
@@ -64,6 +72,7 @@ function App() {
                     <MuiThemeProvider theme = { theme }>
                         <ConnectedRouter  history={history}>
                             <Route component={Login} path='/' exact={true} />
+                            <Route component={ResetPassword} path='/password/reset' />
                             <Route component={Index} path='/dashboard' exact={true} />
                             <Route component={AnbarList} path='/anbar' exact={true} />
                             <Route component={OrderList} path='/orders' exact={true} />
@@ -82,7 +91,6 @@ function App() {
                             <Route component={AttributeEdit} path='/products/attributes/:id' />
                             <Route component={UserList} path='/users' exact={true} />
                             <Route component={Acl} path='/users/access/control/list' />
-
                         </ConnectedRouter >
                         <ToastContainer
                             position="top-left"

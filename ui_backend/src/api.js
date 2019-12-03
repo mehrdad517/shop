@@ -422,6 +422,16 @@ class Api {
         })
     }
 
+    async  AuthEditProfile(object) {
+        return  axios.post('http://localhost:8000/api/change-profile', object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
     // change password
     async  changePasswordUser(id, object) {
         return  axios.put(`http://localhost:8000/api/backend/users/${id}/change-password`, object, {
@@ -433,7 +443,49 @@ class Api {
         })
     }
 
-    // change password
+    async  AuthChangePassword(object) {
+        return  axios.post(`http://localhost:8000/api/change-password`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    async  sendValidationCode(object) {
+        return  axios.post(`http://localhost:8000/api/validation-code/send`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async  verifyValidationCode(object) {
+        return  axios.post(`http://localhost:8000/api/validation-code/verify`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async  passwordValidationCode(object) {
+        return  axios.post(`http://localhost:8000/api/validation-code/change-password`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+    // change status
     async  changeStatus(id, object) {
         return  axios.put(`http://localhost:8000/api/backend/users/${id}/change-status`, object, {
             headers: this.haeders()

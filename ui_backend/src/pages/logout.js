@@ -6,8 +6,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import {AUTH_CHANGE_LOGIN} from "./actionTypes";
-import Api from "./api";
+import {AUTH_CHANGE_LOGIN} from "../actionTypes";
+import Api from "../api";
 import Button from "@material-ui/core/Button";
 import {CircularProgress} from "@material-ui/core";
 import {push} from 'connected-react-router'
