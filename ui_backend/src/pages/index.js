@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {authPermissions} from "../actions/auth";
+import {authPermissions, AuthSetting} from "../actions/auth";
 import Api from "../api";
 import {AUTH_CHANGE_LOGIN} from "../actionTypes";
 import Header from "./header";
@@ -23,6 +23,9 @@ class Index extends Component {
 
     componentDidMount() {
 
+        // call setting record
+        this.props.authSetting(window.location.host);
+
         if (this.props.auth.user) {
             this.props.authPermissions(this.props.auth.user.role_key);
         }
@@ -35,6 +38,7 @@ class Index extends Component {
                 clearInterval(interval);
             }
         }, 100);
+
     }
 
     render() {
@@ -60,15 +64,8 @@ function mapDispatchToProps(dispatch) {
         authPermissions : function (role) {
             dispatch(authPermissions(role))
         },
-        logoutReducer: function () {
-            dispatch({
-                type: AUTH_CHANGE_LOGIN,
-                payload: {
-                    login: false,
-                    user: null,
-                    token: null,
-                }
-            });
+        authSetting: function (domain) {
+            dispatch(AuthSetting(domain));
         }
     }
 }

@@ -23,13 +23,21 @@ class ResetPassword extends Component {
             loading: false,
             sentSMS: false,
             validated: false,
+            counter: 59,
             username: '',
             code: '',
             token: '',
-            password: ''
+            password: '',
+            confirm_password: '',
         };
 
         this.api = new Api();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.state.counter === 0) {
+            window.location.reload();
+        }
     }
 
 
@@ -60,6 +68,14 @@ class ResetPassword extends Component {
                 return ;
             }
 
+            if (this.state.password != this.state.confirm_password) {
+                toast.error('رمز عبور یکسان وارد نکرده اید.');
+                this.setState({
+                    loading: false
+                });
+                return ;
+            }
+
             this.api.passwordValidationCode({
                 mobile: this.state.username,
                 token: this.state.token,
@@ -69,7 +85,9 @@ class ResetPassword extends Component {
                 if (typeof response != "undefined") {
                     if (response.status) {
                         toast.success(response.msg);
-                        history.push('/');
+                        setTimeout(() => {
+                            this.props.history.push('/');
+                        }, 1000);
                     } else {
                         toast.error(response.msg)
                     }
@@ -101,12 +119,14 @@ class ResetPassword extends Component {
                         this.setState({
                             validated: true,
                             token: response.token,
-                            loading: false
                         })
                     } else {
                         toast.error(response.msg);
                     }
                 }
+                this.setState({
+                    loading: false
+                })
             })
 
         } else {
@@ -128,7 +148,16 @@ class ResetPassword extends Component {
                         this.setState({
                             sentSMS: true,
                             token: response.token
-                        })
+                        });
+                        let interval = setInterval(() => {
+                            if (this.state.counter === 0) {
+                                clearInterval(interval);
+                            } else {
+                                this.setState({
+                                    counter: this.state.counter - 1
+                                })
+                            }
+                        }, 1000);
                     } else {
                         toast.error(response.msg);
                     }
@@ -144,7 +173,6 @@ class ResetPassword extends Component {
     };
 
     render() {
-        console.log(this.state);
         return (
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
@@ -153,21 +181,37 @@ class ResetPassword extends Component {
                             <PermPhoneMsgIcon />
                         </Avatar>
                         <Typography style={{ marginTop: '10px'}} component="h1" variant="h5">
-                            اعتبارسنجی
+                            بازیابی رمز عبور
                         </Typography>
                         <form onSubmit={this.handleSubmit.bind(this)}  noValidate>
-                            {this.state.validated ? <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="email"
-                                label="رمز عبور جدید"
-                                name="password"
-                                autoFocus
-                                value={this.state.password}
-                                onChange={this.handleInputChange.bind(this)}
-                            /> : ''}
+                            {this.state.validated ?
+                                <div>
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="رمز عبور جدید"
+                                        name="password"
+                                        type="password"
+                                        autoFocus
+                                        value={this.state.password}
+                                        onChange={this.handleInputChange.bind(this)}
+                                    />
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="تکرار رمز عبور"
+                                        name="confirm_password"
+                                        type="password"
+                                        value={this.state.confirm_password}
+                                        onChange={this.handleInputChange.bind(this)}
+                                    />
+                                </div> : ''}
                             {!this.state.sentSMS && !this.state.validated ?
                                 <TextField
                                 variant="outlined"
@@ -194,23 +238,26 @@ class ResetPassword extends Component {
                                 autoComplete="current-password"
                                 value={this.state.code}
                                 onChange={this.handleInputChange.bind(this)}
+                                helperText={ 'کد دریافتی را وارد نمایید' + ' (' + this.state.counter+ ')'}
                             /> : ''}
 
                             <Button style={{ margin: '15px 0'}} disabled={this.state.loading}
+                                           type="submit"
+                                           fullWidth
+                                           variant="contained"
+                                           color={"secondary"}
+                        >
+                            {this.state.validated ? 'تغییر رمز عبور' : (this.state.sentSMS ? 'تایید کد' : 'ارسال کد فعال سازی')}
+                        </Button>
+                            <Button
+                                    onClick={() => this.props.history.push('/')}
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    color={this.state.validated ? 'secondary' : this.state.sentSMS ? 'primary' : 'secondary'}
+                                    color={"primary"}
                             >
-                                {this.state.validated ? 'تغییر رمز عبور' : (this.state.sentSMS ? 'تایید کد دریافتی' : 'ارسال کد فعال سازی')}
+                                بازگشت به صفحه ورود
                             </Button>
-                            <Grid container>
-                                <Grid item xs>
-                                    <Typography component={Link} to='/'>
-                                        بازگشت به صفحه ورود
-                                    </Typography>
-                                </Grid>
-                            </Grid>
                         </form>
                     </div>
                 </Container>

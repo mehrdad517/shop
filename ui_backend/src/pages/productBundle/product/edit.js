@@ -22,9 +22,7 @@ import validator from 'validator';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Add from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import {Link} from "react-router-dom";
-import attribute from "../productCategory/attribute";
 
 class EditProduct extends Component {
 

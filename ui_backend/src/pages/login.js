@@ -125,7 +125,7 @@ class Login extends Component {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Typography component={Link} to='/password/reset'>
+                                <Typography variant={"button"} component={Link} to='/password/reset'>
                                     رمز عبور خود را فراموش کرده اید؟ کلیک کنید
                                 </Typography>
                             </Grid>

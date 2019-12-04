@@ -22,12 +22,60 @@ import LocalParkingIcon from '@material-ui/icons/LocalParking';
 import AndroidIcon from '@material-ui/icons/Android';
 import AppleIcon from '@material-ui/icons/Apple';
 import {CircularProgress} from "@material-ui/core";
+import SettingsIcon from '@material-ui/icons/Settings';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import {toast} from "react-toastify";
+import Api from "../api";
+import {AuthSetting} from "../actions/auth";
 
 class Sidebar extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            form : {
+                register: this.props.auth.setting.register,
+                maintenance_mode: this.props.auth.setting.maintenance_mode,
+                basket: this.props.auth.setting.basket,
+                android: this.props.auth.setting.android,
+                ios: this.props.auth.setting.ios,
+                user_dashboard: this.props.auth.setting.user_dashboard,
+                admin_panel: this.props.auth.setting.admin_panel,
+            }
+        };
+
+        this.api = new Api();
+
+    }
+
+    handleChangeSetting = (event) => {
+        let form = this.state.form;
+        form[event.target.name] = event.target.checked;
+        this.setState({
+            form
+        });
+
+        this.api.updateBooleanSetting(window.location.host, this.state.form).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    toast.success(response.msg);
+                    this.props.authSetting(window.location.host);
+                } else {
+                    toast.error(response.msg);
+                }
+            }
+
+            this.setState({
+                loading: false,
+            });
+        })
+    };
+
     handleClose = () => {
         this.props.onClose();
-    }
+    };
 
 
     render() {
@@ -91,18 +139,41 @@ class Sidebar extends Component {
                         </ListItemIcon>
                         <ListItemText primary="سطوح دسترسی" />
                     </ListItem> : ''}
-
+                    <Divider/>
+                    <ListItem component={Link} onClick={this.handleClose} to='/setting'>
+                        <ListItemIcon>
+                            <SettingsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="تنظیمات سایت" />
+                    </ListItem>
                     <Divider/>
                     <ListItem>
                         <ListItemIcon>
-                            <SettingsInputCompositeIcon />
+                            <SupervisorAccountIcon />
                         </ListItemIcon>
-                        <ListItemText id="switch-list-label-wifi" primary="سایت" />
+                        <ListItemText id="switch-list-label-wifi" primary="پنل ادمین" />
                         <ListItemSecondaryAction>
                             <Switch
                                 edge="end"
-                                checked={true}
+                                name='admin_panel'
+                                checked={Boolean(this.state.form.admin_panel)}
                                 inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
+                            />
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText id="switch-list-label-wifi" primary="پنل کاربر" />
+                        <ListItemSecondaryAction>
+                            <Switch
+                                edge="end"
+                                name='user_dashboard'
+                                checked={Boolean(this.state.form.user_dashboard)}
+                                inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
@@ -114,8 +185,10 @@ class Sidebar extends Component {
                         <ListItemSecondaryAction>
                             <Switch
                                 edge="end"
-                                checked={true}
+                                name='basket'
+                                checked={Boolean(this.state.form.basket)}
                                 inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
@@ -127,21 +200,10 @@ class Sidebar extends Component {
                         <ListItemSecondaryAction>
                             <Switch
                                 edge="end"
-                                checked={true}
+                                name='register'
+                                checked={Boolean(this.state.form.register)}
                                 inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
-                            />
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                            <AppleIcon />
-                        </ListItemIcon>
-                        <ListItemText id="switch-list-label-wifi" primary="اپ ios" />
-                        <ListItemSecondaryAction>
-                            <Switch
-                                edge="end"
-                                checked={false}
-                                inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
@@ -153,8 +215,40 @@ class Sidebar extends Component {
                         <ListItemSecondaryAction>
                             <Switch
                                 edge="end"
-                                checked={false}
+                                name='android'
+                                checked={Boolean(this.state.form.android)}
                                 inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
+                            />
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <AppleIcon />
+                        </ListItemIcon>
+                        <ListItemText id="switch-list-label-wifi" primary="اپ ios" />
+                        <ListItemSecondaryAction>
+                            <Switch
+                                edge="end"
+                                name='ios'
+                                checked={Boolean(this.state.form.ios)}
+                                inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
+                            />
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem>
+                        <ListItemIcon>
+                            <SettingsInputCompositeIcon />
+                        </ListItemIcon>
+                        <ListItemText id="switch-list-label-wifi" primary="حالت به روز رسانی" />
+                        <ListItemSecondaryAction>
+                            <Switch
+                                edge="end"
+                                name='maintenance_mode'
+                                checked={Boolean(this.state.form.maintenance_mode)}
+                                inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                onChange={this.handleChangeSetting.bind(this)}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
@@ -171,6 +265,15 @@ function mapStateToProps(state) {
     };
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+        authSetting: function (domain) {
+            dispatch(AuthSetting(domain));
+        }
+    };
+}
+
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(Sidebar);

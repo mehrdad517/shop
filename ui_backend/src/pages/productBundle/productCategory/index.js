@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Api from "../../../api";
-import {Box, Checkbox, CircularProgress, Snackbar, Tooltip} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import NavigationIcon from "@material-ui/icons/Navigation";
+import {Box, CircularProgress, Snackbar, Tooltip} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
@@ -16,7 +13,6 @@ import ProductCategoryEdit from "./edit";
 import EditIcon from "@material-ui/icons/Edit";
 import ProductCategoryHead from "./head";
 import 'react-toastify/dist/ReactToastify.css';
-import EditAttributesIcon from '@material-ui/icons/EditAttributes';
 import {Link} from "react-router-dom";
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
 

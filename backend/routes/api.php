@@ -108,6 +108,7 @@ use App\Slider;
 
 Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
 
+
     Route::group(['prefix' => 'filter'], function () {
         Route::get('/users', function (Request $request) {
             $response = \App\User::select('id', 'name', 'mobile')
@@ -119,6 +120,11 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
             return response($response);
         });
     });
+
+
+
+
+
 
     Route::group(['prefix' => 'anbar'], function () {
         Route::get('/', 'Backend\AnbarController@index');
@@ -194,7 +200,6 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
             Route::post('/', 'Backend\RoleController@store');
         });
 
-
         Route::get('/', 'Backend\UserController@index');
         Route::post('/', 'Backend\UserController@store');
         Route::get('/{id}', 'Backend\UserController@show');
@@ -202,7 +207,23 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
         Route::put('/{id}/change-password', 'Backend\UserController@changePassword');
         Route::put('/{id}/change-status', 'Backend\UserController@changeStatus');
 
+    });
 
+    Route::group(['prefix' => 'setting'], function () {
+
+        Route::get('/social-media', function () {
+            $response = \App\SocialMedia::all();
+            return response($response);
+        });
+
+        Route::get('/communication_channel', function () {
+            $response = \App\CommunicationChannel::all();
+            return response($response);
+        });
+
+        Route::get('/{domain}', 'Backend\SettingController@read');
+        Route::put('/{domain}', 'Backend\SettingController@update');
+        Route::put('/{domain}/boolean-change', 'Backend\SettingController@booleanChange');
 
     });
 
@@ -212,10 +233,18 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
 
 /* auth  */
 Route::post('/login', 'Auth\LoginController@login');
-Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
-
 Route::group(['prefix' => 'validation-code'], function () {
     Route::post('/send', function (Request $request) {
+
+        $validator = \Validator::make($request->all(), [
+            'mobile' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
         $user = User::where('mobile', $request->get('mobile'))->where('status', 1);
         // check user status
         if ($user->count() == 1) {
@@ -238,6 +267,18 @@ Route::group(['prefix' => 'validation-code'], function () {
         }
     });
     Route::post('/verify', function (Request $request) {
+
+        $validator = \Validator::make($request->all(), [
+            'token' => 'required',
+            'mobile' => 'required',
+            'code' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
         $user = User::where('mobile', $request->get('mobile'))
             ->where('remember_token', $request->get('token'))
             ->where('validation_code', $request->get('code'))
@@ -257,12 +298,24 @@ Route::group(['prefix' => 'validation-code'], function () {
             return Response()->json(['status' => true, 'msg' => 'رمز جدید خود را وارد کنید', 'token' => $token]);
 
         } elseif ($user->count() == 0) {
-            return Response()->json(['status' => false, 'msg' => 'به جای فرستادن اسپم کتاب بخوانید.']);
+            return Response()->json(['status' => false, 'msg' => 'کد وارد شده نادرست است.']);
         } else {
             return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
         }
     });
     Route::post('/change-password', function (Request $request) {
+
+        $validator = \Validator::make($request->all(), [
+            'password' => 'required|min:6',
+            'token' => 'required',
+            'mobile' => 'required',
+            'code' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
 
         $user = User::where('mobile', $request->get('mobile'))
             ->where('remember_token', $request->get('token'))
@@ -289,7 +342,7 @@ Route::group(['prefix' => 'validation-code'], function () {
         }
     });
 });
-
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
 Route::post('/change-password', function (Request $request) {
 
     $validator = \Validator::make($request->all(), [
@@ -312,8 +365,6 @@ Route::post('/change-password', function (Request $request) {
     return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
 })->middleware('auth:api');
-
-
 Route::post('/change-profile', function (Request $request) {
 
     $validator = \Validator::make($request->all(), [

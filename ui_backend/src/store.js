@@ -9,7 +9,6 @@ import auth from "./reducers/auth";
 import {createBrowserHistory} from "history";
 import { routerMiddleware } from 'connected-react-router'
 import { connectRouter } from 'connected-react-router'
-import exportedEqual from "react-select/src/internal/react-fast-compare";
 export const history = createBrowserHistory();
 
 const createRootReducer = (history) => combineReducers({

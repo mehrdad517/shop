@@ -1,9 +1,10 @@
-import {AUTH_CHANGE_LOGIN, AUTH_PERMISSIONS} from "./../actionTypes";
+import {AUTH_CHANGE_LOGIN, AUTH_PERMISSIONS, FETCH_SETTING} from "./../actionTypes";
 
 const initialState = {
     login: false,
     user: null,
     token: null,
+    setting: null,
     permissions: [],
 };
 
@@ -20,6 +21,11 @@ export default  function auth(state = initialState, action) {
                 login: action.payload.login,
                 user: action.payload.user,
                 token: action.payload.token
+            };
+        case FETCH_SETTING:
+            return {
+                ...state,
+                setting: action.payload
             };
         default:
             return state;

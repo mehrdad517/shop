@@ -8,7 +8,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import {toast} from "react-toastify";
-import {Typography} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Api from "../api";
@@ -94,7 +93,7 @@ class AuthChangePassword extends Component {
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle id="alert-dialog-title"><Typography component={"h1"}>تغییر رمز عبور</Typography></DialogTitle>
+                <DialogTitle id="alert-dialog-title">تغییر رمز عبور</DialogTitle>
                 <form onSubmit={this.handleSubmit.bind(this)}>
                     <DialogContent>
                         {this.state.loading ? <CircularProgress style={{ zIndex: '99999'}} size={15} color={"secondary"} /> : ''}

@@ -364,15 +364,6 @@ class Api {
         })
     }
 
-    async getProductCategoryAttributes(id) {
-        return axios.get(`http://localhost:8000/api/backend/products/categories/${id}/attributes`,{
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
 
 
 
@@ -545,6 +536,58 @@ class Api {
         return axios.get(`http://localhost:8000/api/backend/users/roles/${role}/permissions`, {
             headers: this.haeders(),
             params: {map: map}
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    // all api for setting
+    async socialMedia(){
+        return axios.get(`http://localhost:8000/api/backend/setting/social-media`, {
+            headers: this.haeders(),
+
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async communicationChannel(){
+        return axios.get(`http://localhost:8000/api/backend/setting/communication_channel`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async setting(domain){
+        return axios.get(`http://localhost:8000/api/backend/setting/${domain}`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateSetting(domain, object){
+        return axios.put(`http://localhost:8000/api/backend/setting/${domain}`, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateBooleanSetting(domain, object){
+        return axios.put(`http://localhost:8000/api/backend/setting/${domain}/boolean-change`, object, {
+            headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {

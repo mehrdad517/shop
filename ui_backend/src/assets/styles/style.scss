@@ -7,6 +7,20 @@ body {
     margin: 0;
     padding: 0;
 }
+.Toastify {
+    font-family: Shabnam;
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+.Toastify__toast--error{
+    background-color: #f50057;
+}
+.Toastify__toast--success{
+    background-color: #2ecc71;
+}
+.Toastify__toast--info{
+    background-color: #648ada;
+}
 a{
     text-decoration: none;
     color: #3a35da;

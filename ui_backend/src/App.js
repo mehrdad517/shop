@@ -39,6 +39,7 @@ import './assets/styles/style.scss'
 import 'react-toastify/dist/ReactToastify.css';
 import Header from "./pages/header";
 import ResetPassword from "./pages/reset-password";
+import Setting from './pages/setting'
 
 const theme = createMuiTheme({
     direction: "rtl",
@@ -51,12 +52,22 @@ const theme = createMuiTheme({
                 color: 'red',
             },
         },
+        MuiInputBase: {
+            input: {
+                fontSize: '14px'
+            },
+        },
+        MuiFormHelperText: {
+          contained: {
+              margin: '10px 0 0 0'
+          }
+        },
         MuiDialogContent : {
             root: {
                 '&:first-child': {
                     paddingTop: 0
                 }
-            }
+            },
         }
     },
 });
@@ -91,6 +102,7 @@ function App() {
                             <Route component={AttributeEdit} path='/products/attributes/:id' />
                             <Route component={UserList} path='/users' exact={true} />
                             <Route component={Acl} path='/users/access/control/list' />
+                            <Route component={Setting} path={'/setting'} />
                         </ConnectedRouter >
                         <ToastContainer
                             position="top-left"
