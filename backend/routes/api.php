@@ -224,6 +224,7 @@ Route::group(['prefix' => '/backend'], function () {
     Route::group(['prefix' => 'domains'], function () {
 
         Route::get('/{domain}', 'Backend\DomainController@read');
+        Route::get('/{domain}/read-boolean', 'Backend\DomainController@readBoolean');
         Route::put('/{domain}', 'Backend\DomainController@update');
         Route::put('/{domain}/boolean-change', 'Backend\DomainController@booleanChange');
 

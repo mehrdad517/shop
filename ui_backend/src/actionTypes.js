@@ -1,4 +1,5 @@
-export const FETCH_SETTING = 'FETCH_SETTING';
-export const AUTH_PERMISSIONS = 'AUTH_PERMISSIONS';
-export const AUTH_CHANGE_LOGIN = 'AUTH_CHANGE_LOGIN';
+export const AUTH_LOGIN = 'AUTH_LOGIN';
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+
+export const UPDATE_SETTING = 'UPDATE_SETTING';
 

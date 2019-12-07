@@ -11,9 +11,9 @@ import {toast} from "react-toastify";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Api from "../api";
-import {AUTH_CHANGE_LOGIN} from "../actionTypes";
 import {push} from "connected-react-router";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {AUTH_LOGOUT} from "../actionTypes";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -57,11 +57,7 @@ class AuthChangePassword extends Component {
                         this.props.onClose();
                     }, 500);
 
-                    this.props.logoutReducer( {
-                        login: false,
-                        user: null,
-                        token: null,
-                    });
+                    this.props.logout();
 
 
                     let interval = setInterval(() => {
@@ -133,10 +129,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutReducer: function (payload) {
+        logout: function () {
             dispatch({
-                type: AUTH_CHANGE_LOGIN,
-                payload
+                type: AUTH_LOGOUT,
             });
         },
         redirect: function () {

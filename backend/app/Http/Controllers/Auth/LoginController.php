@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Domain;
 use App\Http\Controllers\Controller;
 
+use App\Role;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +51,7 @@ class LoginController extends Controller
 
         $validator = \Validator::make($request->all(), [
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -61,18 +63,33 @@ class LoginController extends Controller
 
             return response()->json([
                 'status' => false,
-                'message' => 'Unauthorized'
-            ], 401);
+                'message' => 'نام کاربری و کلمه عبور اشتباه است.'
+            ], 200);
         }
 
         $user = $request->user();
+
+        if (!$user->status) {
+            return response()->json([
+                'status' => false,
+                'message' => 'کاربر غیرفعال است.'
+            ], 200);
+        }
+
+
+        // create token
         $token = $user->createToken('Token Name')->accessToken;
 
 
         return response()->json([
             'status' => true,
-            'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'user' => [
+                'name' => $user->name,
+                'mobile' => $user->mobile,
+            ],
+            'permissions' => Role::getPermissions(Auth::user()->role_key, false),
+            'setting' => Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel')->find('localhost:3000'),
         ]);
 
 

@@ -13,7 +13,7 @@ import Api from "../api";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import {toast} from "react-toastify";
-import {AUTH_CHANGE_LOGIN} from "../actionTypes";
+import {AUTH_CHANGE_LOGIN, AUTH_LOGOUT} from "../actionTypes";
 import {push} from "connected-react-router";
 
 
@@ -36,11 +36,11 @@ class AuthEditProfile extends Component {
     }
 
     componentDidMount() {
-        this.setState({
+        /*this.setState({
             form: {
                 name: this.props.auth.user.name,
             }
-        })
+        })*/
     }
 
     handleChangeElement(event) {
@@ -64,11 +64,7 @@ class AuthEditProfile extends Component {
                 }, 500);
 
                 // update redux status
-                this.props.logoutReducer( {
-                    login: false,
-                    user: null,
-                    token: null,
-                });
+                this.props.logout();
 
                 let interval = setInterval(() => {
                     if (!this.props.auth.login) {
@@ -136,11 +132,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutReducer: function (payload) {
-            dispatch({
-                type: AUTH_CHANGE_LOGIN,
-                payload
-            });
+        logout: function () {
+            dispatch({type: AUTH_LOGOUT});
         },
         redirect: function () {
             dispatch(push('/'));

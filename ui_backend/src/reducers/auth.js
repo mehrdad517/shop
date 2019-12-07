@@ -1,4 +1,4 @@
-import {AUTH_CHANGE_LOGIN, AUTH_PERMISSIONS, FETCH_SETTING} from "./../actionTypes";
+import {AUTH_LOGIN, AUTH_LOGOUT, UPDATE_SETTING} from "./../actionTypes";
 
 const initialState = {
     login: false,
@@ -10,23 +10,29 @@ const initialState = {
 
 export default  function auth(state = initialState, action) {
     switch (action.type) {
-        case AUTH_PERMISSIONS:
+        case AUTH_LOGIN:
             return {
                 ...state,
-                permissions: action.payload
-            };
-        case AUTH_CHANGE_LOGIN:
-            return {
-                ...state,
-                login: action.payload.login,
+                login: true,
                 user: action.payload.user,
-                token: action.payload.token
+                token: action.payload.token,
+                permissions: action.payload.permissions,
+                setting: action.payload.setting
             };
-        case FETCH_SETTING:
+        case AUTH_LOGOUT:
+            return {
+                ...state,
+                login: false,
+                user: null,
+                token: null,
+                setting: null,
+                permissions: []
+            };
+        case UPDATE_SETTING:
             return {
                 ...state,
                 setting: action.payload
-            };
+            }
         default:
             return state;
     }

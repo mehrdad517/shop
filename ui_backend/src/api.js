@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 class Api {
 
     haeders() {
-        let token = '';
+        let token = 'initial token';
         let root = JSON.parse(localStorage.getItem('persist:root'));
         if (root) {
             token = JSON.parse(root.auth).token;
@@ -19,7 +19,7 @@ class Api {
     async dispatchResponse(response) {
         if (response.status === 401) {
             return function (dispatch) {
-                // sign out user
+                localStorage.removeItem('persist:root');
             }
         }
         return response.data;
@@ -567,6 +567,16 @@ class Api {
 
     async setting(domain){
         return axios.get(`http://localhost:8000/api/backend/domains/${domain}`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async booleanSetting(domain){
+        return axios.get(`http://localhost:8000/api/backend/domains/${domain}/read-boolean`, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

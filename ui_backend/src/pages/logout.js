@@ -6,11 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import {AUTH_CHANGE_LOGIN} from "../actionTypes";
 import Api from "../api";
 import Button from "@material-ui/core/Button";
 import {CircularProgress} from "@material-ui/core";
 import {push} from 'connected-react-router'
+import {AUTH_LOGOUT} from "../actionTypes";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -37,11 +37,7 @@ class Logout extends Component {
         this.api.logout().then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
-                    this.props.logoutReducer( {
-                        login: false,
-                        user: null,
-                        token: null,
-                    });
+                    this.props.logout();
 
                     let interval = setInterval(() => {
                         if (!this.props.auth.login) {
@@ -96,10 +92,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutReducer: function (payload) {
+        logout: function () {
             dispatch({
-                type: AUTH_CHANGE_LOGIN,
-                payload
+                type: AUTH_LOGOUT,
             });
         },
         redirect: function () {

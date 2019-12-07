@@ -13,7 +13,7 @@ import Box from "@material-ui/core/Box";
 import Api from "../api";
 import {toast} from "react-toastify";
 import { push } from 'connected-react-router'
-import {AUTH_CHANGE_LOGIN} from "../actionTypes";
+import {AUTH_LOGIN} from "../actionTypes";
 
 class Login extends Component {
 
@@ -55,11 +55,7 @@ class Login extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                      toast.success('با موفقیت وارد شدید.');
-                    this.props.changeLoginReducer({
-                        login: true,
-                        user: response.user,
-                        token: response.token
-                    });
+                    this.props.login(response);
 
                     let interval = setInterval(() => {
                         if (this.props.auth.login) {
@@ -152,9 +148,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeLoginReducer :  function (payload) {
+        login :  function (payload) {
             dispatch({
-                type : AUTH_CHANGE_LOGIN,
+                type : AUTH_LOGIN,
                 payload
             });
         },

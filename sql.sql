@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -78,12 +78,18 @@ CREATE TABLE IF NOT EXISTS `communication_channel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.communication_channel: ~1 rows (approximately)
+-- Dumping data for table 517_shop.communication_channel: ~7 rows (approximately)
 /*!40000 ALTER TABLE `communication_channel` DISABLE KEYS */;
 INSERT INTO `communication_channel` (`id`, `title`) VALUES
-	(1, 'fax');
+	(1, 'فکس'),
+	(2, 'موبایل'),
+	(3, 'ایمیل info'),
+	(4, 'تلگرام'),
+	(5, 'واتس اپ'),
+	(6, 'شماره تماس'),
+	(7, 'ایمیل پشتیبانی');
 /*!40000 ALTER TABLE `communication_channel` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain
@@ -109,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
 -- Dumping data for table 517_shop.domain: ~0 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
 INSERT INTO `domain` (`key`, `name`, `meta_title`, `meta_description`, `introduce`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `status`, `created_at`, `updated_at`) VALUES
-	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 1, 1, 1, 1, 1, 1, NULL, '2019-12-06 16:54:42');
+	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 1, 1, 1, 1, 1, 1, '2019-12-07 10:11:41', '2019-12-07 12:27:07');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_communication_channel
@@ -123,10 +129,11 @@ CREATE TABLE IF NOT EXISTS `domain_communication_channel` (
   CONSTRAINT `FK_communication_channel_domain_domain` FOREIGN KEY (`domain_key`) REFERENCES `domain` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.domain_communication_channel: ~1 rows (approximately)
+-- Dumping data for table 517_shop.domain_communication_channel: ~2 rows (approximately)
 /*!40000 ALTER TABLE `domain_communication_channel` DISABLE KEYS */;
 INSERT INTO `domain_communication_channel` (`domain_key`, `communication_channel_id`, `value`) VALUES
-	('localhost:3000', 1, 'asdasd');
+	('localhost:3000', 1, 'dfdfd'),
+	('localhost:3000', 2, 'gfhfghfgh');
 /*!40000 ALTER TABLE `domain_communication_channel` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_social_media
@@ -140,10 +147,13 @@ CREATE TABLE IF NOT EXISTS `domain_social_media` (
   CONSTRAINT `FK_social_media_domain_social_media` FOREIGN KEY (`social_media_id`) REFERENCES `social_media` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.domain_social_media: ~0 rows (approximately)
+-- Dumping data for table 517_shop.domain_social_media: ~4 rows (approximately)
 /*!40000 ALTER TABLE `domain_social_media` DISABLE KEYS */;
 INSERT INTO `domain_social_media` (`domain_key`, `social_media_id`, `value`) VALUES
-	('localhost:3000', 1, 'vxcvcx');
+	('localhost:3000', 1, 'ddddddddd'),
+	('localhost:3000', 2, 'sdfdsfdsf'),
+	('localhost:3000', 3, 'یسسیبسی'),
+	('localhost:3000', 7, 'بببب');
 /*!40000 ALTER TABLE `domain_social_media` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.error
@@ -339,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~107 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~115 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
 	('019b07addecaeab66cf713be1e7d69ce910e9a04438c2714654dd1203e185ddcfef29d8b8379217f', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:49:01', '2019-12-02 21:49:01', '2020-12-02 21:49:01'),
@@ -347,6 +357,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('02a8b1fb9a21dc585a98d88b684d0c331c3b9c9cbf1580d926968ee2b1dcdffba5408f8523abd117', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:39:46', '2019-12-02 21:39:46', '2020-12-02 21:39:46'),
 	('0472a99dd77629e0c64e703e33df5fc45171485e7165af6cab846e084660d307dcbd933784fc9203', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:26:32', '2019-12-02 21:26:32', '2020-12-02 21:26:32'),
 	('060dfdeb0fb0775aba336bdf5b927d5e7f22020c1ec86401dde1e6fa148cff3aa657dea9f2a588ee', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:51:58', '2019-12-02 21:51:58', '2020-12-02 21:51:58'),
+	('09a2606cbbd436a1d96125f0d6bbc3c9462d08b007ab3701ca37e0839ddadb89ab192c1d76185bcc', 2, 2, 'Token Name', '[]', 1, '2019-12-07 11:31:18', '2019-12-07 11:31:18', '2020-12-07 11:31:18'),
 	('125016f9620483a585f5c266d31772fdcf1b046d6726224f6b4f44ae0eb8c71cf23bf794e53cd067', 2, 2, 'Token Name', '[]', 0, '2019-12-01 20:06:34', '2019-12-01 20:06:34', '2020-12-01 20:06:34'),
 	('1281dcf9d3c79b4c41f534a1aa2232b2fe2f43bb3db0de8e6e324624b2dc8eea9e8bf9486ea84d8c', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:11:32', '2019-12-01 19:11:32', '2020-12-01 19:11:32'),
 	('147ac4da0f7d8d79e9e9577d06a92e4cf543817b68e11f40e6423b2b6523b86290e0b6fe4d2dfc6b', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:57:06', '2019-12-02 21:57:06', '2020-12-02 21:57:06'),
@@ -359,6 +370,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('23a980101ec7ffbef9cb984c438a0acd121d6cb5f7641939a0170625a8d1fed2727a4a18d548e12e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:59:31', '2019-12-01 19:59:31', '2020-12-01 19:59:31'),
 	('25166273c54ee3860eb4c16d963bf0e27959d691c79497c0ec3d1f55cd8c2b70347c03d515b56cfc', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:10:49', '2019-12-02 19:10:49', '2020-12-02 19:10:49'),
 	('283019c82a9ece7177e50e526ac78dc8681c569a7f4e4eaa74af84cec9986f9bd2c7077c9b8d036a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:41:08', '2019-12-02 21:41:08', '2020-12-02 21:41:08'),
+	('28a4c6cb7ca955175e511b816f0b745085894ed4ed6f73efb392cc7aad3955dcc3771522b54cf0b9', 2, 2, 'Token Name', '[]', 1, '2019-12-07 11:28:46', '2019-12-07 11:28:46', '2020-12-07 11:28:46'),
 	('296f3f962519772ae7a5cf4e498316fce78ffc22107be6da5e6128aa3c4ea42a0c839f8c1da73941', 2, 2, 'Token Name', '[]', 0, '2019-12-02 19:46:26', '2019-12-02 19:46:26', '2020-12-02 19:46:26'),
 	('2c4106610f55e7cc57c6a5b1f0cf9df3a9259d7d3c062f88c928773a6213cc7d4ec500ea24737f33', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:13:57', '2019-12-01 21:13:57', '2020-12-01 21:13:57'),
 	('32661f49993b688b8a5d036807e5191a567116e82b83c9b16b76f6c1c478507ded40eaf10210b0b8', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:06:00', '2019-12-02 19:06:00', '2020-12-02 19:06:00'),
@@ -381,6 +393,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('5316b31272cf3b4a54d26631439ca2e86c22b62a0c6a60a8761bf3c66aef2aada8d3f6ae5b152d61', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:28:30', '2019-12-02 21:28:30', '2020-12-02 21:28:30'),
 	('57263af97c93a910ae91373f6ed42c2fdc0c1d5262395e9b53600ca2bfb9c274b517b185e84f258a', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:59:19', '2019-12-01 18:59:19', '2020-12-01 18:59:19'),
 	('577d156079a6d4bcfc72fa5b7cc717693fd21836e8dd33e1157dc37b6736afd7394786a8b55a7adb', 2, 2, 'Token Name', '[]', 0, '2019-12-02 17:34:04', '2019-12-02 17:34:04', '2020-12-02 17:34:04'),
+	('5824f35b6e3e4192382fd5f0b19c6f3785f9062d4ead4abd50069b2a3a3e632b9260b4149b8d223f', 2, 2, 'Token Name', '[]', 1, '2019-12-07 11:30:24', '2019-12-07 11:30:24', '2020-12-07 11:30:24'),
 	('589ee722ceae94e5ad87ba6499df9419dc0bb3cd8e1dc08512614ba03503d75a51af9a883857c146', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:57:23', '2019-12-02 21:57:23', '2020-12-02 21:57:23'),
 	('5933d2fd6d721c3db0e54731d4ba3ac970054de6b3ea9a87703481ab0c2ebab0261acb61fbc69d28', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:31:23', '2019-12-01 19:31:23', '2020-12-01 19:31:23'),
 	('5cdd65b4c8928a7315f1b211082cdecc953904f8c4ea79fc1b012892a535c80dfa48af5d61311c3d', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:15:12', '2019-12-01 21:15:12', '2020-12-01 21:15:12'),
@@ -389,11 +402,15 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('646c184d9f9c45ff32788d4ecd261bf39a719fba14c4215180a207ed07166a541715c47071ba6172', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:56:58', '2019-12-01 18:56:58', '2020-12-01 18:56:58'),
 	('662d3f70d4148e3e7537af39d24b051f4f46807e15638f55cf1a8999548a945f6a761b446ce1a067', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:17:49', '2019-12-02 19:17:49', '2020-12-02 19:17:49'),
 	('69192aed7449e2ca3fbf0500af9ce98e1176a478a8f8dc61b9552b3877b2f716c609c2db96cee7c0', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:01:10', '2019-12-02 22:01:10', '2020-12-02 22:01:10'),
+	('6b96610f8f468a2a3ff39d594137afbd1d8451acbe60c72da43af22979311eec8dce31297c8c6223', 2, 2, 'Token Name', '[]', 0, '2019-12-07 13:07:09', '2019-12-07 13:07:09', '2020-12-07 13:07:09'),
 	('6bc19b3c34bffb29e8097e9dfb68535ba7dd9f3ec40e5164ff56a22c0cb8cebd5510f804e4f7e79b', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:58:57', '2019-12-02 21:58:57', '2020-12-02 21:58:57'),
 	('70e43be51d827cbf62cb3c2fded70b8275fe3a46787d95893db323e9f08136ad995783832dc15bf0', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:16:36', '2019-12-02 19:16:36', '2020-12-02 19:16:36'),
 	('72719c00604cc25a8f9a43621b978a5341cb9f3cd4ca2d869fc0b26c9108d27b2b2b53e0fb06bb68', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:41:52', '2019-12-02 21:41:52', '2020-12-02 21:41:52'),
+	('73524f53e665fa117ba3e2994dc1853e927b35fb3bb83139553b11a21f10eecd449a0218db3f194b', 2, 2, 'Token Name', '[]', 1, '2019-12-07 12:28:22', '2019-12-07 12:28:22', '2020-12-07 12:28:22'),
 	('74f0a79ce440997928baff81a5e674c572044c664fa65c78fc1eed5942d7b016dc191de6ac840613', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:10:47', '2019-12-01 19:10:47', '2020-12-01 19:10:47'),
 	('74f6eab8d560d4be7e652cd0c8ce98a3a924ca301bd181d755060fa1bb1977514d12bb80a47f26d6', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:04:55', '2019-12-01 19:04:55', '2020-12-01 19:04:55'),
+	('764ef58784a018bc0e937f494a4f7d1ff6b18ffbcabcbc0248be15ab7a3f084c7cbd186e599bddf6', 2, 2, 'Token Name', '[]', 0, '2019-12-07 14:13:37', '2019-12-07 14:13:37', '2020-12-07 14:13:37'),
+	('7b4e347a63a65f3bf5dce1defc6362bf4934931cec69d277ed1f7512fa96dfa70f8c6a891a32823f', 2, 2, 'Token Name', '[]', 0, '2019-12-07 14:10:23', '2019-12-07 14:10:23', '2020-12-07 14:10:23'),
 	('7c2e56da38f8356b61b05931a7d80abb9dfbb9707c894413ce48177ddc6d8963e1df3e6be855728e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:12:23', '2019-12-01 21:12:23', '2020-12-01 21:12:23'),
 	('7cf7579b7d7d6a16646662985255e95430345b0779e864780591bdb95af119e006bbfcce77b6993d', 2, 2, 'Token Name', '[]', 1, '2019-12-02 17:31:24', '2019-12-02 17:31:24', '2020-12-02 17:31:24'),
 	('7e88063485b4a1763eb43e4200375884d736f5df92556e4d9c821d2fe64d6ea90dab93de8e86f37a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 18:27:45', '2019-12-02 18:27:45', '2020-12-02 18:27:45'),
@@ -406,6 +423,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('8c8c819b483c34e9a344d5110b96e686e544c0b8c3ed43d6c3f1c2ea5420cf6f96aed345beaa5fa1', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:31:15', '2019-12-01 18:31:15', '2020-12-01 18:31:15'),
 	('8feb2652335f4198fb9ee4f91a37ea82e4d29f767756e798b6226a2889deb1f6034a444d1beb442e', 2, 2, 'Token Name', '[]', 0, '2019-12-05 18:24:04', '2019-12-05 18:24:04', '2020-12-05 18:24:04'),
 	('912d382fc0eabe68d402b7dbcfb155b502b5860282ac00df2552cb9a03eb202e51e02a731c432613', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:49:15', '2019-12-02 21:49:15', '2020-12-02 21:49:15'),
+	('926f92bc7be19132ace28e53001c10b88468e2a3e65db6914a64b50d27ffdb16b1d6b722f27a7dbf', 2, 2, 'Token Name', '[]', 0, '2019-12-07 14:12:47', '2019-12-07 14:12:47', '2020-12-07 14:12:47'),
 	('9424604771f234dbd6fbd6ea02c9621110520bed700a6fb96eb76b5d8561e2d9d1954d17e9b9c999', 2, 2, 'Token Name', '[]', 0, '2019-12-01 20:07:57', '2019-12-01 20:07:57', '2020-12-01 20:07:57'),
 	('956ee8c15aebc87a90fba9c6910a787042a4d6a25d9d6030743089da70d404441d1c1e95acf5811a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:45', '2019-12-02 21:50:45', '2020-12-02 21:50:45'),
 	('98ca062fd8addc4ff70c63f4823aa7c217042540c60d1c87d44f6d1ebb48ac7e2f66ae568f22e542', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:03:49', '2019-12-01 19:03:49', '2020-12-01 19:03:49'),
@@ -415,9 +433,11 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('9eaffd9205c5f56b6cd9eafde1b5c5bc485766715f2a43b0edbb32c02dd5f7e4d20d19c3e529a000', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:28:43', '2019-12-02 19:28:43', '2020-12-02 19:28:43'),
 	('9f8318ba5b772091660fc85122db61f3c06ff0e97c14c009135c10413031462eb1dac52e80b1dfd1', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:40:24', '2019-12-02 21:40:24', '2020-12-02 21:40:24'),
 	('a6099dda739d67c61419652ac366ae3854e49b0dda1eb4bc0fcff3e824fbe0419957e511b60dab8b', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:08:35', '2019-12-01 19:08:35', '2020-12-01 19:08:35'),
+	('ab27bc6e6451e46c504297c3b14d3010503af68945f05c057b4d436a8ba12f1b497464c966176ab7', 2, 2, 'Token Name', '[]', 1, '2019-12-07 11:28:07', '2019-12-07 11:28:07', '2020-12-07 11:28:07'),
 	('ab8a858e70f15774a511360c0c82acdbc2b67d4a4a65f6dcddef49969e4f1702ca9dafcde1731ad5', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:25:56', '2019-12-02 19:25:56', '2020-12-02 19:25:56'),
 	('ad623102850f301109baffdb1980a866d29e22cfecbbfe6308d3e0199253f171d10c2d4eab2e612e', 2, 2, 'Token Name', '[]', 1, '2019-12-05 16:10:57', '2019-12-05 16:10:57', '2020-12-05 16:10:57'),
 	('af4e3614ca7076dae1b5c6d1e31dfa22df519a68b13835d2306ada9d474ea0d43fd26456c68f3add', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:11:02', '2019-12-01 19:11:02', '2020-12-01 19:11:02'),
+	('b0f4b3c8cc9edd2d5ea906e58380f974009a70387037ae5e815266d2b66cf27419dd220475f347a8', 2, 2, 'Token Name', '[]', 0, '2019-12-07 13:05:24', '2019-12-07 13:05:24', '2020-12-07 13:05:24'),
 	('b322a6108266907d7fe16b05ec1b07dd0ce7b99f11e13d7b89983bcee2521adcc1cb2da49232c817', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:01:03', '2019-12-02 22:01:03', '2020-12-02 22:01:03'),
 	('b4f6cdd12a987ae3822a57348e4971d52676f387bc2c95dc46dad05a97371c53a623ebddc13dc858', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:41:23', '2019-12-02 19:41:23', '2020-12-02 19:41:23'),
 	('b7747e64db6ebf5eb084d940d9f90cc954cb2164bfe588fc87aa18155eeea7068531aaeaddb1af0d', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:51:48', '2019-12-02 21:51:48', '2020-12-02 21:51:48'),
@@ -443,6 +463,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('dc7a71617624da20e95fe4cb85e661e64053f6a337ba4ba6eb01b501de0f623d8ff5aa3921623dfd', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:27:04', '2019-12-01 18:27:04', '2020-12-01 18:27:04'),
 	('ded8c5c00b835c23d941f8f1e76ec15a8dffe269ded72da637bb053a1f5080040b2329ef7aeb6ae1', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:26:29', '2019-12-01 18:26:29', '2020-12-01 18:26:29'),
 	('e29c379313cb6f6a5de37250d01079d04b3e280288c468cb4787a29ea8cf9ae3a4f635e542dfeba7', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:00:44', '2019-12-02 19:00:44', '2020-12-02 19:00:44'),
+	('e2e56e571127e51408d0b25005cf1ada166def2004bd74a67b2f907955ccc04e9ab7625ce8ce51ba', 2, 2, 'Token Name', '[]', 1, '2019-12-07 11:29:04', '2019-12-07 11:29:04', '2020-12-07 11:29:04'),
 	('e8f3fa46f6d7b7648513fb68d0b46d804ab38290be8625bd0a5351ceb575ef78479d2e62e6150c9f', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:23', '2019-12-02 21:50:23', '2020-12-02 21:50:23'),
 	('eb21a7ede7355d0ffb3af7a17495a6574a53f8fa723eafda2a0b4c67bf6ec02953d25c403307a5f4', 2, 2, 'Token Name', '[]', 1, '2019-12-05 14:14:43', '2019-12-05 14:14:43', '2020-12-05 14:14:43'),
 	('ed5a0ea3b8287dd7d50882f2d8e47235fb83c4e2df1c57fa813a34b5ef26c1f1d97343488ca9858e', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:01:02', '2019-12-02 19:01:02', '2020-12-02 19:01:02'),
@@ -450,6 +471,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('f324c7117bf044e2f7e2078fe1768e8905db04fb272dbbc87cb0fca9720ca1e04320dbf1cec0ea60', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:53:23', '2019-12-02 21:53:23', '2020-12-02 21:53:23'),
 	('f8fdb92ef16544ad66bd062f130518afd9e3abd4e3d1b5a503f8455b334b84e0c719b6e05c387c6d', 2, 2, 'Token Name', '[]', 0, '2019-12-05 14:45:13', '2019-12-05 14:45:13', '2020-12-05 14:45:13'),
 	('fb3381b73e7d8228dd044b5839a6848ee545c51225f73cca3337dc4198ad41f4d4a4d5e96e53e901', 2, 2, 'Token Name', '[]', 1, '2019-12-02 18:12:47', '2019-12-02 18:12:47', '2020-12-02 18:12:47'),
+	('fd45321c16486a80f28f91de5814fdbd714668961999cc198cd1df5d3be4f55a2247102bb128d872', 2, 2, 'Token Name', '[]', 0, '2019-12-07 13:06:24', '2019-12-07 13:06:24', '2020-12-07 13:06:24'),
 	('fd7e940b41d91c645e00f9c26874bebfbd9befffe82a49a3511bcabc32ff29b4b9c4cc0ef2b78416', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:27:12', '2019-12-02 19:27:12', '2020-12-02 19:27:12');
 /*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
@@ -542,7 +564,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `FK_order_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=780 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order: ~338 rows (approximately)
+-- Dumping data for table 517_shop.order: ~373 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
 	(407, 1, 0, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '1971-07-24 02:09:30', '1998-05-26 03:41:31'),
@@ -1785,13 +1807,14 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `method` enum('GET','POST','PUT','DELETE') COLLATE utf8_unicode_ci NOT NULL,
-  `parent` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `parent` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`key`)
+  PRIMARY KEY (`key`),
+  KEY `parent` (`parent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission: ~39 rows (approximately)
+-- Dumping data for table 517_shop.permission: ~9 rows (approximately)
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` (`key`, `title`, `url`, `method`, `parent`, `created_at`, `updated_at`) VALUES
 	('anbar_index', 'مدیریت', '/api/backend/anbar', 'GET', 'anbar', '2019-11-29 11:41:15', '2019-11-29 15:54:36'),
@@ -1845,7 +1868,7 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
   CONSTRAINT `FK_permission_role_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission_role: ~127 rows (approximately)
+-- Dumping data for table 517_shop.permission_role: ~129 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('admin', 'brand_index'),
@@ -2098,7 +2121,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~7 rows (approximately)
+-- Dumping data for table 517_shop.role: ~8 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('admin', 'ادمین', '2019-11-29 10:26:16', '2019-11-29 10:26:16'),
@@ -2116,14 +2139,21 @@ CREATE TABLE IF NOT EXISTS `social_media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.social_media: ~3 rows (approximately)
+-- Dumping data for table 517_shop.social_media: ~10 rows (approximately)
 /*!40000 ALTER TABLE `social_media` DISABLE KEYS */;
 INSERT INTO `social_media` (`id`, `title`) VALUES
 	(1, 'اینستاگرام'),
-	(2, 'گیت هاب'),
-	(3, 'گوگل پلاس');
+	(2, 'کانال تلگرام'),
+	(3, 'فیس بوک'),
+	(4, 'توئیتر'),
+	(5, 'لینکدین'),
+	(6, 'گیت هاب'),
+	(7, 'گوگل پلاس'),
+	(8, 'یوتیوب'),
+	(9, 'اپارات'),
+	(10, 'ویرگول');
 /*!40000 ALTER TABLE `social_media` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.users
@@ -2133,6 +2163,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `role_key` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
+  `validation_code` int(5) DEFAULT NULL,
+  `verify_code` tinyint(1) NOT NULL DEFAULT 0,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2145,9 +2177,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `mobile`, `role_key`, `name`, `status`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'programmer', 'مهرداد معصومی', 1, '70082665', NULL, '2019-11-29 17:18:50', '2019-11-29 17:18:50'),
-	(2, '09120246217', 'programmer', 'mehrdad masoumi', 1, '$2y$10$TZrN.cm073mNA9O5M3llquVbeIW4AeGbTb01o1H6TXgmXyQhBo5s6', NULL, '2019-11-30 20:13:25', '2019-11-30 20:13:25');
+INSERT INTO `users` (`id`, `mobile`, `role_key`, `name`, `status`, `validation_code`, `verify_code`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+	(1, '09398624739', 'programmer', 'مهرداد معصومی', 1, 1, 1, '70082665', NULL, '2019-11-29 17:18:50', '2019-11-29 17:18:50'),
+	(2, '09120246217', 'programmer', 'mehrdad masoumi', 1, 92476, 1, '$2y$10$5wW4C0djjA6yZhdgS5ng8.v8ODQ.UG.caNQT/t7Ptg7RD6GeHC2Ta', '$2y$10$QpRd74EtfwqKkvEDIU4sKOtnpbl3BFtyN5FdUX8P9.axkjEayRb12', '2019-11-30 20:13:25', '2019-12-07 11:28:23');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete
