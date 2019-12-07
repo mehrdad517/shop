@@ -23,8 +23,11 @@ class Index extends Component {
 
     componentDidMount() {
 
-        // call setting record
-        this.props.authSetting(window.location.host);
+        // call setting update  if not exist in redux
+        if (!this.props.auth.setting) {
+
+            this.props.authSetting(window.location.host);
+        }
 
         if (this.props.auth.user) {
             this.props.authPermissions(this.props.auth.user.role_key);

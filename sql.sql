@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         localhost
+-- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.2.0.5599
@@ -72,6 +72,79 @@ CREATE TABLE IF NOT EXISTS `brand` (
 INSERT INTO `brand` (`id`, `title`, `slug`, `content`, `meta_title`, `meta_description`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 'مای', 'سمعل', 'سیبسی', NULL, NULL, 1, '2019-11-10 11:57:50', '2019-11-10 11:57:50');
 /*!40000 ALTER TABLE `brand` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.communication_channel
+CREATE TABLE IF NOT EXISTS `communication_channel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- Dumping data for table 517_shop.communication_channel: ~1 rows (approximately)
+/*!40000 ALTER TABLE `communication_channel` DISABLE KEYS */;
+INSERT INTO `communication_channel` (`id`, `title`) VALUES
+	(1, 'fax');
+/*!40000 ALTER TABLE `communication_channel` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.domain
+CREATE TABLE IF NOT EXISTS `domain` (
+  `key` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `meta_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `introduce` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `android` tinyint(1) DEFAULT 0,
+  `ios` tinyint(1) DEFAULT 0,
+  `maintenance_mode` tinyint(1) DEFAULT 0,
+  `register` tinyint(1) DEFAULT 1,
+  `basket` tinyint(1) DEFAULT 1,
+  `user_dashboard` tinyint(1) DEFAULT 1,
+  `admin_panel` tinyint(1) DEFAULT 1,
+  `status` tinyint(1) DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table 517_shop.domain: ~0 rows (approximately)
+/*!40000 ALTER TABLE `domain` DISABLE KEYS */;
+INSERT INTO `domain` (`key`, `name`, `meta_title`, `meta_description`, `introduce`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `status`, `created_at`, `updated_at`) VALUES
+	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 1, 1, 1, 1, 1, 1, NULL, '2019-12-06 16:54:42');
+/*!40000 ALTER TABLE `domain` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.domain_communication_channel
+CREATE TABLE IF NOT EXISTS `domain_communication_channel` (
+  `domain_key` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `communication_channel_id` int(11) NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`domain_key`,`communication_channel_id`),
+  KEY `FK_communication_channel_domain_communication_channel` (`communication_channel_id`),
+  CONSTRAINT `FK_communication_channel_domain_communication_channel` FOREIGN KEY (`communication_channel_id`) REFERENCES `communication_channel` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_communication_channel_domain_domain` FOREIGN KEY (`domain_key`) REFERENCES `domain` (`key`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table 517_shop.domain_communication_channel: ~1 rows (approximately)
+/*!40000 ALTER TABLE `domain_communication_channel` DISABLE KEYS */;
+INSERT INTO `domain_communication_channel` (`domain_key`, `communication_channel_id`, `value`) VALUES
+	('localhost:3000', 1, 'asdasd');
+/*!40000 ALTER TABLE `domain_communication_channel` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.domain_social_media
+CREATE TABLE IF NOT EXISTS `domain_social_media` (
+  `domain_key` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `social_media_id` int(11) NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`domain_key`,`social_media_id`),
+  KEY `FK_social_media_domain_social_media` (`social_media_id`),
+  CONSTRAINT `FK_social_media_domain_domain` FOREIGN KEY (`domain_key`) REFERENCES `domain` (`key`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_social_media_domain_social_media` FOREIGN KEY (`social_media_id`) REFERENCES `social_media` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table 517_shop.domain_social_media: ~0 rows (approximately)
+/*!40000 ALTER TABLE `domain_social_media` DISABLE KEYS */;
+INSERT INTO `domain_social_media` (`domain_key`, `social_media_id`, `value`) VALUES
+	('localhost:3000', 1, 'vxcvcx');
+/*!40000 ALTER TABLE `domain_social_media` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.error
 CREATE TABLE IF NOT EXISTS `error` (
@@ -266,74 +339,118 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~12 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~107 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
-	('0794b6292480d72d57e43dc75cfe7d7bdf4c1a8085131844d90c8b6a4719e7e510a87ca309c02235', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:03:42', '2019-12-01 13:03:42', '2020-12-01 13:03:42'),
-	('080eb77b957d4843c907051071fc272031a21008bbb3334baa39cce412da1528640706e19e4e6a17', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:41:07', '2019-12-01 13:41:07', '2020-12-01 13:41:07'),
-	('0a5c4ee807aae1250983360fce4738a10526be4abac4ed2b8339de7678764311f2402828f0287250', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:04:55', '2019-12-01 14:04:55', '2020-12-01 14:04:55'),
-	('0d359f69b9dc987eb480672789eea4f9623327621211d7d260c2a24341211d583b228b0c2f9ba745', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:05:18', '2019-12-01 14:05:18', '2020-12-01 14:05:18'),
-	('13d7257693800cac3778ec3d2774055b882432f3f79f7076c1e6a37549573842de3410f9ca53c331', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:06:07', '2019-12-01 13:06:07', '2020-12-01 13:06:07'),
-	('1598c9b8a9f99f949eb7e5c8ac6dd27dfd912dd888bdd9133608203ecfba68415b8ac6b77f516f7d', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:28:27', '2019-12-01 14:28:27', '2020-12-01 14:28:27'),
-	('159c8d989327aab35becfa01626795697edadb1a26b5f13b3a4bcef1c50cef84f3295c92487a37cc', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:17:02', '2019-11-30 20:17:02', '2020-11-30 20:17:02'),
-	('172bc30177e2e360c22382b6657437282c5554d33b6d72128dba780b9c1ed09a796bfe6ee5de49fb', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:07:01', '2019-12-01 13:07:01', '2020-12-01 13:07:01'),
-	('199e6748bc587ff17b4ea313e59aabcc604e8f92539855ac204bf2147ff10135f0889d0ac470df7c', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:23:28', '2019-12-01 14:23:28', '2020-12-01 14:23:28'),
-	('1ac1f350ff54157246f9709ab02aed4679a307b5c785f1baa253bc660e6bee800df6cddd72f522d0', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:29:48', '2019-12-01 12:29:48', '2020-12-01 12:29:48'),
-	('290dc47d85dff074336162b96861d512543389738922542c1a91cfb1b15447309512b97990645c66', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:34:10', '2019-11-30 20:34:10', '2020-11-30 20:34:10'),
-	('2a8bbbbc7be436d873f1d9909ac1d4c5c04102036fb8cec3be02b8c44c80997db54792140eff7f9f', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:44:58', '2019-12-01 13:44:58', '2020-12-01 13:44:58'),
-	('3beb315ae84156917cb13acf1d2cbcabd9310fd855b597b7d6560b33e01e6bc25e8e842f10ac14ef', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:35:04', '2019-12-01 14:35:04', '2020-12-01 14:35:04'),
-	('3df435e7067a213cef76cc2f5efb073deeb688edfcde080722d84df65fe78a540a07a094e7ac5314', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:05:18', '2019-12-01 13:05:18', '2020-12-01 13:05:18'),
-	('424caa73d9ab43d06a21528e5ad99b255b8e573e264718825dc8cc2c835270a12da161e6e7eac92b', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:19:03', '2019-12-01 14:19:03', '2020-12-01 14:19:03'),
-	('485cdff7eedfcd5cc79dc259c212f4e4f0962afe3b9144c3e96e58e793d3ea09b0a36c29882da1aa', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:03:44', '2019-12-01 14:03:44', '2020-12-01 14:03:44'),
-	('4baedb8eec1502478ffc5e96c488492186df252865fb53ae522bfb0dc381646bf3225cfcc5e50e94', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:23:19', '2019-12-01 14:23:19', '2020-12-01 14:23:19'),
-	('4d1d015e22badd625d51bae80bf769a6fb4b3aab6cbebc59155c5ea8eee43fdf2414c1fef75fa9c7', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:53:21', '2019-12-01 12:53:21', '2020-12-01 12:53:21'),
-	('58bfa9edd9f2edc8b38de4860c9fcf6219d9a2d6941fd48a0c89a839ca42d48a147c64c01ebe563a', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:33:31', '2019-12-01 13:33:31', '2020-12-01 13:33:31'),
-	('5bc43beebbd161e181196914c8cd19d42f053b00a8aa4af3d90efccaf9def7a67f3d04312c3e9cb6', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:18:40', '2019-12-01 14:18:40', '2020-12-01 14:18:40'),
-	('5e860357d1bf6c2ed705ab00954e075efdce4a5509e257317c7de6306f9d085c68bc0a72c0dcda3a', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:20:04', '2019-11-30 20:20:04', '2020-11-30 20:20:04'),
-	('5efe487454f3a587f4c5cb1f8f9d5ffc851bdf184819997f699bfca38048d6f4e09e6bec6341b841', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:28:57', '2019-12-01 12:28:57', '2020-12-01 12:28:57'),
-	('5f2753a7527d65ed4cc9d2217676a1cf8957bc5ee7d9dee1f2493dcba1002e2bd6d6ad7f11ef19ae', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:06:13', '2019-12-01 14:06:13', '2020-12-01 14:06:13'),
-	('68fadfb88ee36d4ad99b79f7b14b000da89dd2cd1a64120d78687ea100140c71d8a27c34bd8e74e8', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:13:56', '2019-11-30 20:13:56', '2020-11-30 20:13:56'),
-	('70b43a5cc2ebd761a20beb618c42b92bf93c260d20a6145a40a6cf578df223319f68f56192118f7c', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:26:13', '2019-12-01 14:26:13', '2020-12-01 14:26:13'),
-	('7f2b69aa2763937c166036ba2e2a6f871dd6a067d2793c6519fe0a11cfd35c0d693c69b9deafe0f2', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:52:17', '2019-12-01 12:52:17', '2020-12-01 12:52:17'),
-	('81fe311370e7cc3f3e0d5a8bda9ff8c45fc62bc7b9757103e44d0f7453fc9da5f6ff0f576ab38ee6', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:15:24', '2019-12-01 14:15:24', '2020-12-01 14:15:24'),
-	('83aa2670366dfe68e43597fb571a39f665b773c2c31175bec090791eff9e69cf77b1fa51f4f062d8', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:10:09', '2019-12-01 13:10:09', '2020-12-01 13:10:09'),
-	('85af0ac33626f307210ec0f3c2675abbc72c8b2588906ba29b7a8fd262bbbbdca74a790e0c31cf31', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:41:50', '2019-12-01 13:41:50', '2020-12-01 13:41:50'),
-	('872cc271c9b073844828f91ea438464e23b012a1aecdd85b1a45ce2a104d79369ac7f9cc27b1108d', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:55:32', '2019-12-01 12:55:32', '2020-12-01 12:55:32'),
-	('8936ea1b68544d86d7cbbef3462bd631cb5c82621bda1daf727b5094917a21bc1a8bdaddbacbb86f', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:25:58', '2019-12-01 14:25:58', '2020-12-01 14:25:58'),
-	('8bc4f61698531f0343c6f8be953fc6ffb2a647496a607960c95dbbc005ae3964587088bf7a53dcb1', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:14:33', '2019-12-01 14:14:33', '2020-12-01 14:14:33'),
-	('8ce3f47d4d2fc753697498bab93a62f7e03a22c39d25725a4ce1e46e0bc7c96d7fd73686f904c919', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:33:54', '2019-11-30 20:33:54', '2020-11-30 20:33:54'),
-	('8e59b32adb81bb6a3d7125e7275980fe8a2b81b4da72d3fc8832fa214e3803029ada18a701822ca9', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:16:45', '2019-12-01 14:16:45', '2020-12-01 14:16:45'),
-	('95d1a2b6a9f30ea8b4f5abeab97d4b97fd646905fd91b6708b844d2f8baf4b398bfcacb3ebb429bc', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:57:54', '2019-12-01 12:57:54', '2020-12-01 12:57:54'),
-	('95df9481f060cf70e0ce22cecef55481fea3dbfeb01f4c9ff7bfad1d419af1dbc91fc9a0de325e3e', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:06:00', '2019-12-01 13:06:00', '2020-12-01 13:06:00'),
-	('9eb4bc2a706f462b433041de7251e4cd9d5ebb0c34626cadbda098faa2c2868df42577a8979dcb19', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:32:39', '2019-12-01 14:32:39', '2020-12-01 14:32:39'),
-	('a47df470535df4a6b416a26a75741f8ec071f3828988e1ca83e7b6665ccf980c1c8bae1314f86410', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:40:33', '2019-11-30 20:40:33', '2020-11-30 20:40:33'),
-	('a80e9d3b9c4cbe0fa37cca9a22f1c1ae16e2e5a2c156c7bc1b6b52f115eee07af9a46f6bebcea463', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:45:33', '2019-11-30 20:45:33', '2020-11-30 20:45:33'),
-	('acfe8c706b7cc0204dde6a23b44f91d31153443b5b8a9d4d2feaa27364f1e74722ab68c32a38edd3', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:06:02', '2019-12-01 13:06:02', '2020-12-01 13:06:02'),
-	('b1c4dd3c5a7df638f8bf3ad8e85e3d3685d73cee5b99672080f1934f96da13fe565e33f7aa433085', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:26:31', '2019-12-01 14:26:31', '2020-12-01 14:26:31'),
-	('b1d5fb68f2058608a9f3da2cfa1fe4dd9c0d2998b1bea3efcc631397e05362b47817d98f1fa288dc', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:32:50', '2019-11-30 20:32:50', '2020-11-30 20:32:50'),
-	('b1fcd78714b3684e22fc65cf1425944606bd024146c4a5201ae68235ae7169319c530f19cc29e2e8', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:29:20', '2019-12-01 12:29:20', '2020-12-01 12:29:20'),
-	('b2042eb7713ae4351bf53d1bec4a968111294e3667a0976c498c966de14df38654ac81015f5e11ea', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:46:23', '2019-12-01 13:46:23', '2020-12-01 13:46:23'),
-	('b3d4045aefd39bb28c12562b5eb341221a869d941c8883a5cd07643446244512f54b78e7577ffb73', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:58:34', '2019-12-01 12:58:34', '2020-12-01 12:58:34'),
-	('b52fe91d47c613a84d2322301289e96346d8b0a42f0b3231cd2ce63a6670be328f46df3ae64de15d', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:39:04', '2019-12-01 14:39:04', '2020-12-01 14:39:04'),
-	('b8cf04b9f26e20066a0b111fa56533631e653db9c56a4394a1cdadd4d376caa067c592b9fc366d94', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:42:56', '2019-11-30 20:42:56', '2020-11-30 20:42:56'),
-	('bc674300f4e88fdd0735bee340d70d3abcfc5ecd7a517fe7fb655d5a7a7673e39a2e195e28cd46a7', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:24:56', '2019-11-30 20:24:56', '2020-11-30 20:24:56'),
-	('c5c4425ae73be65de82669be73a0a388af2c06f43b97165f982a030e474f590416f032e371a57552', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:17:22', '2019-12-01 12:17:22', '2020-12-01 12:17:22'),
-	('c5f2cf67ed57b3385f747db6e1b8dbeac3cdb5131953e849231597f574b3f8b69fadec18ec15657f', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:40:29', '2019-12-01 13:40:29', '2020-12-01 13:40:29'),
-	('d699b4401d1250b905902dee3e5c0533ad1473259c4e2dae98b9d3002730a7f4cbd619ef3e76ad2f', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:59:18', '2019-12-01 13:59:18', '2020-12-01 13:59:18'),
-	('d9c9428e343fdebd440a1d07ed568b367f1b1f41398d4332a6c28f61ac16bf2755ce8be023dd4a5b', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:07:06', '2019-12-01 14:07:06', '2020-12-01 14:07:06'),
-	('e157f20f8b4234da254c3f1afc941b941e7897332399d59ac05abb8d22f1614d733affb1305bd437', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:41:36', '2019-11-30 20:41:36', '2020-11-30 20:41:36'),
-	('e2d11e200ab1b148926d01802ad8438ac3e00d3bb4aed9aafc34c2b98fa34b10ee33317dc9671136', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:06:05', '2019-12-01 13:06:05', '2020-12-01 13:06:05'),
-	('e6b7c89c25920567f86f087c343484582fdf77f8a919a06fbac249d0cc04fe0699c350c579139191', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 12:30:03', '2019-12-01 12:30:03', '2020-12-01 12:30:03'),
-	('e74677278465c9e5da615bd379359bbee1a4142a644f59b9d2d81f0ebbcfd1f93184df7a5afd90d1', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:18:21', '2019-12-01 14:18:21', '2020-12-01 14:18:21'),
-	('e7e7227c5942d93f0fcda695e964f809254c6ea00eb664d1f2a849f71372d5ed42440f42fa127e98', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:33:01', '2019-12-01 14:33:01', '2020-12-01 14:33:01'),
-	('ea43bfb83be1a9e71010b693ed5ac4ff3813fe5afe685b00f12095101d3f6fe80179f893ac7027ce', 2, 2, 'Personal Access Token', '[]', 0, '2019-11-30 20:33:47', '2019-11-30 20:33:47', '2020-11-30 20:33:47'),
-	('eff17b8aeaadc4bac3c3fec4ac9ff0b2881462cce33a0e1446bc6fd79e32dc9882dfe0580b384a4e', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:43:51', '2019-12-01 13:43:51', '2020-12-01 13:43:51'),
-	('f1c0adaa3444a337ead1ce9b1e1ff6dad016d8771428ce23b208c2e5d7bd72137c4f85ec877c4acd', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:39:24', '2019-12-01 14:39:24', '2020-12-01 14:39:24'),
-	('f35b0c970c29da35d782169cab3bff96e3736382aa0184334439e274a0b3cf80ae9c19f2c47a1dc6', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:02:59', '2019-12-01 14:02:59', '2020-12-01 14:02:59'),
-	('f3e324f092cf6f19da9be8ddc28b23bdfba767ab5fc6bfee090c3171f6e2b889d15f19cdf462a10f', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:46:02', '2019-12-01 13:46:02', '2020-12-01 13:46:02'),
-	('f7eae5ab6113ee7246a1d6af25353a999128d490ced11bddac3c2e6c0729cf4d8c5408a4ca11ee19', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 14:25:33', '2019-12-01 14:25:33', '2020-12-01 14:25:33'),
-	('fd58422f3f7dae18594b33b8b58ad5f5b83070cd8e5545dbb199ca55ddf85e98e4ae4649f1b51bd0', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 11:53:13', '2019-12-01 11:53:13', '2020-12-01 11:53:13'),
-	('ff86a813c3be8b7f346effb5c30876ac799191043650ea7c87c3e96d022cbe6e1b10fd7dfd9a68d1', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 13:04:25', '2019-12-01 13:04:25', '2020-12-01 13:04:25');
+	('019b07addecaeab66cf713be1e7d69ce910e9a04438c2714654dd1203e185ddcfef29d8b8379217f', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:49:01', '2019-12-02 21:49:01', '2020-12-02 21:49:01'),
+	('01b5558d26f2ca4dd9409df507da4fa246b40d7a94b9d50c04ae6c66357d96207d717bd477f876eb', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:04:35', '2019-12-02 19:04:35', '2020-12-02 19:04:35'),
+	('02a8b1fb9a21dc585a98d88b684d0c331c3b9c9cbf1580d926968ee2b1dcdffba5408f8523abd117', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:39:46', '2019-12-02 21:39:46', '2020-12-02 21:39:46'),
+	('0472a99dd77629e0c64e703e33df5fc45171485e7165af6cab846e084660d307dcbd933784fc9203', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:26:32', '2019-12-02 21:26:32', '2020-12-02 21:26:32'),
+	('060dfdeb0fb0775aba336bdf5b927d5e7f22020c1ec86401dde1e6fa148cff3aa657dea9f2a588ee', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:51:58', '2019-12-02 21:51:58', '2020-12-02 21:51:58'),
+	('125016f9620483a585f5c266d31772fdcf1b046d6726224f6b4f44ae0eb8c71cf23bf794e53cd067', 2, 2, 'Token Name', '[]', 0, '2019-12-01 20:06:34', '2019-12-01 20:06:34', '2020-12-01 20:06:34'),
+	('1281dcf9d3c79b4c41f534a1aa2232b2fe2f43bb3db0de8e6e324624b2dc8eea9e8bf9486ea84d8c', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:11:32', '2019-12-01 19:11:32', '2020-12-01 19:11:32'),
+	('147ac4da0f7d8d79e9e9577d06a92e4cf543817b68e11f40e6423b2b6523b86290e0b6fe4d2dfc6b', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:57:06', '2019-12-02 21:57:06', '2020-12-02 21:57:06'),
+	('19984e0809d4ec7b30edcd759e2cc24f918f805d819f20bff584dfd3303f036d7f7255e7734aa68f', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:29:31', '2019-12-01 19:29:31', '2020-12-01 19:29:31'),
+	('1a8ec05b5fda7648a9a2a98def360ddd28539f86f53b2c037b19c6dcd58976e7a333c9001a4cb954', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:43:51', '2019-12-02 21:43:51', '2020-12-02 21:43:51'),
+	('1ad32bb9131269f9bdf340ba3f618f928b3962bfbe3ca5cc74de0d090127398ede80ae4e7ab62ad4', 2, 2, 'Token Name', '[]', 1, '2019-12-02 17:28:40', '2019-12-02 17:28:40', '2020-12-02 17:28:40'),
+	('1d68aa2c1a30c04dfcc9af62ce77d2ce47e3701e8f430bfd9404f79e8f7cf471d2d48fecf19c1ecf', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:57:07', '2019-12-01 19:57:07', '2020-12-01 19:57:07'),
+	('1e17f6e38f7e932c25c4e1306f8fe042373ba3cee27f5ebe43aba10d67dbfb3157fcb97a02ad75f4', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:09:45', '2019-12-01 19:09:45', '2020-12-01 19:09:45'),
+	('22df937fff8c0ba4b365046b7224dc926d8f08da050e2d5fa1a7f77c46ddde3b5f6011d914256931', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:51:16', '2019-12-01 19:51:16', '2020-12-01 19:51:16'),
+	('23a980101ec7ffbef9cb984c438a0acd121d6cb5f7641939a0170625a8d1fed2727a4a18d548e12e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:59:31', '2019-12-01 19:59:31', '2020-12-01 19:59:31'),
+	('25166273c54ee3860eb4c16d963bf0e27959d691c79497c0ec3d1f55cd8c2b70347c03d515b56cfc', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:10:49', '2019-12-02 19:10:49', '2020-12-02 19:10:49'),
+	('283019c82a9ece7177e50e526ac78dc8681c569a7f4e4eaa74af84cec9986f9bd2c7077c9b8d036a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:41:08', '2019-12-02 21:41:08', '2020-12-02 21:41:08'),
+	('296f3f962519772ae7a5cf4e498316fce78ffc22107be6da5e6128aa3c4ea42a0c839f8c1da73941', 2, 2, 'Token Name', '[]', 0, '2019-12-02 19:46:26', '2019-12-02 19:46:26', '2020-12-02 19:46:26'),
+	('2c4106610f55e7cc57c6a5b1f0cf9df3a9259d7d3c062f88c928773a6213cc7d4ec500ea24737f33', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:13:57', '2019-12-01 21:13:57', '2020-12-01 21:13:57'),
+	('32661f49993b688b8a5d036807e5191a567116e82b83c9b16b76f6c1c478507ded40eaf10210b0b8', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:06:00', '2019-12-02 19:06:00', '2020-12-02 19:06:00'),
+	('32acf7b263578d3e2a4311712b4e956b1f5f7da5054ed255bf8b5018f9b8dad3b1cb957f974da300', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:13:53', '2019-12-02 19:13:53', '2020-12-02 19:13:53'),
+	('341dac2e9b5d3cc088e9fd31634360985cf505cbebf9af787fa8226930475fd808b746fb31f35954', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:09:27', '2019-12-01 21:09:27', '2020-12-01 21:09:27'),
+	('347dce861453637cc19c64a0046ff4c420bb81e6e20ba70995e19b897c5538e232472f1d6c627fc4', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:58:40', '2019-12-02 21:58:40', '2020-12-02 21:58:40'),
+	('35695f5fd0a726b005d5e83d000e162ea513c3c1dde8485b21f285c38f6fb776ee64f6c6dfdd8948', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:03:07', '2019-12-01 21:03:07', '2020-12-01 21:03:07'),
+	('3f00b6bdd9571a042d5f555f71485017c9f453126567692f15beae4914d16d1720db85478305e650', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:01:54', '2019-12-01 21:01:54', '2020-12-01 21:01:54'),
+	('40654a03e9d6b548662b4854b2d676f2b5c7f65d943a896d9704d94f2f4da257be596ed532703f7a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:00:36', '2019-12-02 22:00:36', '2020-12-02 22:00:36'),
+	('40ec8ba2f5251862ad8a21eaaf088559f80e6e400e760a702590ff9f3832946f8c6f70f3c27007dc', 2, 2, 'Personal Access Token', '[]', 0, '2019-12-01 18:24:32', '2019-12-01 18:24:32', '2020-12-01 18:24:32'),
+	('416340bbbfbc10c6d4a0f7e44f19f2d9d201eeac00e0f41b82ba8d4f2dd2bbc210765f363f857438', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:01:55', '2019-12-01 21:01:55', '2020-12-01 21:01:55'),
+	('4310b3f32fce7378230e9fa3746d028443454e06512184b9e5c8031dd378490c7c44ed3538bbe018', 2, 2, 'Token Name', '[]', 1, '2019-12-02 17:35:56', '2019-12-02 17:35:56', '2020-12-02 17:35:56'),
+	('44150a99dc30e7e35f2c0eeeef1fd04ba913ac503a7b7915928e250726c1949b1171f8cb0334cc1b', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:32', '2019-12-02 21:50:32', '2020-12-02 21:50:32'),
+	('46d2b66f52cae0344517f599aff662fe8f5d924c3f4c7ad873f5f86e9f2de7d2294ba5e01648567f', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:04:02', '2019-12-01 21:04:02', '2020-12-01 21:04:02'),
+	('46e8a9468569d85fbf4c728df9e61d076cb963e3be8db61aea65d3052dda3c03ca658cf65de56d9c', 2, 2, 'Token Name', '[]', 1, '2019-12-02 18:11:44', '2019-12-02 18:11:44', '2020-12-02 18:11:44'),
+	('4c16f63b8bc90c286cec7dbd456411bbfba4f47bcfdd9b8fc22ff4b3d532a9e55bd5f70a2efedd7c', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:57:15', '2019-12-02 21:57:15', '2020-12-02 21:57:15'),
+	('4eada1de666a26184bedbcd3d05a523c9f052121e5c692afdcdacb4e42f8dc5d32d4c98b1e6d5ec3', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:06:16', '2019-12-01 19:06:16', '2020-12-01 19:06:16'),
+	('50d7066b5668502a793322c1cef94dd36f275719c563098375bea3f5e1a8f9bc002d709bc23e0380', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:18:27', '2019-12-01 19:18:27', '2020-12-01 19:18:27'),
+	('5157d05c985aab9e1fc1945aa19b67474036d03af1f83fbf3d2231d0e84aa7ccaf03b5fe8a750d06', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:05:13', '2019-12-01 19:05:13', '2020-12-01 19:05:13'),
+	('5316b31272cf3b4a54d26631439ca2e86c22b62a0c6a60a8761bf3c66aef2aada8d3f6ae5b152d61', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:28:30', '2019-12-02 21:28:30', '2020-12-02 21:28:30'),
+	('57263af97c93a910ae91373f6ed42c2fdc0c1d5262395e9b53600ca2bfb9c274b517b185e84f258a', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:59:19', '2019-12-01 18:59:19', '2020-12-01 18:59:19'),
+	('577d156079a6d4bcfc72fa5b7cc717693fd21836e8dd33e1157dc37b6736afd7394786a8b55a7adb', 2, 2, 'Token Name', '[]', 0, '2019-12-02 17:34:04', '2019-12-02 17:34:04', '2020-12-02 17:34:04'),
+	('589ee722ceae94e5ad87ba6499df9419dc0bb3cd8e1dc08512614ba03503d75a51af9a883857c146', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:57:23', '2019-12-02 21:57:23', '2020-12-02 21:57:23'),
+	('5933d2fd6d721c3db0e54731d4ba3ac970054de6b3ea9a87703481ab0c2ebab0261acb61fbc69d28', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:31:23', '2019-12-01 19:31:23', '2020-12-01 19:31:23'),
+	('5cdd65b4c8928a7315f1b211082cdecc953904f8c4ea79fc1b012892a535c80dfa48af5d61311c3d', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:15:12', '2019-12-01 21:15:12', '2020-12-01 21:15:12'),
+	('5d411365c9c5ae49104bf00d825e7429d03f3d816cecaf42605eaa83f3cc789b98698104d61e3042', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:06:52', '2019-12-01 21:06:52', '2020-12-01 21:06:52'),
+	('63ae43adf7fa361ea8521b27a88a2e91e3a1b9a763d1ec16ec93356b5437f4d189ba7ddf6bbe0b8e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:10:11', '2019-12-01 21:10:11', '2020-12-01 21:10:11'),
+	('646c184d9f9c45ff32788d4ecd261bf39a719fba14c4215180a207ed07166a541715c47071ba6172', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:56:58', '2019-12-01 18:56:58', '2020-12-01 18:56:58'),
+	('662d3f70d4148e3e7537af39d24b051f4f46807e15638f55cf1a8999548a945f6a761b446ce1a067', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:17:49', '2019-12-02 19:17:49', '2020-12-02 19:17:49'),
+	('69192aed7449e2ca3fbf0500af9ce98e1176a478a8f8dc61b9552b3877b2f716c609c2db96cee7c0', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:01:10', '2019-12-02 22:01:10', '2020-12-02 22:01:10'),
+	('6bc19b3c34bffb29e8097e9dfb68535ba7dd9f3ec40e5164ff56a22c0cb8cebd5510f804e4f7e79b', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:58:57', '2019-12-02 21:58:57', '2020-12-02 21:58:57'),
+	('70e43be51d827cbf62cb3c2fded70b8275fe3a46787d95893db323e9f08136ad995783832dc15bf0', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:16:36', '2019-12-02 19:16:36', '2020-12-02 19:16:36'),
+	('72719c00604cc25a8f9a43621b978a5341cb9f3cd4ca2d869fc0b26c9108d27b2b2b53e0fb06bb68', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:41:52', '2019-12-02 21:41:52', '2020-12-02 21:41:52'),
+	('74f0a79ce440997928baff81a5e674c572044c664fa65c78fc1eed5942d7b016dc191de6ac840613', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:10:47', '2019-12-01 19:10:47', '2020-12-01 19:10:47'),
+	('74f6eab8d560d4be7e652cd0c8ce98a3a924ca301bd181d755060fa1bb1977514d12bb80a47f26d6', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:04:55', '2019-12-01 19:04:55', '2020-12-01 19:04:55'),
+	('7c2e56da38f8356b61b05931a7d80abb9dfbb9707c894413ce48177ddc6d8963e1df3e6be855728e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:12:23', '2019-12-01 21:12:23', '2020-12-01 21:12:23'),
+	('7cf7579b7d7d6a16646662985255e95430345b0779e864780591bdb95af119e006bbfcce77b6993d', 2, 2, 'Token Name', '[]', 1, '2019-12-02 17:31:24', '2019-12-02 17:31:24', '2020-12-02 17:31:24'),
+	('7e88063485b4a1763eb43e4200375884d736f5df92556e4d9c821d2fe64d6ea90dab93de8e86f37a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 18:27:45', '2019-12-02 18:27:45', '2020-12-02 18:27:45'),
+	('8034acf9a178f2d8df91a20d0245e3ebfa26aadd54cf9644020093df836fd2acf6e57162dea74f42', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:15:12', '2019-12-02 19:15:12', '2020-12-02 19:15:12'),
+	('809b3eabe864060d24bed73d57aabbc3cbf3b6c443c79edb87537cf3e163ac5017fbbf3ff8f4e385', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:02:50', '2019-12-01 21:02:50', '2020-12-01 21:02:50'),
+	('81963ca20020f60d681e03cb4327eb8f8609f9a3c55e9b971af850d224b35fccc9a7a88b6bebafa9', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:04:54', '2019-12-01 21:04:54', '2020-12-01 21:04:54'),
+	('81b86b6d2ba45ff3befd30cff0afe24e43f224176f1959b9bcdbfa94ce64d3355506b171e492f521', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:58:03', '2019-12-02 21:58:03', '2020-12-02 21:58:03'),
+	('8454eb9811efbd6d11f25af173028d22dbefda12f9c3901fda6542ebfe09e6708df2558ae5d76bce', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:58:10', '2019-12-02 21:58:10', '2020-12-02 21:58:10'),
+	('8ad7927a4200c28b414cd935a8ec532582f32522fbe390b0066934d877a72da32f5098fdee624aad', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:59', '2019-12-02 21:50:59', '2020-12-02 21:50:59'),
+	('8c8c819b483c34e9a344d5110b96e686e544c0b8c3ed43d6c3f1c2ea5420cf6f96aed345beaa5fa1', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:31:15', '2019-12-01 18:31:15', '2020-12-01 18:31:15'),
+	('8feb2652335f4198fb9ee4f91a37ea82e4d29f767756e798b6226a2889deb1f6034a444d1beb442e', 2, 2, 'Token Name', '[]', 0, '2019-12-05 18:24:04', '2019-12-05 18:24:04', '2020-12-05 18:24:04'),
+	('912d382fc0eabe68d402b7dbcfb155b502b5860282ac00df2552cb9a03eb202e51e02a731c432613', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:49:15', '2019-12-02 21:49:15', '2020-12-02 21:49:15'),
+	('9424604771f234dbd6fbd6ea02c9621110520bed700a6fb96eb76b5d8561e2d9d1954d17e9b9c999', 2, 2, 'Token Name', '[]', 0, '2019-12-01 20:07:57', '2019-12-01 20:07:57', '2020-12-01 20:07:57'),
+	('956ee8c15aebc87a90fba9c6910a787042a4d6a25d9d6030743089da70d404441d1c1e95acf5811a', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:45', '2019-12-02 21:50:45', '2020-12-02 21:50:45'),
+	('98ca062fd8addc4ff70c63f4823aa7c217042540c60d1c87d44f6d1ebb48ac7e2f66ae568f22e542', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:03:49', '2019-12-01 19:03:49', '2020-12-01 19:03:49'),
+	('9b05b99e0cc208e1f28d09740ff8caffcbb8752b70eaf355da1bf9f0268b7725f7764ed2df271ec5', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:06:30', '2019-12-01 19:06:30', '2020-12-01 19:06:30'),
+	('9b1c8d50330bb067c75f05e09f11bbd7759a95843095bf767f6cf75989ee8c9da653532a93f4e5fb', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:04:18', '2019-12-02 19:04:18', '2020-12-02 19:04:18'),
+	('9b2625bb563914044b7efa0da26ef20f5d391e834d8a7d072c976a79a4821502a99162cb0d8b8282', 2, 2, 'Token Name', '[]', 1, '2019-12-02 17:29:32', '2019-12-02 17:29:32', '2020-12-02 17:29:32'),
+	('9eaffd9205c5f56b6cd9eafde1b5c5bc485766715f2a43b0edbb32c02dd5f7e4d20d19c3e529a000', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:28:43', '2019-12-02 19:28:43', '2020-12-02 19:28:43'),
+	('9f8318ba5b772091660fc85122db61f3c06ff0e97c14c009135c10413031462eb1dac52e80b1dfd1', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:40:24', '2019-12-02 21:40:24', '2020-12-02 21:40:24'),
+	('a6099dda739d67c61419652ac366ae3854e49b0dda1eb4bc0fcff3e824fbe0419957e511b60dab8b', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:08:35', '2019-12-01 19:08:35', '2020-12-01 19:08:35'),
+	('ab8a858e70f15774a511360c0c82acdbc2b67d4a4a65f6dcddef49969e4f1702ca9dafcde1731ad5', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:25:56', '2019-12-02 19:25:56', '2020-12-02 19:25:56'),
+	('ad623102850f301109baffdb1980a866d29e22cfecbbfe6308d3e0199253f171d10c2d4eab2e612e', 2, 2, 'Token Name', '[]', 1, '2019-12-05 16:10:57', '2019-12-05 16:10:57', '2020-12-05 16:10:57'),
+	('af4e3614ca7076dae1b5c6d1e31dfa22df519a68b13835d2306ada9d474ea0d43fd26456c68f3add', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:11:02', '2019-12-01 19:11:02', '2020-12-01 19:11:02'),
+	('b322a6108266907d7fe16b05ec1b07dd0ce7b99f11e13d7b89983bcee2521adcc1cb2da49232c817', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:01:03', '2019-12-02 22:01:03', '2020-12-02 22:01:03'),
+	('b4f6cdd12a987ae3822a57348e4971d52676f387bc2c95dc46dad05a97371c53a623ebddc13dc858', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:41:23', '2019-12-02 19:41:23', '2020-12-02 19:41:23'),
+	('b7747e64db6ebf5eb084d940d9f90cc954cb2164bfe588fc87aa18155eeea7068531aaeaddb1af0d', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:51:48', '2019-12-02 21:51:48', '2020-12-02 21:51:48'),
+	('b97a52dd1e2c41d014b79bb0f25ac0d760151712317fe19e6ae7bc1634860abbe1ce383170f21a64', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:39:41', '2019-12-02 19:39:41', '2020-12-02 19:39:41'),
+	('bf038cccd8cf56ead5bcdd001384da39539e0d0776fb97b959a8a67c2cfdc755a10197f99bf98311', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:39:41', '2019-12-02 21:39:41', '2020-12-02 21:39:41'),
+	('c1258fceeb042de181e84f5c14c337c61d67c432df67219ae93bc0b5743b663b3bc479c7688bd500', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:39', '2019-12-02 21:50:39', '2020-12-02 21:50:39'),
+	('c32189d7f37be67cd4445cf65d856d132ddde683ea066fe41b9eab856b48b528d36f8483bc5e6be7', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:46:13', '2019-12-02 21:46:13', '2020-12-02 21:46:13'),
+	('c3375f7dc03e8ad535a3242c1e6edf9a04334ee6b65c7abd536e55293a6fe4214697571519a3a099', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:46:26', '2019-12-02 21:46:26', '2020-12-02 21:46:26'),
+	('c41436be2ddf111e79ddbde88511eebd4abe4fc2208d272b08b267129d4c8644d3f00544f94898d4', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:00:53', '2019-12-02 22:00:53', '2020-12-02 22:00:53'),
+	('c51c25ee1a1cb0e004697042f0da734e7750e3d70ad6802594a68acad0d6cad08b58a5ee8db746bf', 2, 2, 'Token Name', '[]', 1, '2019-12-02 22:01:17', '2019-12-02 22:01:17', '2020-12-02 22:01:17'),
+	('c9bd67c29f0eefcf6bd62d8b59174b83ff1d8acf96aced14ccd0002b9a7bc5ad7d47e95b503f8460', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:12:03', '2019-12-01 19:12:03', '2020-12-01 19:12:03'),
+	('cd098135b7137733fb075abc6988744e073cceb8a5ce68a63ed4e02c7dd84672722de2a015ad53ab', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:09:57', '2019-12-01 21:09:57', '2020-12-01 21:09:57'),
+	('d0c0fffe9f965d634ba909e23417d2e73f1cee0cb5ca1084799f4d326dffe856b0a8ed1b6c586907', 2, 2, 'Token Name', '[]', 0, '2019-12-02 21:27:20', '2019-12-02 21:27:20', '2020-12-02 21:27:20'),
+	('d3289ff05fafcac2504438ddfb9a4b2384b587c64a12efe37f58966733729520df0cf37f2ad47ae5', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:02:43', '2019-12-01 19:02:43', '2020-12-01 19:02:43'),
+	('d33a1eb958d3179eaaf0cb574b26e81c822274106a8ad5035e3ac9832195c47066609836aba3241f', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:54:41', '2019-12-02 21:54:41', '2020-12-02 21:54:41'),
+	('d41454469843e253d6368053e447360348bbec9cf57655f6450ca868ad58bfbc9abbcdf4a38b0217', 2, 2, 'Token Name', '[]', 1, '2019-12-01 21:15:44', '2019-12-01 21:15:44', '2020-12-01 21:15:44'),
+	('d460cf9fb05a6dc7d9b14947cbd6f377d7a570d0ac67cafb37fae33d125e8d626ed33de1708876af', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:12:10', '2019-12-01 21:12:10', '2020-12-01 21:12:10'),
+	('d48821f8b8414dbbd788ce26ac632d34255c30dce032c20bd21bea1a3646dc08d3dde1b80aceeda2', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:09:15', '2019-12-01 21:09:15', '2020-12-01 21:09:15'),
+	('d57c18425735f117fe62774fc40f766cbb65f4bd0acc49971f639a57fe3a0b1d11e1fdc21b844304', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:52:05', '2019-12-02 21:52:05', '2020-12-02 21:52:05'),
+	('d9bdb7208ce6796febe5814e8f593ebd625bcfa63108452dfb077d3a731b229d85d614f2a6ff73e5', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:14:11', '2019-12-01 19:14:11', '2020-12-01 19:14:11'),
+	('da50a7976f4b88366e9e0325ee5f179e67c0256eb069ab2bd1bf0a716d235a9c93689137ddc6869e', 2, 2, 'Token Name', '[]', 0, '2019-12-01 19:07:25', '2019-12-01 19:07:25', '2020-12-01 19:07:25'),
+	('da8a9f61db9ecf4e0694c1e548ae5253594f1b5b001c7eb7ae63a7e3e566830f8bffdd4c100ae4fd', 2, 2, 'Token Name', '[]', 0, '2019-12-02 19:46:49', '2019-12-02 19:46:49', '2020-12-02 19:46:49'),
+	('dc7a71617624da20e95fe4cb85e661e64053f6a337ba4ba6eb01b501de0f623d8ff5aa3921623dfd', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:27:04', '2019-12-01 18:27:04', '2020-12-01 18:27:04'),
+	('ded8c5c00b835c23d941f8f1e76ec15a8dffe269ded72da637bb053a1f5080040b2329ef7aeb6ae1', 2, 2, 'Token Name', '[]', 0, '2019-12-01 18:26:29', '2019-12-01 18:26:29', '2020-12-01 18:26:29'),
+	('e29c379313cb6f6a5de37250d01079d04b3e280288c468cb4787a29ea8cf9ae3a4f635e542dfeba7', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:00:44', '2019-12-02 19:00:44', '2020-12-02 19:00:44'),
+	('e8f3fa46f6d7b7648513fb68d0b46d804ab38290be8625bd0a5351ceb575ef78479d2e62e6150c9f', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:50:23', '2019-12-02 21:50:23', '2020-12-02 21:50:23'),
+	('eb21a7ede7355d0ffb3af7a17495a6574a53f8fa723eafda2a0b4c67bf6ec02953d25c403307a5f4', 2, 2, 'Token Name', '[]', 1, '2019-12-05 14:14:43', '2019-12-05 14:14:43', '2020-12-05 14:14:43'),
+	('ed5a0ea3b8287dd7d50882f2d8e47235fb83c4e2df1c57fa813a34b5ef26c1f1d97343488ca9858e', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:01:02', '2019-12-02 19:01:02', '2020-12-02 19:01:02'),
+	('f21755c54e7398af877d93ae30513b884f0fadb0596e898abd6f41364d975ef4f5112f5b7739e4e1', 2, 2, 'Token Name', '[]', 0, '2019-12-01 21:11:29', '2019-12-01 21:11:29', '2020-12-01 21:11:29'),
+	('f324c7117bf044e2f7e2078fe1768e8905db04fb272dbbc87cb0fca9720ca1e04320dbf1cec0ea60', 2, 2, 'Token Name', '[]', 1, '2019-12-02 21:53:23', '2019-12-02 21:53:23', '2020-12-02 21:53:23'),
+	('f8fdb92ef16544ad66bd062f130518afd9e3abd4e3d1b5a503f8455b334b84e0c719b6e05c387c6d', 2, 2, 'Token Name', '[]', 0, '2019-12-05 14:45:13', '2019-12-05 14:45:13', '2020-12-05 14:45:13'),
+	('fb3381b73e7d8228dd044b5839a6848ee545c51225f73cca3337dc4198ad41f4d4a4d5e96e53e901', 2, 2, 'Token Name', '[]', 1, '2019-12-02 18:12:47', '2019-12-02 18:12:47', '2020-12-02 18:12:47'),
+	('fd7e940b41d91c645e00f9c26874bebfbd9befffe82a49a3511bcabc32ff29b4b9c4cc0ef2b78416', 2, 2, 'Token Name', '[]', 1, '2019-12-02 19:27:12', '2019-12-02 19:27:12', '2020-12-02 19:27:12');
 /*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_auth_codes
@@ -425,7 +542,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `FK_order_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=780 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order: ~373 rows (approximately)
+-- Dumping data for table 517_shop.order: ~338 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
 	(407, 1, 0, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '1971-07-24 02:09:30', '1998-05-26 03:41:31'),
@@ -1728,7 +1845,7 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
   CONSTRAINT `FK_permission_role_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission_role: ~129 rows (approximately)
+-- Dumping data for table 517_shop.permission_role: ~127 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('admin', 'brand_index'),
@@ -1886,7 +2003,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `FK_products_brand` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.product: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product: ~2 rows (approximately)
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 INSERT INTO `product` (`id`, `brand_id`, `slug`, `title`, `code`, `count`, `price`, `discount`, `sales_number`, `visitor`, `status`, `content`, `meta_title`, `meta_description`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'pro', 'محصول شماره یک', 'fsdfsdf', 10, 100000, 100000, 0, 0, 1, NULL, NULL, NULL, '2019-11-10 11:58:14', '2019-11-24 20:27:47'),
@@ -1923,7 +2040,7 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product_category: ~3 rows (approximately)
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `pic_link`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'دسته بندی محصولات', NULL, NULL, NULL, NULL, 1, 1, 6, NULL, '2019-11-24 20:18:01', '2019-11-24 20:18:01'),
@@ -1946,7 +2063,7 @@ CREATE TABLE IF NOT EXISTS `product_pins` (
   CONSTRAINT `FK_product_pins_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_pins: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product_pins: ~2 rows (approximately)
 /*!40000 ALTER TABLE `product_pins` DISABLE KEYS */;
 INSERT INTO `product_pins` (`id`, `product_id`, `group_attribute_product_ids`, `price`, `discount`, `count`, `created_at`, `updated_at`) VALUES
 	(1, 1, NULL, 100000, 100000, 10, '2019-11-10 12:03:33', '2019-11-10 12:03:34'),
@@ -1981,7 +2098,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~0 rows (approximately)
+-- Dumping data for table 517_shop.role: ~7 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('admin', 'ادمین', '2019-11-29 10:26:16', '2019-11-29 10:26:16'),
@@ -1993,6 +2110,21 @@ INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('programmer', 'تیم برنامه نویس', '2019-11-29 10:25:41', '2019-11-29 10:25:41'),
 	('super_admin', 'سوپر ادمین', '2019-11-29 10:25:52', '2019-11-29 10:25:52');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.social_media
+CREATE TABLE IF NOT EXISTS `social_media` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- Dumping data for table 517_shop.social_media: ~3 rows (approximately)
+/*!40000 ALTER TABLE `social_media` DISABLE KEYS */;
+INSERT INTO `social_media` (`id`, `title`) VALUES
+	(1, 'اینستاگرام'),
+	(2, 'گیت هاب'),
+	(3, 'گوگل پلاس');
+/*!40000 ALTER TABLE `social_media` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -2011,7 +2143,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   CONSTRAINT `FK_users_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.users: ~0 rows (approximately)
+-- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `mobile`, `role_key`, `name`, `status`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 	(1, '09398624739', 'programmer', 'مهرداد معصومی', 1, '70082665', NULL, '2019-11-29 17:18:50', '2019-11-29 17:18:50'),

@@ -35,7 +35,11 @@ class Setting extends Component {
 
     componentDidMount() {
 
-        this.props.authSetting(window.location.host);
+        if (!this.props.auth.setting) {
+
+            this.props.authSetting(window.location.host);
+
+        }
 
         let interval = setInterval(() => {
             if (this.props.auth.setting) {

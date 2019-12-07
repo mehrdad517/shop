@@ -36,13 +36,13 @@ class Sidebar extends Component {
 
         this.state = {
             form : {
-                register: this.props.auth.setting.register,
-                maintenance_mode: this.props.auth.setting.maintenance_mode,
-                basket: this.props.auth.setting.basket,
-                android: this.props.auth.setting.android,
-                ios: this.props.auth.setting.ios,
-                user_dashboard: this.props.auth.setting.user_dashboard,
-                admin_panel: this.props.auth.setting.admin_panel,
+                register: this.props.auth.setting && this.props.auth.setting.register != undefined ? this.props.auth.setting.register : false,
+                maintenance_mode: this.props.auth.setting && this.props.auth.setting.maintenance_mode != undefined ? this.props.auth.setting.maintenance_mode : false,
+                basket: this.props.auth.setting && this.props.auth.setting.basket != undefined ? this.props.auth.setting.basket : false,
+                android: this.props.auth.setting && this.props.auth.setting.android != undefined ? this.props.auth.setting.android : false,
+                ios: this.props.auth.setting && this.props.auth.setting.ios != undefined ? this.props.auth.setting.ios : false,
+                user_dashboard: this.props.auth.setting && this.props.auth.setting.user_dashboard != undefined ? this.props.auth.setting.user_dashboard : false,
+                admin_panel: this.props.auth.setting && this.props.auth.setting.admin_panel != undefined ? this.props.auth.setting.admin_panel : false,
             }
         };
 
@@ -61,6 +61,7 @@ class Sidebar extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
+                    // update redux setting object
                     this.props.authSetting(window.location.host);
                 } else {
                     toast.error(response.msg);
@@ -147,6 +148,8 @@ class Sidebar extends Component {
                         <ListItemText primary="تنظیمات سایت" />
                     </ListItem>
                     <Divider/>
+                </List> : <CircularProgress color={"secondary"} />}
+                {this.props.auth.setting && <List>
                     <ListItem>
                         <ListItemIcon>
                             <SupervisorAccountIcon />
@@ -252,7 +255,7 @@ class Sidebar extends Component {
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
-                </List> : <CircularProgress color={"secondary"} />}
+                </List>}
 
             </div>
         )

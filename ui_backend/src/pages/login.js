@@ -55,9 +55,6 @@ class Login extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                      toast.success('با موفقیت وارد شدید.');
-                    this.setState({
-                        loading: false,
-                    });
                     this.props.changeLoginReducer({
                         login: true,
                         user: response.user,
@@ -74,6 +71,9 @@ class Login extends Component {
                     toast.error(response.message);
                 }
             }
+            this.setState({
+                loading: false,
+            });
         })
     };
 

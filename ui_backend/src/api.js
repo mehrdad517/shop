@@ -545,7 +545,7 @@ class Api {
 
     // all api for setting
     async socialMedia(){
-        return axios.get(`http://localhost:8000/api/backend/setting/social-media`, {
+        return axios.get(`http://localhost:8000/api/backend/social-medias`, {
             headers: this.haeders(),
 
         }).then( (response) => {
@@ -556,7 +556,7 @@ class Api {
     }
 
     async communicationChannel(){
-        return axios.get(`http://localhost:8000/api/backend/setting/communication_channel`, {
+        return axios.get(`http://localhost:8000/api/backend/communication_channels`, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
@@ -566,7 +566,7 @@ class Api {
     }
 
     async setting(domain){
-        return axios.get(`http://localhost:8000/api/backend/setting/${domain}`, {
+        return axios.get(`http://localhost:8000/api/backend/domains/${domain}`, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
@@ -576,7 +576,7 @@ class Api {
     }
 
     async updateSetting(domain, object){
-        return axios.put(`http://localhost:8000/api/backend/setting/${domain}`, object, {
+        return axios.put(`http://localhost:8000/api/backend/domains/${domain}`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
@@ -586,7 +586,7 @@ class Api {
     }
 
     async updateBooleanSetting(domain, object){
-        return axios.put(`http://localhost:8000/api/backend/setting/${domain}/boolean-change`, object, {
+        return axios.put(`http://localhost:8000/api/backend/domains/${domain}/boolean-change`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

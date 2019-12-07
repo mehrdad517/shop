@@ -106,7 +106,7 @@ use App\Slider;
 
 
 
-Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => '/backend'], function () {
 
 
     Route::group(['prefix' => 'filter'], function () {
@@ -120,10 +120,6 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
             return response($response);
         });
     });
-
-
-
-
 
 
     Route::group(['prefix' => 'anbar'], function () {
@@ -209,21 +205,27 @@ Route::group(['prefix' => '/backend', 'middleware' => 'auth:api'], function () {
 
     });
 
-    Route::group(['prefix' => 'setting'], function () {
 
-        Route::get('/social-media', function () {
+    Route::group(['prefix' => 'social-medias'], function () {
+        Route::get('/', function () {
             $response = \App\SocialMedia::all();
             return response($response);
         });
+    });
 
-        Route::get('/communication_channel', function () {
+    Route::group(['prefix' => 'communication_channels'], function () {
+
+        Route::get('/', function () {
             $response = \App\CommunicationChannel::all();
             return response($response);
         });
+    });
 
-        Route::get('/{domain}', 'Backend\SettingController@read');
-        Route::put('/{domain}', 'Backend\SettingController@update');
-        Route::put('/{domain}/boolean-change', 'Backend\SettingController@booleanChange');
+    Route::group(['prefix' => 'domains'], function () {
+
+        Route::get('/{domain}', 'Backend\DomainController@read');
+        Route::put('/{domain}', 'Backend\DomainController@update');
+        Route::put('/{domain}/boolean-change', 'Backend\DomainController@booleanChange');
 
     });
 

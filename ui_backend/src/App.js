@@ -81,7 +81,7 @@ function App() {
             <PersistGate persistor={persistor}>
                 <StylesProvider jss={jss}>
                     <MuiThemeProvider theme = { theme }>
-                        <ConnectedRouter  history={history}>
+                        <ConnectedRouter  history={ history }>
                             <Route component={Login} path='/' exact={true} />
                             <Route component={ResetPassword} path='/password/reset' />
                             <Route component={Index} path='/dashboard' exact={true} />

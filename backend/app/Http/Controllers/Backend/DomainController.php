@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Domain;
 use App\Http\Controllers\Controller;
 use App\Setting;
 use Illuminate\Http\Request;
 
-class SettingController extends Controller
+class DomainController extends Controller
 {
 
     public function read($domain, Request $request)
     {
-        $setting = Setting::where('domain', $domain)
+        $setting = Domain::with(['socialMedias', 'communicationChannels'])
+            ->where('key', $domain)
             ->first();
 
         return response($setting);
@@ -32,7 +34,7 @@ class SettingController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        $setting = Setting::where('domain', $domain)->update([
+        $setting = Domain::where('key', $domain)->update([
             'name' => $request->get('name'),
             'meta_title' => $request->get('meta_title'),
             'meta_description' => $request->get('meta_description'),
@@ -52,12 +54,19 @@ class SettingController extends Controller
     public function booleanChange($domain, Request $request)
     {
 
-        $setting = Setting::where('domain', $domain)->update($request->all());
+        $setting = Domain::where('key', $domain)->where('status', 1);
 
+        if ($setting->count() > 0) {
 
-        if ($setting) {
-            return response()->json(['status' => true, 'msg' => 'تغییرات با موفقیت اعمال شد']);
+            $setting = $setting->update($request->all());
+
+            if ($setting) {
+                return response()->json(['status' => true, 'msg' => 'تغییرات با موفقیت اعمال شد']);
+            }
+        } else {
+            return response()->json(['status' => false, 'msg' => 'دامنه نامعتبر است.']);
         }
+
 
         return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
