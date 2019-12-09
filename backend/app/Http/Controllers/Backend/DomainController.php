@@ -6,14 +6,16 @@ use App\Domain;
 use App\Http\Controllers\Controller;
 use App\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DomainController extends Controller
 {
 
-    public function read($domain)
+    public function read(Request $request)
     {
 
-        $setting = Domain::find($domain);
+
+        $setting = Domain::find(Auth::user()->domain);
 
         $result = [
             'name' => $setting->name,
@@ -38,14 +40,14 @@ class DomainController extends Controller
     }
 
     // read boolean data for update redux
-    public function readBoolean($domain)
+    public function readSticky(Request $request)
     {
-        $setting = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel')->find($domain);
+        $setting = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel')->find(Auth::user()->domain);
 
         return response($setting);
     }
 
-    public function update($domain, Request $request)
+    public function update(Request $request)
     {
 
         $validator = \Validator::make($request->all(),[
@@ -60,7 +62,7 @@ class DomainController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        $setting = Domain::find($domain);
+        $setting = Domain::find(Auth::user()->domain);
 
         $setting->update([
             'name' => $request->get('name'),
@@ -114,10 +116,11 @@ class DomainController extends Controller
 
     }
 
-    public function booleanChange($domain, Request $request)
+    public function updateSticky(Request $request)
     {
 
-        $setting = Domain::where('key', $domain)->where('status', 1);
+
+        $setting = Domain::where('key', Auth::user()->domain)->where('status', 1);
 
         if ($setting->count() > 0) {
 

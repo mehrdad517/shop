@@ -51,7 +51,7 @@ class Login extends Component {
         this.setState({
             loading: true,
         });
-        new Api().login({username: this.state.username, password: this.state.password}).then((response) => {
+        new Api().login({username: this.state.username, password: this.state.password, domain: window.location.host}).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                      toast.success('با موفقیت وارد شدید.');

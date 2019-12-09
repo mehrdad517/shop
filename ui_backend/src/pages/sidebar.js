@@ -27,7 +27,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import {toast} from "react-toastify";
 import Api from "../api";
-import {AuthSetting} from "../actions/auth";
+import {AuthSetting, stickySetting} from "../actions/auth";
 
 class Sidebar extends Component {
 
@@ -57,12 +57,12 @@ class Sidebar extends Component {
             form
         });
 
-        this.api.updateBooleanSetting(window.location.host, this.state.form).then((response) => {
+        this.api.updateStickySetting(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
                     // update redux setting object
-                    this.props.authSetting(window.location.host);
+                    this.props.stickySetting();
                 } else {
                     toast.error(response.msg);
                 }
@@ -270,8 +270,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        authSetting: function (domain) {
-            dispatch(AuthSetting(domain));
+        stickySetting: function () {
+            dispatch(stickySetting());
         }
     };
 }

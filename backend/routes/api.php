@@ -106,7 +106,7 @@ use App\Slider;
 
 
 
-Route::group(['prefix' => '/backend'], function () {
+Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
 
     Route::group(['prefix' => 'filter'], function () {
@@ -206,6 +206,13 @@ Route::group(['prefix' => '/backend'], function () {
     });
 
 
+    Route::group(['prefix' => 'setting'], function () {
+        Route::get('/', 'Backend\DomainController@read');
+        Route::put('/', 'Backend\DomainController@update');
+        Route::get('/sticky-setting', 'Backend\DomainController@readSticky');
+        Route::put('/sticky-setting', 'Backend\DomainController@updateSticky');
+    });
+
     Route::group(['prefix' => 'social-medias'], function () {
         Route::get('/', function () {
             $response = \App\SocialMedia::all();
@@ -221,21 +228,15 @@ Route::group(['prefix' => '/backend'], function () {
         });
     });
 
-    Route::group(['prefix' => 'domains'], function () {
-
-        Route::get('/{domain}', 'Backend\DomainController@read');
-        Route::get('/{domain}/read-boolean', 'Backend\DomainController@readBoolean');
-        Route::put('/{domain}', 'Backend\DomainController@update');
-        Route::put('/{domain}/boolean-change', 'Backend\DomainController@booleanChange');
-
-    });
-
 
 });
 
 
 /* auth  */
+
 Route::post('/login', 'Auth\LoginController@login');
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
+
 Route::group(['prefix' => 'validation-code'], function () {
     Route::post('/send', function (Request $request) {
 
@@ -345,7 +346,7 @@ Route::group(['prefix' => 'validation-code'], function () {
         }
     });
 });
-Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
+
 Route::post('/change-password', function (Request $request) {
 
     $validator = \Validator::make($request->all(), [
@@ -379,15 +380,22 @@ Route::post('/change-profile', function (Request $request) {
         return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
     }
 
-    $model = $request->user()->update([
+    $user  = $request->user();
+
+    $model = $user->update([
         'name' => $request->get('name')
     ]);
 
+
     if ($model) {
 
-        return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+        return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.', 'user' => [
+            'name' => $user->name,
+            'mobile' => $user->mobile
+        ]]);
     }
     return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
 })->middleware('auth:api');
+
 

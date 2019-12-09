@@ -544,6 +544,50 @@ class Api {
     }
 
     // all api for setting
+    async setting(){
+        return axios.get(`http://localhost:8000/api/backend/setting`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateSetting(object){
+        return axios.put(`http://localhost:8000/api/backend/setting`, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async stickySetting(){
+        return axios.get(`http://localhost:8000/api/backend/setting/sticky-setting`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateStickySetting(object){
+        return axios.put(`http://localhost:8000/api/backend/setting/sticky-setting`, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
+
+
+
     async socialMedia(){
         return axios.get(`http://localhost:8000/api/backend/social-medias`, {
             headers: this.haeders(),
@@ -557,46 +601,6 @@ class Api {
 
     async communicationChannel(){
         return axios.get(`http://localhost:8000/api/backend/communication_channels`, {
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
-    async setting(domain){
-        return axios.get(`http://localhost:8000/api/backend/domains/${domain}`, {
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
-    async booleanSetting(domain){
-        return axios.get(`http://localhost:8000/api/backend/domains/${domain}/read-boolean`, {
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
-    async updateSetting(domain, object){
-        return axios.put(`http://localhost:8000/api/backend/domains/${domain}`, object, {
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
-    async updateBooleanSetting(domain, object){
-        return axios.put(`http://localhost:8000/api/backend/domains/${domain}/boolean-change`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

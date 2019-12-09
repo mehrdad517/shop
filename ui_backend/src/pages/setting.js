@@ -93,7 +93,7 @@ class Setting extends Component {
         });
 
 
-        this.api.updateSetting(window.location.host, this.state.form).then((response) => {
+        this.api.updateSetting(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);

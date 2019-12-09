@@ -4,16 +4,14 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {Snackbar} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Api from "../api";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import {toast} from "react-toastify";
-import {AUTH_CHANGE_LOGIN, AUTH_LOGOUT} from "../actionTypes";
+import {AUTH_LOGOUT, UPDATE_USER} from "../actionTypes";
 import {push} from "connected-react-router";
 
 
@@ -36,11 +34,11 @@ class AuthEditProfile extends Component {
     }
 
     componentDidMount() {
-        /*this.setState({
+        this.setState({
             form: {
                 name: this.props.auth.user.name,
             }
-        })*/
+        })
     }
 
     handleChangeElement(event) {
@@ -59,22 +57,17 @@ class AuthEditProfile extends Component {
         this.api.AuthEditProfile(this.state.form).then((response) => {
             if (response.status) {
                 toast.success('پروفایل با موفقیت ویرایش شد.');
-                setTimeout( () => {
-                    this.props.onClose();
-                }, 500);
-
-                // update redux status
-                this.props.logout();
-
-                let interval = setInterval(() => {
-                    if (!this.props.auth.login) {
-                        toast.info('مجددا وارد سایت شوید.');
-                        this.props.redirect();
-                        clearInterval(interval);
-                    }
-                }, 1500)
             }
 
+            this.setState({
+                loading: false
+            });
+            
+            this.props.updateUser(response.user);
+
+            setTimeout( () => {
+                this.props.onClose();
+            }, 500);
 
         }).catch((error) => {
             console.log(error);
@@ -132,8 +125,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        logout: function () {
-            dispatch({type: AUTH_LOGOUT});
+        updateUser: function(user) {
+          dispatch({type : UPDATE_USER, payload: user});
         },
         redirect: function () {
             dispatch(push('/'));

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Input\Input;
 use Validator;
 
@@ -17,6 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+
         $entities = User::select(['id','name', 'mobile', 'created_at', 'role_key', 'status'])->with(['role' => function($q) {
             $q->select('key', 'title');
         }])->where(function ($q) use($request) {

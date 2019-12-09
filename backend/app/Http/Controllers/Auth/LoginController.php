@@ -52,14 +52,25 @@ class LoginController extends Controller
         $validator = \Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required',
+            'domain' => 'required'
         ]);
 
-        if ($validator->fails()) {
-
+        if ( $validator->fails() ) {
             return Response()->json(['status' => false, 'message' => $validator->errors()->first()]);
         }
 
-        if(!Auth::attempt(['mobile' => $request->get('username'), 'password' => $request->get('password')])) {
+        // first time check domain active
+        $domain = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel')->where('key', $request->get('domain'))->where('status', 1)->first();
+
+        if ( ! $domain ) {
+            return response()->json([
+                'status' => false,
+                'message' => 'دامنه نامعتبر است.'
+            ], 200);
+        }
+
+        // fetch user with domain
+        if(!Auth::attempt(['mobile' => $request->get('username'), 'password' => $request->get('password'), 'domain' => $request->get('domain')])) {
 
             return response()->json([
                 'status' => false,
@@ -69,7 +80,7 @@ class LoginController extends Controller
 
         $user = $request->user();
 
-        if (!$user->status) {
+        if ( ! $user->status ) {
             return response()->json([
                 'status' => false,
                 'message' => 'کاربر غیرفعال است.'
@@ -89,7 +100,7 @@ class LoginController extends Controller
                 'mobile' => $user->mobile,
             ],
             'permissions' => Role::getPermissions(Auth::user()->role_key, false),
-            'setting' => Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel')->find('localhost:3000'),
+            'setting' => $domain,
         ]);
 
 

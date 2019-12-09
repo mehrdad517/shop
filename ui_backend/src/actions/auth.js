@@ -3,9 +3,9 @@ import {UPDATE_SETTING} from "../actionTypes";
 
 
 
-export function AuthSetting(domain) {
+export function stickySetting() {
     return function (dispatch) {
-        new Api().booleanSetting(domain).then((response) => {
+        new Api().stickySetting().then((response) => {
             dispatch({'type' : UPDATE_SETTING, 'payload' : response});
         }).catch((error) => {
             console.log(error);
