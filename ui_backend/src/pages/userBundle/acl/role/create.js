@@ -11,7 +11,8 @@ import IconButton from "@material-ui/core/IconButton";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../../api";
-
+import {toast} from "react-toastify";
+import validator from 'validator';
 class RoleCreate extends Component {
 
     constructor(props) {
@@ -46,6 +47,12 @@ class RoleCreate extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
+
+        if (!validator.isAlpha(this.state.form.key)) {
+            toast.error('اسلاگ را به حروف لاتین وارد نمایید.');
+            return;
+        }
+
 
        this.api.createRole(this.state.form).then((response) => {
            if (typeof response != "undefined") {
@@ -123,6 +130,7 @@ class RoleCreate extends Component {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        helperText='بدون فاصله و انگلیسی وارد کنید.'
                                     />
                                 </Grid>
                                 <Grid item xs={12} >

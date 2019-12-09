@@ -81,6 +81,9 @@ class UserController extends Controller
         }
 
 
+        $request->request->add(['domain' => Auth::user()->domain]);
+
+
 
         $model = User::create($request->all());
 

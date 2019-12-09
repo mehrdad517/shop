@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from "@material-ui/core/Drawer";
@@ -13,9 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import {Fade} from "@material-ui/core";
 import Logout from "./logout";
-import Dialog from "@material-ui/core/Dialog";
-import UserEdit from "./userBundle/user/edit";
-import ChangePassword from "./userBundle/user/changePassword";
 import AuthChangePassword from "./change-password";
 import AuthEditProfile from "./edit-profile";
 
@@ -57,7 +53,7 @@ class Header extends Component {
                         <IconButton edge="start"  color="inherit" aria-label="menu" onClick={() => this.setState({ open: true})}>
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="h6" >
+                        <Typography variant="subtitle1" className="animated zoomIn">
                             دیجی عطار
                         </Typography>
                         <div style={{ flexGrow: 1, justifyContent: 'flex-end', display: 'flex'}}>

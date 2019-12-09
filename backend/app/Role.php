@@ -30,6 +30,7 @@ class Role extends Model
 
         $parents = Permission::select(['parent'])->groupBy('parent')->orderBy('created_at', 'asc')->pluck('parent');
         foreach ($parents as $parent) {
+            $actions= [];
 
             $join = DB::select('call fetch_permissions_with_access(?, ?)', [$role_key, $parent]);
 

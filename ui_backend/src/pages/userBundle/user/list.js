@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Header from './../../header'
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import NavigationIcon from "@material-ui/icons/Navigation";
-import {Box, Snackbar, Tooltip} from "@material-ui/core";
+import {Box, Tooltip} from "@material-ui/core";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -33,6 +32,7 @@ import ChangePassword from "./changePassword";
 import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
 import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCheckBoxTwoTone';
 import Api from "../../../api";
+import {Link} from "react-router-dom";
 
 class UserList extends Component {
 
@@ -176,11 +176,11 @@ class UserList extends Component {
                                 <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کاربران را مدیریت کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
-                                <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                <Link to='/dashboard' style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Button variant="contained" color="default" >
-                                        بازگشت&nbsp;<NavigationIcon />
+                                        <NavigationIcon />
                                     </Button>
-                                </div>
+                                </Link>
                             </Grid>
                         </Grid>
                     </Box>

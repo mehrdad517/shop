@@ -180,10 +180,8 @@ class Setting extends Component {
 
     render() {
         return (
-            <div>
-                <Header/>
-                 <Container>
-                    <div className="content">
+            <Container>
+                <div className="content">
                     <Box>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
@@ -380,9 +378,8 @@ class Setting extends Component {
                             </Grid>
                         </form>
                     </Box>
-                    </div>
-                </Container>
-            </div>
+                </div>
+            </Container>
         );
     }
 }

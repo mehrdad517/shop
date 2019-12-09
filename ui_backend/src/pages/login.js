@@ -29,11 +29,14 @@ class Login extends Component {
     componentDidMount() {
 
         if (this.props.auth.login) {
-
             this.props.redirect();
-
         }
+    }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.auth.login) {
+            this.props.redirect();
+        }
     }
 
 
@@ -57,12 +60,6 @@ class Login extends Component {
                      toast.success('با موفقیت وارد شدید.');
                     this.props.login(response);
 
-                    let interval = setInterval(() => {
-                        if (this.props.auth.login) {
-                            this.props.redirect();
-                            clearInterval(interval);
-                        }
-                    }, 1)
                 } else {
                     toast.error(response.message);
                 }
@@ -75,7 +72,7 @@ class Login extends Component {
 
     render() {
         return (
-            <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated zoomOut' : ''}>
+            <Container component="main" maxWidth="xs" className={this.props.auth.login ? 'animated fadeOut' : 'animated fadeIn'}>
                 <CssBaseline />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "Shabnam", marginTop: '25%'}}>
                     <Avatar style={{ backgroundColor: "#f50057"}}>

@@ -138,7 +138,7 @@ class Sidebar extends Component {
                         <ListItemIcon>
                             <LockIcon />
                         </ListItemIcon>
-                        <ListItemText primary="سطوح دسترسی" />
+                        <ListItemText primary="نقش ها و سطوح دسترسی" />
                     </ListItem> : ''}
                     <Divider/>
                     <ListItem component={Link} onClick={this.handleClose} to='/setting'>

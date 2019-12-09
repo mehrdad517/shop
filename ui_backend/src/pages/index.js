@@ -37,7 +37,7 @@ class Index extends Component {
         }
         return (
             <div>
-                <Header />
+
             </div>
         );
     }

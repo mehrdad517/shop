@@ -83,49 +83,8 @@ class RoleController extends Controller
     public function permissions($role, Request $request)
     {
         $list = [];
-        $map = $request->has('map') ? $request->get('map') : false;
 
-        $parents = Permission::select(['parent'])->groupBy('parent')->orderBy('created_at', 'asc')->pluck('parent');
-        foreach ($parents as $parent) {
-
-            $actions= [];
-
-            $join = DB::select('call fetch_permissions_with_access(?, ?)', [$role ?? Auth::user()->role_key, $parent]);
-
-            if ($map == 'true' || $map === true ) {
-                foreach ($join as $item) {
-                    $actions[] = [
-                        'id' => $item->key,
-                        'parent' => $parent,
-                        'title' => $item->title,
-                        'access' => $item->access,
-                        'method' => $item->method,
-                        'url' => $item->url
-                    ];
-                }
-
-                $list[] = [
-                    'controller' => [
-                        'key' => trans('permissions.' . str_replace('_', ' ', $parent)),
-                        'value' => $parent
-                    ],
-                    'actions' => $actions
-                ];
-            } else {
-
-                foreach ($join as $item) {
-                    preg_match('/'.$parent.'_(.*)/', $item->key, $match);
-                    $list[$parent][$match[1]] = [
-                        'title' => $item->title,
-                        'access' => $item->access,
-                        'method' => $item->method,
-                        'url' => $item->url
-                    ];
-                }
-            }
-
-
-        }
+        $list = Role::getPermissions($role, $request->get('map') ?? false);
 
         return response($list);
     }
@@ -137,6 +96,7 @@ class RoleController extends Controller
 
         $role->permissions()->detach();
         $role->permissions()->attach($request->get('permissions'));
+
 
         return response()->json(['status' => true, 'msg' => 'موفقیت آمیز']);
     }

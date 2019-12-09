@@ -38,14 +38,6 @@ class Logout extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                     this.props.logout();
-
-                    let interval = setInterval(() => {
-                        if (!this.props.auth.login) {
-                            this.props.redirect();
-                            clearInterval(interval);
-                        }
-                    }, 1)
-
                 }
             }
         });
@@ -55,31 +47,29 @@ class Logout extends Component {
 
     render() {
         return (
-            <div>
-                <Dialog
-                    open={this.props.open}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    onClose={() => this.props.onClose()}
-                    aria-labelledby="alert-dialog-slide-title"
-                    aria-describedby="alert-dialog-slide-description"
-                >
-                    <DialogTitle id="alert-dialog-slide-title">آیا برای خروج مطمئن هستید؟</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                            {this.state.loading ? <CircularProgress size={18} color={"secondary"} /> : ''}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => this.props.onClose()} color="primary">
-                            خیر
-                        </Button>
-                        <Button onClick={() => this.handleLogout()} color="primary">
-                            بله خارج میشوم
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
+            <Dialog
+                open={this.props.open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => this.props.onClose()}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle id="alert-dialog-slide-title">آیا برای خروج مطمئن هستید؟</DialogTitle>
+                <DialogContent>
+                    <div style={{ display: this.state.loading ? 'block' : 'none'}}>
+                        <CircularProgress size={18} color={"secondary"} />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.props.onClose()} color="primary">
+                        خیر
+                    </Button>
+                    <Button onClick={() => this.handleLogout()} color="primary">
+                        بله خارج میشوم
+                    </Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }

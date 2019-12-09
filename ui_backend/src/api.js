@@ -488,16 +488,6 @@ class Api {
     }
 
 
-    //    fetch all permissions
-    async fetchPermissions() {
-        return axios.get('http://localhost:8000/api/backend/users/permissions', {
-            headers: this.haeders(),
-        }).then( (response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
     // fetch roles
     async fetchRoles() {
         return axios.get('http://localhost:8000/api/backend/users/roles', {
