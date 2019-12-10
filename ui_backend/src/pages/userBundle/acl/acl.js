@@ -93,12 +93,13 @@ class Acl extends Component {
                         </Grid>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        {this.props.auth.login && this.props.auth.permissions.role.store.access ?
                         <Tooltip title="سطح دسترسی">
                             <IconButton onClick={() => this.handleDialog(true)}>
                                 <AccessibilityIcon />
                             </IconButton>
-                        </Tooltip>
-                        {this.props.auth.permissions && this.props.auth.permissions.role.store.access ? <RoleCreate handleRequest={() => this.handleRequest()} /> : ''}
+                        </Tooltip> : "" }
+                        {this.props.auth.login && this.props.auth.permissions.role.store.access ? <RoleCreate handleRequest={() => this.handleRequest()} /> : ''}
                     </Box>
                     <Box className='animated fadeIn' boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
                             <Grid container>

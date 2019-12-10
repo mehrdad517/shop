@@ -62,7 +62,7 @@ class AuthEditProfile extends Component {
             this.setState({
                 loading: false
             });
-            
+
             this.props.updateUser(response.user);
 
             setTimeout( () => {

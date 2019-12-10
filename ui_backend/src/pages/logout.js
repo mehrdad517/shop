@@ -28,6 +28,7 @@ class Logout extends Component {
         this.api = new Api();
     }
 
+
     handleLogout()
     {
         this.setState({

@@ -49,30 +49,44 @@ class Router extends Component {
 
     render() {
         return (
-            <ConnectedRouter  history={ history }>
-                {this.props.auth.login ? <Header /> : ''}
-                <Route component={Login} path='/' exact={true} />
-                <Route component={ResetPassword} path='/password/reset' />
-                <Route component={Index} path='/dashboard' exact={true} />
-                <Route component={AnbarList} path='/anbar' exact={true} />
-                <Route component={OrderList} path='/orders' exact={true} />
-                <Route component={OrderView} exact={true} path='/orders/:id' />
-                <Route component={OrderFractiveRequest} path='/orders/:id/fractive-request' />
-                <Route component={OrderEditStatus} path='/orders/:id/edit-status' />
-                <Route component={ProductList} path='/products' exact={true} />
-                <Route component={CreateProduct} path='/products/create' />
-                <Route component={EditProduct} path='/products/edit/:id' />
-                <Route component={ProductPins} path='/products/pins/:id' />
-                <Route component={BrandList} path='/products/brands' exact />
-                <Route component={BrandEdit} path='/products/brands/:id' />
-                <Route component={ProductCategory} path='/products/categories' axact />
-                <Route component={ProductCategoryAttribute} path='/products/categories/attributes/:id' />
-                <Route component={GroupAttributeList} path='/products/attributes' exact />
-                <Route component={AttributeEdit} path='/products/attributes/:id' />
-                <Route component={UserList} path='/users' exact={true} />
-                <Route component={Acl} path='/users/access/control/list' />
-                <Route component={Setting} path={'/setting'} />
-            </ConnectedRouter>
+            <>
+                {!this.props.auth.login ?
+                    <ConnectedRouter  history={ history }>
+                        <Route component={Login} path='/' exact={true}/>
+                        <Route component={ResetPassword} path='/password/reset'/>
+                    </ConnectedRouter>
+                    :
+                    <ConnectedRouter  history={ history }>
+                        <Header/>
+                        <Route component={Index} path='/dashboard' exact={true}/>
+                        <Route component={AnbarList} path='/anbar' exact={true}/>
+
+                        <Route component={OrderList} path='/orders' exact={true}/>
+                        <Route component={OrderView} exact={true} path='/orders/:id'/>
+                        <Route component={OrderFractiveRequest} path='/orders/:id/fractive-request'/>
+                        <Route component={OrderEditStatus} path='/orders/:id/edit-status'/>
+
+                        <Route component={ProductList} path='/products' exact={true}/>
+                        <Route component={CreateProduct} path='/products/create'/>
+                        <Route component={EditProduct} path='/products/edit/:id'/>
+                        <Route component={ProductPins} path='/products/pins/:id'/>
+
+                        <Route component={GroupAttributeList} path='/products/attributes' exact={true}/>
+                        <Route component={AttributeEdit} path='/products/attributes/:id'/>
+
+                        <Route component={BrandList} path='/brands' exact={true}/>
+                        <Route component={BrandEdit} path='/brands/:id'/>
+
+                        <Route component={ProductCategory} path='/categories' exact={true}/>
+                        <Route component={ProductCategoryAttribute} path='/categories/:id/attributes' />
+
+                        <Route component={UserList} path='/users' exact={true}/>
+                        <Route component={Acl} path='/users/access/control/list'/>
+                        <Route component={Setting} path={'/setting'} exact={true}/>
+
+                    </ConnectedRouter>
+                }
+            </>
         );
     }
 }

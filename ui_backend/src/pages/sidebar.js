@@ -90,14 +90,14 @@ class Sidebar extends Component {
                         <ListItemText primary="محصولات" />
                     </ListItem>: ''}
 
-                    {Boolean(this.props.auth.permissions.product_category.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/products/categories'>
+                    {Boolean(this.props.auth.permissions.product_category.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/categories'>
                         <ListItemIcon>
                             <AccountTreeIcon />
                         </ListItemIcon>
                         <ListItemText primary="دسته بندی محصولات" />
                     </ListItem>: ''}
 
-                    {Boolean(this.props.auth.permissions.brand.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/products/brands'>
+                    {Boolean(this.props.auth.permissions.brand.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/brands'>
                         <ListItemIcon>
                             <BrandingWatermarkIcon />
                         </ListItemIcon>

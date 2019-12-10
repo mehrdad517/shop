@@ -15,6 +15,16 @@ import ProductCategoryHead from "./head";
 import 'react-toastify/dist/ReactToastify.css';
 import {Link} from "react-router-dom";
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
+import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
+import FolderIcon from '@material-ui/icons/Folder';
 
 class ProductCategory extends Component {
 
@@ -78,7 +88,7 @@ class ProductCategory extends Component {
                         <Box>
                             <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
                                 <Tooltip title="افزودن ویژگی">
-                                    {this.state.checked.length === 1 ? <Link to={`/products/categories/attributes/${this.state.checked[0]}`}>
+                                    {this.state.checked.length === 1 ? <Link to={`/categories/${this.state.checked[0]}/attributes`}>
                                         <IconButton>
                                             <ScatterPlotIcon />
                                         </IconButton>
@@ -107,6 +117,15 @@ class ProductCategory extends Component {
                                 onCheck={checked => this.setState({checked})}
                                 onExpand={expanded => this.setState({ expanded })}
                                 noCascade={true}
+                                icons={{
+                                    check: <CheckBoxIcon />,
+                                    uncheck: <CheckBoxOutlineBlankIcon />,
+                                    expandClose: <ExpandLessIcon />,
+                                    expandOpen: <ExpandMoreIcon />,
+                                    parentClose: <FolderIcon />,
+                                    parentOpen: <FolderOpenIcon />,
+                                    leaf: <InsertDriveFileIcon />,
+                                }}
                             /> : <p>دسته جدید ایجاد نمایید.</p> }
                         </Box>
                         <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>

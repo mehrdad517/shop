@@ -24,10 +24,10 @@ class Login extends Component {
             username: '',
             password: '',
         }
+
     }
 
     componentDidMount() {
-
         if (this.props.auth.login) {
             this.props.redirect();
         }

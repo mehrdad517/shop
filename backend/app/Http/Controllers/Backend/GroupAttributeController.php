@@ -13,6 +13,7 @@ class GroupAttributeController extends Controller
 {
     public function index(Request $request)
     {
+
         $result = GroupAttribute::select('id', 'title')
             ->where(function ($q) use ($request) {
                 if ($request->has('filter')) {
