@@ -3,9 +3,25 @@
 body {
     font-size: 12px;
     background-color: #f2f3f5;
-    font-family:  "Shabnam";
+    font-family: "Shabnam FD";
     margin: 0;
     padding: 0;
+}
+.fusioncharts-container{
+    font-family: IRANSansWeb !important;
+}
+.fc__tooltip{
+    text-align: right;
+}
+text, .fc__tooltip {
+    font-family: "Shabnam FD" !important;
+    text-align: right;
+}
+.canvasjs-chart-canvas {
+    position: relative !important;
+}
+.canvasjs-chart-tooltip{
+    position: relative !important;
 }
 .Toastify {
     font-family: Shabnam !important;
