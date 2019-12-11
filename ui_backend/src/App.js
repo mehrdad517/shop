@@ -8,9 +8,9 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import configureStore, { history } from './store'
 import {ToastContainer} from "react-toastify";
 import Router from "./pages/router";
-import 'animate.css';
-import 'shabnam-font/dist/font-face.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'animate.css';
+import 'shabnam-font/dist/Farsi-Digits/font-face.css'
 
 const theme = createMuiTheme({
     direction: "rtl",

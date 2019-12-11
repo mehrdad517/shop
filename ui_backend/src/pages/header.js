@@ -14,6 +14,7 @@ import {Fade} from "@material-ui/core";
 import Logout from "./logout";
 import AuthChangePassword from "./change-password";
 import AuthEditProfile from "./edit-profile";
+import {Link} from "react-router-dom";
 
 
 class Header extends Component {
@@ -53,9 +54,11 @@ class Header extends Component {
                         <IconButton edge="start"  color="inherit" aria-label="menu" onClick={() => this.setState({ open: true})}>
                             <MenuIcon />
                         </IconButton>
-                        <Typography variant="subtitle1" className="animated zoomIn">
-                            دیجی عطار
+                        <Link to={'/dashboard'}>
+                        <Typography variant="subtitle1" className="animated zoomIn" style={{ color:'#fff'}}>
+                            نوآوران دنیای زیبائی هیراد
                         </Typography>
+                        </Link>
                         <div style={{ flexGrow: 1, justifyContent: 'flex-end', display: 'flex'}}>
                             <IconButton  color={"inherit"} style={{ textAlign: 'left'}} aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
                                 <AccountCircleRoundedIcon />

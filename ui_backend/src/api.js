@@ -574,10 +574,6 @@ class Api {
         })
     }
 
-
-
-
-
     async socialMedia(){
         return axios.get(`http://localhost:8000/api/backend/social-medias`, {
             headers: this.haeders(),
@@ -599,6 +595,17 @@ class Api {
         })
     }
 
+
+    /* reports */
+    async reports(){
+        return axios.get(`http://localhost:8000/api/reports`, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
 
 
 }

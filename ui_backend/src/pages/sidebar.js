@@ -28,6 +28,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import {toast} from "react-toastify";
 import Api from "../api";
 import {AuthSetting, stickySetting} from "../actions/auth";
+import AppsIcon from '@material-ui/icons/Apps';
 
 class Sidebar extends Component {
 
@@ -83,13 +84,19 @@ class Sidebar extends Component {
         return (
             <div className='sidebar' style={{ width: '300px'}}>
                 {this.props.auth.permissions ? <List component="nav" aria-label="main mailbox folders">
+                    <ListItem component={Link} onClick={this.handleClose} to='/dashboard'>
+                        <ListItemIcon>
+                            <AppsIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="صفحه نخست" />
+                    </ListItem>
+                    <Divider />
                     {Boolean(this.props.auth.permissions.product.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/products'>
                         <ListItemIcon>
                             <LocalParkingIcon />
                         </ListItemIcon>
                         <ListItemText primary="محصولات" />
                     </ListItem>: ''}
-
                     {Boolean(this.props.auth.permissions.product_category.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/categories'>
                         <ListItemIcon>
                             <AccountTreeIcon />

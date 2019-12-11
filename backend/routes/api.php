@@ -229,6 +229,15 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
     });
 
 
+
+
+});
+
+Route::get('/reports', function () {
+
+    $response = \Illuminate\Support\Facades\DB::select('call orders_count_price_daily_report');
+    return response($response);
+
 });
 
 
