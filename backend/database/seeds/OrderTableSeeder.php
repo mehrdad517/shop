@@ -13,7 +13,7 @@ class OrderTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('fa_IR');
-        foreach (range(1,400) as $key=>$index) {
+        foreach (range(1,100000) as $key=>$index) {
             $id = DB::table('order')->insertGetId([
                 'user_id' => $faker->numberBetween(1,1),
                 'increment_id' => $key,
@@ -23,7 +23,7 @@ class OrderTableSeeder extends Seeder
                 'pure_price' => 340000,
                 'total_price' => 350000,
                 'order_status' => 1,
-                'created_at' => $faker->dateTime,
+                'created_at' => date_sub(date_create(date('Y-m-d')),date_interval_create_from_date_string(rand(0, 30) ." days")),
                 'updated_at' => $faker->dateTime
             ]);
 
