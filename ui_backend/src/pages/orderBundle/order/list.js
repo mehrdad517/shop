@@ -26,7 +26,7 @@ import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import Api from "../../../api";
 import Chip from "@material-ui/core/Chip";
 import moment from 'moment-jalaali'
-import DatePicker from 'react-datepicker2';
+// import DatePicker from 'react-datepicker2';
 import {delivery, items, status, transport} from "../helper";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import {Link} from "react-router-dom";
@@ -362,22 +362,22 @@ class OrderList extends Component {
                                     <Grid item xs={12} sm={4} md={3}>
                                         <div className='datepicker-input-container '>
                                             <label>از تاریخ</label>
-                                            <DatePicker
-                                                value={this.state.filter.from_date}
-                                                isGregorian={false}
-                                                onChange={(value) => this.setSelectedDay(value,'from_date')}
-                                            />
+                                            {/*<DatePicker*/}
+                                            {/*    value={this.state.filter.from_date}*/}
+                                            {/*    isGregorian={false}*/}
+                                            {/*    onChange={(value) => this.setSelectedDay(value,'from_date')}*/}
+                                            {/*/>*/}
 
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3}>
                                         <div className='datepicker-input-container '>
                                             <label>تا تاریخ</label>
-                                            <DatePicker
-                                                value={this.state.filter.to_date}
-                                                isGregorian={false}
-                                                onChange={(value) => this.setSelectedDay(value,'to_date')}
-                                            />
+                                            {/*<DatePicker*/}
+                                            {/*    value={this.state.filter.to_date}*/}
+                                            {/*    isGregorian={false}*/}
+                                            {/*    onChange={(value) => this.setSelectedDay(value,'to_date')}*/}
+                                            {/*/>*/}
 
                                         </div>
                                     </Grid>

@@ -3,18 +3,15 @@
 body {
     font-size: 12px;
     background-color: #f2f3f5;
-    font-family: "Shabnam FD";
+    font-family: 'Shabnam', sans-serif;
     margin: 0;
     padding: 0;
-}
-.fusioncharts-container{
-    font-family: IRANSansWeb !important;
 }
 .fc__tooltip{
     text-align: right;
 }
 text, .fc__tooltip {
-    font-family: "Shabnam FD" !important;
+    font-family: 'Shabnam', sans-serif !important;
     text-align: right;
 }
 .canvasjs-chart-canvas {

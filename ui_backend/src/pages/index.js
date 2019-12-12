@@ -110,6 +110,7 @@ class Index extends Component {
             top: 50%;
             left: 50%;
             z-index: 9999999999;
+     
         `;
 
         return (
@@ -121,6 +122,7 @@ class Index extends Component {
                                 css={override}
                                 loading={true}
                                 size={12}
+                                color={'#2ecc71'}
                                  /> : <ReactFC {...chartConfigs}/>}
 
 

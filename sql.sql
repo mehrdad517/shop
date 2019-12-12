@@ -16,6 +16,22 @@
 CREATE DATABASE IF NOT EXISTS `517_shop` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_persian_ci */;
 USE `517_shop`;
 
+-- Dumping structure for procedure 517_shop.admin_report
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_report`(
+	OUT `all_user` INT,
+	OUT `deactive_user` INT,
+	OUT `guest_user` INT,
+	OUT `user_with_permission` INT
+)
+BEGIN
+	SELECT COUNT(id) into all_user  FROM users;
+	select count(id) into deactive_user from users where status = 0;
+	select count(id) into guest_user from users where role_key = 'guest';
+	select count(id) into user_with_permission from users where role_key <> 'guest';
+END//
+DELIMITER ;
+
 -- Dumping structure for table 517_shop.anbar
 CREATE TABLE IF NOT EXISTS `anbar` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -848,6 +864,32 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(26, '2019_11_09_162055_create_region_table', 1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
+-- Dumping structure for procedure 517_shop.new_p
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `new_p`()
+BEGIN
+		DECLARE all_users int;
+		DECLARE deactive_users int;
+		DECLARE guest_users int;
+		DECLARE system_users int;
+				
+	create TEMPORARY TABLE if not exists admin_new_reports(
+		all_users int null,
+		deactive_users int null,
+		guest_users int null,
+		system_users int null
+	) ENGINE = memory;
+	
+	truncate admin_new_reports;
+	
+	set all_users =  (select count(id) from users );
+	
+	insert into admin_new_reports (all_users, deactive_users, guest_users, system_users) value(all_users, 0,0,0);
+	
+	select * from admin_new_reports;
+END//
+DELIMITER ;
+
 -- Dumping structure for table 517_shop.oauth_access_tokens
 CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -863,17 +905,19 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~43 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~46 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
 	('024d3c61f0ccc5a2714ea04d10719aa95a36331893bfbd393adcb752ae54b13cd86e4241585b11b6', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:55:38', '2019-12-09 17:55:38', '2020-12-09 17:55:38'),
 	('122ecd4e33bc28bf957168686dcbe7d7a95cc502aa08e75e7e48ab521fa2ad0fb82e87747450b368', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:59:08', '2019-12-09 17:59:08', '2020-12-09 17:59:08'),
 	('1238a121014741491745fbc21b3c708d348ddbaa30938fd7fc72965909178932003411064cac9e99', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:47:50', '2019-12-07 20:47:50', '2020-12-07 20:47:50'),
 	('13fd975a1b73cc63c6264af49f90d60575511c7c3d32af3c923bd193b399bc359b882c77f9dc2714', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:41:50', '2019-12-09 17:41:50', '2020-12-09 17:41:50'),
+	('1c10ec452eb16b979e0ae2eedc7b60eb84816624fba488b7aa18b0d926e0c7e0103a2984c255a260', 2, 2, 'Token Name', '[]', 1, '2019-12-11 09:41:52', '2019-12-11 09:41:52', '2020-12-11 09:41:52'),
 	('2126676e24feaf0ad56f1cc14639f17c176df5211f81881cf1f33385acd1252ca0224476c0bdc249', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:36:17', '2019-12-09 17:36:17', '2020-12-09 17:36:17'),
 	('22b86083be489e2a9322d025d76099da78bc70ef3eeff57a6bfdae891b49cb5db58488a978479de3', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:06', '2019-12-09 18:01:06', '2020-12-09 18:01:06'),
 	('241c053952892c638ec962d0065a7195ca62fedbfd9350708e163facfdfb1d7fe8b77c9e977c7988', 2, 2, 'Token Name', '[]', 1, '2019-12-10 07:37:02', '2019-12-10 07:37:02', '2020-12-10 07:37:02'),
 	('2e4cdac12e98e45c9a4b31a2a980e2756e14e5d12216ecbe884b77110285d46ebf908e3ed8bce7c5', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:51:10', '2019-12-09 17:51:10', '2020-12-09 17:51:10'),
+	('2f0e48023622f259fc0624d53dffd29909a9a2d39f23e892268666074bc0c76c103013103481db6c', 2, 2, 'Token Name', '[]', 0, '2019-12-11 12:27:53', '2019-12-11 12:27:53', '2020-12-11 12:27:53'),
 	('3df885ef53f2dc139374b0cee1b0fe191ae2bdc13f5a2f501ab11edd6ea134b34d45cedfe831be78', 2, 2, 'Token Name', '[]', 1, '2019-12-09 20:28:27', '2019-12-09 20:28:27', '2020-12-09 20:28:27'),
 	('3e41aeecb07415495ede3dab37fda563129ca2c84e2909c5259b4723f2944a4760d898ba90a7d29f', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:25', '2019-12-09 18:01:25', '2020-12-09 18:01:25'),
 	('3fa280aa2e2b5099eee4ef4c584f2af4dcecc3e9bea16c4dd57480be99f6812c7086d5613c096eb2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:49:14', '2019-12-09 17:49:14', '2020-12-09 17:49:14'),
@@ -908,7 +952,8 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('de28eec19b38ad1e83ca12458d24a5d5b9fdc5ce506d6d00a878747a353436b65abcb143e5420e5a', 2, 2, 'Token Name', '[]', 0, '2019-12-07 20:42:46', '2019-12-07 20:42:46', '2020-12-07 20:42:46'),
 	('e5490c6460e8d0fc81058fafd0c36886760f03bec6625e4f650f062c18f0f1611cbfda47564fbd46', 2, 2, 'Token Name', '[]', 0, '2019-12-07 20:40:21', '2019-12-07 20:40:21', '2020-12-07 20:40:21'),
 	('ebd4e9eabfff7ca66a1fbc5d3a72ce24a07ed0b54c353b1859ee60162dd7ea4fe1db48741bffe1f9', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:35:56', '2019-12-09 17:35:56', '2020-12-09 17:35:56'),
-	('ebe32b3bdb9f74736e2b58b65e18821b271926578797a8114570f7857450b331e6c625635cfd19b2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:50:59', '2019-12-09 17:50:59', '2020-12-09 17:50:59');
+	('ebe32b3bdb9f74736e2b58b65e18821b271926578797a8114570f7857450b331e6c625635cfd19b2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:50:59', '2019-12-09 17:50:59', '2020-12-09 17:50:59'),
+	('ecf0f424666997e78d3edcbe40f6a874f6b6f2b05b9eea3266e1a5417faf1327bdc3ebce8573a16b', 2, 2, 'Token Name', '[]', 1, '2019-12-11 06:59:31', '2019-12-11 06:59:31', '2020-12-11 06:59:31');
 /*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_auth_codes
@@ -1001,7 +1046,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `FK_order_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11038 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order: ~9,943 rows (approximately)
+-- Dumping data for table 517_shop.order: ~10,650 rows (approximately)
 /*!40000 ALTER TABLE `order` DISABLE KEYS */;
 INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `tax`, `pure_price`, `total_price`, `order_status`, `transport_status`, `delivery_status`, `items_status`, `created_at`, `updated_at`) VALUES
 	(407, 1, 0, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-12-10 02:09:30', '1998-05-26 03:41:31'),
@@ -2487,7 +2532,7 @@ INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `
 	(1887, 1, 1107, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-12-06 00:00:00', '1971-05-17 22:04:12'),
 	(1888, 1, 1108, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-23 00:00:00', '2005-11-07 16:20:46'),
 	(1889, 1, 1109, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-30 00:00:00', '1995-02-04 02:12:46'),
-	(1890, 1, 1110, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-13 00:00:00', '2007-03-23 00:15:11'),
+	(1890, 1, 1110, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-13 00:00:00', '2007-03-23 01:00:00'),
 	(1891, 1, 1111, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-21 00:00:00', '1992-11-11 17:15:47'),
 	(1892, 1, 1112, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-19 00:00:00', '2003-09-04 12:21:37'),
 	(1893, 1, 1113, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-29 00:00:00', '1970-10-24 19:18:04'),
@@ -10938,7 +10983,7 @@ INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `
 	(10337, 1, 9557, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-27 00:00:00', '1976-07-31 15:44:28'),
 	(10338, 1, 9558, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-12-05 00:00:00', '2008-02-28 00:15:07'),
 	(10339, 1, 9559, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-24 00:00:00', '2019-11-29 01:37:45'),
-	(10340, 1, 9560, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-13 00:00:00', '2019-03-22 00:34:24'),
+	(10340, 1, 9560, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-13 00:00:00', '2019-03-22 01:00:00'),
 	(10341, 1, 9561, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-15 00:00:00', '1974-07-09 19:10:25'),
 	(10342, 1, 9562, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-29 00:00:00', '2003-07-26 21:27:50'),
 	(10343, 1, 9563, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-12-04 00:00:00', '1979-09-29 22:27:19'),
@@ -11645,7 +11690,7 @@ BEGIN
 	DECLARE i int; 
 	DECLARE data_exist int;
 	
-	/* create table if not exist*/
+	
 	CREATE TEMPORARY TABLE IF NOT EXISTS calendar(
 		calendar_day DATE NOT NULL,
 		index idx (calendar_day)	
@@ -11665,7 +11710,7 @@ BEGIN
 	   END LOOP;
    END IF;
    
-	SELECT calendar_day, IFNULL(CAST(total_price AS INTEGER), 0) total_price, IFNULL(total_count, 0) AS total_count
+	SELECT DATE_FORMAT(calendar_day,'%d')  AS label,  IFNULL(CAST(total_price AS INTEGER), 0) total_price, IFNULL(total_count, 0) AS total_count
 	FROM calendar
 	LEFT JOIN (
 	SELECT CAST(created_at AS DATE) AS order_created_at, SUM(total_price) AS total_price, COUNT(id) AS total_count
@@ -11730,7 +11775,7 @@ CREATE TABLE IF NOT EXISTS `order_post_info` (
   CONSTRAINT `FK_order_post_info_region` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order_post_info: ~9,727 rows (approximately)
+-- Dumping data for table 517_shop.order_post_info: ~10,532 rows (approximately)
 /*!40000 ALTER TABLE `order_post_info` DISABLE KEYS */;
 INSERT INTO `order_post_info` (`order_id`, `region_id`, `full_name`, `national_code`, `mobile`, `phone`, `postal_code`, `address`, `created_at`, `updated_at`) VALUES
 	(408, 1, 'آرمین نجفی', '14973974763', '02691378556', '02606270344', '6122887472', 'آذربایجان شرقی خیابان تبریزی ساختمان قدسی', NULL, NULL),
@@ -22385,7 +22430,7 @@ CREATE TABLE IF NOT EXISTS `order_product_pins` (
   CONSTRAINT `FK_order_product_pins_product_pins` FOREIGN KEY (`product_pins_id`) REFERENCES `product_pins` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order_product_pins: ~10,025 rows (approximately)
+-- Dumping data for table 517_shop.order_product_pins: ~10,646 rows (approximately)
 /*!40000 ALTER TABLE `order_product_pins` DISABLE KEYS */;
 INSERT INTO `order_product_pins` (`order_id`, `product_pins_id`, `count`, `price`, `discount`, `fractional_count`, `defactive_count`, `detail`, `created_at`, `updated_at`) VALUES
 	(408, 1, 1, 340000.00, 0.00, 0, 0, NULL, NULL, NULL),
@@ -33047,7 +33092,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   KEY `paymentable_id` (`paymentable_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.payment: ~2 rows (approximately)
+-- Dumping data for table 517_shop.payment: ~3 rows (approximately)
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
 INSERT INTO `payment` (`id`, `paymentable_id`, `paymentable_type`, `amount`, `ref_id`, `type`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'App\\Order', 240000.00, '1221135445', 'online', 1, '2019-11-10 11:54:44', '2019-11-10 11:54:45'),
@@ -33122,7 +33167,7 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
   CONSTRAINT `FK_permission_role_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission_role: ~148 rows (approximately)
+-- Dumping data for table 517_shop.permission_role: ~152 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('admin', 'brand_index'),
@@ -33338,7 +33383,7 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: ~3 rows (approximately)
+-- Dumping data for table 517_shop.product_category: ~4 rows (approximately)
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'دسته بندی محصولات', NULL, NULL, NULL, 1, 1, 8, NULL, '2019-11-24 20:18:01', '2019-11-24 20:18:01'),
@@ -33397,7 +33442,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.role: ~8 rows (approximately)
+-- Dumping data for table 517_shop.role: ~9 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('admin', 'ادمین', '2019-11-29 10:26:16', '2019-11-29 10:26:16'),
@@ -33458,8 +33503,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `mobile`, `domain`, `role_key`, `name`, `status`, `validation_code`, `verify_account`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 1, 1, '70082665', NULL, '2019-11-29 17:18:50', '2019-11-29 17:18:50'),
-	(2, '09120246217', 'localhost:3000', 'programmer', 'v11212vvmasoumi', 1, 10245, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$r/mWcBlnkhAx8152mKAgVufG3ZoLX/3QWR3ccZcFJAIhirxBsKeYK', '2019-11-30 20:13:25', '2019-12-10 07:50:48');
+	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 32030, 1, '70082665', '$2y$10$UYSSv0pBz6k10fCFhVlumu4tz4wF8qtyEnV7HkpUX.ise7t1e7yFG', '2019-11-29 17:18:50', '2019-12-11 09:41:40'),
+	(2, '09120246217', 'localhost:3000', 'programmer', 'v11212vvmasoumi', 1, 16549, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$nZw4p36WUelzcJ7H4ZjyBun1/4C4iVj4l0d7w/EvryFHJay44OFSm', '2019-11-30 20:13:25', '2019-12-11 09:39:55');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete
@@ -33521,24 +33566,24 @@ CREATE TRIGGER `order_before_update` BEFORE UPDATE ON `order` FOR EACH ROW BEGIN
 	END IF;
 	
 
-	/* وضعیت جدید حمل و نقل ارسال مجدد است*/
+	
 	IF NEW.transport_status = 3
 	THEN
-		IF OLD.transport_status IN (0, 2) /* اگر ار صف ارسال و در حال اماده سازی به ارسال مجدد تبدیل شد*/
+		IF OLD.transport_status IN (0, 2) 
 		THEN 
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = message;			
-		ELSE /*اگر از حالت خروج از انبار یا حالت دیگه تبدیل شد*/
-			IF OLD.delivery_status = 0 OR NEW.delivery_status = 0 /*در صورتی که هنوز ارسال نشده است نمیتولند ارسال مجدد شود*/
+		ELSE 
+			IF OLD.delivery_status = 0 OR NEW.delivery_status = 0 
 			THEN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ORDER BE DATE USER NARESIDE KE BEKHAD MOJADAD BASHE';
-			ELSEIF OLD.delivery_status <> 3 AND NEW.delivery_status <> 3 /* ارسال شده و وضعیت بازگشت به انبار ندارد*/
+			ELSEIF OLD.delivery_status <> 3 AND NEW.delivery_status <> 3 
 			THEN
 				SET NEW.delivery_status = 3;	
 			END IF;
 		END IF;
 	END IF;
 	
-	/*از حالت بی تاثیر به ارسال مجدد قابل انجام نیست*/
+	
 	IF NEW.transport_status IN (0, 2)
 	THEN
 		IF OLD.transport_status = 3
@@ -33562,7 +33607,7 @@ CREATE TRIGGER `order_before_update` BEFORE UPDATE ON `order` FOR EACH ROW BEGIN
 
 	
 	
-	/* اگر فاکتور پرداختی نداشته باشد نمیشود به خروج از انبار تبدیل کرد.*/
+	
 	IF NEW.transport_status = 1
 	THEN
 		IF OLD.total_price <> (SELECT SUM(amount) FROM payment WHERE paymentable_id = OLd.id and paymentable_type = 'AppOrder' and status = 1) OR (SELECT COUNT(*) FROM payment WHERE payment.paymentable_id = OLD.id AND payment.paymentable_type = 'AppOrder' AND payment.status = 0) > 0
@@ -33571,13 +33616,13 @@ CREATE TRIGGER `order_before_update` BEFORE UPDATE ON `order` FOR EACH ROW BEGIN
 		END IF;
 	END IF;
 	
-	/*پس از پرداخت الحاقیه خروج از انبار میشود و وضعیت تحویل دیفالت میشود.*/
+	
 	IF NEW.transport_status = 1 AND OLD.transport_status IN(0,2,3) AND NEW.delivery_status <> 4
 	THEN
 		SET NEW.delivery_status = 0;
 	END IF; 
 		
-	/* تبدیل خروج از انبار به حالت دیگری در صورتی انجام میشود که در فاکتور تجمیعی انبار نباشد*/
+	
 	IF OLD.transport_status = 1 AND NEW.transport_status <> 1
 	THEN
 		IF (SELECT COUNT(*) FROM anbar left join order_in_anbar on anbar.id = order_in_anbar.anbar_id WHERE order_in_anbar.order_id = OLD.id and post_sending_data = 1) > 0
@@ -33588,7 +33633,7 @@ CREATE TRIGGER `order_before_update` BEFORE UPDATE ON `order` FOR EACH ROW BEGIN
 	
 					
 	
-	/*اگر ار مرجوعی بخاد خارج بشه*/
+	
 	IF OLD.delivery_status = 4 AND NEW.delivery_status <> 4
 	THEN
 		IF (SELECT COUNT(*) FROM finance WHERE finance.financeable_id = OLD.id AND finance.financeable_type = 'AppOrder' AND finance.status = 1) > 0
