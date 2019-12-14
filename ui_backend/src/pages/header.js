@@ -19,6 +19,7 @@ import {Link} from "react-router-dom";
 
 class Header extends Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +37,7 @@ class Header extends Component {
 
         const handleClick = event => {
             this.setState({
-                anchorEl: true
+                anchorEl : event.currentTarget
             })
         };
 
@@ -48,37 +49,33 @@ class Header extends Component {
 
 
         return (
-            <div style={{ flexGrow: 1}}>
+            <div>
                 <AppBar position="static">
-                    <Toolbar>
+                    <Toolbar  style={{ display: "flex", justifyContent:  'space-between', }}>
                         <IconButton edge="start"  color="inherit" aria-label="menu" onClick={() => this.setState({ open: true})}>
                             <MenuIcon />
                         </IconButton>
-                        <Link to={'/dashboard'}>
+                        <Link to={'/'}>
                         <Typography variant="subtitle1" className="animated zoomIn" style={{ color:'#fff'}}>
                             نوآوران دنیای زیبائی هیراد
                         </Typography>
                         </Link>
-                        <div style={{ flexGrow: 1, justifyContent: 'flex-end', display: 'flex'}}>
-                            <IconButton  color={"inherit"} style={{ textAlign: 'left'}} aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
-                                <AccountCircleRoundedIcon />
-                            </IconButton>
-                            <Menu
-                                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                                id="fade-menu"
-                                anchorEl={this.state.anchorEl}
-                                keepMounted
-                                open={Boolean(this.state.anchorEl)}
-                                onClose={handleClose}
-                                TransitionComponent={Fade}
-                            >
-                                <MenuItem onClick={() => this.setState({profile: true})}>ویرایش پروفایل</MenuItem>
-                                <MenuItem onClick={() => this.setState({password: true})}>تغییر رمز</MenuItem>
-                                <MenuItem onClick={() => this.setState({logout: true})}>
-                                    <Typography>خروج از سایت</Typography>
-                                </MenuItem>
-                            </Menu>
-                        </div>
+                        <IconButton id='fade-menu' aria-haspopup="true" onClick={handleClick} style={{ color: '#fff'}}>
+                            <AccountCircleRoundedIcon />
+                        </IconButton>
+                        <Menu
+                            id="fade-menu"
+                            anchorEl={this.state.anchorEl}
+                            open={Boolean(this.state.anchorEl)}
+                            onClose={handleClose}
+                            TransitionComponent={Fade}
+                        >
+                            <MenuItem onClick={() => this.setState({profile: true, anchorEl: null})}>ویرایش پروفایل</MenuItem>
+                            <MenuItem onClick={() => this.setState({password: true, anchorEl: null})}>تغییر رمز</MenuItem>
+                            <MenuItem onClick={() => this.setState({logout: true, anchorEl: null})}>
+                                <Typography>خروج از سایت</Typography>
+                            </MenuItem>
+                        </Menu>
                     </Toolbar>
                 </AppBar>
                 <Drawer anchor="left" open={this.state.open} onClose={() => this.setState({ open: false})}>

@@ -27,18 +27,6 @@ class Login extends Component {
 
     }
 
-    componentDidMount() {
-        if (this.props.auth.login) {
-            this.props.redirect();
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.auth.login) {
-            this.props.redirect();
-        }
-    }
-
 
     handleInputChange(event) {
         let form = this.state;
@@ -57,8 +45,8 @@ class Login extends Component {
         new Api().login({username: this.state.username, password: this.state.password, domain: window.location.host}).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
-                     toast.success('با موفقیت وارد شدید.');
                     this.props.login(response);
+                    toast.success('با موفقیت وارد شدید.');
 
                 } else {
                     toast.error(response.message);
@@ -152,7 +140,7 @@ function mapDispatchToProps(dispatch) {
             });
         },
         redirect: function () {
-            dispatch(push('/dashboard'));
+            dispatch(push('/'));
         }
     }
 }

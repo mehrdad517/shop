@@ -39,13 +39,6 @@ class Router extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
-        if (!this.props.auth.login) {
-            this.props.redirect();
-        }
-    }
-
 
     render() {
         return (
@@ -58,7 +51,7 @@ class Router extends Component {
                     :
                     <ConnectedRouter  history={ history }>
                         <Header/>
-                        <Route component={Index} path='/dashboard' exact={true}/>
+                        <Route component={Index} path='/' exact={true}/>
                         <Route component={AnbarList} path='/anbar' exact={true}/>
 
                         <Route component={OrderList} path='/orders' exact={true}/>

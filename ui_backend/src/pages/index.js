@@ -17,7 +17,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import ClipLoader from 'react-spinners/SyncLoader';
-
+import CurrencyFormat from 'react-currency-format';
 ReactFC.fcRoot(FusionCharts, mscombi2d , FusionTheme);
 
 class Index extends Component {
@@ -29,7 +29,8 @@ class Index extends Component {
 
         this.state = {
             loading: true,
-            data: []
+            chart: [],
+            reports: []
         };
 
 
@@ -37,37 +38,52 @@ class Index extends Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        this.api.reports().then((response) => {
-           if (typeof response != "undefined") {
+        await new Promise(resolve =>
+        {
+            resolve(this.api.salesReport(this.props.auth.token).then((response) => {
+                if (typeof response != "undefined") {
 
-               let chart = {
-                   label: [],
-                   price: [],
-                   count: []
-               };
+                    let chart = {
+                        label: [],
+                        price: [],
+                        count: []
+                    };
 
-               response.map((r, key) => {
-                   chart.label.push({'label' : r.label});
-                   chart.price.push({'value' : r.total_price});
-                   chart.count.push({'value' : r.total_count});
-               });
+                    response.map((r, key) => {
+                        chart.label.push({'label' : r.label});
+                        chart.price.push({'value' : r.total_price});
+                        chart.count.push({'value' : r.total_count});
+                    });
 
-               this.setState({
-                   data: chart,
-                   loading: false
-               })
-           }
+                    this.setState({
+                        chart,
+                    })
+                }
+            }));
         });
 
+        await new Promise(resolve => {
+            resolve(this.api.mapReports(this.props.auth.token).then((response) => {
+                if (typeof response != "undefined") {
+                    this.setState({
+                        reports: response
+                    })
+                }
+            }));
+        });
+
+        await new Promise((resolve => {
+            resolve(this.setState({
+                loading: false
+            }));
+        }));
 
     }
 
 
     render() {
-
-        console.log(this.state.data);
 
         const chartConfigs = {
             type: 'mscombi2d',// The chart type
@@ -86,19 +102,19 @@ class Index extends Component {
                 },
                 "categories": [
                     {
-                        "category": this.state.data.label
+                        "category": this.state.chart.label
                     }
                 ],
                 "dataset": [
                     {
                         "seriesName": "تعداد فاکتور",
                         "renderAs": "line",
-                        "data": this.state.data.count
+                        "data": this.state.chart.count
                     },
                     {
                         "seriesName": "مبلغ فروش",
                         "renderAs": "line",
-                        "data": this.state.data.price
+                        "data": this.state.chart.price
                     }
                 ]
             }
@@ -121,134 +137,27 @@ class Index extends Component {
                             {this.state.loading ? <ClipLoader
                                 css={override}
                                 loading={true}
-                                size={12}
-                                color={'#2ecc71'}
-                                 /> : <ReactFC {...chartConfigs}/>}
-
-
+                                size={10}
+                                color={'#36D7B7'}
+                            /> : <ReactFC {...chartConfigs}/>}
                         </Box>
                         <Box>
                             <Grid spacing={2} container={true}>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '20px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            تعداد کل کاربران
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '20px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            کاربران غیرفعال
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            10
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '20px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            کابران مهمان
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            480
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '20px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            کاربران سیستمی
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            480
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            تعداد کل محصولات
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            محصولات غیرفعال
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            محصولات ناموجود
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            برندها
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            تعداد کل سفارشات
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            سفارشات مرجوعی
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            سفارشات تعدیلی
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={6} sm={4} md={3}>
-                                    <Paper style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}} boxShadow={3}>
-                                        <Typography variant={"subtitle1"}>
-                                            سفارشات دارای کسری و معیوبی
-                                        </Typography>
-                                        <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
-                                            503
-                                        </Typography>
-                                    </Paper>
-                                </Grid>
+                                {this.state.reports.length > 0 && this.state.reports.map((report, index) => {
+                                    return (
+                                        <Grid key={index} item xs={6} sm={4} md={3}>
+                                            <Paper className='animated bounceIn' style={{ padding: '10px 0px', textAlign: "center", margin: '5px 0 0 0'}}>
+                                                <Typography variant={"subtitle1"}>
+                                                    {report.title}
+                                                </Typography>
+                                                <Typography component="h4" variant={"h4"}  style={{ marginTop: '10px'}}>
+                                                    <CurrencyFormat value={report.counter} displayType={'text'} thousandSeparator={true}  />
+                                                </Typography>
+                                            </Paper>
+                                        </Grid>
+                                    );
+                                })}
+
                             </Grid>
                         </Box>
                     </Container>

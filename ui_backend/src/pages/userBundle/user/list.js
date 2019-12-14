@@ -176,7 +176,7 @@ class UserList extends Component {
                                 <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کاربران را مدیریت کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
-                                <Link to='/dashboard' style={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                <Link to='/' style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Button variant="contained" color="default" >
                                         <NavigationIcon />
                                     </Button>

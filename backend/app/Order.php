@@ -241,7 +241,7 @@ class Order extends Model
                         ->get(['title','value']);
 
                     $list['product_pins'][] = [
-                        'product' => [
+                        'content' => [
                             'id' => $pins->product->id,
                             'title' => $pins->product->title
                         ],

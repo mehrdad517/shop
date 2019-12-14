@@ -323,7 +323,7 @@ class ProductController extends Controller
 
                 $selected = explode('/', trim($pins->group_attribute_product_ids, '/'));
                 $row = [];
-                // get main product attr
+                // get main content attr
                 $mains = DB::table('group_attribute_product as gap')
                     ->select('ga.id', 'ga.title')
                     ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
@@ -374,7 +374,7 @@ class ProductController extends Controller
                 'discount' => $product->discount,
             ];
 
-            // get main product attr
+            // get main content attr
             $mains = DB::table('group_attribute_product as gap')
                 ->select('ga.id', 'ga.title')
                 ->leftJoin('group_attribute as ga', 'ga.id', '=', 'gap.attribute_id')
@@ -432,7 +432,6 @@ class ProductController extends Controller
                     'count' => $frm['count'],
                     'discount' => $frm['discount'],
                     'price' => $frm['price'],
-                    'detail' => json_encode($frm['pins']),
                 ]);
             }
 

@@ -3,6 +3,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Container from "@material-ui/core/Container";
 import {Box} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -21,17 +22,9 @@ import validator from 'validator';
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Add from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import {Link} from "react-router-dom";
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import FolderIcon from '@material-ui/icons/Folder';
 
-class CreateProduct extends Component {
+class EditProduct extends Component {
 
     constructor(props) {
         super(props);
@@ -62,6 +55,7 @@ class CreateProduct extends Component {
     }
 
     async handleRequest() {
+        // fetch brands
         await new Promise(resolve => {
             resolve(this.api.fetchBrands().then((response) => {
                 if (typeof response != "undefined") {
@@ -74,6 +68,7 @@ class CreateProduct extends Component {
             }));
         });
 
+        // get category tree
         await new Promise(resolve => {
             resolve(this.api.fetchProductCategories().then((response) => {
                 if (typeof response != "undefined") {
@@ -87,6 +82,50 @@ class CreateProduct extends Component {
         });
 
         await new Promise(resolve => {
+            resolve(this.api.fetchProduct(this.props.match.params.id).then((response) => {
+
+                let checked = this.state.checked;
+
+                response.categories.map((category) => {
+                    checked.push(category.value);
+                });
+
+                this.setState({
+                    form: {
+                        categories: response.categories,
+                        attributes: response.attributes,
+                        title: response.title,
+                        code: response.code,
+                        brand_id: response.brand_id,
+                        status: response.status,
+                        slug: response.slug,
+                        meta_title: response.meta_title,
+                        meta_description: response.meta_description,
+                        content: response.content,
+                    },
+                    checked,
+                });
+
+
+            }));
+        });
+
+        await new Promise(resolve => {
+           resolve(this.api.getProductAttributes(this.props.match.params.id, this.state.checked).then((response) => {
+               if (typeof response != "undefined") {
+                   let form = this.state.form;
+                   form.attributes = response;
+                   form.attributes.sort(this.compare);
+                   this.setState({
+                        form
+                   })
+               }
+           }).catch((error) => {
+               console.log(error);
+           }));
+        });
+
+        await new Promise(resolve => {
             resolve(this.setState({
                 loading: true
             }));
@@ -96,7 +135,7 @@ class CreateProduct extends Component {
     handleDuplicateRaw = (event, i) => {
         let form = this.state.form;
         if (event.target.name === 'main') {
-            form.attributes[i][event.target.name] = Boolean(event.target.value);
+            form.attributes[i][event.target.name] = event.target.checked;
         } else {
             form.attributes[i][event.target.name] = event.target.value;
         }
@@ -117,7 +156,6 @@ class CreateProduct extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
-
         if (validator.isEmpty(this.state.form.title)) {
             toast.error('عجله نکن ! عنوان رو وارد کن حالا');
             return;
@@ -128,30 +166,36 @@ class CreateProduct extends Component {
             return;
         }
 
+
         if (this.state.checked.length === 0) {
             toast.error('محصول دسته بندی نداره؟ روی هوا باشه؟');
             return;
         }
 
-
         if (this.state.form.brand_id === 0) {
-            toast.info('برند نزدی ها ولی گیر نمیدم بهت');
+            toast.info('برند نزدی ها ولی گیر نمیدم بهت...');
         }
 
         if (validator.isEmpty(this.state.form.content)) {
             toast.warn('محتوا به کاربر چی نشون بدیم؟');
         }
 
+        this.setState({
+            loading: false
+        });
+
         this.state.form['categories'] = this.state.checked;
-        console.log(this.state.form);
-        this.api.createProduct(this.state.form).then((response) => {
+
+        this.api.updateProduct(this.props.match.params.id, this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
-                    this.props.history.push('/products');
                 } else {
                     toast.error(response.msg);
                 }
+                this.setState({
+                    loading: true
+                })
             }
         }).catch((error) => {
             console.log(error);
@@ -162,26 +206,44 @@ class CreateProduct extends Component {
     async handleChangeCategory(checked) {
 
         let form = this.state.form;
-        form['attributes'] = [];
+
         await new Promise(resolve => {
             resolve(this.setState({
                 checked,
-                form
             }));
         });
 
         if (this.state.checked.length > 0) {
             await new Promise(resolve => {
-                resolve(this.api.getProductCategoryAttributes(checked).then((response) => {
+                resolve(this.api.getProductAttributes(this.props.match.params.id, this.state.checked).then((response) => {
                     if (typeof response != "undefined") {
-                        form['attributes'] = response;
-                        resolve(form['attributes'].sort(this.compare));
+                        let form = this.state.form;
+                        let arr = [];
+                        response.map((r, index) => {
+                            arr[index] = {
+                                'id': r.id,
+                                'title': r.title,
+                                'row' : r.row,
+                                'value': r.value,
+                                'order' : r.ord,
+                                'main' : r.main
+                            };
+                        });
+                        arr.sort(this.compare);
+                        form.attributes = arr;
                         this.setState({
                             form
                         })
                     }
                 }).catch((error) => {
-                    console.log(error);
+                    toast.error(error);
+                }));
+            });
+        } else {
+            form.attributes = [];
+            await new Promise(resolve => {
+                resolve(this.setState({
+                    form,
                 }));
             });
         }
@@ -196,7 +258,6 @@ class CreateProduct extends Component {
         }
         return 0;
     }
-
 
     async  duplicateRaw(id) {
         let arr = [];
@@ -254,15 +315,14 @@ class CreateProduct extends Component {
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>افزودن محصولات</h2>
-                                <p style={{ color: '#8e8e8e'}}>محصول جدید اضافه کنید.</p>
+                                <h2>ویرایش محصول</h2>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Link to='/products'>
-                                    <Button variant="contained" color="default" >
-                                        <NavigationIcon />
-                                    </Button>
+                                        <Button variant="contained" color="default" >
+                                            <NavigationIcon />
+                                        </Button>
                                     </Link>
                                 </div>
                             </Grid>
@@ -365,27 +425,18 @@ class CreateProduct extends Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item xs={12}>
-                                            {this.state.categories.length > 0 ?  <CheckboxTree
+                                            {this.state.categories && this.state.categories.length > 0 ?  <CheckboxTree
                                                 nodes={this.state.categories}
                                                 checked={this.state.checked}
                                                 expanded={this.state.expanded}
                                                 onCheck={checked => this.handleChangeCategory(checked)}
                                                 onExpand={expanded => this.setState({ expanded })}
                                                 noCascade={true}
-                                                icons={{
-                                                    check: <CheckBoxIcon />,
-                                                    uncheck: <CheckBoxOutlineBlankIcon />,
-                                                    expandClose: <ExpandLessIcon />,
-                                                    expandOpen: <ExpandMoreIcon />,
-                                                    parentClose: <FolderIcon />,
-                                                    parentOpen: <FolderOpenIcon />,
-                                                    leaf: <InsertDriveFileIcon />,
-                                                }}
                                             /> : <p>دسته جدید ایجاد نمایید.</p> }
                                         </Grid>
-                                        {this.state.form.attributes.length > 0 ?
+                                        {this.state.form.attributes && this.state.form.attributes.length > 0 ?
                                             <Grid item xs={12}>
-                                                <table className='table-duplicate-row fadeIn'>
+                                                <table className='table-duplicate-row bounceIn'>
                                                     <thead>
                                                     <tr>
                                                         <th>ردیف</th>
@@ -400,7 +451,7 @@ class CreateProduct extends Component {
                                                     {this.state.form.attributes.map((attribute, index) => {
                                                         return(<tr key={index}>
                                                             <td>{index + 1 }</td>
-                                                            <td><Checkbox value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
+                                                            <td><Checkbox checked={Boolean(this.state.form.attributes[index].main)} value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
                                                             <td><b>{attribute.title}</b></td>
                                                             <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].value} name='value' style={{ justifyContent: 'center !important'}} /></td>
                                                             <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].order} name='order' style={{ justifyContent: 'center !important'}} /></td>
@@ -410,16 +461,14 @@ class CreateProduct extends Component {
                                                                         <Add />
                                                                     </IconButton>
                                                                 </Tooltip>
-                                                                <Tooltip title={'حذف اتریبیوت ' + attribute.title}>
-                                                                    <IconButton color='secondary' onClick={() => this.deleteRaw(attribute.id)}>
-                                                                        <RemoveCircleIcon />
-                                                                    </IconButton>
-                                                                </Tooltip>
                                                             </td>
                                                         </tr>);
                                                     })}
                                                     </tbody>
                                                 </table>
+                                                <p>برای حذف ویژگی کافیست فیلد مقدار را خالی بگذارید. </p>
+                                                <p>توجه داشته باشید حذف ویژگی ممکن است قیمت محصول را تحت تاثیر قرار دهد. </p>
+                                                <p>پس از تغییر اولویت ها حتما فرم قیمت و موجودی را به روز رسانی کنید.</p>
                                             </Grid>: ''}
                                     </Grid>
                                 </ExpansionPanelDetails>
@@ -442,7 +491,7 @@ class CreateProduct extends Component {
                                                 label="اسلاگ"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.slug}
+                                                value={this.state.form.slug ? this.state.form.slug : ''}
                                                 fullWidth
                                                 name='slug'
                                                 onChange={this.handleChangeElement.bind(this)}
@@ -456,7 +505,7 @@ class CreateProduct extends Component {
                                                 label="متا عنوان"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.meta_title}
+                                                value={this.state.form.meta_title ? this.state.form.meta_title : ''}
                                                 fullWidth
                                                 name='meta_title'
                                                 onChange={this.handleChangeElement.bind(this)}
@@ -470,7 +519,7 @@ class CreateProduct extends Component {
                                                 label="متا توضیحات"
                                                 variant="filled"
                                                 margin='dense'
-                                                value={this.state.form.meta_description}
+                                                value={this.state.form.meta_description ? this.state.form.meta_description : ''}
                                                 fullWidth
                                                 name='meta_description'
                                                 onChange={this.handleChangeElement.bind(this)}
@@ -517,7 +566,7 @@ class CreateProduct extends Component {
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
                             <Box style={{ margin: '20px 0', display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button variant='contained' color='primary' type="submit">ایجاد محصول</Button>
+                                <Button variant='contained' color='primary' type="submit">ویرایش محصول</Button>
                             </Box>
                         </form>
                     </Box>
@@ -527,4 +576,4 @@ class CreateProduct extends Component {
     }
 }
 
-export default CreateProduct;
+export default EditProduct;

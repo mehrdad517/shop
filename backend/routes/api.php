@@ -17,7 +17,7 @@ use App\Slider;
 
 
 /**
- * menu and product categories
+ * menu and content categories
  * slider
  * setting
  * login, register, logout
@@ -229,22 +229,14 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
     });
 
 
+    Route::group(['prefix' => 'reports'], function () {
+
+        Route::get('/sales-daily-report', 'Backend\ReportController@salesReport');
+        Route::get('/map-reports', 'Backend\ReportController@mapReports');
+    });
 
 
-});
 
-Route::get('/reports', function () {
-
-
-
-    $response = \Illuminate\Support\Facades\DB::statement(\Illuminate\Support\Facades\DB::raw('call admin_report(@all_user, @deactive_user, @guest_user, @user_with_permission)'));
-    $result = \Illuminate\Support\Facades\DB::select(\Illuminate\Support\Facades\DB::raw('select @all_user as x'));
-    dd(json_decode(json_encode($result[0], true))->x);
-
-    return response($response);
-
-    $response = \Illuminate\Support\Facades\DB::select('call orders_count_price_daily_report');
-    return response($response);
 
 });
 

@@ -39,6 +39,7 @@ class Logout extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                     this.props.logout();
+                    this.props.redirect();
                 }
             }
         });

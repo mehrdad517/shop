@@ -391,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 /*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
 
--- Dumping structure for table 517_shop.product
+-- Dumping structure for table 517_shop.content
 CREATE TABLE IF NOT EXISTS `product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
@@ -415,12 +415,12 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `FK_products_brand` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.product: ~1 rows (approximately)
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+-- Dumping data for table 517_shop.content: ~1 rows (approximately)
+/*!40000 ALTER TABLE `content` DISABLE KEYS */;
 INSERT INTO `product` (`id`, `title`, `brand_id`, `slug`, `code`, `price`, `count`, `discount`, `content`, `meta_title`, `meta_description`, `sales_number`, `visitor`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 'محصول شماره یک', 1, 'pro', 'fsdfsdf', 0, 0, 0, NULL, NULL, NULL, 0, 0, 1, '2019-11-10 11:58:14', '2019-11-10 11:58:15'),
 	(2, 'محصول شمار دو', 1, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, 0, 1, '2019-11-10 12:04:13', '2019-11-10 12:04:13');
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+/*!40000 ALTER TABLE `content` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_categories
 CREATE TABLE IF NOT EXISTS `product_categories` (

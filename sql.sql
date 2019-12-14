@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             10.2.0.5599
+-- HeidiSQL Version:             10.3.0.5771
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -15,22 +15,6 @@
 -- Dumping database structure for 517_shop
 CREATE DATABASE IF NOT EXISTS `517_shop` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_persian_ci */;
 USE `517_shop`;
-
--- Dumping structure for procedure 517_shop.admin_report
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_report`(
-	OUT `all_user` INT,
-	OUT `deactive_user` INT,
-	OUT `guest_user` INT,
-	OUT `user_with_permission` INT
-)
-BEGIN
-	SELECT COUNT(id) into all_user  FROM users;
-	select count(id) into deactive_user from users where status = 0;
-	select count(id) into guest_user from users where role_key = 'guest';
-	select count(id) into user_with_permission from users where role_key <> 'guest';
-END//
-DELIMITER ;
 
 -- Dumping structure for table 517_shop.anbar
 CREATE TABLE IF NOT EXISTS `anbar` (
@@ -67,6 +51,53 @@ CREATE TABLE IF NOT EXISTS `attachment` (
 -- Dumping data for table 517_shop.attachment: ~0 rows (approximately)
 /*!40000 ALTER TABLE `attachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `attachment` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.blog_category
+CREATE TABLE IF NOT EXISTS `blog_category` (
+  `value` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) COLLATE utf8_persian_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
+  `meta_title` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
+  `meta_description` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `_lft` int(10) unsigned NOT NULL DEFAULT 0,
+  `_rgt` int(10) unsigned NOT NULL DEFAULT 0,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`value`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `_lft` (`_lft`),
+  KEY `_rgt` (`_rgt`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- Dumping data for table 517_shop.blog_category: ~0 rows (approximately)
+/*!40000 ALTER TABLE `blog_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `blog_category` ENABLE KEYS */;
+
+-- Dumping structure for table 517_shop.blog_content
+CREATE TABLE IF NOT EXISTS `blog_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `slug` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `created_by` bigint(20) unsigned NOT NULL,
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `meta_title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `meta_description` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `content` text CHARACTER SET latin1 NOT NULL DEFAULT '',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `visitor` bigint(20) NOT NULL DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `FK_blog_content_users` (`created_by`),
+  CONSTRAINT `FK_blog_content_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- Dumping data for table 517_shop.blog_content: ~0 rows (approximately)
+/*!40000 ALTER TABLE `blog_content` DISABLE KEYS */;
+/*!40000 ALTER TABLE `blog_content` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.brand
 CREATE TABLE IF NOT EXISTS `brand` (
@@ -131,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
 -- Dumping data for table 517_shop.domain: ~0 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
 INSERT INTO `domain` (`key`, `name`, `meta_title`, `meta_description`, `introduce`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `status`, `created_at`, `updated_at`) VALUES
-	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 0, 0, 1, 1, 1, 1, 1, '2019-12-07 10:11:41', '2019-12-10 09:07:49');
+	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 0, 1, 0, 0, 0, 1, '2019-12-07 10:11:41', '2019-12-13 15:58:52');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_communication_channel
@@ -208,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 
 -- Dumping structure for procedure 517_shop.fetch_permissions_with_access
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `fetch_permissions_with_access`(
+CREATE PROCEDURE `fetch_permissions_with_access`(
 	IN `role_parameter` VARCHAR(50),
 	IN `parent_parameter` VARCHAR(50)
 
@@ -239,10 +270,13 @@ CREATE TABLE IF NOT EXISTS `finance` (
   KEY `financeable_id` (`financeable_id`),
   KEY `FK_finance_user` (`user_id`),
   CONSTRAINT `FK_finance_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.finance: ~0 rows (approximately)
+-- Dumping data for table 517_shop.finance: ~2 rows (approximately)
 /*!40000 ALTER TABLE `finance` DISABLE KEYS */;
+INSERT INTO `finance` (`id`, `user_id`, `financeable_id`, `financeable_type`, `debtor`, `credit`, `description`, `status`, `created_at`, `updated_at`) VALUES
+	(83, 1, 11037, 'AppOrder', 0.00, 350000.00, 'بابت مرجوعی کالا', 0, '2019-12-13 11:35:17', '2019-12-13 11:35:17'),
+	(84, 1, 11037, 'AppOrder', 10000.00, 0.00, 'هزینه پستی کسر گردید', 0, '2019-12-13 11:35:17', '2019-12-13 11:35:17');
 /*!40000 ALTER TABLE `finance` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.group_attribute
@@ -819,11 +853,48 @@ CREATE TABLE IF NOT EXISTS `group_attribute_product` (
   PRIMARY KEY (`id`),
   KEY `group_attribute_product_product_id_index` (`product_id`),
   KEY `group_attribute_product_attribute_id_index` (`attribute_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.group_attribute_product: ~0 rows (approximately)
+-- Dumping data for table 517_shop.group_attribute_product: ~4 rows (approximately)
 /*!40000 ALTER TABLE `group_attribute_product` DISABLE KEYS */;
+INSERT INTO `group_attribute_product` (`id`, `product_id`, `attribute_id`, `value`, `order`, `main`, `created_at`, `updated_at`) VALUES
+	(1, 3, 2, '50ml', 1, 1, NULL, NULL),
+	(2, 3, 2, '100ml', 1, 1, NULL, NULL),
+	(3, 3, 2, '200ml', 1, 1, NULL, NULL),
+	(4, 3, 4, 'کودکان', 3, 0, NULL, NULL);
 /*!40000 ALTER TABLE `group_attribute_product` ENABLE KEYS */;
+
+-- Dumping structure for procedure 517_shop.map_reports
+DELIMITER //
+CREATE PROCEDURE `map_reports`()
+BEGIN
+DROP TABLE IF EXISTS map_reports;
+CREATE TEMPORARY TABLE IF NOT EXISTS map_reports(
+    title VARCHAR(100) NULL,
+    counter INT NULL
+) ENGINE = memory;
+TRUNCATE map_reports;
+INSERT INTO map_reports (title, counter) VALUES
+('کل سفارشات', (select count(id) from `order` where order_status=1)),
+('مرجوعی ها', (select count(id) from `order` where delivery_status= 4)),
+('سفارشات تعدیلی', (select count(id) FROM `order` where order_status = 3 )),
+('کسری و معیوبی', (select count(id) from `order` where items_status = 2)),
+('محصولات', (select count(id) from product)),
+('محصولات غیرفعال', (select count(id) from product where status = 0)),
+('محصولات ناموجود', (select count(id) from product where count > 0)),
+('محصولات دارای تخفیف', 0),
+('تعداد کاربران', (select count(id) from users)),
+('کاربران غیرفعال', (select count(id) from users where status = 0)),
+('عضو سایت', (select count(id) from users where role_key = 'guest')),
+('کابران سیستمی', (select count(id) from users where role_key <> 'guest')),
+('برندها', (select count(id) from brand)),
+('کیف پول کاربران', (select IFNULL(sum(credit), 0) - IFNULL(sum(debtor), 0) from finance WHERE status = 0))
+;
+
+/* select all items */
+SELECT * FROM map_reports;
+END//
+DELIMITER ;
 
 -- Dumping structure for table 517_shop.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
@@ -864,32 +935,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(26, '2019_11_09_162055_create_region_table', 1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
--- Dumping structure for procedure 517_shop.new_p
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `new_p`()
-BEGIN
-		DECLARE all_users int;
-		DECLARE deactive_users int;
-		DECLARE guest_users int;
-		DECLARE system_users int;
-				
-	create TEMPORARY TABLE if not exists admin_new_reports(
-		all_users int null,
-		deactive_users int null,
-		guest_users int null,
-		system_users int null
-	) ENGINE = memory;
-	
-	truncate admin_new_reports;
-	
-	set all_users =  (select count(id) from users );
-	
-	insert into admin_new_reports (all_users, deactive_users, guest_users, system_users) value(all_users, 0,0,0);
-	
-	select * from admin_new_reports;
-END//
-DELIMITER ;
-
 -- Dumping structure for table 517_shop.oauth_access_tokens
 CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -905,55 +950,103 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~46 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~94 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
+	('00eaa512dd682e592d38cecbdb23a7b53cb210dc5d8e89425491cfb15dee343c7e90668634b0635a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:49:01', '2019-12-12 20:49:01', '2020-12-12 20:49:01'),
+	('02374a3a21ff00c2d587b50d7144eee40543abc615537846a8605f5a222de2d6de0fda01c6c7b655', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:00:16', '2019-12-12 16:00:16', '2020-12-12 16:00:16'),
 	('024d3c61f0ccc5a2714ea04d10719aa95a36331893bfbd393adcb752ae54b13cd86e4241585b11b6', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:55:38', '2019-12-09 17:55:38', '2020-12-09 17:55:38'),
+	('074f19405e7067a92ad124b483ffafc8778d9241f0992d6a70bbc7de1fc83bd0b497b377961a7db1', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:39:17', '2019-12-12 20:39:17', '2020-12-12 20:39:17'),
+	('0df8fb2f1d9a71dd9a8270c67388e4b38c557c1e02468eeb542483373e4581fe168d91d1b0a7ac4d', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:47:48', '2019-12-12 20:47:48', '2020-12-12 20:47:48'),
 	('122ecd4e33bc28bf957168686dcbe7d7a95cc502aa08e75e7e48ab521fa2ad0fb82e87747450b368', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:59:08', '2019-12-09 17:59:08', '2020-12-09 17:59:08'),
 	('1238a121014741491745fbc21b3c708d348ddbaa30938fd7fc72965909178932003411064cac9e99', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:47:50', '2019-12-07 20:47:50', '2020-12-07 20:47:50'),
+	('13ad6282ec5481d9d0708976385103433dd8186dde83407623f965189550f3a154ceaead8723a8ce', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:40:33', '2019-12-12 15:40:33', '2020-12-12 15:40:33'),
 	('13fd975a1b73cc63c6264af49f90d60575511c7c3d32af3c923bd193b399bc359b882c77f9dc2714', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:41:50', '2019-12-09 17:41:50', '2020-12-09 17:41:50'),
 	('1c10ec452eb16b979e0ae2eedc7b60eb84816624fba488b7aa18b0d926e0c7e0103a2984c255a260', 2, 2, 'Token Name', '[]', 1, '2019-12-11 09:41:52', '2019-12-11 09:41:52', '2020-12-11 09:41:52'),
+	('20f5d30b860c7ce71d6d695af44938554aa51b84bba72b67036ea60e9d64d1c0ee78b6e93e3c7cfb', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:01:50', '2019-12-12 18:01:50', '2020-12-12 18:01:50'),
 	('2126676e24feaf0ad56f1cc14639f17c176df5211f81881cf1f33385acd1252ca0224476c0bdc249', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:36:17', '2019-12-09 17:36:17', '2020-12-09 17:36:17'),
 	('22b86083be489e2a9322d025d76099da78bc70ef3eeff57a6bfdae891b49cb5db58488a978479de3', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:06', '2019-12-09 18:01:06', '2020-12-09 18:01:06'),
 	('241c053952892c638ec962d0065a7195ca62fedbfd9350708e163facfdfb1d7fe8b77c9e977c7988', 2, 2, 'Token Name', '[]', 1, '2019-12-10 07:37:02', '2019-12-10 07:37:02', '2020-12-10 07:37:02'),
+	('2a469a20aaa8f71b7220b83e9a5497f8c16e92371de027d3af0ea2e48e1c4212692d7e91ed2f282c', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:01:44', '2019-12-12 18:01:44', '2020-12-12 18:01:44'),
 	('2e4cdac12e98e45c9a4b31a2a980e2756e14e5d12216ecbe884b77110285d46ebf908e3ed8bce7c5', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:51:10', '2019-12-09 17:51:10', '2020-12-09 17:51:10'),
+	('2e9202a4dbfa5a5b266d4a6b0e20d7471902cc21cd776b65a21552f6fa75e02bf2de88cb53a6738e', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:23:01', '2019-12-12 16:23:01', '2020-12-12 16:23:01'),
 	('2f0e48023622f259fc0624d53dffd29909a9a2d39f23e892268666074bc0c76c103013103481db6c', 2, 2, 'Token Name', '[]', 0, '2019-12-11 12:27:53', '2019-12-11 12:27:53', '2020-12-11 12:27:53'),
+	('362f294735f544b9fcbc7c55d9a26339047883678355803990cf562cafc0f56160d2e673efc355bf', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:54:21', '2019-12-12 16:54:21', '2020-12-12 16:54:21'),
+	('397da7893e114c8915e163809278a6a111707e77846d825fbc49a63b75f16b516b012347ce88cd36', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:51:37', '2019-12-12 20:51:37', '2020-12-12 20:51:37'),
+	('3af5758534ccc7824864abf5910324db2c50dbbe887f13f0d8ce2a1644dc13e73087c6ff6790dc0a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:29:02', '2019-12-12 16:29:02', '2020-12-12 16:29:02'),
 	('3df885ef53f2dc139374b0cee1b0fe191ae2bdc13f5a2f501ab11edd6ea134b34d45cedfe831be78', 2, 2, 'Token Name', '[]', 1, '2019-12-09 20:28:27', '2019-12-09 20:28:27', '2020-12-09 20:28:27'),
 	('3e41aeecb07415495ede3dab37fda563129ca2c84e2909c5259b4723f2944a4760d898ba90a7d29f', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:25', '2019-12-09 18:01:25', '2020-12-09 18:01:25'),
 	('3fa280aa2e2b5099eee4ef4c584f2af4dcecc3e9bea16c4dd57480be99f6812c7086d5613c096eb2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:49:14', '2019-12-09 17:49:14', '2020-12-09 17:49:14'),
+	('496fa8e17d6fc2aff2a1bc7a78ae98ae077f7daa8d075d8715f44e75a72b846649fcff55f859482a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:20:13', '2019-12-12 16:20:13', '2020-12-12 16:20:13'),
 	('4e64aaf58ba8e01bb2273db16d812c48845b0a755834aaf6429413a03cd0d9b770f865537cc3890c', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:33:51', '2019-12-07 20:33:51', '2020-12-07 20:33:51'),
 	('5163c9732dd745b6164ed11a1e82375b4e036aaac2d3cb19d46c07c285ed5325fb891e07f23e3fe0', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:33:58', '2019-12-09 17:33:58', '2020-12-09 17:33:58'),
 	('52f18eb6d9bed0f1b0e1eca64065b1bafe55e3ab9c6034c5ce06dc528375158858460c9065a9ffaa', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:36:55', '2019-12-09 17:36:55', '2020-12-09 17:36:55'),
+	('54d1fc4198b78914374559ac532073c1deac794df02d862383849e53d6835ac908bb16d84c701543', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:55:20', '2019-12-12 15:55:20', '2020-12-12 15:55:20'),
 	('58d74e41aa55a98b90e76a0ed08d4f1d75b19078cd67d0d2e552d7903d24d35b3006fc0317168856', 2, 2, 'Token Name', '[]', 1, '2019-12-08 18:14:59', '2019-12-08 18:14:59', '2020-12-08 18:14:59'),
+	('5ba453b600093b7a9dee9e408c2e33a5d22c6c0ed011aed4023a45a4cc4ffbd085511e24122ca83a', 2, 2, 'Token Name', '[]', 0, '2019-12-12 16:30:29', '2019-12-12 16:30:29', '2020-12-12 16:30:29'),
 	('5f4614ef23259978d3a40fdd6c372d0819c87f9609afcaea63a0de9bf87fe8d79f711002aff1411b', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:36:18', '2019-12-07 20:36:18', '2020-12-07 20:36:18'),
 	('5f4ec133d41d515e3940f7961ce447578a2f2f20c9767229a5d96585cff2b7667a005da486d2e034', 2, 2, 'Token Name', '[]', 1, '2019-12-10 07:36:19', '2019-12-10 07:36:19', '2020-12-10 07:36:19'),
 	('64f17007619e9ac978d431e92f2cf28f4187823250ba635a9c6ff8f27ac25917c0a52c33073e326b', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:59:28', '2019-12-09 17:59:28', '2020-12-09 17:59:28'),
 	('680f36518604108bb2b4bfe4713933b4fbde8f392395fe1a160f0ec392224e77b421721051fb0636', 2, 2, 'Token Name', '[]', 0, '2019-12-08 18:14:35', '2019-12-08 18:14:35', '2020-12-08 18:14:35'),
+	('6a39ee74fdb55be9d67bb68f504482f8201476d2b34d1a404d5e8bd47641452fb12e69b9f85a0db6', 2, 2, 'Token Name', '[]', 1, '2019-12-12 19:32:04', '2019-12-12 19:32:04', '2020-12-12 19:32:04'),
+	('6ab0cbfa92eaab2a9ce914ddb90a119e8611f53f3a805dc4b734ca536c8fe25af74e6c383125c9f3', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:43:19', '2019-12-12 20:43:19', '2020-12-12 20:43:19'),
+	('6b227231df037132d62fc6d0c76f0b3dfc90c9f9fef26bb6fb33b6877d363853df0141e3d0ea7436', 2, 2, 'Token Name', '[]', 0, '2019-12-12 15:41:09', '2019-12-12 15:41:09', '2020-12-12 15:41:09'),
+	('71059b5197c7904570504b255e3cc86f75ba6f38775d74f3e3bf339381d531eb9c9dc6429a8a15eb', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:51:14', '2019-12-12 20:51:14', '2020-12-12 20:51:14'),
+	('75b21435545d3d3d789dab3fc6117f726950875e42f68a9d9cf768d291581dd428118623732622ff', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:27:40', '2019-12-12 16:27:40', '2020-12-12 16:27:40'),
 	('78ab9d23340b1b5c7be68323ecfb00d17c8141af66410fbd9e06a8a56d05c224fc27dc8957be758b', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:49:35', '2019-12-09 17:49:35', '2020-12-09 17:49:35'),
 	('79321defe7a837859e511e74a9d89944a7fc67426be26743019764dd6ede6f108d5fe3e3f2f2bc3b', 2, 2, 'Token Name', '[]', 0, '2019-12-08 17:24:37', '2019-12-08 17:24:37', '2020-12-08 17:24:37'),
+	('82ca5e74fe40a05553263ac027fa651c26d9619342e1375a4c97f1de45da1aefe9c627620ca07d33', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:56:04', '2019-12-12 15:56:04', '2020-12-12 15:56:04'),
 	('84dd762eafa41e896908c51721faac57781a43a60555cd8b7ced6dc96f1decd39898bd6e0925deee', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:33:46', '2019-12-09 17:33:46', '2020-12-09 17:33:46'),
+	('855c10449b1b79219e9cece20bcc34542c3ddd0ba21010e3ac9099bfdd40574f2439604201d9cf71', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:50:49', '2019-12-12 20:50:49', '2020-12-12 20:50:49'),
+	('87c2f21ae7d0b7da38b0acd12c0962afc3a9a6d5d4490ab0ead71824e65516d26d19bc1daf0920ca', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:24:38', '2019-12-12 16:24:38', '2020-12-12 16:24:38'),
+	('8fb85af832ae96da81ae3636fe2853d555a186289c66aded920e4b9a8a7199dc29aeff9ce0771572', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:50:01', '2019-12-12 20:50:01', '2020-12-12 20:50:01'),
+	('9099147e72ffcf6771baed2f8a7eb02a27a40e7fa048d5cdcbebd0d7d8e57b01206d47ba45c5e3c6', 2, 2, 'Token Name', '[]', 1, '2019-12-12 14:57:16', '2019-12-12 14:57:16', '2020-12-12 14:57:16'),
 	('92ceb1533044fa09bd59e064b6c2632de4a74b380977a37df969d5c9b06fac441cd40b33a0222f65', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:34:57', '2019-12-09 17:34:57', '2020-12-09 17:34:57'),
+	('99aa5f420091743f6acb64928502893e7d1963909c4179adc6776b0e07e5ed5d532611c6eb533627', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:22:28', '2019-12-12 16:22:28', '2020-12-12 16:22:28'),
 	('99ab0d781d8b27cb699e9e967e23c3110f5846f195435e8ad8dde643e2453b4f5f1fa5be250eff76', 2, 2, 'Token Name', '[]', 0, '2019-12-10 07:51:05', '2019-12-10 07:51:05', '2020-12-10 07:51:05'),
+	('9c7ec005681fecef22d84f98b8950ab6c5f69824c31de30dbbaf632c8438a83b5c3bd0d6980e9069', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:51:27', '2019-12-12 20:51:27', '2020-12-12 20:51:27'),
+	('a2c320653026c4eb4818eef6143be503fd4c4fe28beb5a0f4a02a44676df1f4a55044b502b69c2e1', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:52:16', '2019-12-12 15:52:16', '2020-12-12 15:52:16'),
 	('a3caba7843d6c613d0083e408eb3beca79fb34d0773800999ae1937681b0b06ba8fa913532f4694d', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:59:16', '2019-12-09 17:59:16', '2020-12-09 17:59:16'),
+	('a44280be884385af5ab6882b76a657d7d2e2bfbdf5811f79354d66c13e8628ad1bfc993254887cac', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:42:24', '2019-12-12 16:42:24', '2020-12-12 16:42:24'),
 	('a4e2081043e788651cc3585787e4addcb69f0bcc5b80fee0a7fb3c43acbcccb0e853437962fc1c08', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:48:10', '2019-12-07 20:48:10', '2020-12-07 20:48:10'),
 	('a624e4883ed11c8beb957d2505686f814fbd2e30a04965520af2c5d88b717674c225d63db2fc8c28', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:55:44', '2019-12-09 17:55:44', '2020-12-09 17:55:44'),
 	('a8423db58c464960a23851ca3d1ae6eb37fe8dd6197acf7c6feb3c66c6d202d44c47dd6fbd90b8ca', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:57:25', '2019-12-09 17:57:25', '2020-12-09 17:57:25'),
 	('a884e4bc9343171582bd66a29f3ed966746d25674e4d2773defd54709637ae9d997020337246338c', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:55:00', '2019-12-09 17:55:00', '2020-12-09 17:55:00'),
 	('a94d25110ee080fa2ac653c3915870ef53fb21d716361b59c499488359c7336dfa12b698483a37eb', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:31:29', '2019-12-07 20:31:29', '2020-12-07 20:31:29'),
 	('ab5cdb6736b03338b4227b424ccc26837b19bc75ec233e40a616ce413c7f85454e83db06c2984d6c', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:31:38', '2019-12-09 17:31:38', '2020-12-09 17:31:38'),
+	('ac0ad5adf9e54945153df15aff1e5a039976e44dc02d8d0937c63badac28b2b9867368b9743d655f', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:20:38', '2019-12-12 16:20:38', '2020-12-12 16:20:38'),
+	('af0620ca58778aecd5c51a4e9d5fb11cfbf9a76c7e114f4c3ded81ecb980d2543dddc01c4774c4b4', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:28:36', '2019-12-12 16:28:36', '2020-12-12 16:28:36'),
+	('af55ac0882b84d8ff21182260df2971fa411290ebc51ac4ee3f6f1968d5b5d00ffd06af97554783d', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:39:31', '2019-12-12 20:39:31', '2020-12-12 20:39:31'),
 	('af8f68b6eb3673ce683ee26a97cf380bb5869bc95e668f6007476769ddbcdf619cec1afc18cb3c2e', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:47:40', '2019-12-07 20:47:40', '2020-12-07 20:47:40'),
+	('afeb49ca4384124b118c0defb365cca16dc5227b5c47957fb85d6304dd25ff4420d4942dabd743d8', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:32:19', '2019-12-12 16:32:19', '2020-12-12 16:32:19'),
 	('b04661a729178752c3e12490942fda77d98f892535727daf4d7f3ca39fa785185b3f6f801c65f0d5', 2, 2, 'Token Name', '[]', 1, '2019-12-08 18:15:07', '2019-12-08 18:15:07', '2020-12-08 18:15:07'),
+	('b8862650f9b5388b4d6515d2f86d64c95f6a8f20f3b610a5b8b1e6b404c5a13a0513caa8895ef724', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:58:32', '2019-12-12 16:58:32', '2020-12-12 16:58:32'),
+	('b944a28ad5d6e88ffcb3681728aa0abd9f7072a10db413c9a5eb90d94e17acd8fb1b02678415a649', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:50:07', '2019-12-12 15:50:07', '2020-12-12 15:50:07'),
+	('baac7d7812d674b9585a0637a1f50afd35d3323619cd0b9507b22e332836903aae4d3f1e80b37ff6', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:59:40', '2019-12-12 15:59:40', '2020-12-12 15:59:40'),
 	('be8dcac4ef568a1beadd0f57128fb85af05aad78240b374f6200f867d4f36f223718c669d549aa19', 2, 2, 'Token Name', '[]', 0, '2019-12-07 20:33:35', '2019-12-07 20:33:35', '2020-12-07 20:33:35'),
 	('bef217a41ae85955330cfae3d938eed6b866a08573870803843f3748645d89224091fd19195ff712', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:47:48', '2019-12-09 17:47:48', '2020-12-09 17:47:48'),
 	('c30fce4abf3e8d79f06489e82aaf6091c593fe15ff203db09dd21d8b63058d405168261cd3cca2bf', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:37:27', '2019-12-09 17:37:27', '2020-12-09 17:37:27'),
+	('c501214285b3d6e706e94af076d431011a8cd06f3958b3c42915b4f105f8f5571743f178582c927e', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:25:56', '2019-12-12 16:25:56', '2020-12-12 16:25:56'),
+	('c5be724445541687c793b59ca6f8ddd15141ead2507b3079db1acc6145db4345c56379112942425a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:21:37', '2019-12-12 16:21:37', '2020-12-12 16:21:37'),
 	('c675e83e3c913b6b83aa819c845f44b38c0bc1bde7f06b68a0a51e023ad8dbd0edb4ef5ef16043c9', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:46:22', '2019-12-09 17:46:22', '2020-12-09 17:46:22'),
+	('ca5d430f94593ce0c5d7cd08244b2686471b8ae2c67925fab05257023dcbd62360812766a8b9ee76', 2, 2, 'Token Name', '[]', 0, '2019-12-13 07:21:14', '2019-12-13 07:21:14', '2020-12-13 07:21:14'),
 	('cc6483fd289246eeb3b0191e56848de499c5fbe8d0c6f81a8cd650efcb72bdbc204ad01d2a09d896', 2, 2, 'Token Name', '[]', 1, '2019-12-08 13:28:28', '2019-12-08 13:28:28', '2020-12-08 13:28:28'),
+	('d14f0660cddec043ee587706375e3084f3fa7c165a12d0a0097ea38b45240e97a3d2b54f14bb7231', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:55:07', '2019-12-12 15:55:07', '2020-12-12 15:55:07'),
+	('d40e900a21b945df0cc02ee18fed116d31d130f0c5039188bd348cf46bcb042f4d98c8da1f4273dc', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:02:22', '2019-12-12 18:02:22', '2020-12-12 18:02:22'),
 	('d6612b6f2545c5e4544e6e80a472de5eda5b15584e1575ec171fb5496300635ba97df7e40fa804b5', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:56:28', '2019-12-09 17:56:28', '2020-12-09 17:56:28'),
+	('d958138baab41c789c3e5f699b30b82b9b97900b798c311b428f23398259e2d0e939d1347a057fd7', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:00:05', '2019-12-12 16:00:05', '2020-12-12 16:00:05'),
 	('de28eec19b38ad1e83ca12458d24a5d5b9fdc5ce506d6d00a878747a353436b65abcb143e5420e5a', 2, 2, 'Token Name', '[]', 0, '2019-12-07 20:42:46', '2019-12-07 20:42:46', '2020-12-07 20:42:46'),
+	('e45bfb972c46c405672fc88a1c64b8e2e07eb1dff56e20b9c319240de7d3d12638085e27f89be78f', 2, 2, 'Token Name', '[]', 1, '2019-12-12 21:41:10', '2019-12-12 21:41:10', '2020-12-12 21:41:10'),
 	('e5490c6460e8d0fc81058fafd0c36886760f03bec6625e4f650f062c18f0f1611cbfda47564fbd46', 2, 2, 'Token Name', '[]', 0, '2019-12-07 20:40:21', '2019-12-07 20:40:21', '2020-12-07 20:40:21'),
 	('ebd4e9eabfff7ca66a1fbc5d3a72ce24a07ed0b54c353b1859ee60162dd7ea4fe1db48741bffe1f9', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:35:56', '2019-12-09 17:35:56', '2020-12-09 17:35:56'),
 	('ebe32b3bdb9f74736e2b58b65e18821b271926578797a8114570f7857450b331e6c625635cfd19b2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:50:59', '2019-12-09 17:50:59', '2020-12-09 17:50:59'),
-	('ecf0f424666997e78d3edcbe40f6a874f6b6f2b05b9eea3266e1a5417faf1327bdc3ebce8573a16b', 2, 2, 'Token Name', '[]', 1, '2019-12-11 06:59:31', '2019-12-11 06:59:31', '2020-12-11 06:59:31');
+	('eca65c5c5d976bc18f73c5b31176b89c1638fb044803694b5adea0877cd9ccd65f3c2d88d5a15cc8', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:02:05', '2019-12-12 18:02:05', '2020-12-12 18:02:05'),
+	('ecf0f424666997e78d3edcbe40f6a874f6b6f2b05b9eea3266e1a5417faf1327bdc3ebce8573a16b', 2, 2, 'Token Name', '[]', 1, '2019-12-11 06:59:31', '2019-12-11 06:59:31', '2020-12-11 06:59:31'),
+	('f22d5382c72adab8927a02920810bf4f9071d2048db93835ccd05bd65d20fc5e281dfcfb989c6584', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:43:34', '2019-12-12 20:43:34', '2020-12-12 20:43:34'),
+	('f4dc8a9a38bb5643f87c9b522a74bea1cc189d3db4994e8877d898ad396a27d7034ed54336dbfdc8', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:58:36', '2019-12-12 18:58:36', '2020-12-12 18:58:36'),
+	('f82237b2aa31484526bd979929d187cb02d03b8c7ac6566141cd2b3057d1e039eba528bc4d6ff088', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:46:11', '2019-12-12 16:46:11', '2020-12-12 16:46:11'),
+	('f9d83b2230e753293b8630920cdd167f6e51783bcdcd31cd5e488f419c1709e8e35babf138a1f31f', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:39:42', '2019-12-12 20:39:42', '2020-12-12 20:39:42'),
+	('fe3949fa0ac9e7d9c30ba83072c9f521755a71116586574f27777c08ca88d75597ef227b365ab0ed', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:51:54', '2019-12-12 20:51:54', '2020-12-12 20:51:54');
 /*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_auth_codes
@@ -11679,48 +11772,9 @@ INSERT INTO `order` (`id`, `user_id`, `increment_id`, `discount`, `post_cost`, `
 	(11033, 1, 10253, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-18 00:00:00', '1996-12-12 17:38:30'),
 	(11034, 1, 10254, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-17 00:00:00', '1970-02-07 22:27:46'),
 	(11035, 1, 10255, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-21 00:00:00', '1977-04-23 22:09:24'),
-	(11036, 1, 10256, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-12-09 00:00:00', '2015-09-18 23:54:12'),
-	(11037, 1, 10257, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 0, 0, 0, '2019-11-21 00:00:00', '1983-03-16 02:18:00');
+	(11036, 1, 10256, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 1, 1, 0, '2019-12-09 00:00:00', '2019-12-12 21:28:19'),
+	(11037, 1, 10257, 0.00, 10000.00, 0.00, 340000.00, 350000.00, 1, 1, 4, 0, '2019-11-21 00:00:00', '2019-12-13 08:05:17');
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
-
--- Dumping structure for procedure 517_shop.orders_count_price_daily_report
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `orders_count_price_daily_report`()
-BEGIN
-	DECLARE i int; 
-	DECLARE data_exist int;
-	
-	
-	CREATE TEMPORARY TABLE IF NOT EXISTS calendar(
-		calendar_day DATE NOT NULL,
-		index idx (calendar_day)	
-	) ENGINE=MEMORY; 
-
-	SET i = 29; 
-	set data_exist = (select count(calendar_day) from calendar where calendar_day = CAST(NOW() AS DATE));
-
-	IF(data_exist = 0) THEN
-		TRUNCATE calendar;
-		label: LOOP 
-		IF(i < 0) THEN
-			LEAVE label;
-		END IF;
-			INSERT INTO calendar VALUES(DATE_SUB(NOW(),INTERVAL i DAY));
-			SET i = i - 1;
-	   END LOOP;
-   END IF;
-   
-	SELECT DATE_FORMAT(calendar_day,'%d')  AS label,  IFNULL(CAST(total_price AS INTEGER), 0) total_price, IFNULL(total_count, 0) AS total_count
-	FROM calendar
-	LEFT JOIN (
-	SELECT CAST(created_at AS DATE) AS order_created_at, SUM(total_price) AS total_price, COUNT(id) AS total_count
-	FROM `order`
-	WHERE CAST(created_at AS DATE) > CAST(DATE_SUB(NOW(), INTERVAL 31 DAY) AS DATE) and order_status = 1
-	GROUP BY CAST(created_at AS DATE)) AS sub ON sub.order_created_at = calendar.calendar_day; 
-
-
-END//
-DELIMITER ;
 
 -- Dumping structure for table 517_shop.order_fractive_request
 CREATE TABLE IF NOT EXISTS `order_fractive_request` (
@@ -11737,10 +11791,11 @@ CREATE TABLE IF NOT EXISTS `order_fractive_request` (
   CONSTRAINT `FK_order_request__order` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='این جدول درخواست اپراتور به انباردار برای مشخص کردن کسری و یا معیوبی است.کلمه اخر نام جدول ترکیب کسری و معیوبی است.';
 
--- Dumping data for table 517_shop.order_fractive_request: ~0 rows (approximately)
+-- Dumping data for table 517_shop.order_fractive_request: ~1 rows (approximately)
 /*!40000 ALTER TABLE `order_fractive_request` DISABLE KEYS */;
 INSERT INTO `order_fractive_request` (`order_id`, `product_pins`, `document`, `status`, `type`, `post_barcode`, `order_weight`, `created_at`, `updated_at`) VALUES
-	(779, '{\n  "data" : "x"\n}', NULL, 1, 1, NULL, NULL, '2019-11-29 19:13:01', '2019-11-29 23:50:33');
+	(779, '{\n  "data" : "x"\n}', NULL, 1, 1, NULL, NULL, '2019-11-29 19:13:01', '2019-11-29 23:50:33'),
+	(11036, '[{"product":{"id":1,"title":"\\u0645\\u062d\\u0635\\u0648\\u0644 \\u0634\\u0645\\u0627\\u0631\\u0647 \\u06cc\\u06a9"},"attributes":[],"brand":{"id":1,"title":"\\u0645\\u0627\\u06cc"},"count":1,"price":"340,000","discount":"0","fractional_count":1,"defactive_count":0,"total":"340,000"}]', NULL, 1, 1, NULL, NULL, '2019-12-12 21:28:46', '2019-12-12 21:28:50');
 /*!40000 ALTER TABLE `order_fractive_request` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.order_in_anbar
@@ -33065,6 +33120,23 @@ INSERT INTO `order_product_pins` (`order_id`, `product_pins_id`, `count`, `price
 	(11037, 1, 1, 340000.00, 0.00, 0, 0, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `order_product_pins` ENABLE KEYS */;
 
+-- Dumping structure for table 517_shop.package_type
+CREATE TABLE IF NOT EXISTS `package_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) COLLATE utf8_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+
+-- Dumping data for table 517_shop.package_type: ~5 rows (approximately)
+/*!40000 ALTER TABLE `package_type` DISABLE KEYS */;
+INSERT INTO `package_type` (`id`, `title`) VALUES
+	(1, 'فله ای'),
+	(2, 'کارتون'),
+	(3, 'بسته'),
+	(4, 'تعدادی'),
+	(5, 'جفت');
+/*!40000 ALTER TABLE `package_type` ENABLE KEYS */;
+
 -- Dumping structure for table 517_shop.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -33113,7 +33185,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   KEY `parent` (`parent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission: ~39 rows (approximately)
+-- Dumping data for table 517_shop.permission: ~45 rows (approximately)
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 INSERT INTO `permission` (`key`, `title`, `url`, `method`, `parent`, `created_at`, `updated_at`) VALUES
 	('anbar_index', 'مدیریت', '/api/backend/anbar', 'GET', 'anbar', '2019-11-29 11:41:15', '2019-11-29 15:54:36'),
@@ -33121,6 +33193,10 @@ INSERT INTO `permission` (`key`, `title`, `url`, `method`, `parent`, `created_at
 	('brand_show', 'نمایش', '/api/backend/products/brands/{id}', 'GET', 'brand', '2019-11-29 11:41:16', '2019-11-29 15:54:37'),
 	('brand_store', 'ذخیره سازی', '/api/backend/products/brands', 'POST', 'brand', '2019-11-29 11:41:16', '2019-11-29 15:54:37'),
 	('brand_update', 'به روز رسانی', '/api/backend/products/brands/{id}', 'PUT', 'brand', '2019-11-29 11:41:16', '2019-11-29 15:54:37'),
+	('domain_read', 'permissions.read', '/api/backend/setting', 'GET', 'domain', '2019-12-12 20:37:37', '2019-12-12 20:37:37'),
+	('domain_read_sticky', 'permissions.read sticky', '/api/backend/setting/sticky-setting', 'GET', 'domain', '2019-12-12 20:37:38', '2019-12-12 20:37:38'),
+	('domain_update', 'به روز رسانی', '/api/backend/setting', 'PUT', 'domain', '2019-12-12 20:37:38', '2019-12-12 20:37:38'),
+	('domain_update_sticky', 'permissions.update sticky', '/api/backend/setting/sticky-setting', 'PUT', 'domain', '2019-12-12 20:37:38', '2019-12-12 20:37:38'),
 	('group_attribute_index', 'مدیریت', '/api/backend/products/attributes', 'GET', 'group_attribute', '2019-11-29 11:41:16', '2019-11-29 15:54:36'),
 	('group_attribute_show', 'نمایش', '/api/backend/products/attributes/{id}', 'GET', 'group_attribute', '2019-11-29 11:41:16', '2019-11-29 15:54:36'),
 	('group_attribute_store', 'ذخیره سازی', '/api/backend/products/attributes', 'POST', 'group_attribute', '2019-11-29 11:41:16', '2019-11-29 15:54:36'),
@@ -33145,6 +33221,8 @@ INSERT INTO `permission` (`key`, `title`, `url`, `method`, `parent`, `created_at
 	('product_store', 'ذخیره سازی', '/api/backend/products', 'POST', 'product', '2019-11-29 11:41:17', '2019-11-29 15:54:37'),
 	('product_store_pins', 'ذخیره سازی قیمت تخفیف و تعداد محصول', '/api/backend/products/{id}/pins', 'POST', 'product', '2019-11-29 11:41:17', '2019-11-29 15:54:37'),
 	('product_update', 'به روز رسانی', '/api/backend/products/{id}', 'PUT', 'product', '2019-11-29 11:41:17', '2019-11-29 15:54:37'),
+	('report_map_reports', 'permissions.map reports', '/api/backend/reports/map-reports', 'GET', 'report', '2019-12-12 20:37:38', '2019-12-12 20:37:38'),
+	('report_sales_report', 'permissions.sales report', '/api/backend/reports/sales-daily-report', 'GET', 'report', '2019-12-12 20:37:38', '2019-12-12 20:37:38'),
 	('role_index', 'مدیریت', '/api/backend/users/roles', 'GET', 'role', '2019-11-29 11:41:18', '2019-11-29 15:54:38'),
 	('role_permissions', 'سطوح دسترسی', '/api/backend/users/roles/{role}/permissions', 'GET', 'role', '2019-11-29 11:41:18', '2019-11-29 15:54:38'),
 	('role_set_permission', 'ست کردن سطح دسترسی', '/api/backend/users/roles/{role}/permissions', 'PUT', 'role', '2019-11-29 11:41:18', '2019-11-29 15:54:38'),
@@ -33167,13 +33245,17 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
   CONSTRAINT `FK_permission_role_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission_role: ~152 rows (approximately)
+-- Dumping data for table 517_shop.permission_role: ~184 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('admin', 'brand_index'),
 	('admin', 'brand_show'),
 	('admin', 'brand_store'),
 	('admin', 'brand_update'),
+	('admin', 'domain_read'),
+	('admin', 'domain_read_sticky'),
+	('admin', 'domain_update'),
+	('admin', 'domain_update_sticky'),
 	('admin', 'group_attribute_index'),
 	('admin', 'group_attribute_show'),
 	('admin', 'group_attribute_store'),
@@ -33194,6 +33276,8 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('admin', 'product_store'),
 	('admin', 'product_store_pins'),
 	('admin', 'product_update'),
+	('admin', 'report_map_reports'),
+	('admin', 'report_sales_report'),
 	('admin', 'user_change_password'),
 	('admin', 'user_change_status'),
 	('admin', 'user_index'),
@@ -33218,12 +33302,26 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('fhfghfgh', 'order_index'),
 	('fhfghfgh', 'order_show'),
 	('fhfghfgh', 'order_update'),
+	('fhfghfgh', 'permission_index'),
+	('fhfghfgh', 'permission_initial'),
 	('fhfghfgh', 'product_category_get_attributes'),
 	('fhfghfgh', 'product_category_index'),
 	('fhfghfgh', 'product_category_show'),
 	('fhfghfgh', 'product_category_store'),
 	('fhfghfgh', 'product_category_store_attributes'),
 	('fhfghfgh', 'product_category_update'),
+	('fhfghfgh', 'product_change_status'),
+	('fhfghfgh', 'product_index'),
+	('fhfghfgh', 'product_pins'),
+	('fhfghfgh', 'product_product_attributes'),
+	('fhfghfgh', 'product_show'),
+	('fhfghfgh', 'product_store'),
+	('fhfghfgh', 'product_store_pins'),
+	('fhfghfgh', 'product_update'),
+	('fhfghfgh', 'role_index'),
+	('fhfghfgh', 'role_permissions'),
+	('fhfghfgh', 'role_set_permission'),
+	('fhfghfgh', 'role_store'),
 	('operrator', 'brand_index'),
 	('operrator', 'brand_show'),
 	('operrator', 'order_index'),
@@ -33249,6 +33347,10 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'brand_show'),
 	('programmer', 'brand_store'),
 	('programmer', 'brand_update'),
+	('programmer', 'domain_read'),
+	('programmer', 'domain_read_sticky'),
+	('programmer', 'domain_update'),
+	('programmer', 'domain_update_sticky'),
 	('programmer', 'group_attribute_index'),
 	('programmer', 'group_attribute_show'),
 	('programmer', 'group_attribute_store'),
@@ -33273,6 +33375,8 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'product_store'),
 	('programmer', 'product_store_pins'),
 	('programmer', 'product_update'),
+	('programmer', 'report_map_reports'),
+	('programmer', 'report_sales_report'),
 	('programmer', 'role_index'),
 	('programmer', 'role_permissions'),
 	('programmer', 'role_set_permission'),
@@ -33288,6 +33392,10 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('super_admin', 'brand_show'),
 	('super_admin', 'brand_store'),
 	('super_admin', 'brand_update'),
+	('super_admin', 'domain_read'),
+	('super_admin', 'domain_read_sticky'),
+	('super_admin', 'domain_update'),
+	('super_admin', 'domain_update_sticky'),
 	('super_admin', 'group_attribute_index'),
 	('super_admin', 'group_attribute_show'),
 	('super_admin', 'group_attribute_store'),
@@ -33312,6 +33420,8 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('super_admin', 'product_store'),
 	('super_admin', 'product_store_pins'),
 	('super_admin', 'product_update'),
+	('super_admin', 'report_map_reports'),
+	('super_admin', 'report_sales_report'),
 	('super_admin', 'role_index'),
 	('super_admin', 'role_permissions'),
 	('super_admin', 'role_set_permission'),
@@ -33332,10 +33442,10 @@ CREATE TABLE IF NOT EXISTS `product` (
   `title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `code` varchar(50) COLLATE utf8_persian_ci DEFAULT NULL,
   `count` int(11) NOT NULL DEFAULT 0,
-  `price` int(11) NOT NULL DEFAULT 0,
+  `price` int(11) DEFAULT NULL,
   `discount` int(11) NOT NULL DEFAULT 0,
   `sales_number` int(11) NOT NULL DEFAULT 0,
-  `visitor` int(11) NOT NULL DEFAULT 0,
+  `visitor` int(11) unsigned NOT NULL DEFAULT 0,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `content` text COLLATE utf8_persian_ci DEFAULT NULL,
   `meta_title` varchar(255) COLLATE utf8_persian_ci DEFAULT NULL,
@@ -33345,13 +33455,14 @@ CREATE TABLE IF NOT EXISTS `product` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_slug_unique` (`slug`),
   KEY `FK_products_brand` (`brand_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.product: ~2 rows (approximately)
+-- Dumping data for table 517_shop.product: ~3 rows (approximately)
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 INSERT INTO `product` (`id`, `brand_id`, `slug`, `title`, `code`, `count`, `price`, `discount`, `sales_number`, `visitor`, `status`, `content`, `meta_title`, `meta_description`, `created_at`, `updated_at`) VALUES
-	(1, 1, 'pro', 'محصول شماره یک', 'fsdfsdf', 10, 100000, 100000, 0, 0, 1, NULL, NULL, NULL, '2019-11-10 11:58:14', '2019-11-24 20:27:47'),
-	(2, 1, NULL, 'محصول شمار دو', NULL, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, '2019-11-10 12:04:13', '2019-12-10 09:06:52');
+	(1, 1, 'pro', 'محصول شماره یک', 'fsdfsdf', 10, 100000, 100000, 0, 0, 1, NULL, NULL, NULL, '2019-11-10 11:58:14', '2019-12-12 20:32:54'),
+	(2, 1, NULL, 'محصول شمار دو', NULL, 0, 0, 0, 0, 0, 1, NULL, NULL, NULL, '2019-11-10 12:04:13', '2019-12-12 20:33:32'),
+	(3, 1, NULL, 'محصول جدید', '123', 180, 10000, 0, 0, 0, 1, NULL, NULL, NULL, '2019-12-12 21:22:00', '2019-12-13 15:34:48');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_categories
@@ -33361,8 +33472,10 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`category_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_categories: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product_categories: ~1 rows (approximately)
 /*!40000 ALTER TABLE `product_categories` DISABLE KEYS */;
+INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
+	(3, 3);
 /*!40000 ALTER TABLE `product_categories` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_category
@@ -33405,13 +33518,16 @@ CREATE TABLE IF NOT EXISTS `product_pins` (
   PRIMARY KEY (`id`),
   KEY `FK_product_pins_product` (`product_id`),
   CONSTRAINT `FK_product_pins_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_pins: ~2 rows (approximately)
+-- Dumping data for table 517_shop.product_pins: ~5 rows (approximately)
 /*!40000 ALTER TABLE `product_pins` DISABLE KEYS */;
 INSERT INTO `product_pins` (`id`, `product_id`, `group_attribute_product_ids`, `price`, `discount`, `count`, `created_at`, `updated_at`) VALUES
 	(1, 1, NULL, 100000, 100000, 10, '2019-11-10 12:03:33', '2019-11-10 12:03:34'),
-	(2, 2, NULL, 0, 0, 0, '2019-11-10 12:03:50', '2019-11-10 12:03:50');
+	(2, 2, NULL, 0, 0, 0, '2019-11-10 12:03:50', '2019-11-10 12:03:50'),
+	(3, 3, '/1/', 10000, 0, 50, '2019-12-12 21:25:43', '2019-12-12 21:25:43'),
+	(4, 3, '/2/', 20000, 0, 100, '2019-12-12 21:25:43', '2019-12-12 21:25:43'),
+	(5, 3, '/3/', 50000, 0, 30, '2019-12-12 21:25:43', '2019-12-12 21:25:43');
 /*!40000 ALTER TABLE `product_pins` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.region
@@ -33455,6 +33571,45 @@ INSERT INTO `role` (`key`, `title`, `created_at`, `updated_at`) VALUES
 	('programmer', 'تیم برنامه نویس', '2019-11-29 10:25:41', '2019-11-29 10:25:41'),
 	('super_admin', 'سوپر ادمین', '2019-11-29 10:25:52', '2019-11-29 10:25:52');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
+
+-- Dumping structure for procedure 517_shop.sales_daily_report
+DELIMITER //
+CREATE PROCEDURE `sales_daily_report`()
+BEGIN
+	DECLARE i int; 
+	DECLARE data_exist int;
+	
+	
+	CREATE TEMPORARY TABLE IF NOT EXISTS calendar(
+		calendar_day DATE NOT NULL,
+		index idx (calendar_day)	
+	) ENGINE=MEMORY; 
+
+	SET i = 29; 
+	set data_exist = (select count(calendar_day) from calendar where calendar_day = CAST(NOW() AS DATE));
+
+	IF(data_exist = 0) THEN
+		TRUNCATE calendar;
+		label: LOOP 
+		IF(i < 0) THEN
+			LEAVE label;
+		END IF;
+			INSERT INTO calendar VALUES(DATE_SUB(NOW(),INTERVAL i DAY));
+			SET i = i - 1;
+	   END LOOP;
+   END IF;
+   
+	SELECT DATE_FORMAT(calendar_day,'%d')  AS label,  IFNULL(CAST(total_price AS INTEGER), 0) total_price, IFNULL(total_count, 0) AS total_count
+	FROM calendar
+	LEFT JOIN (
+	SELECT CAST(created_at AS DATE) AS order_created_at, SUM(total_price) AS total_price, COUNT(id) AS total_count
+	FROM `order`
+	WHERE CAST(created_at AS DATE) > CAST(DATE_SUB(NOW(), INTERVAL 31 DAY) AS DATE) and order_status = 1
+	GROUP BY CAST(created_at AS DATE)) AS sub ON sub.order_created_at = calendar.calendar_day; 
+
+
+END//
+DELIMITER ;
 
 -- Dumping structure for table 517_shop.social_media
 CREATE TABLE IF NOT EXISTS `social_media` (
@@ -33503,8 +33658,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `mobile`, `domain`, `role_key`, `name`, `status`, `validation_code`, `verify_account`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 32030, 1, '70082665', '$2y$10$UYSSv0pBz6k10fCFhVlumu4tz4wF8qtyEnV7HkpUX.ise7t1e7yFG', '2019-11-29 17:18:50', '2019-12-11 09:41:40'),
-	(2, '09120246217', 'localhost:3000', 'programmer', 'v11212vvmasoumi', 1, 16549, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$nZw4p36WUelzcJ7H4ZjyBun1/4C4iVj4l0d7w/EvryFHJay44OFSm', '2019-11-30 20:13:25', '2019-12-11 09:39:55');
+	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 32030, 1, '70082665', '$2y$10$UYSSv0pBz6k10fCFhVlumu4tz4wF8qtyEnV7HkpUX.ise7t1e7yFG', '2019-11-29 17:18:50', '2019-12-13 15:37:54'),
+	(2, '09120246217', 'localhost:3000', 'programmer', 'مهرداد معصومی', 0, 65606, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$qwfADsyZzmqYlqEoDAIhcOPKAuRXjPzuTCOKog2E6meo6MEhlQ.ze', '2019-11-30 20:13:25', '2019-12-13 15:37:50');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete

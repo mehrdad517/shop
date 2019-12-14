@@ -13,9 +13,7 @@ class AnbarController extends Controller
 
     public function index(Request $request)
     {
-        $entities = Anbar::with(['orderBundle' => function($q) {
-            return $q->select('order_id');
-        }])->where(function ($q) use($request) {
+        $entities = Anbar::where(function ($q) use($request) {
 
             if ($request->has('filter')) {
 

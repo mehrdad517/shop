@@ -29,7 +29,9 @@ import {toast} from "react-toastify";
 import Api from "../api";
 import {AuthSetting, stickySetting} from "../actions/auth";
 import AppsIcon from '@material-ui/icons/Apps';
-
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
+import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
 class Sidebar extends Component {
 
     constructor(props) {
@@ -84,7 +86,7 @@ class Sidebar extends Component {
         return (
             <div className='sidebar' style={{ width: '300px'}}>
                 {this.props.auth.permissions ? <List component="nav" aria-label="main mailbox folders">
-                    <ListItem component={Link} onClick={this.handleClose} to='/dashboard'>
+                    <ListItem component={Link} onClick={this.handleClose} to='/'>
                         <ListItemIcon>
                             <AppsIcon />
                         </ListItemIcon>
@@ -148,15 +150,42 @@ class Sidebar extends Component {
                         <ListItemText primary="نقش ها و سطوح دسترسی" />
                     </ListItem> : ''}
                     <Divider/>
+                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                        <ListItemIcon>
+                            <CollectionsBookmarkIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="مدیریت محتوا" />
+                    </ListItem>
+                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                        <ListItemIcon>
+                            <AccountTreeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="دسته بندی مطالب" />
+                    </ListItem>
+                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                        <ListItemIcon>
+                            <PostAddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="لندینگ پیج ها" />
+                    </ListItem>
+                    <Divider />
+                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                        <ListItemIcon>
+                            <ContactMailIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="امور مشتریان" />
+                    </ListItem>
+                    <Divider />
+                    {Boolean(this.props.auth.permissions.domain.update.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/setting'>
                         <ListItemIcon>
                             <SettingsIcon />
                         </ListItemIcon>
                         <ListItemText primary="تنظیمات سایت" />
-                    </ListItem>
+                    </ListItem>}
                     <Divider/>
                 </List> : <CircularProgress color={"secondary"} />}
-                {this.props.auth.setting && <List>
+                {this.props.auth.setting && Boolean(this.props.auth.permissions.domain.update_sticky.access) === true && <List>
                     <ListItem>
                         <ListItemIcon>
                             <SupervisorAccountIcon />

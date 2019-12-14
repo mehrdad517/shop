@@ -17,6 +17,8 @@ import Add from "@material-ui/icons/AddCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ClipLoader from 'react-spinners/SyncLoader';
+
 class Setting extends Component {
 
     constructor(props) {
@@ -190,7 +192,7 @@ class Setting extends Component {
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Link to='/dashboard'>
+                                    <Link to='/'>
                                         <Button variant="contained" color="default" >
                                             <NavigationIcon />
                                         </Button>
@@ -373,12 +375,14 @@ class Setting extends Component {
                                     variant="contained"
                                     color={"primary"}
                                 >
-                                    ذخیره تنظیمات
+                                    {this.state.loading ? <ClipLoader size={10} color={'#36D7B7'}  /> : 'ذخیره تنظیمات'}
                                 </Button>
+
                             </Grid>
                         </form>
                     </Box>
                 </div>
+                {this.state.loading && <CircularProgress color={"secondary"} size={20}  />}
             </Container>
         );
     }

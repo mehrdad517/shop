@@ -212,9 +212,9 @@ class Api {
         })
     }
 
-    // in edit from get product id
+    // in edit from get content id
     // if checked new category send all of checked item to api
-    // result response contain all attributes (category attributes) with value (form product)
+    // result response contain all attributes (category attributes) with value (form content)
     async getProductAttributes(id, object) {
         return axios.get(`http://localhost:8000/api/backend/products/${id}/categories/${object}/attributes`,{
             headers: this.haeders(),
@@ -597,9 +597,25 @@ class Api {
 
 
     /* reports */
-    async reports(){
-        return axios.get(`http://localhost:8000/api/reports`, {
-            headers: this.haeders(),
+    async salesReport(token){
+        return axios.get(`http://localhost:8000/api/backend/reports/sales-daily-report`, {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async mapReports(token){
+        return axios.get(`http://localhost:8000/api/backend/reports/map-reports`, {
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {

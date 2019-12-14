@@ -80,7 +80,7 @@ class OrderController extends Controller
         $order = Order::with(['user', 'payments', 'postInfo' => function($q){
             $q->with(['region']);
         }, 'attachments', 'productPins' => function($q) {
-            $q->with(['product' => function($q) {
+            $q->with(['content' => function($q) {
                 $q->with(['brand']);
             }]);
         }, 'fractiveRequest'])->find($id);
