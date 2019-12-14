@@ -7,11 +7,11 @@ import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import IconButton from "@material-ui/core/IconButton";
 import SyncIcon from '@material-ui/icons/Sync';
-import ProductCategoryCreate from "./create";
+import BlogCategoryCreate from "./create";
 import Dialog from "@material-ui/core/Dialog";
-import ProductCategoryEdit from "./edit";
+import BlogCategoryEdit from "./edit";
 import EditIcon from "@material-ui/icons/Edit";
-import ProductCategoryHead from "./head";
+import BlogCategoryHead from "./head";
 import 'react-toastify/dist/ReactToastify.css';
 import {Link} from "react-router-dom";
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
@@ -23,8 +23,10 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FolderIcon from '@material-ui/icons/Folder';
+import {toast} from "react-toastify";
+import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 
-class ProductCategory extends Component {
+class BlogCategory extends Component {
 
     constructor(props) {
         super(props);
@@ -34,10 +36,6 @@ class ProductCategory extends Component {
             categories : [], // categories tree
             loading: false, // page loading
             dialog:false, // dialog open
-            snackbar: { // toaster
-                open: false,
-                msg: null
-            },
         }
     }
 
@@ -50,7 +48,7 @@ class ProductCategory extends Component {
     async handleRequest() {
         let instance = new Api();
         await new Promise((resolve => {
-            resolve(instance.fetchProductCategories().then((response) => {
+            resolve(instance.getBlogCategories().then((response) => {
                 if (typeof response != "undefined") {
                     this.setState({
                         categories : response,
@@ -66,38 +64,50 @@ class ProductCategory extends Component {
         })
     }
 
-    // handle snackbar for show error or notification
-    handleSnackbar(parameter) {
+    expandScrolling(expanded, categories){
+
+        categories.map((category) => {
+            expanded.push(category.value);
+            this.expandScrolling(expanded,category.children);
+
+        });
+
+        return expanded;
+    }
+
+    handleToggleExpand()
+    {
+        let expanded = [];
+
+        if (this.state.expanded.length === 0) {
+
+            expanded = this.expandScrolling(expanded,this.state.categories)
+
+        }
+
         this.setState({
-            snackbar:{
-                open: parameter.open,
-                msg: parameter.msg
-            }
+            expanded
         })
     }
 
     render() {
-        console.log('xxx');
+        console.log(this.state)
         return (
             <div className='content'>
                 <Container>
-                    <ProductCategoryHead />
+                    <BlogCategoryHead />
                     {!this.state.loading ? <CircularProgress color={"secondary"} /> : <div>
                         <Box>
                             <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
-                                <Tooltip title="افزودن ویژگی">
-                                    {this.state.checked.length === 1 ? <Link to={`/categories/${this.state.checked[0]}/attributes`}>
-                                        <IconButton>
-                                            <ScatterPlotIcon />
-                                        </IconButton>
-                                    </Link> : <IconButton onClick={() => this.state.checked.length === 1 ?  '' : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
-                                        <ScatterPlotIcon />
-                                    </IconButton>}
-                                </Tooltip>
-                                <ProductCategoryCreate handleRequest={this.handleRequest.bind(this)}  items={this.state.checked} />
+                                <BlogCategoryCreate handleRequest={this.handleRequest.bind(this)}  items={this.state.checked} />
                                 <Tooltip title="ویرایش">
-                                    <IconButton onClick={() => this.state.checked.length === 1 ?  this.setState({ dialog: true}) : this.setState({snackbar:{open: true, msg: 'یگ گزینه را انتخاب نمایید.'}}) }>
+                                    <IconButton onClick={() => this.state.checked.length === 1 ?  this.setState({ dialog: true}) : toast.info('یگ گزینه را انتخاب نمایید.') }>
                                         <EditIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="باز و بسته کردن">
+                                    <IconButton onClick={this.handleToggleExpand.bind(this)}>
+                                        <AspectRatioIcon />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="سینک">
@@ -127,14 +137,8 @@ class ProductCategory extends Component {
                             /> : <p>دسته جدید ایجاد نمایید.</p> }
                         </Box>
                         <Dialog open={this.state.dialog}  onClose={() => this.setState({dialog: false})}>
-                            {this.state.checked.length > 0 ? <ProductCategoryEdit entity={this.state.checked[0]}  handleRequest={() => this.handleRequest()} handleSnackbar={this.handleSnackbar.bind(this)} onClose={() => this.setState({dialog: false})} /> : ''}
+                            {this.state.checked.length > 0 && <BlogCategoryEdit entity={this.state.checked[0]}  handleRequest={() => this.handleRequest()} onClose={() => this.setState({dialog: false})} />}
                         </Dialog>
-                        <Snackbar
-                            autoHideDuration={4500}
-                            open={this.state.snackbar.open}
-                            message={this.state.snackbar.msg}
-                            onClose={() => this.setState({snackbar:{open: false,msg: null}})}
-                        />
                     </div>}
                 </Container>
             </div>
@@ -148,4 +152,4 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-)(ProductCategory);
+)(BlogCategory);

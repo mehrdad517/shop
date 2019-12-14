@@ -8,13 +8,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../api";
 import MenuItem from "@material-ui/core/MenuItem";
+import {toast} from "react-toastify";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-class ProductCategoryEdit extends Component {
+class BlogCategoryEdit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            loading: true,
             form: {
                 label: '',
                 slug: '',
@@ -28,16 +31,20 @@ class ProductCategoryEdit extends Component {
     }
 
     componentDidMount() {
-        this.api.fetchProductCategory(this.props.entity).then((response) => {
-            this.setState({
-                form: {
-                    label: response.label,
-                    slug: response.slug,
-                    meta_title: response.meta_title,
-                    meta_description: response.meta_description,
-                    status: response.status
-                }
-            })
+        this.api.getBlogCategory(this.props.entity).then((response) => {
+            if (typeof response != "undefined") {
+
+                this.setState({
+                    loading: false,
+                    form: {
+                        label: response.label,
+                        slug: response.slug,
+                        meta_title: response.meta_title,
+                        meta_description: response.meta_description,
+                        status: response.status
+                    }
+                })
+            }
         }).catch((error) => {
             console.log(error);
         })
@@ -54,15 +61,27 @@ class ProductCategoryEdit extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
-        this.api.updateProductCategory(this.props.entity, this.state.form).then((response) => {
-            if (response.status) {
+
+        this.setState({
+            loading: true
+        });
+
+        this.api.updateBlogCategory(this.props.entity, this.state.form).then((response) => {
+            if (typeof response != "undefined") {
+
+                if (response.status) {
+                    toast.success(response.msg);
+                    this.props.handleRequest();
+                    setTimeout(() => {
+                        this.props.onClose();
+                    }, 500);
+                } else {
+                    toast.error(response.msg);
+                }
+
                 this.setState({
-                    open: false,
+                    loading: false
                 });
-                this.props.onClose();
-                this.props.handleRequest();
-            } else {
-                this.props.handleSnackbar({open: true, msg: response.msg});
             }
         }).catch((error) => {
             console.log(error);
@@ -76,6 +95,7 @@ class ProductCategoryEdit extends Component {
             <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
                 <DialogTitle id="form-dialog-title">ویرایش</DialogTitle>
                 <DialogContent>
+                    {this.state.loading && <CircularProgress size={15} color={"secondary"}  />}
                     <Grid container spacing={2}>
                         <Grid item xs={12} >
                             <TextField
@@ -157,7 +177,7 @@ class ProductCategoryEdit extends Component {
                     <Button color="primary" onClick={() => this.props.onClose()}>
                         انصراف
                     </Button>
-                    <Button color="primary" autoFocus type='submit'>
+                    <Button disabled={this.state.loading} color="primary" autoFocus type='submit'>
                         ارسال اطلاعات
                     </Button>
                 </DialogActions>
@@ -177,4 +197,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProductCategoryEdit);
+)(BlogCategoryEdit);

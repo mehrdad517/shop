@@ -12,16 +12,9 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Api from "../../../api";
 import {toast} from "react-toastify";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import CheckboxTree from "react-checkbox-tree";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-import Checkbox from "@material-ui/core/Checkbox";
 import Divider from "@material-ui/core/Divider";
-import validator from 'validator';
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import Add from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import {Link} from "react-router-dom";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -30,27 +23,28 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FolderIcon from '@material-ui/icons/Folder';
+import MUIRichTextEditor from 'mui-rte'
+import { EditorState, convertToRaw } from 'draft-js'
+import Editor from "../../../component/editor";
+import JoditEditor from "jodit-react";
 
-class CreateProduct extends Component {
+class BlogContentCreate extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             loading: false,
-            brands: [],
             checked: [], // tree checked or edit or  show
             expanded: [], // expanded tree
             categories : [], // categories tree
             form: {
                 title: '',
                 code: '',
-                brand_id: 0,
                 status: 1,
                 slug: '',
                 meta_title: '',
                 meta_description: '',
                 content: '',
-                attributes:[]
             }
         };
 
@@ -62,49 +56,18 @@ class CreateProduct extends Component {
     }
 
     async handleRequest() {
-        await new Promise(resolve => {
-            resolve(this.api.fetchBrands().then((response) => {
-                if (typeof response != "undefined") {
-                    this.setState({
-                        brands: response.data
-                    })
-                }
-            }).catch((error) => {
-                toast(error);
-            }));
-        });
 
-        await new Promise(resolve => {
-            resolve(this.api.fetchProductCategories().then((response) => {
-                if (typeof response != "undefined") {
-                    this.setState({
-                        categories: response
-                    })
-                }
-            }).catch((error) => {
-                toast(error);
-            }))
-        });
-
-        await new Promise(resolve => {
-            resolve(this.setState({
-                loading: true
-            }));
+        this.api.getBlogCategories().then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    categories: response
+                })
+            }
+        }).catch((error) => {
+            toast(error);
         })
+
     }
-
-    handleDuplicateRaw = (event, i) => {
-        let form = this.state.form;
-        if (event.target.name === 'main') {
-            form.attributes[i][event.target.name] = Boolean(event.target.value);
-        } else {
-            form.attributes[i][event.target.name] = event.target.value;
-        }
-
-        this.setState({
-            form
-        })
-    };
 
 
     handleChangeElement = (event) => {
@@ -117,33 +80,7 @@ class CreateProduct extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
-
-        if (validator.isEmpty(this.state.form.title)) {
-            toast.error('عجله نکن ! عنوان رو وارد کن حالا');
-            return;
-        }
-
-        if (validator.isEmpty(this.state.form.code)) {
-            toast.error('کد پس چی؟');
-            return;
-        }
-
-        if (this.state.checked.length === 0) {
-            toast.error('محصول دسته بندی نداره؟ روی هوا باشه؟');
-            return;
-        }
-
-
-        if (this.state.form.brand_id === 0) {
-            toast.info('برند نزدی ها ولی گیر نمیدم بهت');
-        }
-
-        if (validator.isEmpty(this.state.form.content)) {
-            toast.warn('محتوا به کاربر چی نشون بدیم؟');
-        }
-
         this.state.form['categories'] = this.state.checked;
-        console.log(this.state.form);
         this.api.createProduct(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
@@ -159,110 +96,50 @@ class CreateProduct extends Component {
 
     }
 
-    async handleChangeCategory(checked) {
-
-        let form = this.state.form;
-        form['attributes'] = [];
-        await new Promise(resolve => {
-            resolve(this.setState({
-                checked,
-                form
-            }));
-        });
-
-        if (this.state.checked.length > 0) {
-            await new Promise(resolve => {
-                resolve(this.api.getProductCategoryAttributes(checked).then((response) => {
-                    if (typeof response != "undefined") {
-                        form['attributes'] = response;
-                        resolve(form['attributes'].sort(this.compare));
-                        this.setState({
-                            form
-                        })
-                    }
-                }).catch((error) => {
-                    console.log(error);
-                }));
-            });
-        }
-    }
-
-    compare( a, b ) {
-        if ( a.id < b.id ){
-            return -1;
-        }
-        if ( a.id > b.id ){
-            return 1;
-        }
-        return 0;
-    }
-
-
-    async  duplicateRaw(id) {
-        let arr = [];
-        arr = this.state.form.attributes;
-        for (let i=0; i < arr.length; i++) {
-            if (arr[i].id === id) {
-                await new Promise(resolve => {
-                    let pusher = {
-                        'id' : arr[i].id,
-                        'title' : arr[i].title,
-                        'value' : arr[i].value,
-                        'order' : arr[i].order,
-                        'main' : arr[i].main,
-                    };
-                    resolve(arr.push(pusher));
-                });
-                await new Promise(resolve => {
-                    resolve(arr.sort(this.compare));
-                });
-                await new Promise(resolve => {
-                    resolve(this.setState({
-                        attributes : arr
-                    }));
-                });
-                break;
-            }
-        }
-    }
-
-    async deleteRaw(id) {
-        let arr = [];
-        arr = this.state.form.attributes;
-        for (let i = 0 ; i < this.state.form.attributes.length ; i++) {
-            if (arr[i].id === id) {
-                await new Promise(resolve => {
-                    resolve(arr.splice(i, 1));
-                });
-                await new Promise(resolve => {
-                    resolve(this.setState({
-                        attributes : arr
-                    }));
-                });
-                break;
-            }
-        }
-    }
-
     render() {
-        if (!this.state.loading) {
-            return (<CircularProgress color={"secondary"} />);
+
+        const save = (state) => {
+            console.log(state.getCurrentContent())
         }
+
+        const MyHashTagDecorator = (props) => {
+            console.log('xxxx');
+            const hashtagUrl = "http://myurl/" + props.decoratedText
+            return (
+                <a
+                    href={hashtagUrl}
+                    style={{
+                        color: "green"
+                    }}
+                >
+                    {props.children}
+                </a>
+            )
+        }
+
+        const MyBlock = (props) => {
+            return (
+                <h1>
+                    {props.children}
+                </h1>
+            )
+        }
+
         return (
             <div className='content'>
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>افزودن محصولات</h2>
-                                <p style={{ color: '#8e8e8e'}}>محصول جدید اضافه کنید.</p>
+                                <h2>افزودن مطلب جدید</h2>
+                                <p style={{ color: '#8e8e8e'}}>مقاله جدید اضافه کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
                                 <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                    <Link to='/products'>
-                                    <Button variant="contained" color="default" >
-                                        <NavigationIcon />
-                                    </Button>
+                                    <Link to='/blog/contents'>
+                                        <Button variant="contained" color="default" >
+                                            <NavigationIcon />
+                                        </Button>
                                     </Link>
                                 </div>
                             </Grid>
@@ -293,42 +170,6 @@ class CreateProduct extends Component {
                                                     shrink: true,
                                                 }}
                                             />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <TextField
-                                                label="کد محصول"
-                                                variant="filled"
-                                                margin='dense'
-                                                value={this.state.form.code}
-                                                fullWidth
-                                                name='code'
-                                                onChange={this.handleChangeElement.bind(this)}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                select
-                                                label="برند"
-                                                value={this.state.form.brand_id}
-                                                variant="filled"
-                                                margin='dense'
-                                                fullWidth
-                                                name='brand_id'
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                onChange={this.handleChangeElement.bind(this)}
-                                            >
-                                                <MenuItem key={0} value={0}>انتخاب</MenuItem>
-                                                {this.state.brands.map((brand, index) => {
-                                                    return(
-                                                        <MenuItem key={index + 1} value={brand.id}>{brand.title}</MenuItem>
-                                                    );
-                                                })}
-                                            </TextField>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
                                             <TextField
@@ -365,7 +206,7 @@ class CreateProduct extends Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item xs={12}>
-                                            {this.state.categories.length > 0 ?  <CheckboxTree
+                                            {this.state.categories ?  <CheckboxTree
                                                 nodes={this.state.categories}
                                                 checked={this.state.checked}
                                                 expanded={this.state.expanded}
@@ -383,44 +224,6 @@ class CreateProduct extends Component {
                                                 }}
                                             /> : <p>دسته جدید ایجاد نمایید.</p> }
                                         </Grid>
-                                        {this.state.form.attributes.length > 0 ?
-                                            <Grid item xs={12}>
-                                                <table className='table-duplicate-row fadeIn'>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>ردیف</th>
-                                                        <th>تغییر قیمت و موجودی</th>
-                                                        <th>ویژگی</th>
-                                                        <th>مقدار</th>
-                                                        <th>اولویت</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {this.state.form.attributes.map((attribute, index) => {
-                                                        return(<tr key={index}>
-                                                            <td>{index + 1 }</td>
-                                                            <td><Checkbox value={this.state.form.attributes[index].main} name='main' onChange={(event) => this.handleDuplicateRaw(event, index)}  /></td>
-                                                            <td><b>{attribute.title}</b></td>
-                                                            <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].value} name='value' style={{ justifyContent: 'center !important'}} /></td>
-                                                            <td><TextField onChange={(event) => this.handleDuplicateRaw(event, index)} value={this.state.form.attributes[index].order} name='order' style={{ justifyContent: 'center !important'}} /></td>
-                                                            <td>
-                                                                <Tooltip title={'ایجاد اتریبیوت ' + attribute.title}>
-                                                                    <IconButton color='primary' onClick={() => this.duplicateRaw(attribute.id)}>
-                                                                        <Add />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Tooltip title={'حذف اتریبیوت ' + attribute.title}>
-                                                                    <IconButton color='secondary' onClick={() => this.deleteRaw(attribute.id)}>
-                                                                        <RemoveCircleIcon />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                            </td>
-                                                        </tr>);
-                                                    })}
-                                                    </tbody>
-                                                </table>
-                                            </Grid>: ''}
                                     </Grid>
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
@@ -527,4 +330,4 @@ class CreateProduct extends Component {
     }
 }
 
-export default CreateProduct;
+export default BlogContentCreate;

@@ -10,11 +10,20 @@ import {ToastContainer} from "react-toastify";
 import Router from "./pages/router";
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
-import 'shabnam-font/dist/Farsi-Digits/font-face.css'
+import './assets/Farsi-Digits/font-face.css'
 
 const theme = createMuiTheme({
     direction: "rtl",
     overrides: {
+        MUIRichTextEditor: {
+            root: {
+                padding: '20px 0',
+                width: "100%",
+            },
+            editor: {
+                fontFamily: 'Shabnam',
+            }
+        },
         // Style sheet name ⚛️
         MuiButton: {
             // Name of the rule

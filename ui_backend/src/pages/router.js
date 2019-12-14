@@ -26,9 +26,11 @@ import {history} from "../store";
 import {ConnectedRouter} from "connected-react-router";
 import Header from "./header";
 import {push} from 'connected-react-router';
-
+import BlogCategory from './blogBundle/category/index'
+import BlogContent from './blogBundle/content/list'
 
 import './../assets/styles/style.scss'
+import BlogContentCreate from "./blogBundle/content/create";
 
 class Router extends Component {
 
@@ -76,6 +78,10 @@ class Router extends Component {
                         <Route component={UserList} path='/users' exact={true}/>
                         <Route component={Acl} path='/users/access/control/list'/>
                         <Route component={Setting} path={'/setting'} exact={true}/>
+
+                        <Route component={BlogContent} path='/blog/contents' exact={true}/>
+                        <Route component={BlogContentCreate} path='/blog/contents/create' exact={true}/>
+                        <Route component={BlogCategory} path='/blog/categories' exact={true}/>
 
                     </ConnectedRouter>
                 }

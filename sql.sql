@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
+-- Host:                         localhost
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.3.0.5771
@@ -70,21 +70,49 @@ CREATE TABLE IF NOT EXISTS `blog_category` (
   KEY `_lft` (`_lft`),
   KEY `_rgt` (`_rgt`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.blog_category: ~0 rows (approximately)
+-- Dumping data for table 517_shop.blog_category: ~27 rows (approximately)
 /*!40000 ALTER TABLE `blog_category` DISABLE KEYS */;
+INSERT INTO `blog_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
+	(5, 'محصولات گیاهی', NULL, NULL, NULL, 1, 1, 38, NULL, '2019-12-14 07:14:24', '2019-12-14 07:45:09'),
+	(6, 'محصولات گیاهی', 'اسلاگ_من', NULL, NULL, 1, 2, 15, 5, '2019-12-14 07:14:51', '2019-12-14 07:30:27'),
+	(7, 'محصولات گیاهی', NULL, NULL, NULL, 1, 3, 8, 6, '2019-12-14 07:43:55', '2019-12-14 07:43:55'),
+	(8, 'محصولات گیاهی', NULL, NULL, NULL, 1, 16, 21, 5, '2019-12-14 07:45:31', '2019-12-14 07:45:31'),
+	(9, 'zzzz', NULL, NULL, NULL, 1, 22, 23, 5, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
+	(10, 'zzzz', NULL, NULL, NULL, 1, 9, 10, 6, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
+	(11, 'zzzz', NULL, NULL, NULL, 1, 4, 5, 7, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
+	(12, 'zzzz', NULL, NULL, NULL, 1, 17, 18, 8, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
+	(13, 'yyyyy', NULL, NULL, NULL, 1, 24, 25, 5, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
+	(14, 'yyyyy', NULL, NULL, NULL, 1, 11, 12, 6, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
+	(15, 'yyyyy', NULL, NULL, NULL, 1, 6, 7, 7, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
+	(16, 'yyyyy', NULL, NULL, NULL, 1, 19, 20, 8, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
+	(17, 'محصولات گیاهی', NULL, NULL, NULL, 1, 26, 27, 5, '2019-12-14 07:51:48', '2019-12-14 07:51:48'),
+	(18, 'محصولات گیاهی', NULL, NULL, NULL, 1, 28, 29, 5, '2019-12-14 07:53:29', '2019-12-14 07:53:29'),
+	(19, 'zzzzzzzzzzzzzzzzz', NULL, NULL, NULL, 1, 30, 37, 5, '2019-12-14 07:53:36', '2019-12-14 07:53:36'),
+	(20, 'zzzzzzzzzzzzzzzzz', NULL, NULL, NULL, 1, 13, 14, 6, '2019-12-14 07:53:36', '2019-12-14 07:53:36'),
+	(21, 'q', NULL, NULL, NULL, 1, 31, 34, 19, '2019-12-14 07:54:50', '2019-12-14 07:54:50'),
+	(22, 'yyyyy', NULL, NULL, NULL, 1, 35, 36, 19, '2019-12-14 07:55:07', '2019-12-14 07:55:07'),
+	(23, 'yyyyy', NULL, NULL, NULL, 1, 32, 33, 21, '2019-12-14 07:55:07', '2019-12-14 07:55:07'),
+	(24, 'محصولات گیاهی', 'اسلاگ_منd', NULL, NULL, 1, 39, 42, NULL, '2019-12-14 07:56:44', '2019-12-14 07:57:10'),
+	(25, 'yyyyy', 'اسلاگ_منsssss', NULL, NULL, 1, 40, 41, 24, '2019-12-14 07:59:47', '2019-12-14 08:04:48'),
+	(26, 'دسته 1', NULL, NULL, NULL, 1, 43, 44, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
+	(27, 'دسته 2', NULL, NULL, NULL, 1, 45, 46, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
+	(28, ' دسته 3', NULL, NULL, NULL, 1, 47, 54, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
+	(29, 'دسته 1', NULL, NULL, NULL, 1, 48, 49, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51'),
+	(30, 'دسته 2', NULL, NULL, NULL, 1, 50, 51, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51'),
+	(31, 'دسته 3', NULL, NULL, NULL, 1, 52, 53, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51');
 /*!40000 ALTER TABLE `blog_category` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.blog_content
 CREATE TABLE IF NOT EXISTS `blog_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `slug` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `created_by` bigint(20) unsigned NOT NULL,
-  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `meta_title` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `meta_description` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `content` text CHARACTER SET latin1 NOT NULL DEFAULT '',
+  `title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
+  `meta_title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
+  `meta_description` varchar(255) COLLATE utf8_persian_ci NOT NULL,
+  `content` text COLLATE utf8_persian_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `visitor` bigint(20) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
@@ -162,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
 -- Dumping data for table 517_shop.domain: ~0 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
 INSERT INTO `domain` (`key`, `name`, `meta_title`, `meta_description`, `introduce`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `status`, `created_at`, `updated_at`) VALUES
-	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 0, 1, 0, 0, 0, 1, '2019-12-07 10:11:41', '2019-12-13 15:58:52');
+	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 0, 0, 0, 1, 1, 1, 1, 1, '2019-12-07 10:11:41', '2019-12-14 08:12:48');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_communication_channel
@@ -891,7 +919,7 @@ INSERT INTO map_reports (title, counter) VALUES
 ('کیف پول کاربران', (select IFNULL(sum(credit), 0) - IFNULL(sum(debtor), 0) from finance WHERE status = 0))
 ;
 
-/* select all items */
+
 SELECT * FROM map_reports;
 END//
 DELIMITER ;
@@ -950,7 +978,7 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~94 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~95 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
 	('00eaa512dd682e592d38cecbdb23a7b53cb210dc5d8e89425491cfb15dee343c7e90668634b0635a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:49:01', '2019-12-12 20:49:01', '2020-12-12 20:49:01'),
@@ -978,6 +1006,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('3e41aeecb07415495ede3dab37fda563129ca2c84e2909c5259b4723f2944a4760d898ba90a7d29f', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:25', '2019-12-09 18:01:25', '2020-12-09 18:01:25'),
 	('3fa280aa2e2b5099eee4ef4c584f2af4dcecc3e9bea16c4dd57480be99f6812c7086d5613c096eb2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:49:14', '2019-12-09 17:49:14', '2020-12-09 17:49:14'),
 	('496fa8e17d6fc2aff2a1bc7a78ae98ae077f7daa8d075d8715f44e75a72b846649fcff55f859482a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:20:13', '2019-12-12 16:20:13', '2020-12-12 16:20:13'),
+	('4c771aea194f7b6ceea1fa1485f0a3b88dba436f9f372b06ff64366ba1625f95eb5cae2ba328ccca', 2, 2, 'Token Name', '[]', 0, '2019-12-14 06:37:05', '2019-12-14 06:37:05', '2020-12-14 06:37:05'),
 	('4e64aaf58ba8e01bb2273db16d812c48845b0a755834aaf6429413a03cd0d9b770f865537cc3890c', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:33:51', '2019-12-07 20:33:51', '2020-12-07 20:33:51'),
 	('5163c9732dd745b6164ed11a1e82375b4e036aaac2d3cb19d46c07c285ed5325fb891e07f23e3fe0', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:33:58', '2019-12-09 17:33:58', '2020-12-09 17:33:58'),
 	('52f18eb6d9bed0f1b0e1eca64065b1bafe55e3ab9c6034c5ce06dc528375158858460c9065a9ffaa', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:36:55', '2019-12-09 17:36:55', '2020-12-09 17:36:55'),
@@ -11791,7 +11820,7 @@ CREATE TABLE IF NOT EXISTS `order_fractive_request` (
   CONSTRAINT `FK_order_request__order` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='این جدول درخواست اپراتور به انباردار برای مشخص کردن کسری و یا معیوبی است.کلمه اخر نام جدول ترکیب کسری و معیوبی است.';
 
--- Dumping data for table 517_shop.order_fractive_request: ~1 rows (approximately)
+-- Dumping data for table 517_shop.order_fractive_request: ~2 rows (approximately)
 /*!40000 ALTER TABLE `order_fractive_request` DISABLE KEYS */;
 INSERT INTO `order_fractive_request` (`order_id`, `product_pins`, `document`, `status`, `type`, `post_barcode`, `order_weight`, `created_at`, `updated_at`) VALUES
 	(779, '{\n  "data" : "x"\n}', NULL, 1, 1, NULL, NULL, '2019-11-29 19:13:01', '2019-11-29 23:50:33'),
@@ -11830,7 +11859,7 @@ CREATE TABLE IF NOT EXISTS `order_post_info` (
   CONSTRAINT `FK_order_post_info_region` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order_post_info: ~10,532 rows (approximately)
+-- Dumping data for table 517_shop.order_post_info: ~10,271 rows (approximately)
 /*!40000 ALTER TABLE `order_post_info` DISABLE KEYS */;
 INSERT INTO `order_post_info` (`order_id`, `region_id`, `full_name`, `national_code`, `mobile`, `phone`, `postal_code`, `address`, `created_at`, `updated_at`) VALUES
 	(408, 1, 'آرمین نجفی', '14973974763', '02691378556', '02606270344', '6122887472', 'آذربایجان شرقی خیابان تبریزی ساختمان قدسی', NULL, NULL),
@@ -33472,7 +33501,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`category_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_categories: ~1 rows (approximately)
+-- Dumping data for table 517_shop.product_categories: ~0 rows (approximately)
 /*!40000 ALTER TABLE `product_categories` DISABLE KEYS */;
 INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
 	(3, 3);
@@ -33494,15 +33523,20 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   PRIMARY KEY (`value`),
   UNIQUE KEY `product_category_slug_unique` (`slug`),
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: ~4 rows (approximately)
+-- Dumping data for table 517_shop.product_category: ~9 rows (approximately)
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'دسته بندی محصولات', NULL, NULL, NULL, 1, 1, 8, NULL, '2019-11-24 20:18:01', '2019-11-24 20:18:01'),
 	(2, 'محصولات بهداشتی', NULL, NULL, NULL, 1, 2, 3, 1, '2019-11-24 20:18:10', '2019-11-24 20:18:10'),
 	(3, 'محصولات آرایشی', NULL, NULL, NULL, 1, 4, 7, 1, '2019-11-24 20:18:18', '2019-11-24 20:18:18'),
-	(4, 'زیر شاخه', NULL, NULL, NULL, 1, 5, 6, 3, '2019-12-09 19:47:00', '2019-12-09 19:47:00');
+	(4, 'زیر شاخه', NULL, NULL, NULL, 1, 5, 6, 3, '2019-12-09 19:47:00', '2019-12-09 19:47:00'),
+	(5, 'محصولات گیاهی', NULL, NULL, NULL, 1, 9, 10, NULL, '2019-12-14 07:06:33', '2019-12-14 07:06:33'),
+	(6, 'محصولات گیاهی', 'اسلاگ_من', NULL, NULL, 1, 11, 12, NULL, '2019-12-14 07:10:54', '2019-12-14 07:21:45'),
+	(7, 'محصولات گیاهی', NULL, NULL, NULL, 1, 13, 14, NULL, '2019-12-14 07:11:00', '2019-12-14 07:11:00'),
+	(8, 'محصولات گیاهی', NULL, NULL, NULL, 1, 15, 16, NULL, '2019-12-14 07:11:51', '2019-12-14 07:11:51'),
+	(9, 'محصولات گیاهی', NULL, NULL, NULL, 1, 17, 18, NULL, '2019-12-14 07:12:32', '2019-12-14 07:12:32');
 /*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_pins
@@ -33658,8 +33692,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `mobile`, `domain`, `role_key`, `name`, `status`, `validation_code`, `verify_account`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 32030, 1, '70082665', '$2y$10$UYSSv0pBz6k10fCFhVlumu4tz4wF8qtyEnV7HkpUX.ise7t1e7yFG', '2019-11-29 17:18:50', '2019-12-13 15:37:54'),
-	(2, '09120246217', 'localhost:3000', 'programmer', 'مهرداد معصومی', 0, 65606, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$qwfADsyZzmqYlqEoDAIhcOPKAuRXjPzuTCOKog2E6meo6MEhlQ.ze', '2019-11-30 20:13:25', '2019-12-13 15:37:50');
+	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 98279, 1, '70082665', '$2y$10$z2aEO7jGg3Ty8j3CclsZdeIunnhpZ5LPwhCSxHCvTMbMHUUwGnpkS', '2019-11-29 17:18:50', '2019-12-14 06:32:44'),
+	(2, '09120246217', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 10216, 1, '$2y$10$yct.hT4Kwp5nOtdnEfBeGuWjllF1L19TrpM3npdUbrnrcqFF7o.0S', '$2y$10$yTTrCs9ABo6b0Wnd0x.O3.XqCQFvMcMIH1Ury2HiKBe857LUs17Aq', '2019-11-30 20:13:25', '2019-12-14 06:35:17');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete

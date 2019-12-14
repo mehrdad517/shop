@@ -1,73 +1,68 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Api from "../../../api";
-import {Box, CircularProgress, Snackbar, Tooltip} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import NavigationIcon from "@material-ui/icons/Navigation";
 import Container from "@material-ui/core/Container";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Grid from "@material-ui/core/Grid";
+import NavigationIcon from "@material-ui/icons/Navigation";
+import {Box, Tooltip} from "@material-ui/core";
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from "@material-ui/core/Typography";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
+import IconButton from '@material-ui/core/IconButton';
 import FormControl from "@material-ui/core/FormControl";
-import NativeSelect from "@material-ui/core/NativeSelect";
-import Pagination from "react-js-pagination";
-import IconButton from "@material-ui/core/IconButton";
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import SortIcon from '@material-ui/icons/Sort';
+import Pagination from "react-js-pagination";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import MenuItem from '@material-ui/core/MenuItem';
+import UserCreate from "./create";
 import SyncIcon from '@material-ui/icons/Sync';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import 'react-checkbox-tree/lib/react-checkbox-tree.css';
-import {toast} from "react-toastify";
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
+import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCheckBoxTwoTone';
+import Api from "../../../api";
 import {Link} from "react-router-dom";
-import CreateIcon from '@material-ui/icons/Create';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-class ProductList extends Component {
+class BlogContent extends Component {
+
     constructor(props) {
         super(props);
-        this.state= {
-            checked: [],
-            expanded: [],
-            entities : [],
-            loading: false,
+        this.state = {
+            loading: true,
+            entities: [],
             filter: {
-                status: -1,
-                count: -1,
-                discount: -1,
-                brand_id: -1
+                status: -1
             },
             page: 1,
-            brands: [],
             limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
-            snackbar: {
-                open: false,
-                msg: null
-            }
-        }
+        };
+
+        this.api = new Api();
+
+        this.handleRequest = this.handleRequest.bind(this);
     }
 
     componentDidMount() {
-        this.handleRequest();
+        this.handleRequest()
     }
 
     async handleChangeLimit(event) {
+
         let limit = event.target.value;
         await new Promise((resolve => {
             resolve(this.setState({
                 limit: parseInt(limit),
-                page:  1
+                page:  1,
+                loading: true,
             }));
         }));
 
@@ -76,7 +71,9 @@ class ProductList extends Component {
 
     async handleChangeSearchInput(event) {
         let filter = this.state.filter;
+
         filter[event.target.name] = event.target.value;
+
         await new Promise((resolve => {
             resolve(this.setState({
                 filter,
@@ -112,111 +109,61 @@ class ProductList extends Component {
         await this.handleRequest()
     }
 
-
-    changeStatus(id, status) {
+    changeStatus(id, status)
+    {
         this.setState({
-            loading: false,
+            loading:true
         });
-        let instance = new Api();
-        instance.changeProductStatus(id, {'status' : status}).then((response) => {
-            if (response.status) {
-                this.handleRequest();
+
+        this.api.changeStatus(id, {'status' : status}).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    this.handleRequest();
+                }
             }
-            this.setState({
-                snackbar: {
-                    open: true,
-                    msg: response.msg
-                },
-                loading: true
-            });
         }).catch((error) => {
             console.log(error);
         })
     }
 
     async handleRequest() {
-        let instance = new Api();
 
-        await new Promise((resolve => {
-            resolve(instance.fetchBrands().then((response) => {
-               this.setState({
-                   brands: response.data
-               });
-            }).catch((error) => {
-                toast(error);
-            }));
-        }));
-
-        await new Promise((resolve => {
-            resolve(instance.fetchProducts({
-                filter: this.state.filter,
-                sort_field: this.state.sort_field,
-                sort_type: this.state.sort_type,
-                page: this.state.page,
-                limit: this.state.limit
-            }).then((response) => {
-                if (typeof response != "undefined") {
-                    this.setState({
-                        entities: response,
-                        loading: true,
-                        snackbar: {
-                            open: true,
-                            msg: 'لیست بارگزاری گردید.'
-                        }
-                    })
-                }
-            }).catch((error) => {
-                console.log(error);
-            }));
-        }));
+        await this.api.getContents({
+            filter: this.state.filter,
+            sort_field: this.state.sort_field,
+            sort_type: this.state.sort_type,
+            page: this.state.page,
+            limit: this.state.limit
+        }).then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    entities: response,
+                    loading: false
+                })
+            }
+        });
 
     }
 
     render() {
-
-        if (!this.state.loading) {
-            return (<CircularProgress color={"secondary"} />);
-        }
         return (
             <div className='content'>
+                <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
                 <Container>
                     <Box style={{ margin: '10px 0 20px 0'}}>
                         <Grid container alignItems="center">
                             <Grid item xs={12} sm={6}>
-                                <h2>مدیریت محصولات</h2>
-                                <p style={{ color: '#8e8e8e'}}>کلیه محصولات در این صفحه لیست شده اند.</p>
+                                <h2>مدیریت مطالب وبلاگ</h2>
+                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کلیه مطالب وبلاگ را مدیریت کنید.</p>
                             </Grid>
                             <Grid item xs={12} sm={6} >
-                                <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                <Link to='/' style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                     <Button variant="contained" color="default" >
                                         <NavigationIcon />
                                     </Button>
-                                </div>
+                                </Link>
                             </Grid>
                         </Grid>
-                    </Box>
-                    <Box  style={{ margin: '30px 0'}}>
-                        <ExpansionPanel>
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1c-content"
-                                id="panel1c-header"
-                            >
-                                <div>
-                                    <Typography variant={"button"}><b>راهنما</b></Typography>
-                                </div>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Grid xs={12}>
-                                    <ul>
-                                        <li>موجودی نمایش داده شده موجودی کلی اتریبیوت های مختلف میباشد.</li>
-                                        <li>قیمت و تخفیف نمایش داده شده میانگین اتریبیوت های مختلف میباشد و جهت نمایش در صفحه فروشگاه میباشد.</li>
-                                        <li>در صورتی که محصول اتریبیوت تاثیرگذار در قیمت نداشته باشد میانگین قیمت و تخفیف همچنین موجودی برابر با قیمت واقعی محصول است.</li>
-                                    </ul>
-                                </Grid>
-                            </ExpansionPanelDetails>
-                            <Divider />
-                        </ExpansionPanel>
                     </Box>
                     <Box style={{ margin: '20px 0'}} boxShadow={0}>
                         <ExpansionPanel>
@@ -226,7 +173,7 @@ class ProductList extends Component {
                                 id="panel1c-header"
                             >
                                 <div>
-                                    <Typography><b>جستجو در لیست</b></Typography>
+                                    <Typography>جستجو در لیست</Typography>
                                 </div>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails >
@@ -234,11 +181,11 @@ class ProductList extends Component {
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             id="outlined-name"
-                                            label="کد محصول"
+                                            label="نام کاربر"
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='id'
+                                            name='name'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
@@ -247,65 +194,23 @@ class ProductList extends Component {
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
-                                            id="outlined-name"
-                                            label="نام محصول"
+                                            label="موبایل"
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='title'
+                                            name='mobile'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="برند"
-                                            value={this.state.filter.brand_id}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='brand_id'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            {this.state.brands.map((brand, index) => {
-                                                return(
-                                                    <MenuItem key={index + 1} value={brand.id}>{brand.title}</MenuItem>
-                                                );
-                                            })}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="موجودی"
-                                            value={this.state.filter.count}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='count'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>دارد</MenuItem>
-                                            <MenuItem key={2} value={0}>ندارد</MenuItem>
-                                        </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             select
                                             label="وضعیت"
-                                            value={this.state.filter.status}
                                             variant="filled"
+                                            value={this.state.filter.status}
                                             margin='dense'
                                             fullWidth
                                             name='status'
@@ -317,25 +222,6 @@ class ProductList extends Component {
                                             <MenuItem key={0} value={-1}>انتخاب</MenuItem>
                                             <MenuItem key={1} value={1}>فعال</MenuItem>
                                             <MenuItem key={2} value={0}>غیرفعال</MenuItem>
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12} sm={4} md={3} >
-                                        <TextField
-                                            select
-                                            label="تخفیف"
-                                            value={this.state.filter.discount}
-                                            variant="filled"
-                                            margin='dense'
-                                            fullWidth
-                                            name='discount'
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            onChange={this.handleChangeSearchInput.bind(this)}
-                                        >
-                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                            <MenuItem key={1} value={1}>دارد</MenuItem>
-                                            <MenuItem key={2} value={0}>ندارد</MenuItem>
                                         </TextField>
                                     </Grid>
                                 </Grid>
@@ -351,28 +237,27 @@ class ProductList extends Component {
                     <Box style={{ margin: '20px 0 0 0'}}>
                         <Grid container alignItems="center" >
                             <Grid item xs={4} sm={6}>
-                                <TextField
-                                    select
-                                    value={this.state.limit}
-                                    margin='dense'
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    onChange={this.handleChangeLimit.bind(this)}
-                                >
-                                    <MenuItem  value="10">10</MenuItem>
-                                    <MenuItem  value="20">20</MenuItem>
-                                    <MenuItem  value="30">30</MenuItem>
-                                    <MenuItem  value="50">50</MenuItem>
-                                    <MenuItem  value="100">100</MenuItem>
-                                    <MenuItem  value="200">200</MenuItem>
-                                </TextField>
+                                <FormControl>
+                                    <NativeSelect
+                                        value={this.state.limit}
+                                        onChange={this.handleChangeLimit.bind(this)}
+                                        name="age"
+                                        inputProps={{ 'aria-label': 'age' }}
+                                    >
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                    </NativeSelect>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <Pagination
                                     activePage={this.state.page}
-                                    itemsCountPerPage={this.state.entities.per_page}
-                                    totalItemsCount={this.state.entities.total}
+                                    itemsCountPerPage={this.state.entities && this.state.entities.per_page}
+                                    totalItemsCount={this.state.entities && this.state.entities.total}
                                     pageRangeDisplayed={5}
                                     onChange={this.handlePageChange.bind(this)}
                                 />
@@ -381,67 +266,41 @@ class ProductList extends Component {
                     </Box>
                     <Box>
                         <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
-                            <Tooltip title="افزودن">
-                                <Link to='/products/create'>
-                                <IconButton>
-                                    <AddCircleIcon />
-                                </IconButton>
-                                </Link>
-                            </Tooltip>
                             <Tooltip title="سینک">
                                 <IconButton onClick={() => this.handleRequest()} >
                                     <SyncIcon />
                                 </IconButton>
                             </Tooltip>
+                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) ?  <Tooltip title="افزودن">
+                                <Link to={'/blog/contents/create'}>
+                                <IconButton>
+                                    <AddCircleOutlineIcon />
+                                </IconButton>
+                                </Link>
+                            </Tooltip> : ''}
                         </div>
                         <div style={{ overflowX: 'auto'}}>
                             <table className='table'>
                                 <thead>
                                 <tr>
                                     <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('title')}>نام &nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('brand_id')}>برند &nbsp;{this.state.sort_field === 'brand_id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('count')}>موجودی&nbsp;{this.state.sort_field === 'count' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('price')}>قیمت&nbsp;{this.state.sort_field === 'price' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('discount')}>تخفیف&nbsp;{this.state.sort_field === 'discount' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('sales_number')}>تعداد فروش&nbsp;{this.state.sort_field === 'sales_number' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('title')}>عنوان&nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('visitor')}>بازدید&nbsp;{this.state.sort_field === 'visitor' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc' ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>) : <SortIcon/>}</th>
+                                    <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ایجاد&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th>عملیات</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.state.entities.data && this.state.entities.data.map((product, index) => {
+                                {this.state.entities.data  && this.state.entities.data.map((entity, index) => {
                                     return(
                                         <tr key={index}>
-                                            <td>{product.id}</td>
-                                            <td>{product.title}</td>
-                                            <td>{product.brand ? product.brand.title : '-'}</td>
-                                            <td>{product.count}</td>
-                                            <td>{product.price}</td>
-                                            <td>{product.discount}</td>
-                                            <td>{product.sales_number}</td>
+                                            <td>{entity.id}</td>
+                                            <td>{entity.title}</td>
+                                            <td>{entity.visitor}</td>
+                                            <td>{entity.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }</td>
+                                            <td>{entity.created_at}</td>
                                             <td>
-                                                <Tooltip title="تغییر وضعیت">
-                                                    <IconButton onClick={() => this.changeStatus(product.id, !product.status)}>
-                                                        {product.status === 1 ? <CheckCircleIcon color='primary' /> :  <RemoveCircleOutlineIcon color='secondary' /> }
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </td>
-                                            <td style={{ display:'flex', 'direction': 'row', justifyContent: 'center'}}>
-                                                <Tooltip title="تغییر قیمت و موجودی">
-                                                    <Link to={`/products/pins/${product.id}`}>
-                                                        <IconButton>
-                                                            <LocalOfferIcon />
-                                                        </IconButton>
-                                                    </Link>
-                                                </Tooltip>
-                                                <Tooltip title="ویرایش">
-                                                    <Link to={`/products/edit/${product.id}`}>
-                                                        <IconButton>
-                                                            <CreateIcon />
-                                                        </IconButton>
-                                                    </Link>
-                                                </Tooltip>
                                             </td>
                                         </tr>
                                     );
@@ -451,28 +310,29 @@ class ProductList extends Component {
                         </div>
                         <Pagination
                             activePage={this.state.page}
-                            itemsCountPerPage={this.state.entities.per_page}
-                            totalItemsCount={this.state.entities.total}
+                            itemsCountPerPage={this.state.entities && this.state.entities.per_page}
+                            totalItemsCount={this.state.entities && this.state.entities.total}
                             pageRangeDisplayed={5}
                             onChange={this.handlePageChange.bind(this)}
                         />
                     </Box>
                 </Container>
-                <Snackbar
-                    autoHideDuration={4500}
-                    open={this.state.snackbar.open}
-                    message={this.state.snackbar.msg}
-                    onClose={() => this.setState({snackbar:{open: false,msg: null}})}
-                />
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        auth: state.auth
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {}
 }
 
 export default connect(
     mapStateToProps,
-)(ProductList);
+    mapDispatchToProps
+)(BlogContent);

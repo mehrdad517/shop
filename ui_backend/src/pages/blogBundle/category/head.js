@@ -5,18 +5,18 @@ import Button from "@material-ui/core/Button";
 import NavigationIcon from "@material-ui/icons/Navigation";
 import {Box} from "@material-ui/core";
 
-class ProductCategoryHead extends Component {
+class BlogCategoryHead extends Component {
     render() {
         return (
             <Box style={{ margin: '10px 0 20px 0'}}>
                 <Grid container alignItems="center">
                     <Grid item xs={12} sm={6}>
-                        <h2>دسته بندی محصولات</h2>
-                        <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید محصولات را دسته بندی کرده و ویژگی های گروهی را تعیین نمایید.</p>
+                        <h2>دسته بندی مطالب وبلاگ</h2>
+                        <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید مطالب را دسته بندی کنید.</p>
                     </Grid>
                     <Grid item xs={12} sm={6} >
                         <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                            <Link to='/products'>
+                            <Link to='/blog/contents'>
                                 <Button variant="contained" color="default" >
                                     <NavigationIcon />
                                 </Button>
@@ -29,4 +29,4 @@ class ProductCategoryHead extends Component {
     }
 }
 
-export default ProductCategoryHead;
+export default BlogCategoryHead;

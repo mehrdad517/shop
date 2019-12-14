@@ -11,13 +11,16 @@ import IconButton from "@material-ui/core/IconButton";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Grid from "@material-ui/core/Grid";
 import Api from "../../../api";
+import {toast} from "react-toastify";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-class ProductCategoryCreate extends Component {
+class BlogCategoryCreate extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            loading: false,
             form: {
                 label: '',
             }
@@ -38,20 +41,33 @@ class ProductCategoryCreate extends Component {
     handleSubmit (event) {
         event.preventDefault();
 
-        this.api.createProductCategories({
+        this.setState({
+            loading: true
+        });
+
+        this.api.createBlogCategories({
             label: this.state.form.label,
             items: this.props.items
         }).then((response) => {
-            if (response.status) {
+            if (typeof response != "undefined") {
+
+                if (response.status) {
+                    toast.success(response.msg);
+                    this.props.handleRequest();
+                    this.setState({
+                        open: false,
+                        form:{
+                            label: ''
+                        }
+                    });
+
+                } else {
+                    toast.error(response.msg);
+                }
+
                 this.setState({
-                    open: false,
-                    form:{
-                        label: '',
-                    }
-                });
-                this.props.handleRequest();
-            } else {
-                this.props.handleSnackbar({open: true, msg: response.msg});
+                    loading: false
+                })
             }
         }).catch((error) => {
             console.log(error);
@@ -68,10 +84,11 @@ class ProductCategoryCreate extends Component {
                         <AddCircleOutlineIcon />
                     </IconButton>
                 </Tooltip>
-                <Dialog open={this.state.open} onClose={() => this.setState({ open: false })} aria-labelledby="form-dialog-title">
+                <Dialog fullWidth open={this.state.open} onClose={() => this.setState({ open: false })} aria-labelledby="form-dialog-title">
                     <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
                         <DialogTitle id="form-dialog-title">دسته بندی  جدید</DialogTitle>
                         <DialogContent>
+                            {this.state.loading && <CircularProgress size={15} color={"secondary"}  />}
                             <Grid container spacing={2}>
                                 <Grid item xs={12} >
                                     <TextField
@@ -84,6 +101,7 @@ class ProductCategoryCreate extends Component {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        helperText='با علامت , جدا کنید'
                                     />
                                 </Grid>
                             </Grid>
@@ -92,7 +110,7 @@ class ProductCategoryCreate extends Component {
                             <Button color="primary" onClick={() => this.setState({open: false})}>
                                 انصراف
                             </Button>
-                            <Button color="primary" autoFocus type='submit'>
+                            <Button disabled={this.state.loading} color="primary" autoFocus type='submit'>
                                 ارسال اطلاعات
                             </Button>
                         </DialogActions>
@@ -114,4 +132,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProductCategoryCreate);
+)(BlogCategoryCreate);

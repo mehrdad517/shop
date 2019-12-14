@@ -623,6 +623,100 @@ class Api {
         })
     }
 
+    // blog
+    async getBlogCategories() {
+        return axios.get('http://localhost:8000/api/backend/blog/categories', {
+            headers: this.haeders()
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async getBlogCategory(id) {
+        return axios.get('http://localhost:8000/api/backend/blog/categories/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async createBlogCategories(object) {
+        return axios.post('http://localhost:8000/api/backend/blog/categories', object ,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateBlogCategory(id, object) {
+        return axios.put('http://localhost:8000/api/backend/blog/categories/' + id, object,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    // blog content
+    async getContents(object) {
+        return axios.get('http://localhost:8000/api/backend/blog/contents/', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async getContent(id) {
+        return axios.get('http://localhost:8000/api/backend/blog/contents/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async postContent(object) {
+        return axios.post('http://localhost:8000/api/backend/blog/contents', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async putContent(id, object) {
+        return axios.put('http://localhost:8000/api/backend/blog/contents/' + id, object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async putContentStatus(id, object) {
+        return  axios.put(`http://localhost:8000/api/backend/blog/contents/${id}/status`, object, {
+            headers: this.haeders()
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
 
 }
 

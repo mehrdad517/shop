@@ -130,10 +130,10 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
         Route::get('/status', function () {
             $list = [
-              'order_status' => \App\Order::status(),
-              'transport_status' => \App\Order::transport(),
-              'delivery_status' => \App\Order::delivery(),
-              'items_status' => \App\Order::items(),
+                'order_status' => \App\Order::status(),
+                'transport_status' => \App\Order::transport(),
+                'delivery_status' => \App\Order::delivery(),
+                'items_status' => \App\Order::items(),
             ];
             return response($list);
         });
@@ -237,6 +237,31 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
 
 
+    Route::group([ 'prefix' => '/blog'], function () {
+
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\BlogCategoryController@index');
+            Route::post('/', 'Backend\BlogCategoryController@store');
+            Route::get('/{id}', 'Backend\BlogCategoryController@show');
+            Route::put('/{id}', 'Backend\BlogCategoryController@update');
+        });
+
+
+        Route::group(['prefix' => '/contents'], function () {
+            Route::get('/', 'Backend\BlogContentController@index');
+            Route::post('/', 'Backend\BlogContentController@store');
+            Route::get('/{id}', 'Backend\BlogContentController@show');
+            Route::put('/{id}', 'Backend\BlogContentController@update');
+            Route::put('/{id}/status', 'Backend\BlogContentController@changeStatus');
+        });
+    });
+
+
+
+
+
+
 
 });
 
@@ -304,7 +329,7 @@ Route::group(['prefix' => 'validation-code'], function () {
             $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
 
             $user->update([
-                'verify_code' => true,
+                'verify_account' => true,
                 'remember_token' => $token
             ]);
 

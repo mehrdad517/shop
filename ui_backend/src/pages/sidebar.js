@@ -150,23 +150,17 @@ class Sidebar extends Component {
                         <ListItemText primary="نقش ها و سطوح دسترسی" />
                     </ListItem> : ''}
                     <Divider/>
-                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                    <ListItem component={Link} onClick={this.handleClose} to='/blog/contents'>
                         <ListItemIcon>
                             <CollectionsBookmarkIcon />
                         </ListItemIcon>
                         <ListItemText primary="مدیریت محتوا" />
                     </ListItem>
-                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                    <ListItem component={Link} onClick={this.handleClose} to='/blog/categories'>
                         <ListItemIcon>
                             <AccountTreeIcon />
                         </ListItemIcon>
                         <ListItemText primary="دسته بندی مطالب" />
-                    </ListItem>
-                    <ListItem component={Link} onClick={this.handleClose} to='/'>
-                        <ListItemIcon>
-                            <PostAddIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="لندینگ پیج ها" />
                     </ListItem>
                     <Divider />
                     <ListItem component={Link} onClick={this.handleClose} to='/'>
