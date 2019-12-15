@@ -716,6 +716,25 @@ class Api {
         })
     }
 
+    /**
+     * File Attachment
+     * @returns {Promise<(function(*): void) | * | Promise<(function(*): void) | *>>}
+     */
+    async attachment(data) {
+        return axios.post('http://localhost:8000/api/attachment', data , {
+            headers: {
+                headers: {
+                    'Accept': 'application/json',
+                    'content-type':'multipart/form-data',
+                }
+            },
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
 
 
 }

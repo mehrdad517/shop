@@ -104,7 +104,10 @@ use App\Slider;
 //});
 
 
-
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Request-Method:*');
+header('Access-Control-Allow-Headers: Origin,token, Authorization, X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Credentials: true');
 
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
@@ -258,11 +261,13 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
     });
 
 
+});
 
+Route::post('/attachment', function (Request $request) {
 
+    $path = $request->file('file')->store('attachment', 'public');
 
-
-
+    return response()->json($path);
 });
 
 
@@ -431,5 +436,3 @@ Route::post('/change-profile', function (Request $request) {
     return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
 })->middleware('auth:api');
-
-

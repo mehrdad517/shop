@@ -25,7 +25,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import ImgUploader from "../../../component/ImgUploader";
+import FileUploader from "../../../component/FileUploader";
 
 
 class BlogContentCreate extends Component {
@@ -324,7 +324,7 @@ class BlogContentCreate extends Component {
                                                     console.log( { event, editor, data } );
                                                 } }
                                             />
-                                            <ImgUploader />
+                                            <FileUploader />
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
