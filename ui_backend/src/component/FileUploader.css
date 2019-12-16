@@ -1,0 +1,60 @@
+.gallery {
+    width: 100%;
+}
+.gallery-box {
+    width: 100%;
+    min-height: 260px;
+    background-color: rgba(0,0,0,.1);
+    display: flex;
+    justify-content:  center;
+    align-items: center;
+    color: #000000;
+    font-size: 17px;
+    border: 2px dashed rgb(12, 163, 255);
+    flex-wrap: wrap;
+}
+.img-box {
+    position: relative;
+    margin: 10px;
+    background-color: rgb(127, 127, 127);
+    border-radius: 10px;
+}
+.img-box-mask {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    top: 0;
+    position: absolute;
+    border-radius: 10px;
+    z-index: 999;
+}
+
+.img-box-progress {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999999;
+}
+.circle-progress {
+    position:  absolute !important;
+    top: -6px !important;
+    right: -6px !important;
+    z-index: 1
+}
+.input-file {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    width: 0;
+}
+img, video{
+    border-radius: 10px;
+}
+.remove-btn {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    color: #dcdcdc !important;
+    z-index: 99999999999;
+}
+

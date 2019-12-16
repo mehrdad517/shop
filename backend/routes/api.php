@@ -2,7 +2,7 @@
 
 use App\User;
 use Illuminate\Http\Request;
-use App\Slider;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -263,14 +263,7 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
 });
 
-Route::post('/attachment', function (Request $request) {
 
-//    dd($request->file('file'));
-    $path = $request->file('file')->store('attachment', 'public');
-
-
-    return response()->json(env('APP_URL') . '/storage/' . $path);
-});
 
 
 /* auth  */
@@ -438,3 +431,26 @@ Route::post('/change-profile', function (Request $request) {
     return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
 })->middleware('auth:api');
+
+
+
+Route::group(['prefix' => 'attachment'], function () {
+
+    Route::post('/', function (Request $request) {
+
+        $path = $request->file('file')->store('attachment', 'public');
+
+        return response()->json(['address' => env('APP_URL') . '/storage/' . $path, 'name' => last(explode('/', $path))]);
+
+    });
+
+    Route::delete('/', function (Request $request) {
+
+        $r = Storage::delete('attachment/' . $request->get('file'));
+
+       return response()->json(['status' => $r]);
+    });
+
+
+});
+

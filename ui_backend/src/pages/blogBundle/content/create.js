@@ -45,7 +45,8 @@ class BlogContentCreate extends Component {
                 meta_title: '',
                 meta_description: '',
                 content: '',
-            }
+            },
+            file:[]
         };
 
         this.api = new Api();
@@ -98,32 +99,7 @@ class BlogContentCreate extends Component {
 
     render() {
 
-        const save = (state) => {
-            console.log(state.getCurrentContent())
-        }
-
-        const MyHashTagDecorator = (props) => {
-            console.log('xxxx');
-            const hashtagUrl = "http://myurl/" + props.decoratedText
-            return (
-                <a
-                    href={hashtagUrl}
-                    style={{
-                        color: "green"
-                    }}
-                >
-                    {props.children}
-                </a>
-            )
-        }
-
-        const MyBlock = (props) => {
-            return (
-                <h1>
-                    {props.children}
-                </h1>
-            )
-        }
+        console.log(this.state)
 
         return (
             <div className='content'>
@@ -340,7 +316,12 @@ class BlogContentCreate extends Component {
                                     <Typography><b>گالری تصاویر</b></Typography>
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
-                                     <FileUploader />
+                                    <FileUploader
+                                        multiple={true}
+                                        width={200}
+                                        height={200}
+                                        onComplete={(files) => this.setState({files})}
+                                    />
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
                                     <Divider/>
