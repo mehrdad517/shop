@@ -24,6 +24,11 @@ const theme = createMuiTheme({
                 fontFamily: 'Shabnam',
             }
         },
+        MuiFab: {
+            root: {
+                fontFamily: 'Shabnam'
+            }
+        },
         // Style sheet name ⚛️
         MuiButton: {
             // Name of the rule

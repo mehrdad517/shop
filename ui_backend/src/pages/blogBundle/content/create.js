@@ -312,21 +312,35 @@ class BlogContentCreate extends Component {
                                                     shrink: true,
                                                 }}
                                             />
-                                            <CKEditor
-                                                config={{
-                                                    language: 'fa',
-                                                    direction: 'rtl',
-                                                }}
-                                                editor={ ClassicEditor }
-                                                data="<p>Hello from CKEditor 5!</p>"
-                                                onChange={ ( event, editor ) => {
-                                                    const data = editor.getData();
-                                                    console.log( { event, editor, data } );
-                                                } }
-                                            />
-                                            <FileUploader />
+                                            {/*<CKEditor*/}
+                                            {/*    config={{*/}
+                                            {/*        language: 'fa',*/}
+                                            {/*        direction: 'rtl',*/}
+                                            {/*    }}*/}
+                                            {/*    editor={ ClassicEditor }*/}
+                                            {/*    data="<p>Hello from CKEditor 5!</p>"*/}
+                                            {/*    onChange={ ( event, editor ) => {*/}
+                                            {/*        const data = editor.getData();*/}
+                                            {/*        console.log( { event, editor, data } );*/}
+                                            {/*    } }*/}
+                                            {/*/>*/}
                                         </Grid>
                                     </Grid>
+                                </ExpansionPanelDetails>
+                                <ExpansionPanelActions>
+                                    <Divider/>
+                                </ExpansionPanelActions>
+                            </ExpansionPanel>
+                            <ExpansionPanel >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel4bh-content"
+                                    id="panel4bh-header"
+                                >
+                                    <Typography><b>گالری تصاویر</b></Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                     <FileUploader />
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
                                     <Divider/>

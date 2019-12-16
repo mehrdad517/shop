@@ -265,9 +265,11 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
 Route::post('/attachment', function (Request $request) {
 
+//    dd($request->file('file'));
     $path = $request->file('file')->store('attachment', 'public');
 
-    return response()->json($path);
+
+    return response()->json(env('APP_URL') . '/storage/' . $path);
 });
 
 
