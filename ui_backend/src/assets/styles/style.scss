@@ -3,9 +3,20 @@
 body {
     font-size: 12px;
     background-color: #f2f3f5;
-    font-family: 'Shabnam', sans-serif;
+    font-family: 'Shabnam', sans-serif !important;
     margin: 0;
     padding: 0;
+}
+.content body{
+    font-family: 'Shabnam', sans-serif !important;
+    text-align: right;
+}
+.mce-content-body{
+    font-family: 'Shabnam', sans-serif !important;
+    direction: rtl !important;
+}
+.tox-toolbar-overlord, .tox-toolbar__primary{
+    justify-content: flex-end !important;
 }
 .rdw-dropdown-carettoopen{
     left: 10% !important;

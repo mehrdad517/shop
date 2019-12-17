@@ -433,24 +433,56 @@ Route::post('/change-profile', function (Request $request) {
 })->middleware('auth:api');
 
 
-
+/*
+ |--------------------------------------------------------------------------
+ |  All File And Media Router
+ |--------------------------------------------------------------------------
+ */
 Route::group(['prefix' => 'attachment'], function () {
-
+    /*
+     | Store File In Attachment Directory
+     | This Directory Contain All Media
+     | Before Insert In DataBase
+     | Original File Save
+     | Past Parameters Are file,Directory
+     */
     Route::post('/', function (Request $request) {
 
-        $path = $request->file('file')->store('attachment', 'public');
+        // Check File Mime Type
+        if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
+            // Image Size Larger Than 1MB
+            if ($request->file('file')->getSize() / 1024 > 1000) {
+                return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 1 مگابایت است']);
+            }
+            //Video Check Mime Type
+        }
+        elseif (in_array($request->file('file')->getMimeType(), ['video/mp4'])) {
+            if ($request->file('file')->getSize() / 1024 > 10000) {
+                return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 10 مگابایت است']);
+            }
+        }
+        else { // Other Format is InValid
+            return response()->json(['status' => false, 'msg' => 'فرمت غیر مجاز است.']);
+        }
+        // With Storage Laravel File System Save File In Attachment Directory
+        $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
 
-        return response()->json(['address' => env('APP_URL') . '/storage/' . $path, 'name' => last(explode('/', $path))]);
-
+        return response()->json(['address' => env('APP_URL') . '/storage/' . $path , 'name' => 'baz.jpg']);
     });
 
+    /**
+     | Delete Files From Storage
+     | Past Parameters Are file,Directory
+     */
     Route::delete('/', function (Request $request) {
+        // File with Address or Http etc ...
+        $file = last(explode('/', $request->get('file')));
 
-        $r = Storage::delete('attachment/' . $request->get('file'));
+        // Directory Find
+        $status = Storage::delete( ($request->has('directory') ? $request->get('directory') : 'attachment') .  '/' . $file);
 
-       return response()->json(['status' => $r]);
+        // Status Delete File True Or False
+        return response()->json(['status' => $status]);
     });
-
-
 });
 

@@ -30,6 +30,12 @@ class FileUploader extends Component {
 
         for (let i = 0; i < event.target.files.length ; i++) {
 
+            /* File extension that accepted */
+            const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
+
+            /* Video format accepted */
+            const validVideoTypes = ['video/mp4'];
+
             /* Init State */
             files[i + counter] = {
                 'percent': 0,
@@ -39,18 +45,24 @@ class FileUploader extends Component {
                 'collection': true
             };
 
-            /* File extension that accepted */
-            const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/jpg'];
-
-            /* Video format accepted*/
-            const validVideoTypes = ['video/mp4'];
-
             if (validImageTypes.includes(event.target.files[i].type)) {
                 files[i + counter]['tag'] = 'img';
+                if ((event.target.files[i].size / 1024) > 1000) {
+                    toast.error('حداکثر حجم عکس 1 مگابایت است.');
+                    delete files[i + counter];
+                    return ;
+                }
+
             } else if (validVideoTypes.includes(event.target.files[i].type)) {
                 files[i + counter]['tag'] = 'video';
+                if ((event.target.files[i].size) > 10000) {
+                    toast.error('حداکثر حجم ویدئو 10 مگابایت است.');
+                    delete files[i + counter];
+                    return ;
+                }
             } else {
                 toast.error('فرمت فایل نامعتبر است.');
+                delete files[i + counter];
                 return false;
             }
 
@@ -69,7 +81,6 @@ class FileUploader extends Component {
 
             /* Send Post Request To Server */
             axios.post('http://localhost:8000/api/attachment', form_data, {
-
                 onUploadProgress: (e) => {
                     const done = e.loaded;
                     const total = e.total;
@@ -136,26 +147,15 @@ class FileUploader extends Component {
     handleUnlinkFile(event, index) {
         event.preventDefault();
         let files = this.state.files;
-        axios.delete('http://localhost:8000/api/attachment', {
-            params : { 'file': files[index].name},
-            headers: {
-                headers: {
-                    'Accept': 'application/json',
-                }
-            },
-        }).then((response) => {
+        this.api.unlink({file: files[index].name}).then((response) => {
             if (typeof response != "undefined") {
-                if (response.data.status === true) {
+                if (response.status === true) {
                     delete files[index];
                     this.setState({
                         files
                     });
-
-
                     this.props.onComplete(files);
-
                     toast.success('فایل با موفقیت حذف گزدید');
-
                 } else {
                     toast.error('خطایی رخ داده است.');
                 }
@@ -189,7 +189,7 @@ class FileUploader extends Component {
                     })}
                     {this.state.files.length === 0 && <span>انتخاب فایل</span>}
                 </label>
-                <input className='input-file' id='upload' type="file" onChange={(event) => this.handleSelectedFiles(event)} multiple={true}/>
+                <input accept="image/x-png,image/gif,image/jpeg" className='input-file' id='upload' type="file" onChange={(event) => this.handleSelectedFiles(event)} multiple={true}/>
             </div>
         );
     }

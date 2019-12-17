@@ -24,8 +24,8 @@ import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileUploader from "../../../component/FileUploader";
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { Editor } from '@tinymce/tinymce-react';
+import TextEditor from "../../../component/TextEditor/TextEditor";
 class BlogContentCreate extends Component {
 
     constructor(props) {
@@ -95,27 +95,6 @@ class BlogContentCreate extends Component {
 
     }
 
-    uploadImageCallBack(file) {
-
-        return new Promise(
-            (resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://localhost:8000/api/attachment');
-                xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
-                const data = new FormData();
-                data.append('file', file);
-                xhr.send(data);
-                xhr.addEventListener('load', () => {
-                    const response = JSON.parse(xhr.responseText);
-                    resolve({data  : {link: response.address}});
-                });
-                xhr.addEventListener('error', () => {
-                    const error = JSON.parse(xhr.responseText);
-                    reject(error);
-                });
-            }
-        );
-    }
 
     render() {
 
@@ -295,27 +274,7 @@ class BlogContentCreate extends Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item xs={12} >
-                                            <Editor
-                                                toolbarClassName="toolbarClassName"
-                                                wrapperClassName="wrapperClassName"
-                                                editorClassName="editorClassName"
-                                                toolbar={{
-                                                    inline: { inDropdown: true },
-                                                    list: { inDropdown: true },
-                                                    textAlign: { inDropdown: true },
-                                                    link: { inDropdown: true },
-                                                    history: { inDropdown: true },
-                                                    remove: { className: undefined, component: undefined },
-                                                    image: { uploadCallback: this.uploadImageCallBack,
-                                                        alt: { present: false, mandatory: false } ,
-                                                        previewImage: true,
-                                                        inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-                                                        urlEnabled: true,
-                                                        uploadEnabled: true,
-                                                        alignmentEnabled: true,
-                                                        }
-                                                }}
-                                            />
+                                            <TextEditor onChange={(value) => this.setState({ content : value})} />
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>

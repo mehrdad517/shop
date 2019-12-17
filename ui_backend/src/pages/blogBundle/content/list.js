@@ -29,6 +29,7 @@ import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCh
 import Api from "../../../api";
 import {Link} from "react-router-dom";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { Editor } from '@tinymce/tinymce-react';
 
 class BlogContent extends Component {
 

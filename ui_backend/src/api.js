@@ -717,6 +717,30 @@ class Api {
     }
 
 
+    /* Attachment File, Image video etc ... */
+
+    async attachment(object) {
+        return axios.post('http://localhost:8000/api/attachment', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async unlink(params) {
+        return axios.delete('http://localhost:8000/api/attachment', {
+            params : params,
+            headers: this.haeders(),
+        }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+
 
 
 }
