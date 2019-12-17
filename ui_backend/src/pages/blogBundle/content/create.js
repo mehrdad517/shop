@@ -23,11 +23,9 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import FileUploader from "../../../component/FileUploader";
-
-
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 class BlogContentCreate extends Component {
 
     constructor(props) {
@@ -37,6 +35,7 @@ class BlogContentCreate extends Component {
             checked: [], // tree checked or edit or  show
             expanded: [], // expanded tree
             categories : [], // categories tree
+            files:[],
             form: {
                 title: '',
                 code: '',
@@ -46,7 +45,6 @@ class BlogContentCreate extends Component {
                 meta_description: '',
                 content: '',
             },
-            file:[]
         };
 
         this.api = new Api();
@@ -95,6 +93,28 @@ class BlogContentCreate extends Component {
             console.log(error);
         })
 
+    }
+
+    uploadImageCallBack(file) {
+
+        return new Promise(
+            (resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8000/api/attachment');
+                xhr.setRequestHeader('Authorization', 'Client-ID XXXXX');
+                const data = new FormData();
+                data.append('file', file);
+                xhr.send(data);
+                xhr.addEventListener('load', () => {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve({data  : {link: response.address}});
+                });
+                xhr.addEventListener('error', () => {
+                    const error = JSON.parse(xhr.responseText);
+                    reject(error);
+                });
+            }
+        );
     }
 
     render() {
@@ -275,31 +295,27 @@ class BlogContentCreate extends Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item xs={12} >
-                                            <TextField
-                                                label="توضیح کامل"
-                                                variant="filled"
-                                                margin='dense'
-                                                multiline
-                                                value={this.state.form.content}
-                                                fullWidth
-                                                name='content'
-                                                onChange={this.handleChangeElement.bind(this)}
-                                                InputLabelProps={{
-                                                    shrink: true,
+                                            <Editor
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                toolbar={{
+                                                    inline: { inDropdown: true },
+                                                    list: { inDropdown: true },
+                                                    textAlign: { inDropdown: true },
+                                                    link: { inDropdown: true },
+                                                    history: { inDropdown: true },
+                                                    remove: { className: undefined, component: undefined },
+                                                    image: { uploadCallback: this.uploadImageCallBack,
+                                                        alt: { present: false, mandatory: false } ,
+                                                        previewImage: true,
+                                                        inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                                                        urlEnabled: true,
+                                                        uploadEnabled: true,
+                                                        alignmentEnabled: true,
+                                                        }
                                                 }}
                                             />
-                                            {/*<CKEditor*/}
-                                            {/*    config={{*/}
-                                            {/*        language: 'fa',*/}
-                                            {/*        direction: 'rtl',*/}
-                                            {/*    }}*/}
-                                            {/*    editor={ ClassicEditor }*/}
-                                            {/*    data="<p>Hello from CKEditor 5!</p>"*/}
-                                            {/*    onChange={ ( event, editor ) => {*/}
-                                            {/*        const data = editor.getData();*/}
-                                            {/*        console.log( { event, editor, data } );*/}
-                                            {/*    } }*/}
-                                            {/*/>*/}
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
