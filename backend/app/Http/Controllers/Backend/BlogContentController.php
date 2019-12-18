@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\BlogContent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BlogContentController extends Controller
 {
@@ -41,16 +42,13 @@ class BlogContentController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
             $validator = \Validator::make($request->all(), [
                 'title' => 'required',
-                'code' => 'required',
-                'brand_id' => 'required'
-            ], [
-                'title.required' => 'عنوان نمیتواند خالی باشد.',
-                'code.required' => 'کد محصول نمیتواند خالی باشد.',
-                'brand_id' => 'برند را وارد نکرده اید.'
+                'content' => 'required',
+                'meta_title' => 'required',
+                'meta_description' => 'required',
+                'slug' => 'required|unique:blog_content',
             ]);
 
             if ($validator->fails()) {
@@ -66,29 +64,29 @@ class BlogContentController extends Controller
 
             $result = BlogContent::firstOrCreate([
                 'title' => $request->get('title'),
-                'content' => $request->get('content'),
-                'brand_id' => $request->get('brand_id') != 0 ?? null,
-                'code' => $request->get('code'),
-                'price' => $request->get('price'),
-                'status' => $request->get('status'),
                 'slug' => $request->get('slug'),
+                'content' => $request->get('content'),
                 'meta_title' => $request->get('meta_title'),
                 'meta_description' => $request->get('meta_description'),
+                'status' => $request->get('status'),
+                'created_by' => Auth::id()
             ]);
 
             $result->categories()->detach();
             $result->categories()->attach($request->get('categories'));
-            if ($request->has('attributes')) {
-                foreach ($request->get('attributes') as $item) {
-                    if ($item['value']) {
-                        $result->attributes()->attach($item['id'], [
-                            'value' => $item['value'],
-                            'order' => $item['order'],
-                            'main' => $item['main']
-                        ]);
-                    }
+
+
+            foreach ($request->get('files')  as $file) {
+                if ($file) {
+                    $result->files()->create([
+                        'created_by' => Auth::id(),
+                        'path' => $file['address'],
+                        'collection' => $file['collection']
+                    ]);
                 }
+
             }
+
 
             if ($result) {
                 return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.', 'result' => $result], 200);
@@ -151,12 +149,12 @@ class BlogContentController extends Controller
             return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        if ($request->get('slug')) {
+      /*  if ($request->get('slug')) {
             $slug = BlogContent::where('slug', $request->get('slug'))->where('id', '<>', $id)->count();
             if ($slug > 0) {
                 return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
             }
-        }
+        }*/
         $result = BlogContent::updateOrCreate(['id' => $id], [
             'title' => $request->get('title'),
             'content' => $request->get('content'),

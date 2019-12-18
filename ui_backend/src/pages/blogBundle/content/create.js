@@ -80,11 +80,12 @@ class BlogContentCreate extends Component {
     handleSubmit (event) {
         event.preventDefault();
         this.state.form['categories'] = this.state.checked;
-        this.api.createProduct(this.state.form).then((response) => {
+        this.state.form['files'] = this.state.files;
+        this.api.postContent(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
-                    this.props.history.push('/products');
+                    this.props.history.push('/blog/contents')
                 } else {
                     toast.error(response.msg);
                 }
@@ -185,7 +186,7 @@ class BlogContentCreate extends Component {
                                                 nodes={this.state.categories}
                                                 checked={this.state.checked}
                                                 expanded={this.state.expanded}
-                                                onCheck={checked => this.handleChangeCategory(checked)}
+                                                onCheck={checked => this.setState({checked})}
                                                 onExpand={expanded => this.setState({ expanded })}
                                                 noCascade={true}
                                                 icons={{
@@ -274,7 +275,13 @@ class BlogContentCreate extends Component {
                                 <ExpansionPanelDetails>
                                     <Grid container>
                                         <Grid item xs={12} >
-                                            <TextEditor onChange={(value) => this.setState({ content : value})} />
+                                            <TextEditor onChange={(value) => {
+                                             let form = this.state.form;
+                                             form['content'] = value;
+                                             this.setState({
+                                                 form
+                                             })
+                                            }} />
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>

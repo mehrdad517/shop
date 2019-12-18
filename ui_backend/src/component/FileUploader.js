@@ -78,6 +78,7 @@ class FileUploader extends Component {
             const form_data = new FormData();
             /* Append New File */
             form_data.append('file', event.target.files[i]);
+            form_data.append('directory', 'attachment');
 
             /* Send Post Request To Server */
             axios.post('http://localhost:8000/api/attachment', form_data, {

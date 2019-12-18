@@ -106,11 +106,10 @@ use Illuminate\Support\Facades\Storage;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Request-Method:*');
-header('Access-Control-Allow-Headers: Origin,token, Authorization, X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Headers: Origin,token, Authorization, X-Requested-With, Content-Type, Accept, Content-Disposition, Content-Length');
 header('Access-Control-Allow-Credentials: true');
 
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
-
 
     Route::group(['prefix' => 'filter'], function () {
         Route::get('/users', function (Request $request) {
@@ -270,7 +269,6 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
 Route::post('/login', 'Auth\LoginController@login');
 Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
-
 Route::group(['prefix' => 'validation-code'], function () {
     Route::post('/send', function (Request $request) {
 
@@ -380,7 +378,6 @@ Route::group(['prefix' => 'validation-code'], function () {
         }
     });
 });
-
 Route::post('/change-password', function (Request $request) {
 
     $validator = \Validator::make($request->all(), [
@@ -434,18 +431,19 @@ Route::post('/change-profile', function (Request $request) {
 
 
 /*
- |--------------------------------------------------------------------------
+ |-------------------------------------------------------------------------
  |  All File And Media Router
  |--------------------------------------------------------------------------
+ |
+ | Store File In Attachment Directory
+ | This Directory Contain All Media
+ | Before Insert In DataBase
+ | Original File Save
+ | Past Parameters Are file,Directory
+ |
  */
 Route::group(['prefix' => 'attachment'], function () {
-    /*
-     | Store File In Attachment Directory
-     | This Directory Contain All Media
-     | Before Insert In DataBase
-     | Original File Save
-     | Past Parameters Are file,Directory
-     */
+
     Route::post('/', function (Request $request) {
 
         // Check File Mime Type
@@ -467,7 +465,7 @@ Route::group(['prefix' => 'attachment'], function () {
         // With Storage Laravel File System Save File In Attachment Directory
         $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
 
-        return response()->json(['address' => env('APP_URL') . '/storage/' . $path , 'name' => 'baz.jpg']);
+        return response()->json(['address' => env('APP_URL') . '/storage/' . $path , 'name' => last(explode('/', $path))]);
     });
 
     /**

@@ -15,4 +15,6 @@ class BlogCategory extends Model
 
     protected $fillable=['label'];
 
+
+
 }

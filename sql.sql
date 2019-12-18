@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Host:                         localhost
+-- Host:                         127.0.0.1
 -- Server version:               10.3.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             10.3.0.5771
@@ -52,6 +52,48 @@ CREATE TABLE IF NOT EXISTS `attachment` (
 /*!40000 ALTER TABLE `attachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `attachment` ENABLE KEYS */;
 
+-- Dumping structure for table 517_shop.blog_categories
+CREATE TABLE IF NOT EXISTS `blog_categories` (
+  `content_id` bigint(20) unsigned NOT NULL,
+  `category_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`content_id`,`category_id`),
+  KEY `FK_blog_categories_blog_category` (`category_id`),
+  CONSTRAINT `FK_blog_categories_blog_category` FOREIGN KEY (`category_id`) REFERENCES `blog_category` (`value`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_blog_categories_blog_content` FOREIGN KEY (`content_id`) REFERENCES `blog_content` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table 517_shop.blog_categories: ~3 rows (approximately)
+/*!40000 ALTER TABLE `blog_categories` DISABLE KEYS */;
+INSERT INTO `blog_categories` (`content_id`, `category_id`) VALUES
+	(2, 5),
+	(3, 5),
+	(4, 5),
+	(5, 5),
+	(6, 5),
+	(7, 5),
+	(8, 5),
+	(9, 5),
+	(10, 5),
+	(11, 5),
+	(12, 5),
+	(13, 5),
+	(14, 5),
+	(15, 5),
+	(16, 5),
+	(17, 5),
+	(18, 5),
+	(19, 5),
+	(20, 5),
+	(21, 5),
+	(22, 5),
+	(23, 5),
+	(24, 5),
+	(25, 5),
+	(26, 5),
+	(27, 5),
+	(28, 5);
+/*!40000 ALTER TABLE `blog_categories` ENABLE KEYS */;
+
 -- Dumping structure for table 517_shop.blog_category
 CREATE TABLE IF NOT EXISTS `blog_category` (
   `value` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -70,61 +112,63 @@ CREATE TABLE IF NOT EXISTS `blog_category` (
   KEY `_lft` (`_lft`),
   KEY `_rgt` (`_rgt`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.blog_category: ~27 rows (approximately)
+-- Dumping data for table 517_shop.blog_category: ~1 rows (approximately)
 /*!40000 ALTER TABLE `blog_category` DISABLE KEYS */;
 INSERT INTO `blog_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
-	(5, 'محصولات گیاهی', NULL, NULL, NULL, 1, 1, 38, NULL, '2019-12-14 07:14:24', '2019-12-14 07:45:09'),
-	(6, 'محصولات گیاهی', 'اسلاگ_من', NULL, NULL, 1, 2, 15, 5, '2019-12-14 07:14:51', '2019-12-14 07:30:27'),
-	(7, 'محصولات گیاهی', NULL, NULL, NULL, 1, 3, 8, 6, '2019-12-14 07:43:55', '2019-12-14 07:43:55'),
-	(8, 'محصولات گیاهی', NULL, NULL, NULL, 1, 16, 21, 5, '2019-12-14 07:45:31', '2019-12-14 07:45:31'),
-	(9, 'zzzz', NULL, NULL, NULL, 1, 22, 23, 5, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
-	(10, 'zzzz', NULL, NULL, NULL, 1, 9, 10, 6, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
-	(11, 'zzzz', NULL, NULL, NULL, 1, 4, 5, 7, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
-	(12, 'zzzz', NULL, NULL, NULL, 1, 17, 18, 8, '2019-12-14 07:47:35', '2019-12-14 07:47:35'),
-	(13, 'yyyyy', NULL, NULL, NULL, 1, 24, 25, 5, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
-	(14, 'yyyyy', NULL, NULL, NULL, 1, 11, 12, 6, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
-	(15, 'yyyyy', NULL, NULL, NULL, 1, 6, 7, 7, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
-	(16, 'yyyyy', NULL, NULL, NULL, 1, 19, 20, 8, '2019-12-14 07:50:59', '2019-12-14 07:50:59'),
-	(17, 'محصولات گیاهی', NULL, NULL, NULL, 1, 26, 27, 5, '2019-12-14 07:51:48', '2019-12-14 07:51:48'),
-	(18, 'محصولات گیاهی', NULL, NULL, NULL, 1, 28, 29, 5, '2019-12-14 07:53:29', '2019-12-14 07:53:29'),
-	(19, 'zzzzzzzzzzzzzzzzz', NULL, NULL, NULL, 1, 30, 37, 5, '2019-12-14 07:53:36', '2019-12-14 07:53:36'),
-	(20, 'zzzzzzzzzzzzzzzzz', NULL, NULL, NULL, 1, 13, 14, 6, '2019-12-14 07:53:36', '2019-12-14 07:53:36'),
-	(21, 'q', NULL, NULL, NULL, 1, 31, 34, 19, '2019-12-14 07:54:50', '2019-12-14 07:54:50'),
-	(22, 'yyyyy', NULL, NULL, NULL, 1, 35, 36, 19, '2019-12-14 07:55:07', '2019-12-14 07:55:07'),
-	(23, 'yyyyy', NULL, NULL, NULL, 1, 32, 33, 21, '2019-12-14 07:55:07', '2019-12-14 07:55:07'),
-	(24, 'محصولات گیاهی', 'اسلاگ_منd', NULL, NULL, 1, 39, 42, NULL, '2019-12-14 07:56:44', '2019-12-14 07:57:10'),
-	(25, 'yyyyy', 'اسلاگ_منsssss', NULL, NULL, 1, 40, 41, 24, '2019-12-14 07:59:47', '2019-12-14 08:04:48'),
-	(26, 'دسته 1', NULL, NULL, NULL, 1, 43, 44, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
-	(27, 'دسته 2', NULL, NULL, NULL, 1, 45, 46, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
-	(28, ' دسته 3', NULL, NULL, NULL, 1, 47, 54, NULL, '2019-12-14 08:15:18', '2019-12-14 08:15:18'),
-	(29, 'دسته 1', NULL, NULL, NULL, 1, 48, 49, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51'),
-	(30, 'دسته 2', NULL, NULL, NULL, 1, 50, 51, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51'),
-	(31, 'دسته 3', NULL, NULL, NULL, 1, 52, 53, 28, '2019-12-14 08:15:51', '2019-12-14 08:15:51');
+	(5, 'دسته بندی محصولات', NULL, NULL, NULL, 1, 1, 2, NULL, '2019-12-16 17:12:50', '2019-12-16 17:12:50');
 /*!40000 ALTER TABLE `blog_category` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.blog_content
 CREATE TABLE IF NOT EXISTS `blog_content` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `created_by` bigint(20) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `meta_title` varchar(255) COLLATE utf8_persian_ci NOT NULL,
   `meta_description` varchar(255) COLLATE utf8_persian_ci NOT NULL,
-  `content` text COLLATE utf8_persian_ci DEFAULT NULL,
+  `content` text COLLATE utf8_persian_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
-  `visitor` bigint(20) NOT NULL DEFAULT 1,
+  `visitor` bigint(20) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `FK_blog_content_users` (`created_by`),
   CONSTRAINT `FK_blog_content_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_persian_ci;
 
--- Dumping data for table 517_shop.blog_content: ~0 rows (approximately)
+-- Dumping data for table 517_shop.blog_content: ~3 rows (approximately)
 /*!40000 ALTER TABLE `blog_content` DISABLE KEYS */;
+INSERT INTO `blog_content` (`id`, `slug`, `created_by`, `title`, `meta_title`, `meta_description`, `content`, `status`, `visitor`, `created_at`, `updated_at`) VALUES
+	(2, 'samsung', 2, 'سوپر ادمین', 'sdfsdf', 'عنوان تستی', '<p>asdadasdad</p>', 1, 0, '2019-12-17 19:33:26', '2019-12-17 19:33:26'),
+	(3, 'sdfsdfsdf', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', '<p>asdasdadadasdasd</p>', 1, 0, '2019-12-17 19:37:51', '2019-12-17 19:37:51'),
+	(4, 'ddddddf', 2, 'مناسب برای', 'sdfsdf', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', '<p>sadasdasda</p>', 1, 0, '2019-12-17 19:39:38', '2019-12-17 19:39:38'),
+	(5, 'wq', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:22:46', '2019-12-17 20:22:46'),
+	(6, 'wqdddd', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:23:33', '2019-12-17 20:23:33'),
+	(7, 'wqddddssss', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:25:42', '2019-12-17 20:25:42'),
+	(8, 'wqddddsssshhhh', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:32:10', '2019-12-17 20:32:10'),
+	(9, 'wqddddsssshhhhrtyryr', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:34:56', '2019-12-17 20:34:56'),
+	(10, 'wqddddsssshhhhrtyryr666', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:35:06', '2019-12-17 20:35:06'),
+	(11, 'wqddddsssshhhhrtyryr666yyyy', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 20:35:40', '2019-12-17 20:35:40'),
+	(12, 'wqddddsssshhhhrtyryr666yyyyRRR', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:34:39', '2019-12-17 21:34:39'),
+	(13, 'wqddddsssshhhhrtyryr666yyyyRRRrrr', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:37:05', '2019-12-17 21:37:05'),
+	(14, 'ww', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:39:29', '2019-12-17 21:39:29'),
+	(15, 'wweee', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:39:57', '2019-12-17 21:39:57'),
+	(16, 'wweeeqqq', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:40:16', '2019-12-17 21:40:16'),
+	(17, 'wweeeqqqrrrr', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:40:33', '2019-12-17 21:40:33'),
+	(18, 'wweeeqqqrrrrqwqw', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:41:07', '2019-12-17 21:41:07'),
+	(19, '67676', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:41:55', '2019-12-17 21:41:55'),
+	(20, '67676rt', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:43:01', '2019-12-17 21:43:01'),
+	(21, '67676rtere', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:43:53', '2019-12-17 21:43:53'),
+	(22, '67676rtereqwqw', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:44:09', '2019-12-17 21:44:09'),
+	(23, '67676rtereqwqwwewe', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:45:01', '2019-12-17 21:45:01'),
+	(24, '67676rtereqwqwweweerer', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:45:50', '2019-12-17 21:45:50'),
+	(25, '67676rtereqwqwweweererfrtrtr', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:46:12', '2019-12-17 21:46:12'),
+	(26, 'rtrttrtr', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>dasdadaadadasdasdadssdd</p>', 1, 0, '2019-12-17 21:46:53', '2019-12-17 21:46:53'),
+	(27, 'apple', 2, 'سوپر ادمین', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', '<p>sfsfsdf</p>', 1, 0, '2019-12-17 21:48:09', '2019-12-17 21:48:09'),
+	(28, 'applet', 2, 'trtrtrt', 'کرم مرطوب کننده تیوپی حاوی روغن زیتون 100 میل', 'عنوان تستی', '<p>rtrtrt</p>', 1, 0, '2019-12-17 21:50:22', '2019-12-17 21:50:22');
 /*!40000 ALTER TABLE `blog_content` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.brand
@@ -190,7 +234,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
 -- Dumping data for table 517_shop.domain: ~0 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
 INSERT INTO `domain` (`key`, `name`, `meta_title`, `meta_description`, `introduce`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `status`, `created_at`, `updated_at`) VALUES
-	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 0, 0, 0, 1, 1, 1, 1, 1, '2019-12-07 10:11:41', '2019-12-14 08:12:48');
+	('localhost:3000', '21212121', 'dfdfd', 'تینساسباسی', 'نسیاتنسابسکنیمب', 1, 1, 0, 1, 0, 0, 0, 1, '2019-12-07 10:11:41', '2019-12-13 15:58:52');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_communication_channel
@@ -281,6 +325,49 @@ BEGIN
 	order by permission.created_at ASC;
 END//
 DELIMITER ;
+
+-- Dumping structure for table 517_shop.file
+CREATE TABLE IF NOT EXISTS `file` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `fileable_id` bigint(20) NOT NULL,
+  `fileable_type` varchar(50) NOT NULL,
+  `created_by` bigint(20) unsigned NOT NULL,
+  `extention` enum('image','video') NOT NULL DEFAULT 'image',
+  `path` varchar(255) NOT NULL,
+  `collection` tinyint(4) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fileable_id` (`fileable_id`),
+  KEY `fileable_type` (`fileable_type`),
+  KEY `FK_file_users` (`created_by`),
+  CONSTRAINT `FK_file_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table 517_shop.file: ~0 rows (approximately)
+/*!40000 ALTER TABLE `file` DISABLE KEYS */;
+INSERT INTO `file` (`id`, `fileable_id`, `fileable_type`, `created_by`, `extention`, `path`, `collection`, `created_at`, `updated_at`) VALUES
+	(1, 19, 'App\\BlogContent', 2, 'image', 'DUSgoAyhKqNtaE282PxkdnnW9sbXsoglYmAHvE6E.jpeg', 1, '2019-12-17 21:41:55', '2019-12-17 21:41:55'),
+	(2, 19, 'App\\BlogContent', 2, 'image', 'IOa6f4Z7DFwxiRzF20TOu8sWu9m3ex7afWPioEUJ.jpeg', 1, '2019-12-17 21:41:55', '2019-12-17 21:41:55'),
+	(3, 19, 'App\\BlogContent', 2, 'image', 'IBDbP4YmscDUAI8ajXQdnLYoB3opFu5Ge9JrBQYF.jpeg', 0, '2019-12-17 21:41:55', '2019-12-17 21:41:55'),
+	(4, 19, 'App\\BlogContent', 2, 'image', 'QyfXeMqDrhRF8vzN0ndGfqnpi64Zt4543sPRrZh5.jpeg', 1, '2019-12-17 21:41:55', '2019-12-17 21:41:55'),
+	(5, 22, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/DUSgoAyhKqNtaE282PxkdnnW9sbXsoglYmAHvE6E.jpeg', 1, '2019-12-17 21:44:10', '2019-12-17 21:44:10'),
+	(6, 22, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/IOa6f4Z7DFwxiRzF20TOu8sWu9m3ex7afWPioEUJ.jpeg', 1, '2019-12-17 21:44:10', '2019-12-17 21:44:10'),
+	(7, 22, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/IBDbP4YmscDUAI8ajXQdnLYoB3opFu5Ge9JrBQYF.jpeg', 0, '2019-12-17 21:44:10', '2019-12-17 21:44:10'),
+	(8, 22, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/QyfXeMqDrhRF8vzN0ndGfqnpi64Zt4543sPRrZh5.jpeg', 1, '2019-12-17 21:44:10', '2019-12-17 21:44:10'),
+	(9, 25, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/DUSgoAyhKqNtaE282PxkdnnW9sbXsoglYmAHvE6E.jpeg', 1, '2019-12-17 21:46:13', '2019-12-17 21:46:13'),
+	(10, 25, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/IOa6f4Z7DFwxiRzF20TOu8sWu9m3ex7afWPioEUJ.jpeg', 1, '2019-12-17 21:46:13', '2019-12-17 21:46:13'),
+	(11, 25, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/IBDbP4YmscDUAI8ajXQdnLYoB3opFu5Ge9JrBQYF.jpeg', 0, '2019-12-17 21:46:13', '2019-12-17 21:46:13'),
+	(12, 25, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/QyfXeMqDrhRF8vzN0ndGfqnpi64Zt4543sPRrZh5.jpeg', 1, '2019-12-17 21:46:13', '2019-12-17 21:46:13'),
+	(13, 26, 'App\\BlogContent', 2, 'image', 'ccc', 1, '2019-12-17 21:46:54', '2019-12-17 21:46:54'),
+	(14, 26, 'App\\BlogContent', 2, 'image', 'ccc', 1, '2019-12-17 21:46:54', '2019-12-17 21:46:54'),
+	(15, 26, 'App\\BlogContent', 2, 'image', 'ccc', 1, '2019-12-17 21:46:54', '2019-12-17 21:46:54'),
+	(16, 26, 'App\\BlogContent', 2, 'image', 'ccc', 1, '2019-12-17 21:46:54', '2019-12-17 21:46:54'),
+	(17, 26, 'App\\BlogContent', 2, 'image', 'ccc', 1, '2019-12-17 21:46:54', '2019-12-17 21:46:54'),
+	(18, 28, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/Qyv2lkuGTbSSlH5dHxkARfNN8jrgSgBc5vBkeeeA.jpeg', 1, '2019-12-17 21:50:22', '2019-12-17 21:50:22'),
+	(19, 28, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/i6crJTfINA9LdbbwJo6ZRBFv2ESEY9P1FkJQg0Cy.jpeg', 1, '2019-12-17 21:50:22', '2019-12-17 21:50:22'),
+	(20, 28, 'App\\BlogContent', 2, 'image', 'http://localhost:8000/storage/attachment/HiENn07Jbyv4g8xSzG1XC7V2H5GEyUB6doj7JPID.jpeg', 1, '2019-12-17 21:50:23', '2019-12-17 21:50:23');
+/*!40000 ALTER TABLE `file` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.finance
 CREATE TABLE IF NOT EXISTS `finance` (
@@ -919,7 +1006,7 @@ INSERT INTO map_reports (title, counter) VALUES
 ('کیف پول کاربران', (select IFNULL(sum(credit), 0) - IFNULL(sum(debtor), 0) from finance WHERE status = 0))
 ;
 
-
+/* select all items */
 SELECT * FROM map_reports;
 END//
 DELIMITER ;
@@ -1006,7 +1093,6 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('3e41aeecb07415495ede3dab37fda563129ca2c84e2909c5259b4723f2944a4760d898ba90a7d29f', 2, 2, 'Token Name', '[]', 1, '2019-12-09 18:01:25', '2019-12-09 18:01:25', '2020-12-09 18:01:25'),
 	('3fa280aa2e2b5099eee4ef4c584f2af4dcecc3e9bea16c4dd57480be99f6812c7086d5613c096eb2', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:49:14', '2019-12-09 17:49:14', '2020-12-09 17:49:14'),
 	('496fa8e17d6fc2aff2a1bc7a78ae98ae077f7daa8d075d8715f44e75a72b846649fcff55f859482a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:20:13', '2019-12-12 16:20:13', '2020-12-12 16:20:13'),
-	('4c771aea194f7b6ceea1fa1485f0a3b88dba436f9f372b06ff64366ba1625f95eb5cae2ba328ccca', 2, 2, 'Token Name', '[]', 0, '2019-12-14 06:37:05', '2019-12-14 06:37:05', '2020-12-14 06:37:05'),
 	('4e64aaf58ba8e01bb2273db16d812c48845b0a755834aaf6429413a03cd0d9b770f865537cc3890c', 2, 2, 'Token Name', '[]', 1, '2019-12-07 20:33:51', '2019-12-07 20:33:51', '2020-12-07 20:33:51'),
 	('5163c9732dd745b6164ed11a1e82375b4e036aaac2d3cb19d46c07c285ed5325fb891e07f23e3fe0', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:33:58', '2019-12-09 17:33:58', '2020-12-09 17:33:58'),
 	('52f18eb6d9bed0f1b0e1eca64065b1bafe55e3ab9c6034c5ce06dc528375158858460c9065a9ffaa', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:36:55', '2019-12-09 17:36:55', '2020-12-09 17:36:55'),
@@ -1033,6 +1119,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('92ceb1533044fa09bd59e064b6c2632de4a74b380977a37df969d5c9b06fac441cd40b33a0222f65', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:34:57', '2019-12-09 17:34:57', '2020-12-09 17:34:57'),
 	('99aa5f420091743f6acb64928502893e7d1963909c4179adc6776b0e07e5ed5d532611c6eb533627', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:22:28', '2019-12-12 16:22:28', '2020-12-12 16:22:28'),
 	('99ab0d781d8b27cb699e9e967e23c3110f5846f195435e8ad8dde643e2453b4f5f1fa5be250eff76', 2, 2, 'Token Name', '[]', 0, '2019-12-10 07:51:05', '2019-12-10 07:51:05', '2020-12-10 07:51:05'),
+	('9bb109ff64e3effd38824b18f4e6824510401a184887a38e185f6f5e0cac51e23c2f354497b5c2df', 2, 2, 'Token Name', '[]', 0, '2019-12-17 18:02:33', '2019-12-17 18:02:33', '2020-12-17 18:02:33'),
 	('9c7ec005681fecef22d84f98b8950ab6c5f69824c31de30dbbaf632c8438a83b5c3bd0d6980e9069', 2, 2, 'Token Name', '[]', 1, '2019-12-12 20:51:27', '2019-12-12 20:51:27', '2020-12-12 20:51:27'),
 	('a2c320653026c4eb4818eef6143be503fd4c4fe28beb5a0f4a02a44676df1f4a55044b502b69c2e1', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:52:16', '2019-12-12 15:52:16', '2020-12-12 15:52:16'),
 	('a3caba7843d6c613d0083e408eb3beca79fb34d0773800999ae1937681b0b06ba8fa913532f4694d', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:59:16', '2019-12-09 17:59:16', '2020-12-09 17:59:16'),
@@ -1058,7 +1145,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('c501214285b3d6e706e94af076d431011a8cd06f3958b3c42915b4f105f8f5571743f178582c927e', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:25:56', '2019-12-12 16:25:56', '2020-12-12 16:25:56'),
 	('c5be724445541687c793b59ca6f8ddd15141ead2507b3079db1acc6145db4345c56379112942425a', 2, 2, 'Token Name', '[]', 1, '2019-12-12 16:21:37', '2019-12-12 16:21:37', '2020-12-12 16:21:37'),
 	('c675e83e3c913b6b83aa819c845f44b38c0bc1bde7f06b68a0a51e023ad8dbd0edb4ef5ef16043c9', 2, 2, 'Token Name', '[]', 1, '2019-12-09 17:46:22', '2019-12-09 17:46:22', '2020-12-09 17:46:22'),
-	('ca5d430f94593ce0c5d7cd08244b2686471b8ae2c67925fab05257023dcbd62360812766a8b9ee76', 2, 2, 'Token Name', '[]', 0, '2019-12-13 07:21:14', '2019-12-13 07:21:14', '2020-12-13 07:21:14'),
+	('ca5d430f94593ce0c5d7cd08244b2686471b8ae2c67925fab05257023dcbd62360812766a8b9ee76', 2, 2, 'Token Name', '[]', 1, '2019-12-13 07:21:14', '2019-12-13 07:21:14', '2020-12-13 07:21:14'),
 	('cc6483fd289246eeb3b0191e56848de499c5fbe8d0c6f81a8cd650efcb72bdbc204ad01d2a09d896', 2, 2, 'Token Name', '[]', 1, '2019-12-08 13:28:28', '2019-12-08 13:28:28', '2020-12-08 13:28:28'),
 	('d14f0660cddec043ee587706375e3084f3fa7c165a12d0a0097ea38b45240e97a3d2b54f14bb7231', 2, 2, 'Token Name', '[]', 1, '2019-12-12 15:55:07', '2019-12-12 15:55:07', '2020-12-12 15:55:07'),
 	('d40e900a21b945df0cc02ee18fed116d31d130f0c5039188bd348cf46bcb042f4d98c8da1f4273dc', 2, 2, 'Token Name', '[]', 1, '2019-12-12 18:02:22', '2019-12-12 18:02:22', '2020-12-12 18:02:22'),
@@ -11820,7 +11907,7 @@ CREATE TABLE IF NOT EXISTS `order_fractive_request` (
   CONSTRAINT `FK_order_request__order` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='این جدول درخواست اپراتور به انباردار برای مشخص کردن کسری و یا معیوبی است.کلمه اخر نام جدول ترکیب کسری و معیوبی است.';
 
--- Dumping data for table 517_shop.order_fractive_request: ~2 rows (approximately)
+-- Dumping data for table 517_shop.order_fractive_request: ~1 rows (approximately)
 /*!40000 ALTER TABLE `order_fractive_request` DISABLE KEYS */;
 INSERT INTO `order_fractive_request` (`order_id`, `product_pins`, `document`, `status`, `type`, `post_barcode`, `order_weight`, `created_at`, `updated_at`) VALUES
 	(779, '{\n  "data" : "x"\n}', NULL, 1, 1, NULL, NULL, '2019-11-29 19:13:01', '2019-11-29 23:50:33'),
@@ -11859,7 +11946,7 @@ CREATE TABLE IF NOT EXISTS `order_post_info` (
   CONSTRAINT `FK_order_post_info_region` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.order_post_info: ~10,271 rows (approximately)
+-- Dumping data for table 517_shop.order_post_info: ~10,532 rows (approximately)
 /*!40000 ALTER TABLE `order_post_info` DISABLE KEYS */;
 INSERT INTO `order_post_info` (`order_id`, `region_id`, `full_name`, `national_code`, `mobile`, `phone`, `postal_code`, `address`, `created_at`, `updated_at`) VALUES
 	(408, 1, 'آرمین نجفی', '14973974763', '02691378556', '02606270344', '6122887472', 'آذربایجان شرقی خیابان تبریزی ساختمان قدسی', NULL, NULL),
@@ -33501,7 +33588,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`category_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_categories: ~0 rows (approximately)
+-- Dumping data for table 517_shop.product_categories: ~1 rows (approximately)
 /*!40000 ALTER TABLE `product_categories` DISABLE KEYS */;
 INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
 	(3, 3);
@@ -33523,20 +33610,15 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   PRIMARY KEY (`value`),
   UNIQUE KEY `product_category_slug_unique` (`slug`),
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: ~9 rows (approximately)
+-- Dumping data for table 517_shop.product_category: ~4 rows (approximately)
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `label`, `slug`, `meta_title`, `meta_description`, `status`, `_lft`, `_rgt`, `parent_id`, `created_at`, `updated_at`) VALUES
 	(1, 'دسته بندی محصولات', NULL, NULL, NULL, 1, 1, 8, NULL, '2019-11-24 20:18:01', '2019-11-24 20:18:01'),
 	(2, 'محصولات بهداشتی', NULL, NULL, NULL, 1, 2, 3, 1, '2019-11-24 20:18:10', '2019-11-24 20:18:10'),
 	(3, 'محصولات آرایشی', NULL, NULL, NULL, 1, 4, 7, 1, '2019-11-24 20:18:18', '2019-11-24 20:18:18'),
-	(4, 'زیر شاخه', NULL, NULL, NULL, 1, 5, 6, 3, '2019-12-09 19:47:00', '2019-12-09 19:47:00'),
-	(5, 'محصولات گیاهی', NULL, NULL, NULL, 1, 9, 10, NULL, '2019-12-14 07:06:33', '2019-12-14 07:06:33'),
-	(6, 'محصولات گیاهی', 'اسلاگ_من', NULL, NULL, 1, 11, 12, NULL, '2019-12-14 07:10:54', '2019-12-14 07:21:45'),
-	(7, 'محصولات گیاهی', NULL, NULL, NULL, 1, 13, 14, NULL, '2019-12-14 07:11:00', '2019-12-14 07:11:00'),
-	(8, 'محصولات گیاهی', NULL, NULL, NULL, 1, 15, 16, NULL, '2019-12-14 07:11:51', '2019-12-14 07:11:51'),
-	(9, 'محصولات گیاهی', NULL, NULL, NULL, 1, 17, 18, NULL, '2019-12-14 07:12:32', '2019-12-14 07:12:32');
+	(4, 'زیر شاخه', NULL, NULL, NULL, 1, 5, 6, 3, '2019-12-09 19:47:00', '2019-12-09 19:47:00');
 /*!40000 ALTER TABLE `product_category` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.product_pins
@@ -33692,8 +33774,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `mobile`, `domain`, `role_key`, `name`, `status`, `validation_code`, `verify_account`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 98279, 1, '70082665', '$2y$10$z2aEO7jGg3Ty8j3CclsZdeIunnhpZ5LPwhCSxHCvTMbMHUUwGnpkS', '2019-11-29 17:18:50', '2019-12-14 06:32:44'),
-	(2, '09120246217', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 10216, 1, '$2y$10$yct.hT4Kwp5nOtdnEfBeGuWjllF1L19TrpM3npdUbrnrcqFF7o.0S', '$2y$10$yTTrCs9ABo6b0Wnd0x.O3.XqCQFvMcMIH1Ury2HiKBe857LUs17Aq', '2019-11-30 20:13:25', '2019-12-14 06:35:17');
+	(1, '09398624739', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 32030, 1, '70082665', '$2y$10$UYSSv0pBz6k10fCFhVlumu4tz4wF8qtyEnV7HkpUX.ise7t1e7yFG', '2019-11-29 17:18:50', '2019-12-13 15:37:54'),
+	(2, '09120246217', 'localhost:3000', 'programmer', 'مهرداد معصومی', 1, 21751, 1, '$2y$10$qQqMnT3dQTRGZYmAaX0LsOOKieaM2BYxo99iYyUqZraV8DUFKmjPa', '$2y$10$fxGEjjmMA/u9/IcDDkY6mOd/hS.eUeS9sDCCuVAa9zOZyw8fhD9QG', '2019-11-30 20:13:25', '2019-12-17 18:02:14');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete

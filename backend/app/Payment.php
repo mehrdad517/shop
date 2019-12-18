@@ -11,6 +11,7 @@ class Payment extends Model
     protected $table = 'payment';
 
     const PAYMENT_STATUS_PENDING = 0;
+
     const PAYMENT_STATUS_ACCEPTED = 1;
 
     const PAYMENT_TYPE_ONLINE= 'online';

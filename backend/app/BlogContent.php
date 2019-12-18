@@ -11,4 +11,18 @@ class BlogContent extends Model
     protected $primaryKey = 'id';
 
     protected $guarded = [];
+
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+
+    public function categories()
+    {
+        return $this->belongsToMany(BlogCategory::class, 'blog_categories', 'content_id', 'category_id');
+    }
+
+
 }

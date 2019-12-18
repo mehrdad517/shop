@@ -718,7 +718,6 @@ class Api {
 
 
     /* Attachment File, Image video etc ... */
-
     async attachment(object) {
         return axios.post('http://localhost:8000/api/attachment', object, {
             headers: this.haeders(),
