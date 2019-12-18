@@ -26,16 +26,23 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FileUploader from "../../../component/FileUploader";
 import { Editor } from '@tinymce/tinymce-react';
 import TextEditor from "../../../component/TextEditor/TextEditor";
-class BlogContentCreate extends Component {
+import CircularProgress from "@material-ui/core/CircularProgress";
+import validator from 'validator';
+import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+
+
+class ContentCreate extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loading: false,
+            loading: true,
             checked: [], // tree checked or edit or  show
             expanded: [], // expanded tree
             categories : [], // categories tree
             files:[],
+            tags: [],
+            options: [],
             form: {
                 title: '',
                 code: '',
@@ -59,8 +66,10 @@ class BlogContentCreate extends Component {
         this.api.getBlogCategories().then((response) => {
             if (typeof response != "undefined") {
                 this.setState({
-                    categories: response
+                    categories: response,
+                    loading: false
                 })
+
             }
         }).catch((error) => {
             toast(error);
@@ -79,8 +88,14 @@ class BlogContentCreate extends Component {
 
     handleSubmit (event) {
         event.preventDefault();
+
+        this.setState({
+            loading: true
+        });
+
         this.state.form['categories'] = this.state.checked;
         this.state.form['files'] = this.state.files;
+        this.state.form['tags'] = this.state.tags;
         this.api.postContent(this.state.form).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
@@ -90,17 +105,60 @@ class BlogContentCreate extends Component {
                     toast.error(response.msg);
                 }
             }
+            this.setState({
+                loading: false
+            });
         }).catch((error) => {
             console.log(error);
+            this.setState({
+                loading: false
+            });
         })
 
     }
 
 
+    autoCompleteHandleSelect = (selected) =>
+    {
+        let tags = [];
+        selected.forEach((value) => {
+            tags.push(value.id);
+        });
+        this.setState({
+           tags
+        });
+
+
+    };
+
+
+    async autoCompleteHandleChange(event)
+    {
+        let instance = new Api();
+        let term = event.target.value;
+        instance.autoComplete('tags', {'term': event.target.value}).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.length > 0 ) {
+                    this.setState({
+                        options: response
+                    })
+                } else {
+                    let options = this.state.options;
+                    options.push({
+                        id: term,
+                        name: term
+                    });
+                    this.setState({
+                        options
+                    })
+                }
+            }
+        });
+
+    }
+
     render() {
-
-        console.log(this.state)
-
+        console.log(this.state);
         return (
             <div className='content'>
                 <Container>
@@ -228,6 +286,7 @@ class BlogContentCreate extends Component {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                helperText='بدون فاصله وارد کنید.'
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
@@ -242,6 +301,7 @@ class BlogContentCreate extends Component {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                helperText='60 تا 255 کاراکتر وارد کنید.'
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
@@ -256,6 +316,7 @@ class BlogContentCreate extends Component {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                helperText='60 تا 255 کاراکتر وارد کنید.'
                                             />
                                         </Grid>
                                     </Grid>
@@ -282,6 +343,29 @@ class BlogContentCreate extends Component {
                                                  form
                                              })
                                             }} />
+                                        </Grid>
+                                        <Grid item xs={12} style={{ marginTop:'25px'}}>
+                                            <Autocomplete
+                                                multiple
+                                                freeSolo
+                                                size={"small"}
+                                                onChange={((event, value) => this.autoCompleteHandleSelect(value))}
+                                                options={this.state.options}
+                                                getOptionLabel={option => option.name}
+                                                renderInput={params => (
+                                                    <TextField
+                                                        {...params}
+                                                        fullWidth
+                                                        margin={"dense"}
+                                                        label="تگ ها"
+                                                        variant="filled"
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        onChange={this.autoCompleteHandleChange.bind(this)}
+                                                    />
+                                                )}
+                                            />
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
@@ -310,14 +394,15 @@ class BlogContentCreate extends Component {
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
                             <Box style={{ margin: '20px 0', display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button variant='contained' color='primary' type="submit">ایجاد محصول</Button>
+                                <Button disabled={this.state.loading} variant='contained' color='primary' type="submit">ایجاد مطلب جدید</Button>
                             </Box>
                         </form>
                     </Box>
                 </Container>
+                {this.state.loading && <CircularProgress size={20} color={"secondary"} />}
             </div>
         );
     }
 }
 
-export default BlogContentCreate;
+export default ContentCreate;

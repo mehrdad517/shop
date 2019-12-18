@@ -112,6 +112,14 @@ header('Access-Control-Allow-Credentials: true');
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => 'filter'], function () {
+        Route::get('/tags', function (Request $request) {
+            $response = \App\Tag::select('id', 'name')
+                ->where('name', 'like', '%'.$request->get('term').'%')
+                ->take(10)
+                ->get();
+            return response($response);
+        });
+
         Route::get('/users', function (Request $request) {
             $response = \App\User::select('id', 'name', 'mobile')
                 ->where('name', 'like', '%'.$request->get('term').'%')
@@ -465,7 +473,12 @@ Route::group(['prefix' => 'attachment'], function () {
         // With Storage Laravel File System Save File In Attachment Directory
         $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
 
-        return response()->json(['address' => env('APP_URL') . '/storage/' . $path , 'name' => last(explode('/', $path))]);
+        \Intervention\Image\Facades\Image::make(storage_path('app/public/' . $path))->insert(public_path('logo.png'), 'bottom-right', 30, 30)->save();
+
+        return response()->json([
+            'path' => env('APP_URL') . '/storage/' . $path ,
+            'file' => last(explode('/', $path))
+        ]);
     });
 
     /**
@@ -478,6 +491,10 @@ Route::group(['prefix' => 'attachment'], function () {
 
         // Directory Find
         $status = Storage::delete( ($request->has('directory') ? $request->get('directory') : 'attachment') .  '/' . $file);
+
+        if ($status) {
+            \App\File::where('file', $file)->delete();
+        }
 
         // Status Delete File True Or False
         return response()->json(['status' => $status]);

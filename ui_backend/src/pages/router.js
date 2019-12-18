@@ -30,7 +30,8 @@ import BlogCategory from './blogBundle/category/index'
 import BlogContent from './blogBundle/content/list'
 
 import './../assets/styles/style.scss'
-import BlogContentCreate from "./blogBundle/content/create";
+import ContentCreate from "./blogBundle/content/create";
+import ContentEdit from "./blogBundle/content/edit";
 
 class Router extends Component {
 
@@ -80,7 +81,8 @@ class Router extends Component {
                         <Route component={Setting} path={'/setting'} exact={true}/>
 
                         <Route component={BlogContent} path='/blog/contents' exact={true}/>
-                        <Route component={BlogContentCreate} path='/blog/contents/create' exact={true}/>
+                        <Route component={ContentEdit} path='/blog/contents/:id/edit'/>
+                        <Route component={ContentCreate} path='/blog/contents/create'/>
                         <Route component={BlogCategory} path='/blog/categories' exact={true}/>
 
                     </ConnectedRouter>

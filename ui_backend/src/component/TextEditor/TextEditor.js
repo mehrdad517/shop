@@ -13,6 +13,7 @@ class TextEditor extends Component {
     render() {
         return (
             <Editor
+                value={this.props.value}
                 apiKey={'1iu7rhp54lw7udhv0zn9l9rzyu98jy5w97f742h8zgpt6i5f'}
                 init={{
                     setup: (editor) => {
@@ -21,7 +22,7 @@ class TextEditor extends Component {
                             onAction: () => {
                                 new Api().unlink({
                                     file: editor.selection.getNode().src,
-                                    directory: 'editor'
+                                    directory: 'upload'
                                 }).then((response) => {
                                     if (typeof response != "undefined") {
                                         if (response.status) {
@@ -43,10 +44,10 @@ class TextEditor extends Component {
                         return new Promise((resolve => {
                             const data = new FormData();
                             data.append('file', blobInfo.blob(), blobInfo.filename());
-                            data.append('directory', 'editor');
+                            data.append('directory', 'upload');
                             new Api().attachment(data).then((response) => {
                                 if (typeof response != "undefined") {
-                                    resolve(success(response.address));
+                                    resolve(success(response.path));
                                 }
                             }).catch((error) => {
                                 console.log(error);

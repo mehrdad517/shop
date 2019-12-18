@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\BlogContent;
+use App\File;
 use App\Http\Controllers\Controller;
+use App\Tag;
+use Faker\Provider\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class BlogContentController extends Controller
 {
@@ -55,16 +59,9 @@ class BlogContentController extends Controller
                 return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
             }
 
-            if ($request->get('slug')) {
-                $slug = BlogContent::where('slug', $request->get('slug'))->count();
-                if ($slug > 0) {
-                    return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
-                }
-            }
-
             $result = BlogContent::firstOrCreate([
                 'title' => $request->get('title'),
-                'slug' => $request->get('slug'),
+                'slug' => str_replace(' ', '-', $request->get('slug')),
                 'content' => $request->get('content'),
                 'meta_title' => $request->get('meta_title'),
                 'meta_description' => $request->get('meta_description'),
@@ -75,16 +72,49 @@ class BlogContentController extends Controller
             $result->categories()->detach();
             $result->categories()->attach($request->get('categories'));
 
+            $result->tags()->detach();
 
-            foreach ($request->get('files')  as $file) {
-                if ($file) {
-                    $result->files()->create([
-                        'created_by' => Auth::id(),
-                        'path' => $file['address'],
-                        'collection' => $file['collection']
-                    ]);
+            foreach ($request->get('tags') as $tag) {
+
+                if (!is_numeric($tag)) {
+                    $tag = Tag::create(['name' => $tag])->id;
                 }
+                $result->tags()->attach($tag);
+            }
 
+            if ($request->has('files')) {
+
+                foreach ($request->get('files')  as $file) {
+                    if ($file) {
+
+                        $old = 'attachment/' . $file['file'];
+                        $new = 'content/' . $result->id . '/' . $file['file'];
+
+                        foreach ([500,300,200,100,50] as $dir) {
+                            $copy = Storage::copy($old, 'content/' . $result->id . '/' . $dir . '/' . $file['file']);
+                            if ($copy) {
+                                $copy = \Intervention\Image\Facades\Image::make(storage_path('app/public/content/' . $result->id . '/' . $dir . '/' . $file['file']));
+                                $copy->resize($dir, $dir);
+                                $copy->save();
+                            }
+                        }
+
+                        $move = Storage::move($old, $new);
+
+                        if ($move) {
+
+                            $result->files()->create([
+                                'created_by' => Auth::id(),
+                                'file' => $file['file'],
+                                'path' => 'storage/content/' . $result->id . '/' . $file['file'],
+                                'collection' => $file['collection']
+                            ]);
+                        }
+
+
+                    }
+
+                }
             }
 
 
@@ -107,20 +137,32 @@ class BlogContentController extends Controller
     {
         $result = BlogContent::with(['categories' => function ($q) {
             $q->select('value', 'label');
-        }])->find($id);
+        }, 'tags', 'files'])->find($id);
+
+
+        $files = [];
+        foreach ($result->files as $file) {
+            $files[] = [
+                'file' => $file['file'],
+                'mime_type' => $file['mime_type'],
+                'path' => env('APP_URL') . '/' . $file['path'],
+                'collection' => $file['collection'],
+                'percent' => 100,
+                'directory' => 'content/' . $result->id
+            ];
+        }
 
         if ($result) {
-
             return response([
                 'title' => $result->title,
-                'code' => $result->code,
-                'brand_id' => $result->brand_id,
-                'status' => $result->status,
                 'slug' => $result->slug ?? '',
+                'status' => $result->status,
                 'meta_title' => $result->meta_title ?? '',
                 'meta_description' => $result->meta_description ?? '',
                 'content' => $result->content ?? '',
-                'categories' => $result->categories
+                'categories' => $result->categories,
+                'tags' => $result->tags,
+                'files' => $files
             ]);
         }
 
@@ -135,75 +177,90 @@ class BlogContentController extends Controller
      */
     public function update($id, Request $request)
     {
+
         $validator = \Validator::make($request->all(), [
             'title' => 'required',
-            'code' => 'required',
-            'brand_id' => 'required'
-        ], [
-            'title.required' => 'عنوان نمیتواند خالی باشد.',
-            'code.required' => 'کد محصول نمیتواند خالی باشد.',
-            'brand_id.required' => 'برند را وارد نکرده اید.'
+            'content' => 'required',
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'slug' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-      /*  if ($request->get('slug')) {
+        if ($request->get('slug')) {
             $slug = BlogContent::where('slug', $request->get('slug'))->where('id', '<>', $id)->count();
             if ($slug > 0) {
                 return Response()->json(['status' => false, 'msg' => 'اسلاگ قبلا ثبت شده است.']);
             }
-        }*/
+        }
+
         $result = BlogContent::updateOrCreate(['id' => $id], [
             'title' => $request->get('title'),
+            'slug' => str_replace(' ', '-', $request->get('slug')),
             'content' => $request->get('content'),
-            'brand_id' => $request->get('brand_id') > 0 ? $request->get('brand_id') : null,
-            'code' => $request->get('code'),
-            'status' => $request->get('status'),
-            'slug' => $request->get('slug'),
             'meta_title' => $request->get('meta_title'),
             'meta_description' => $request->get('meta_description'),
+            'status' => $request->get('status'),
         ]);
+
 
         $result->categories()->detach();
         $result->categories()->attach($request->get('categories'));
-        if ($request->has('attributes')) {
-            foreach ($request->get('attributes') as $item) {
-                if ($item['value']) {
-                    $check = DB::table('group_attribute_product')->where('product_id', $id)->where('attribute_id', $item['id'])->where('value', $item['value']);
-                    if ($check->count() > 0) {
-                        $check->update([
-                            'value' => $item['value'],
-                            'order' => $item['order'],
-                            'main' => $item['main']
+
+        $result->tags()->detach();
+
+        foreach ($request->get('tags') as $tag) {
+
+            if (!is_numeric($tag)) {
+                $tag = Tag::create(['name' => $tag])->id;
+            }
+            $result->tags()->attach($tag);
+        }
+
+        if ($request->has('files')) {
+
+            foreach ($request->get('files')  as $file) {
+                if ($file) {
+
+                    $check_exist = File::where('file', $file['file']);
+
+                    if ($check_exist->count() > 0) {
+                        $check_exist->update([
+                            'collection' => $file['collection']
                         ]);
                     } else {
-                        DB::table('group_attribute_product')->insert([
-                            'product_id' => $id,
-                            'attribute_id' => $item['id'],
-                            'value' => $item['value'],
-                            'order' => $item['order'],
-                            'main' => $item['main']
-                        ]);
-                    }
-                } else {
-                    if (@$item['row']) {
-                        $check = DB::table('product_pins')->where('product_id', $id)->where('group_attribute_product_ids', 'like', "%$item[row]%");
-                        if ($check->count() == 0) {
-                            DB::table('group_attribute_product')->where('id', $item['row'])->delete();
-                        } else {
-                            foreach ($check->get() as $ch) {
-                                DB::table('product_pins')->where('id', $ch->id)->update([
-                                    'group_attribute_product_ids' => str_replace("$item[row]/", '', $ch->group_attribute_product_ids)
-                                ]);
+                        $old = 'attachment/' . $file['file'];
+                        $new = 'content/' . $result->id . '/' . $file['file'];
+
+                        foreach ([500,300,200,100,50] as $dir) {
+                            $copy = Storage::copy($old, 'content/' . $result->id . '/' . $dir . '/' . $file['file']);
+                            if ($copy) {
+                                $copy = \Intervention\Image\Facades\Image::make(storage_path('app/public/content/' . $result->id . '/' . $dir . '/' . $file['file']));
+                                $copy->resize($dir, $dir);
+                                $copy->save();
                             }
-                            DB::table('group_attribute_product')->where('id', $item['row'])->delete();
+                        }
+
+                        $move = Storage::move($old, $new);
+
+                        if ($move) {
+
+                            $result->files()->create([
+                                'created_by' => Auth::id(),
+                                'file' => $file['file'],
+                                'path' => 'storage/content/' . $result->id . '/' . $file['file'],
+                                'collection' => $file['collection']
+                            ]);
                         }
                     }
                 }
+
             }
         }
+
 
         if ($result) {
             return response()->json(['status' => true, 'msg' => 'عملیات موفقیت امیز بود.'], 200);

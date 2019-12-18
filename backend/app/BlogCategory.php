@@ -15,6 +15,8 @@ class BlogCategory extends Model
 
     protected $fillable=['label'];
 
+    protected $hidden = ['pivot'];
+
 
 
 }

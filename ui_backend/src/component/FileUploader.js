@@ -8,6 +8,7 @@ import {CircularProgress} from "@material-ui/core";
 import './FileUploader.css';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from "@material-ui/core/IconButton";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 class FileUploader extends Component {
 
@@ -19,9 +20,18 @@ class FileUploader extends Component {
         this.api = new Api();
     }
 
+    componentDidMount() {
+        console.log(this.props.value);
+        if (this.props.value && this.props.value.length > 0 ) {
+            this.setState({
+               files:  this.props.value
+            });
+        }
+    }
+
+
     /* Trigger On Change Input File */
     async handleSelectedFiles(event) {
-
 
         /* Fetch All File In State */
         let files = this.state.files;
@@ -39,14 +49,14 @@ class FileUploader extends Component {
             /* Init State */
             files[i + counter] = {
                 'percent': 0,
-                'preview': '',
-                'address': '',
-                'name' : '',
-                'collection': true
+                'path': '',
+                'file' : '',
+                'collection': true,
+                'directory' : 'attachment'
             };
 
             if (validImageTypes.includes(event.target.files[i].type)) {
-                files[i + counter]['tag'] = 'img';
+                files[i + counter]['mime_type'] = 'image';
                 if ((event.target.files[i].size / 1024) > 1000) {
                     toast.error('حداکثر حجم عکس 1 مگابایت است.');
                     delete files[i + counter];
@@ -54,7 +64,7 @@ class FileUploader extends Component {
                 }
 
             } else if (validVideoTypes.includes(event.target.files[i].type)) {
-                files[i + counter]['tag'] = 'video';
+                files[i + counter]['mime_type'] = 'video';
                 if ((event.target.files[i].size) > 10000) {
                     toast.error('حداکثر حجم ویدئو 10 مگابایت است.');
                     delete files[i + counter];
@@ -68,7 +78,7 @@ class FileUploader extends Component {
 
 
             /* Preview Image Or Video File with Absolute Address */
-            files[i + counter]['preview'] = URL.createObjectURL(event.target.files[i]);
+            files[i + counter]['path'] = URL.createObjectURL(event.target.files[i]);
 
             this.setState({
                 files
@@ -102,8 +112,8 @@ class FileUploader extends Component {
                 /* Get Real Address From Server */
                 if (typeof response != "undefined") {
                     if (response.status === 200) {
-                        files[i + counter]['address'] = response.data.address;
-                        files[i + counter]['name'] = response.data.name;
+                        files[i + counter]['path'] = response.data.path;
+                        files[i + counter]['file'] = response.data.file;
                     } else {
                         delete files[i + counter];
                     }
@@ -132,7 +142,7 @@ class FileUploader extends Component {
 
     handleSetCollection(index) {
         let files = this.state.files;
-        files[index].collection = (files[index].collection === true) ? false :  true;
+        files[index].collection = (Boolean(files[index].collection) === true) ? false :  true;
         this.setState({
             files
         });
@@ -148,7 +158,7 @@ class FileUploader extends Component {
     handleUnlinkFile(event, index) {
         event.preventDefault();
         let files = this.state.files;
-        this.api.unlink({file: files[index].name}).then((response) => {
+        this.api.unlink({file: files[index].file, directory: files[index].directory}).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status === true) {
                     delete files[index];
@@ -175,22 +185,26 @@ class FileUploader extends Component {
                         return (
                             <div key={index} className='img-box' style={{ height: '200px', width: '200px' }}>
                                 {file.percent === 100 &&
-                                <IconButton onClick={(event) => this.handleUnlinkFile(event, index)} className='remove-btn animated flash'>
-                                    <DeleteForeverIcon />
+                                <IconButton onClick={(event) => this.handleUnlinkFile(event, index)} color={"default"} className='remove-btn animated flash'>
+                                    <HighlightOffIcon />
                                 </IconButton>}
                                 <div className="img-box-mask" style={{ height: 200 - (file.percent * 2) + 'px', width: '200px'}}/>
                                 <div className="img-box-progress">
-                                    <Fab onClick={() => this.handleSetCollection(index, false)}  aria-label="save" color={file.collection === true ? 'default': 'primary'}>{ file.percent < 100 ? file.percent : <CheckIcon className='animated flash' />}</Fab>
+                                    <Fab onClick={() => this.handleSetCollection(index, false)}  aria-label="save" color={Boolean(file.collection) === true ? 'default': 'primary'}>{ file.percent < 100 ? file.percent : <CheckIcon className='animated flash' />}</Fab>
                                     {file.percent < 100 && <CircularProgress color={"secondary"} className='circle-progress' size={68} />}
                                 </div>
-                                {file.tag === 'img' && <img className={file.percent === 100 ? 'animated flipInX' : 'animated fadeIn'}  width={200} height={200} key={index} src={ file.address !== '' ? file.address : file.preview}/>}
-                                {file.tag === 'video' && <video className={file.percent === 100 ? 'animated flipInY' : 'animated fadeIn'}  controls  width={200} height={200} src={ file.address !== '' ? file.address : file.preview}/>}
+                                {file.mime_type === 'image' && <img className={file.percent === 100 ? 'animated flipInX' : 'animated fadeIn'}  width={200} height={200} key={index} src={ file.path !== '' && file.path}/>}
+                                {file.mime_type === 'video' && <video className={file.percent === 100 ? 'animated flipInY' : 'animated fadeIn'}  controls  width={200} height={200} src={ file.path !== '' && file.path}/>}
                             </div>
                         );
                     })}
                     {this.state.files.length === 0 && <span>انتخاب فایل</span>}
                 </label>
                 <input accept="image/x-png,image/gif,image/jpeg" className='input-file' id='upload' type="file" onChange={(event) => this.handleSelectedFiles(event)} multiple={true}/>
+                <p>حجم عکس نباید بالاتر از 1 مگابایت باشد</p>
+                <p>ویدئو را در سرویس های ارائه دهنده های ویدئو مانند آپارات آپلود کنید و از طریق ادیتور متن در صفحه قرار دهید.</p>
+                <p>پس ار آپلود فایل با کلیک به روی علامت چک عکس اصلی را انتخاب کنید.</p>
+                <p>در صورت انتخاب چند عکس به عنوان عکس اصلی نحوه نمایش به صورت رندوم خواهد بود.</p>
             </div>
         );
     }
