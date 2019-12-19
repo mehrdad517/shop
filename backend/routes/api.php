@@ -476,7 +476,7 @@ Route::group(['prefix' => 'attachment'], function () {
         \Intervention\Image\Facades\Image::make(storage_path('app/public/' . $path))->insert(public_path('logo.png'), 'bottom-right', 30, 30)->save();
 
         return response()->json([
-            'path' => env('APP_URL') . '/storage/' . $path ,
+            'path' => Storage::url($path) ,
             'file' => last(explode('/', $path))
         ]);
     });
@@ -489,11 +489,24 @@ Route::group(['prefix' => 'attachment'], function () {
         // File with Address or Http etc ...
         $file = last(explode('/', $request->get('file')));
 
-        // Directory Find
-        $status = Storage::delete( ($request->has('directory') ? $request->get('directory') : 'attachment') .  '/' . $file);
+        $db_file = \App\File::where('file', $file)->first();
 
-        if ($status) {
-            \App\File::where('file', $file)->delete();
+
+        if ($db_file) {
+            if ($db_file->size) {
+                foreach (json_decode($db_file->size, true) as $size) {
+                    Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $size .  '/' . $file);
+                }
+            }
+
+            $status = Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $file);
+            if ($status) {
+                $db_file->delete();
+            }
+
+        } else {
+            // Directory Find
+            $status = Storage::delete('attachment/' . $file);
         }
 
         // Status Delete File True Or False

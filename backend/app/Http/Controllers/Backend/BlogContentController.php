@@ -88,7 +88,6 @@ class BlogContentController extends Controller
                     if ($file) {
 
                         $old = 'attachment/' . $file['file'];
-                        $new = 'content/' . $result->id . '/' . $file['file'];
 
                         foreach ([500,300,200,100,50] as $dir) {
                             $copy = Storage::copy($old, 'content/' . $result->id . '/' . $dir . '/' . $file['file']);
@@ -99,15 +98,18 @@ class BlogContentController extends Controller
                             }
                         }
 
-                        $move = Storage::move($old, $new);
+                        $new = 'content/' . $result->id . '/' . $file['file'];
+
+                        $move = Storage::move($old, $new); // Move Main Image
 
                         if ($move) {
 
                             $result->files()->create([
                                 'created_by' => Auth::id(),
                                 'file' => $file['file'],
-                                'path' => 'storage/content/' . $result->id . '/' . $file['file'],
-                                'collection' => $file['collection']
+                                'collection' => $file['collection'],
+                                'directory' => 'content',
+                                'size' => json_encode([500,300,200,100,50])
                             ]);
                         }
 
@@ -119,7 +121,7 @@ class BlogContentController extends Controller
 
 
             if ($result) {
-                return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.', 'result' => $result], 200);
+                return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.'], 200);
             }
 
             return response()->json(['status' => false, 'msg' => 'un success'], 200);
@@ -143,12 +145,12 @@ class BlogContentController extends Controller
         $files = [];
         foreach ($result->files as $file) {
             $files[] = [
+                'percent' => 100, // for react component
                 'file' => $file['file'],
                 'mime_type' => $file['mime_type'],
-                'path' => env('APP_URL') . '/' . $file['path'],
+                'path' => Storage::url('content/' . $result->id . '/' . $file['file']), // image or file address
                 'collection' => $file['collection'],
-                'percent' => 100,
-                'directory' => 'content/' . $result->id
+                'directory' => 'content'
             ];
         }
 
@@ -251,8 +253,9 @@ class BlogContentController extends Controller
                             $result->files()->create([
                                 'created_by' => Auth::id(),
                                 'file' => $file['file'],
-                                'path' => 'storage/content/' . $result->id . '/' . $file['file'],
-                                'collection' => $file['collection']
+                                'directory' => 'content',
+                                'collection' => $file['collection'],
+                                'size' => json_encode([500,300,200,100,50])
                             ]);
                         }
                     }

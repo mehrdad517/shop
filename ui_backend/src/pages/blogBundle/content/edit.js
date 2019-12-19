@@ -138,6 +138,7 @@ class ContentEdit extends Component {
             if (typeof response != "undefined") {
                 if (response.status) {
                     toast.success(response.msg);
+                    this.props.history.push('/blog/contents');
                 } else {
                     toast.error(response.msg);
                 }

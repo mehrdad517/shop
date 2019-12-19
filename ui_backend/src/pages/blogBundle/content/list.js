@@ -22,14 +22,12 @@ import Pagination from "react-js-pagination";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import MenuItem from '@material-ui/core/MenuItem';
-import UserCreate from "./create";
 import SyncIcon from '@material-ui/icons/Sync';
-import VerifiedUserTwoToneIcon from '@material-ui/icons/VerifiedUserTwoTone';
-import IndeterminateCheckBoxTwoToneIcon from '@material-ui/icons/IndeterminateCheckBoxTwoTone';
 import Api from "../../../api";
 import {Link} from "react-router-dom";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { Editor } from '@tinymce/tinymce-react';
+import Chip from "@material-ui/core/Chip";
+import CreateIcon from "@material-ui/icons/Create";
 
 class BlogContent extends Component {
 
@@ -299,9 +297,20 @@ class BlogContent extends Component {
                                             <td>{entity.id}</td>
                                             <td>{entity.title}</td>
                                             <td>{entity.visitor}</td>
-                                            <td>{entity.status === 1 ? <VerifiedUserTwoToneIcon color='primary' /> :  <IndeterminateCheckBoxTwoToneIcon color='secondary' /> }</td>
+                                            <td>
+                                                <Tooltip title="وضعیت">
+                                                    <Chip size={"small"} variant={"outlined"} color={entity.status ? "primary": "secondary"}  label={entity.status ? 'فعال' : 'غیرفعال'} />
+                                                </Tooltip>
+                                            </td>
                                             <td>{entity.created_at}</td>
                                             <td>
+                                                <Tooltip title="ویرایش">
+                                                    <Link to={`/blog/contents/${entity.id}/edit/`}>
+                                                        <IconButton>
+                                                            <CreateIcon />
+                                                        </IconButton>
+                                                    </Link>
+                                                </Tooltip>
                                             </td>
                                         </tr>
                                     );
