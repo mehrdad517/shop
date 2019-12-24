@@ -36,8 +36,10 @@ class BlogContent extends Component {
         this.state = {
             loading: true,
             entities: [],
+            users: [], // Filter
             filter: {
-                status: -1
+                status: -1,
+                created_by: -1
             },
             page: 1,
             limit: 10,
@@ -108,24 +110,15 @@ class BlogContent extends Component {
         await this.handleRequest()
     }
 
-    changeStatus(id, status)
-    {
-        this.setState({
-            loading:true
-        });
-
-        this.api.changeStatus(id, {'status' : status}).then((response) => {
-            if (typeof response != "undefined") {
-                if (response.status) {
-                    this.handleRequest();
-                }
-            }
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
-
     async handleRequest() {
+
+        this.api.autoComplete('users/accessible').then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    users : response
+                });
+            }
+        });
 
         await this.api.getContents({
             filter: this.state.filter,
@@ -180,11 +173,11 @@ class BlogContent extends Component {
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
                                             id="outlined-name"
-                                            label="نام کاربر"
+                                            label="شناسه"
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='name'
+                                            name='id'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
@@ -193,16 +186,39 @@ class BlogContent extends Component {
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
-                                            label="موبایل"
+                                            id="outlined-name"
+                                            label="عنوان"
                                             variant="filled"
                                             margin='dense'
                                             fullWidth
-                                            name='mobile'
+                                            name='title'
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
                                             onChange={this.handleChangeSearchInput.bind(this)}
                                         />
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="کاربران"
+                                            variant="filled"
+                                            value={this.state.filter.created_by}
+                                            margin='dense'
+                                            fullWidth
+                                            name='created_by'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            {this.state.users && this.state.users.map((user, index) => {
+                                                return(
+                                                    <MenuItem key={index} value={user.id}>{user.name}</MenuItem>
+                                                );
+                                            })}
+                                        </TextField>
                                     </Grid>
                                     <Grid item xs={12} sm={4} md={3} >
                                         <TextField
@@ -236,21 +252,22 @@ class BlogContent extends Component {
                     <Box style={{ margin: '20px 0 0 0'}}>
                         <Grid container alignItems="center" >
                             <Grid item xs={4} sm={6}>
-                                <FormControl>
-                                    <NativeSelect
-                                        value={this.state.limit}
-                                        onChange={this.handleChangeLimit.bind(this)}
-                                        name="age"
-                                        inputProps={{ 'aria-label': 'age' }}
-                                    >
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="30">30</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="200">200</option>
-                                    </NativeSelect>
-                                </FormControl>
+                                <TextField
+                                    select
+                                    value={this.state.limit}
+                                    margin='dense'
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    onChange={this.handleChangeLimit.bind(this)}
+                                >
+                                    <MenuItem  value="10">10</MenuItem>
+                                    <MenuItem  value="20">20</MenuItem>
+                                    <MenuItem  value="30">30</MenuItem>
+                                    <MenuItem  value="50">50</MenuItem>
+                                    <MenuItem  value="100">100</MenuItem>
+                                    <MenuItem  value="200">200</MenuItem>
+                                </TextField>
                             </Grid>
                             <Grid item xs={8} sm={6}>
                                 <Pagination
@@ -272,9 +289,9 @@ class BlogContent extends Component {
                             </Tooltip>
                             {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) ?  <Tooltip title="افزودن">
                                 <Link to={'/blog/contents/create'}>
-                                <IconButton>
-                                    <AddCircleOutlineIcon />
-                                </IconButton>
+                                    <IconButton>
+                                        <AddCircleOutlineIcon />
+                                    </IconButton>
                                 </Link>
                             </Tooltip> : ''}
                         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\BlogContent;
 use App\File;
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\Tag;
 use Faker\Provider\Image;
 use Illuminate\Http\Request;
@@ -18,10 +19,17 @@ class BlogContentController extends Controller
 
         $entities = BlogContent::where(function ($q) use ($request) {
             if ($request->has('filter')) {
+
                 $filter = json_decode($request->get('filter'), true);
 
                 if (@$filter['id']) {
                     $q->where('id', '=', $filter['id']);
+                }
+
+                if (@$filter['created_by'] != -1) {
+                    $q->where('created_by', '=', $filter['created_by']);
+                } elseif (! in_array(Auth::user()->role_key, Role::where('full_access', 1)->pluck('key')->toArray())) {
+                    $q->where('created_by', '=', Auth::id());
                 }
 
                 if (@$filter['title']) {

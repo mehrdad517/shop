@@ -27,8 +27,8 @@ class Api {
 
 
     // auto complete
-    async autoComplete(table, term) {
-        return axios.get(`http://localhost:8000/api/backend/filter/${table}`, {
+    async autoComplete(url, term = null) {
+        return axios.get(`http://localhost:8000/api/backend/filter/${url}`, {
             headers: this.haeders(),
             params: term
         }).then( (response) => {
@@ -40,7 +40,6 @@ class Api {
 
 
     /* auth api*/
-
     async login(object) {
         return axios.post(`http://localhost:8000/api/login`, object, {
             headers: this.haeders(),

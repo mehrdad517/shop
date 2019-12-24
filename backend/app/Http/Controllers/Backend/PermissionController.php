@@ -31,26 +31,33 @@ class PermissionController extends Controller
                 // get action parameter list
                 $action = $route->getAction();
 
-                // explode action and get single controller
-                $explodedAction = explode('@', @$action['controller']);
+//                dd($route->get);
 
-                if (count($explodedAction) == 2) {
+                if (@$action['controller']) {
+                    // explode action and get single controller
+                    $explodedAction = explode('@', @$action['controller']);
+                    if (count($explodedAction) == 2) {
 
-                    preg_match('/(.*)Controller/',last(explode("\\", $explodedAction[0])), $matches);
+                        preg_match('/(.*)Controller/',last(explode("\\", $explodedAction[0])), $matches);
 
-                    preg_match('/(.*)Controller/', $matches[0], $controller);
+                        preg_match('/(.*)Controller/', $matches[0], $controller);
 
 
-                    preg_match_all('/(?:^|[A-Z])[a-z]+/',$controller[1],$controller_name);
-                    preg_match_all('/(?:^|[A-Z])[a-z]+/',$explodedAction[1],$action_name);
+                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$controller[1],$controller_name);
+                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$explodedAction[1],$action_name);
 
-                    $final[mb_strtolower(join('_', $controller_name[0]))][] = [
-                        'key' => mb_strtolower(join('_', $controller_name[0])) . '_' . mb_strtolower(join('_', $action_name[0])),
-                        'action' => trans('permissions.' . mb_strtolower(join(' ', $action_name[0]))),
-                        'method' => $route->methods[0],
-                        'url' => '/'.$route->uri,
-                    ];
+                        $final[mb_strtolower(join('_', $controller_name[0]))][] = [
+                            'key' => mb_strtolower(join('_', $controller_name[0])) . '_' . mb_strtolower(join('_', $action_name[0])),
+                            'action' => trans('permissions.' . mb_strtolower(join(' ', $action_name[0]))),
+                            'method' => $route->methods[0],
+                            'url' => '/'.$route->uri,
+                        ];
+                    }
+                } else {
+
                 }
+
+
 
             }
 

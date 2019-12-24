@@ -112,6 +112,8 @@ header('Access-Control-Allow-Credentials: true');
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => 'filter'], function () {
+
+        // Filter Tags
         Route::get('/tags', function (Request $request) {
             $response = \App\Tag::select('id', 'name')
                 ->where('name', 'like', '%'.$request->get('term').'%')
@@ -120,6 +122,7 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
             return response($response);
         });
 
+        // Auto Complete User Table
         Route::get('/users', function (Request $request) {
             $response = \App\User::select('id', 'name', 'mobile')
                 ->where('name', 'like', '%'.$request->get('term').'%')
@@ -129,6 +132,17 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
                 ->get();
             return response($response);
         });
+
+        // Auto Complete User Table
+        Route::get('/users/accessible', function (Request $request) {
+            $response = \App\User::select('id', 'name', 'mobile')
+                ->where("status", 1)
+                ->where('role_key', '<>', 'guest')
+                ->get();
+            return response($response);
+        });
+
+
     });
 
 
