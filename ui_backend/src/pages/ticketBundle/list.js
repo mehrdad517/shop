@@ -26,9 +26,31 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Chip from "@material-ui/core/Chip";
 import CreateIcon from "@material-ui/icons/Create";
 import Api from "../../api";
-import { Widget } from 'react-chat-widget';
-
-import 'react-chat-widget/lib/styles.css';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import DirectionsIcon from '@material-ui/icons/Directions';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import SendIcon from '@material-ui/icons/Send';
+import AppBar from '@material-ui/core/AppBar';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Toolbar from "@material-ui/core/Toolbar";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import './chat.css'
+import FolderIcon from '@material-ui/icons/Folder';
+import PageviewIcon from '@material-ui/icons/Pageview';
+import AssignmentIcon from '@material-ui/icons/Assignment'
 
 class Ticket extends Component {
 
@@ -130,9 +152,10 @@ class Ticket extends Component {
 
     render() {
         return (
-                <div className='content'>
-                    <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
-                    <Container>
+            <div className='content'>
+                <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
+                <Container>
+                    <div className='container-inner' >
                         <Box style={{ margin: '10px 0 20px 0'}}>
                             <Grid container alignItems="center">
                                 <Grid item xs={12} sm={6}>
@@ -334,14 +357,67 @@ class Ticket extends Component {
                                 onChange={this.handlePageChange.bind(this)}
                             />
                         </Box>
-                        <Widget   title="My new awesome title"
-                                  subtitle="And my cool subtitle"
-                                  launcher={handleToggle => (
-                                      <button onClick={handleToggle}>Toggle</button>
-                                  )}
-                        />
-                    </Container>
-                </div>
+                    </div>
+                    <Box className='chat-box animated slideInLeft'>
+                        <AppBar position="static" color={"default"}>
+                            <Toolbar style={{ display: "flex", justifyContent: 'space-between'}}>
+                                <div style={{ display: "flex",flexDirection: 'row', alignItems: 'center'}}>
+                                    <Avatar style={{ marginLeft: '10px'}}>M</Avatar>
+                                    <Typography variant="body1">
+                                        مهرداد معصومی
+                                    </Typography>
+                                </div>
+                                <IconButton>
+                                    <ChevronLeftIcon />
+                                </IconButton>
+                            </Toolbar>
+                        </AppBar>
+                        <Paper className='chat-box-inner'>
+                            <div className="operator">
+                                <Avatar>H</Avatar>
+                                <div className='operator-reply'>
+                                    به گزارش "ورزش سه"، بارسلونا در تابستان تیم خود را با بازیکنانی نظیر آنتوان گریزمان و فرانکی دی یونگ تقویت کرد. با این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بالا رفتن سن بازیکنان خود مواجه شده اند.
+                                    <small>1396/17/12 16:54</small>
+                                </div>
+                            </div>
+                            <div className='customer'>
+                                <div className='customer-reply'>
+                                    ب این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بال
+                                    <small>1396/17/12 16:54</small>
+                                </div>
+                                <Avatar>H</Avatar>
+                            </div>
+                            <div className="operator">
+                                <Avatar>H</Avatar>
+                                <div className='operator-reply'>
+                                    به گزارش "ورزش سه"، بارسلونا در تابستان تیم خود را با بازیکنانی نظیر آنتوان گریزمان و فرانکی دی یونگ تقویت کرد. با این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بالا رفتن سن بازیکنان خود مواجه شده اند.
+                                    <small>1396/17/12 16:54</small>
+                                </div>
+                            </div>
+                            <div className='customer'>
+                                <div className='customer-reply'>
+                                    ب این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بال
+                                    <small>1396/17/12 16:54</small>
+                                </div>
+                                <Avatar>H</Avatar>
+                            </div>
+                        </Paper>
+                        <Paper component="form" style={{ display: "flex", flexDirection: 'row', justifyContent:"space-between"}}>
+                            <IconButton color="primary"  aria-label="directions">
+                                <SendIcon />
+                            </IconButton>
+                            <Divider orientation="vertical" />
+                            <InputBase style={{ width: '100%'}}
+                                       placeholder="Search Google Maps"
+                                       inputProps={{ 'aria-label': 'search google maps' }}
+                            />
+                            <AttachFileIcon style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
+                            <label for='a' style={{width:50,height:50, zIndex: 1}}/>
+                            <input style={{position:'absolute',right:100,zIndex:-100000,display:'none'}} id='a' type='file'/>
+                        </Paper>
+                    </Box>
+                </Container>
+            </div>
 
 
         );
