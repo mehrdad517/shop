@@ -163,7 +163,7 @@ class Sidebar extends Component {
                         <ListItemText primary="دسته بندی مطالب" />
                     </ListItem>
                     <Divider />
-                    <ListItem component={Link} onClick={this.handleClose} to='/'>
+                    <ListItem component={Link} onClick={this.handleClose} to='/tickets'>
                         <ListItemIcon>
                             <ContactMailIcon />
                         </ListItemIcon>

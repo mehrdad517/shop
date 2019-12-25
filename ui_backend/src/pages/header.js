@@ -78,7 +78,7 @@ class Header extends Component {
                         </Menu>
                     </Toolbar>
                 </AppBar>
-                <Drawer anchor="left" open={this.state.open} onClose={() => this.setState({ open: false})}>
+                <Drawer  anchor="left" open={this.state.open} onClose={() => this.setState({ open: false})}>
                     <Sidebar onClose={() => this.setState({ open: false})} />
                 </Drawer>
                 <Logout open={this.state.logout} onClose={() => this.setState({ logout: false})} />

@@ -28,6 +28,7 @@ import Header from "./header";
 import {push} from 'connected-react-router';
 import BlogCategory from './blogBundle/category/index'
 import BlogContent from './blogBundle/content/list'
+import Ticket from './ticketBundle/list'
 
 import './../assets/styles/style.scss'
 import ContentCreate from "./blogBundle/content/create";
@@ -81,9 +82,11 @@ class Router extends Component {
                         <Route component={Setting} path={'/setting'} exact={true}/>
 
                         <Route component={BlogContent} path='/blog/contents' exact={true}/>
-                        <Route component={ContentEdit} path='/blog/contents/:id/edit'/>
                         <Route component={ContentCreate} path='/blog/contents/create'/>
+                        <Route component={ContentEdit} path='/blog/contents/:id/edit'/>
                         <Route component={BlogCategory} path='/blog/categories' exact={true}/>
+
+                        <Route component={Ticket} path={'/tickets'} exact={true} />
 
                     </ConnectedRouter>
                 }

@@ -705,16 +705,6 @@ class Api {
         })
     }
 
-    async putContentStatus(id, object) {
-        return  axios.put(`http://localhost:8000/api/backend/blog/contents/${id}/status`, object, {
-            headers: this.haeders()
-        }).then((response) => {
-            return this.dispatchResponse(response);
-        }).catch((error) => {
-            toast.error(error.message);
-        })
-    }
-
 
     /* Attachment File, Image video etc ... */
     async attachment(object) {
@@ -732,6 +722,18 @@ class Api {
             params : params,
             headers: this.haeders(),
         }).then((response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    // Ticket And Conversation
+    async getTickets(object) {
+        return axios.get('http://localhost:8000/api/backend/tickets', {
+            headers: this.haeders(),
+            params: object
+        }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
             toast.error(error.message);
