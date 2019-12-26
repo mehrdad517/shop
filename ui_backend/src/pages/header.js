@@ -51,7 +51,7 @@ class Header extends Component {
         return (
             <div>
                 <AppBar position="static">
-                    <Toolbar  style={{ display: "flex", justifyContent:  'space-between', }}>
+                    <Toolbar  style={{ display: "flex", justifyContent:  'space-between' }}>
                         <IconButton edge="start"  color="inherit" aria-label="menu" onClick={() => this.setState({ open: true})}>
                             <MenuIcon />
                         </IconButton>

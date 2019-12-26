@@ -740,6 +740,17 @@ class Api {
         })
     }
 
+    // With Conversations
+    async getTicketConversations(id) {
+        return axios.get('http://localhost:8000/api/backend/tickets/' + id + '/conversations', {
+            headers: this.haeders()
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
 
 
 

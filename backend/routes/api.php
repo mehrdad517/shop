@@ -281,6 +281,11 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
         });
     });
 
+    Route::group(['prefix' => '/tickets'], function() {
+        Route::get('/', 'Backend\TicketController@index');
+        Route::get('/{id}/conversations', 'Backend\TicketController@conversations');
+    });
+
 
 });
 

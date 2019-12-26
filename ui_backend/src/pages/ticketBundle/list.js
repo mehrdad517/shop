@@ -51,7 +51,11 @@ import './chat.css'
 import FolderIcon from '@material-ui/icons/Folder';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import AssignmentIcon from '@material-ui/icons/Assignment'
-
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import {toast} from "react-toastify";
+import moment from 'moment-jalaali'
+import FaceIcon from '@material-ui/icons/Face';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 class Ticket extends Component {
 
     constructor(props) {
@@ -67,14 +71,27 @@ class Ticket extends Component {
             limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
+            // For Load Conversation
+            chat: false,
+            ticket: [],
         };
 
         this.api = new Api();
         this.handleRequest = this.handleRequest.bind(this);
+        this.scrollToBottom = this.scrollToBottom.bind(this);
     }
 
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    };
+
     componentDidMount() {
+
         this.handleRequest()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.scrollToBottom();
     }
 
     async handleChangeLimit(event) {
@@ -150,12 +167,37 @@ class Ticket extends Component {
 
     }
 
+
+    // Handle Load Ticket And Show Conversation
+    handleLoadTicket(id) {
+        // Show Loading
+        this.setState({
+            loading: true,
+        });
+        // Send Request To Server And Fetch Ticket And Conversation
+        this.api.getTicketConversations(id).then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    loading: false,
+                    chat: true,
+                    ticket: response
+                })
+            }
+        }).catch((error) => {
+            toast.error(error);
+        })
+
+
+
+    }
+
     render() {
+        console.log(this.state)
         return (
             <div className='content'>
                 <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
                 <Container>
-                    <div className='container-inner' >
+                    <div className={ 'container-inner ' + (this.state.chat ? 'animated fadeIn' : '') } style={{ paddingLeft: this.state.chat ? '300px' : 0 }}>
                         <Box style={{ margin: '10px 0 20px 0'}}>
                             <Grid container alignItems="center">
                                 <Grid item xs={12} sm={6}>
@@ -336,11 +378,9 @@ class Ticket extends Component {
                                                 <td>{entity.updated_at}</td>
                                                 <td>
                                                     <Tooltip title="مشاهده">
-                                                        <Link to={`/blog/contents/${entity.id}/edit/`}>
-                                                            <IconButton>
-                                                                <CreateIcon />
-                                                            </IconButton>
-                                                        </Link>
+                                                        <IconButton onClick={() => this.handleLoadTicket(entity.id)}>
+                                                            <QuestionAnswerIcon />
+                                                        </IconButton>
                                                     </Tooltip>
                                                 </td>
                                             </tr>
@@ -358,61 +398,45 @@ class Ticket extends Component {
                             />
                         </Box>
                     </div>
-                    <Box className='chat-box animated slideInLeft'>
+                    <Box style={{ display: (this.state.chat ? 'block' : 'none')}} className={ 'chat-box ' + (this.state.chat ? 'animated fadeIn' : 'animated fadeOut') }>
                         <AppBar position="static" color={"default"}>
-                            <Toolbar style={{ display: "flex", justifyContent: 'space-between'}}>
+                            <Toolbar style={{ display: "flex", justifyContent: 'space-between', padding: "0 10px"}}>
                                 <div style={{ display: "flex",flexDirection: 'row', alignItems: 'center'}}>
-                                    <Avatar style={{ marginLeft: '10px'}}>M</Avatar>
+                                    <Avatar style={{ backgroundColor: '#ff5b60', marginLeft: '10px'}}><FaceIcon /></Avatar>
                                     <Typography variant="body1">
-                                        مهرداد معصومی
+                                        {this.state.ticket && this.state.ticket.created_by && this.state.ticket.created_by.name}
                                     </Typography>
                                 </div>
-                                <IconButton>
+                                <IconButton onClick={() => this.setState({ chat: false})}>
                                     <ChevronLeftIcon />
                                 </IconButton>
                             </Toolbar>
                         </AppBar>
                         <Paper className='chat-box-inner'>
-                            <div className="operator">
-                                <Avatar>H</Avatar>
-                                <div className='operator-reply'>
-                                    به گزارش "ورزش سه"، بارسلونا در تابستان تیم خود را با بازیکنانی نظیر آنتوان گریزمان و فرانکی دی یونگ تقویت کرد. با این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بالا رفتن سن بازیکنان خود مواجه شده اند.
-                                    <small>1396/17/12 16:54</small>
-                                </div>
-                            </div>
-                            <div className='customer'>
-                                <div className='customer-reply'>
-                                    ب این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بال
-                                    <small>1396/17/12 16:54</small>
-                                </div>
-                                <Avatar>H</Avatar>
-                            </div>
-                            <div className="operator">
-                                <Avatar>H</Avatar>
-                                <div className='operator-reply'>
-                                    به گزارش "ورزش سه"، بارسلونا در تابستان تیم خود را با بازیکنانی نظیر آنتوان گریزمان و فرانکی دی یونگ تقویت کرد. با این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بالا رفتن سن بازیکنان خود مواجه شده اند.
-                                    <small>1396/17/12 16:54</small>
-                                </div>
-                            </div>
-                            <div className='customer'>
-                                <div className='customer-reply'>
-                                    ب این وجود اما به نظر می رسد که آبی اناری ها در بخش هایی از زمین با مشکل بال
-                                    <small>1396/17/12 16:54</small>
-                                </div>
-                                <Avatar>H</Avatar>
-                            </div>
+                            {this.state.ticket && this.state.ticket.conversations && this.state.ticket.conversations.map((conversation, index) => {
+                                return(
+                                    <div key={index}>
+                                        <div className={conversation.created_by.role_key === 'guest' ? 'customer' : 'operator'}>
+                                            {conversation.created_by.role_key !== 'guest' && <Avatar style={{ backgroundColor: '#f0e623'}}><Tooltip title={conversation.created_by.name}><AccountCircleIcon /></Tooltip></Avatar>}
+                                            <div className={(conversation.created_by.role_key === 'guest' ? 'customer' : 'operator') + '-reply'}>
+                                                <p>{conversation.content}</p>
+                                                <small>{moment(conversation.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</small>
+                                            </div>
+                                            {conversation.created_by.role_key === 'guest' && <Avatar style={{ backgroundColor: '#ff5b60'}}><FaceIcon /></Avatar> }
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            <div  ref={(el) => { this.messagesEnd = el }}></div>
                         </Paper>
                         <Paper component="form" style={{ display: "flex", flexDirection: 'row', justifyContent:"space-between"}}>
                             <IconButton color="primary"  aria-label="directions">
                                 <SendIcon />
                             </IconButton>
                             <Divider orientation="vertical" />
-                            <InputBase style={{ width: '100%'}}
-                                       placeholder="Search Google Maps"
-                                       inputProps={{ 'aria-label': 'search google maps' }}
-                            />
+                            <InputBase style={{ width: '100%'}} placeholder="Search Google Maps" inputProps={{ 'aria-label': 'search google maps' }}/>
                             <AttachFileIcon style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
-                            <label for='a' style={{width:50,height:50, zIndex: 1}}/>
+                            <label htmlFor='a' style={{width:50,height:50, zIndex: 1}}/>
                             <input style={{position:'absolute',right:100,zIndex:-100000,display:'none'}} id='a' type='file'/>
                         </Paper>
                     </Box>
