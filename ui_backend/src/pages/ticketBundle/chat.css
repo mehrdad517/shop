@@ -39,28 +39,33 @@
     text-align: justify;
     direction: rtl;
 }
-.customer-reply {
-    background-color: #00bb72;
-    color: #ffffff;
+.operator-reply {
+    background-color: #e5ffe8;
+    border: 1px solid #b4b4b4;
+    color: #000000;
     border-radius: 15px;
     padding: 15px 15px 5px 15px;
-    margin: 15px;
+    margin: 15px 15px 15px 0;
     line-height: 2;
-    /*width: auto;*/
     max-width: 60%;
     justify-content: center;
 }
-.operator-reply {
-    background-color: #0079ac;
-    color: #ffffff;
+.customer-reply {
+    background-color: #ededed;
+    border: 1px solid #b4b4b4;
+    color: #000000;
     border-radius: 15px;
     padding: 15px 15px 5px 15px;
     margin: 15px;
     line-height: 2;
     max-width: 60%;
 }
-
-
+/* chat form */
+.chat-form {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
 @media only screen and (max-width: 1600px) {
     .container-inner {
         padding-left: calc(1600px - 1280px - 160px);

@@ -751,6 +751,26 @@ class Api {
         })
     }
 
+    async postTicketConversations(id, object) {
+        return axios.post('http://localhost:8000/api/backend/tickets/' + id + '/conversations', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async deleteTicketConversations(ticket, id) {
+        return axios.delete('http://localhost:8000/api/backend/tickets/' + ticket + '/conversations/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
 
 
 

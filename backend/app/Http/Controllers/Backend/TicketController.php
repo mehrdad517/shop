@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Ticket;
+use App\TicketConversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -78,13 +80,60 @@ class TicketController extends Controller
                     'mobile' => $conversation->createdBy->mobile,
                     'role_key' => $conversation->createdBy->role_key,
                 ],
+                'id' => $conversation->id,
                 'content' => $conversation->content,
+                'is_customer' => $ticket->created_by == $conversation->created_by ? true: false,
                 'created_at' => $conversation->created_at,
             ];
         }
 
 
         return response($list);
+    }
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeConversations($id, Request $request)
+    {
+
+        $ticket = Ticket::find($id);
+
+        $result = $ticket->conversations()->create([
+            'created_by' => Auth::id(),
+            'content' => $request->get('content'),
+        ]);
+
+        if ($result) {
+            return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.']);
+        }
+
+        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+    }
+
+    /**
+     * @param $ticket_id
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteConversation($ticket_id, $id)
+    {
+        $status = false;
+        $cnv = TicketConversation::find($id);
+
+        if ($cnv->ticket_id == $ticket_id) {
+            $status = $cnv->delete();
+        }
+
+        if ($status) {
+            return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.']);
+        }
+
+        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+
     }
 
 }

@@ -24,38 +24,26 @@ import SyncIcon from '@material-ui/icons/Sync';
 import {Link} from "react-router-dom";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Chip from "@material-ui/core/Chip";
-import CreateIcon from "@material-ui/icons/Create";
 import Api from "../../api";
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import DirectionsIcon from '@material-ui/icons/Directions';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import SendIcon from '@material-ui/icons/Send';
 import AppBar from '@material-ui/core/AppBar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Toolbar from "@material-ui/core/Toolbar";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import './chat.css'
-import FolderIcon from '@material-ui/icons/Folder';
-import PageviewIcon from '@material-ui/icons/Pageview';
-import AssignmentIcon from '@material-ui/icons/Assignment'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import {toast} from "react-toastify";
 import moment from 'moment-jalaali'
 import FaceIcon from '@material-ui/icons/Face';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+
+import PersonIcon from '@material-ui/icons/Person';
 class Ticket extends Component {
 
     constructor(props) {
@@ -72,7 +60,10 @@ class Ticket extends Component {
             sort_field: 'id',
             sort_type: 'desc',
             // For Load Conversation
+            deleteMode: false,
             chat: false,
+            ticket_id : '',
+            content: '', // chat conversation
             ticket: [],
         };
 
@@ -93,6 +84,7 @@ class Ticket extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.scrollToBottom();
     }
+
 
     async handleChangeLimit(event) {
 
@@ -173,6 +165,7 @@ class Ticket extends Component {
         // Show Loading
         this.setState({
             loading: true,
+            ticket_id: id
         });
         // Send Request To Server And Fetch Ticket And Conversation
         this.api.getTicketConversations(id).then((response) => {
@@ -186,9 +179,47 @@ class Ticket extends Component {
         }).catch((error) => {
             toast.error(error);
         })
+    }
 
+    handleDeleteConversation(id)
+    {
+        this.setState({
+            deleteMode: true
+        });
+        this.api.deleteTicketConversations(this.state.ticket_id, id).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    this.handleLoadTicket(this.state.ticket_id)
+                }
+            }
+        }).catch((error) => {
+            toast.error(error);
+        })
+    }
 
+    handleConversationSubmit(event)
+    {
+        event.preventDefault();
+        let form = this.state.ticket;
+        form['conversations'].push({
+            content: this.state.content,
+            created_at: moment().format('YYYY/MM/DD HH:mm:ss'),
+            is_customer: 0
+        });
+        this.setState({
+            ticket: form,
+            content: ''
+        });
 
+        this.api.postTicketConversations(this.state.ticket_id, {'content' : this.state.content }).then((response) => {
+            if (typeof response != "undefined") {
+                if (response.status) {
+                    this.handleLoadTicket(this.state.ticket_id)
+                }
+            }
+        }).catch((error) => {
+            toast.error(error);
+        })
     }
 
     render() {
@@ -398,52 +429,56 @@ class Ticket extends Component {
                             />
                         </Box>
                     </div>
-                    <Box style={{ display: (this.state.chat ? 'block' : 'none')}} className={ 'chat-box ' + (this.state.chat ? 'animated fadeIn' : 'animated fadeOut') }>
+                    {/* Chat Component Box  */}
+                    <Box style={{ display: (this.state.chat ? 'block' : 'none')}} className={ 'chat-box ' + (this.state.chat ? 'animated slideInDown' : 'animated fadeOut') }>
+                        {/* APP Bar Header */}
                         <AppBar position="static" color={"default"}>
                             <Toolbar style={{ display: "flex", justifyContent: 'space-between', padding: "0 10px"}}>
                                 <div style={{ display: "flex",flexDirection: 'row', alignItems: 'center'}}>
-                                    <Avatar style={{ backgroundColor: '#ff5b60', marginLeft: '10px'}}><FaceIcon /></Avatar>
-                                    <Typography variant="body1">
-                                        {this.state.ticket && this.state.ticket.created_by && this.state.ticket.created_by.name}
-                                    </Typography>
+                                    <Avatar style={{ backgroundColor: '#00a7e2', marginLeft: '10px'}}><FaceIcon /></Avatar>
+                                    <h2>{this.state.ticket && this.state.ticket.created_by && this.state.ticket.created_by.name}</h2>
                                 </div>
-                                <IconButton onClick={() => this.setState({ chat: false})}>
-                                    <ChevronLeftIcon />
+                                <IconButton onClick={() => this.setState({ chat: false })}>
+                                    <NavigateBeforeIcon />
                                 </IconButton>
                             </Toolbar>
                         </AppBar>
+                        {/* Chat Conversations */}
                         <Paper className='chat-box-inner'>
                             {this.state.ticket && this.state.ticket.conversations && this.state.ticket.conversations.map((conversation, index) => {
                                 return(
-                                    <div key={index}>
-                                        <div className={conversation.created_by.role_key === 'guest' ? 'customer' : 'operator'}>
-                                            {conversation.created_by.role_key !== 'guest' && <Avatar style={{ backgroundColor: '#f0e623'}}><Tooltip title={conversation.created_by.name}><AccountCircleIcon /></Tooltip></Avatar>}
-                                            <div className={(conversation.created_by.role_key === 'guest' ? 'customer' : 'operator') + '-reply'}>
-                                                <p>{conversation.content}</p>
-                                                <small>{moment(conversation.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</small>
-                                            </div>
-                                            {conversation.created_by.role_key === 'guest' && <Avatar style={{ backgroundColor: '#ff5b60'}}><FaceIcon /></Avatar> }
+                                    <div key={index} className={Boolean(conversation.is_customer) === true  ? 'customer' : 'operator'}>
+                                        {Boolean(conversation.is_customer) === false && <Avatar style={{ backgroundColor: '#00da85'}}><Tooltip title={conversation.created_by && conversation.created_by.name}><PersonIcon /></Tooltip></Avatar>}
+                                        <div className={(Boolean(conversation.is_customer) === true  ? 'customer' : 'operator') + '-reply'}>
+                                            <p>{conversation.content}</p>
+                                            <small>{moment(conversation.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</small>
                                         </div>
+                                        {Boolean(conversation.is_customer) === true && <Avatar style={{ backgroundColor: '#00a7e2'}}><FaceIcon /></Avatar> }
+                                        {Boolean(conversation.is_customer) === false &&
+                                        <IconButton onClick={() => this.handleDeleteConversation(conversation.id)} color={"secondary"}>
+                                            <HighlightOffIcon />
+                                        </IconButton>}
                                     </div>
                                 );
                             })}
-                            <div  ref={(el) => { this.messagesEnd = el }}></div>
+                            <Divider  ref={(el) => { this.messagesEnd = el }} />
                         </Paper>
-                        <Paper component="form" style={{ display: "flex", flexDirection: 'row', justifyContent:"space-between"}}>
-                            <IconButton color="primary"  aria-label="directions">
+                        {/* Input for Attach File And Write Text Message */}
+                        <Paper className='chat-form' onSubmit={this.handleConversationSubmit.bind(this)} component="form">
+                            {/* Send Icon */}
+                            <IconButton type="submit" color={ (this.state.content !== '') ? "primary" :  "default" }  aria-label="directions">
                                 <SendIcon />
                             </IconButton>
-                            <Divider orientation="vertical" />
-                            <InputBase style={{ width: '100%'}} placeholder="Search Google Maps" inputProps={{ 'aria-label': 'search google maps' }}/>
+                            {/* Input For Write Text Message */}
+                            <InputBase style={{ width: '100%'}} value={this.state.content} onChange={(event) => this.setState({content: event.target.value})} placeholder="تایپ کنید ..."/>
+                            {/* Attch File Icon */}
                             <AttachFileIcon style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
-                            <label htmlFor='a' style={{width:50,height:50, zIndex: 1}}/>
-                            <input style={{position:'absolute',right:100,zIndex:-100000,display:'none'}} id='a' type='file'/>
+                            <label htmlFor="attach" style={{width:50,height:50, zIndex: 1}}/>
+                            <input style={{position:'absolute', right:100, zIndex:-100000, display:'none'}} id='attach' type='file'/>
                         </Paper>
                     </Box>
                 </Container>
             </div>
-
-
         );
     }
 }
