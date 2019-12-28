@@ -708,7 +708,7 @@ class Api {
 
     /* Attachment File, Image video etc ... */
     async attachment(object) {
-        return axios.post('http://localhost:8000/api/attachment', object, {
+        return axios.post('http://localhost:8000/api/backend/attachment', object, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
@@ -718,7 +718,7 @@ class Api {
     }
 
     async unlink(params) {
-        return axios.delete('http://localhost:8000/api/attachment', {
+        return axios.delete('http://localhost:8000/api/backend/attachment', {
             params : params,
             headers: this.haeders(),
         }).then((response) => {
@@ -733,6 +733,26 @@ class Api {
         return axios.get('http://localhost:8000/api/backend/tickets', {
             headers: this.haeders(),
             params: object
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async postTicket(object) {
+        return axios.post('http://localhost:8000/api/backend/tickets', object, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async putTicket(id, object) {
+        return axios.put('http://localhost:8000/api/backend/tickets/' + id, object, {
+            headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);
         }).catch((error) => {
@@ -763,6 +783,47 @@ class Api {
 
     async deleteTicketConversations(ticket, id) {
         return axios.delete('http://localhost:8000/api/backend/tickets/' + ticket + '/conversations/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async getTicketCategories(flat_mode = false) {
+        return axios.get('http://localhost:8000/api/backend/tickets/categories', {
+            headers: this.haeders(),
+            params: {flat_mode: Boolean(flat_mode)}
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async getTicketCategory(id) {
+        return axios.get('http://localhost:8000/api/backend/tickets/categories/' + id, {
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async createTicketCategories(object) {
+        return axios.post('http://localhost:8000/api/backend/tickets/categories', object ,{
+            headers: this.haeders(),
+        }).then( (response) => {
+            return this.dispatchResponse(response);
+        }).catch((error) => {
+            toast.error(error.message);
+        })
+    }
+
+    async updateTicketCategory(id, object) {
+        return axios.put('http://localhost:8000/api/backend/tickets/categories/' + id, object,{
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

@@ -4,22 +4,24 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Ticket;
+use App\TicketCategory;
 use App\TicketConversation;
+use Faker\Factory as Faker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     *
-     */
     public function index(Request $request)
     {
 
-        $entities = Ticket::where( function ($q) use ($request) {
+        $entities = Ticket::with(['createdBy' => function($q) {
+            $q->select('id','name');
+        }, 'category' => function($q) {
+            $q->select('value', 'label');
+        }])->where( function ($q) use ($request) {
             // Filter If Request Contain Filter Input
             if ($request->has('filter')) {
 
@@ -29,16 +31,26 @@ class TicketController extends Controller
                     $q->where('id', '=', $filter['id']);
                 }
 
-                if (@$filter['created_by'] != -1) {
+                if (@$filter['created_by'] != -1 and  @$filter['created_by'] != "") {
                     $q->where('created_by', '=', $filter['created_by']);
                 }
 
-                if (@$filter['title']) {
-                    $q->where('title', 'like', '%' . $filter['title'] . '%')->orWhere('slug', 'like', '%' . $filter['title'] . '%');
+
+                if (@$filter['category_id'] != -1 and  @$filter['category_id'] != "") {
+                    $q->whereIn('category_id', TicketCategory::descendantsAndSelf($filter['category_id'])->pluck('value'));
                 }
 
                 if (@$filter['status'] != -1) {
                     $q->where('status', $filter['status']);
+                }
+
+                if (@$filter['from_date'] && @$filter['to_date']) {
+                    $q->where('created_at', '>=', $filter['from_date']);
+                    $q->where('created_at', '<=', $filter['to_date']);
+                } elseif (@$filter['from_date']) {
+                    $q->where('created_at', '>=', $filter['from_date']);
+                } elseif (@$filter['to_date']) {
+                    $q->where('created_at', '<=', $filter['to_date']);
                 }
             }
         })->orderBy($request->get('sort_field') ?? 'id', $request->get('sort_type') ?? 'desc')
@@ -48,14 +60,35 @@ class TicketController extends Controller
 
     }
 
+
+    public function store(Request $request)
+    {
+
+        $result = Ticket::create([
+            'title' => $request->get('title'),
+            'category_id' => $request->get('category_id'),
+            'created_by' => $request->get('created_by')
+        ]);
+
+        if ($result) {
+            return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.']);
+        }
+
+        return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+    }
+
+
+
     /**
      * @param $id
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     *
+     * ticket_id
      */
     public function conversations($id)
     {
         $ticket = Ticket::with(['createdBy', 'conversations' => function($q) {
-            $q->with(['createdBy']);
+            $q->with(['createdBy', 'files']);
         }])->find($id);
 
 
@@ -72,8 +105,9 @@ class TicketController extends Controller
             'conversations' => [],
         ];
 
-        foreach ($ticket->conversations as $conversation) {
-            $list['conversations'][] = [
+        foreach ($ticket->conversations as $key => $conversation) {
+            $list['conversations'][$key] = [
+                'files' => [],
                 'created_by' => [
                     'id' => $conversation->createdBy->id,
                     'name' => $conversation->createdBy->name,
@@ -85,8 +119,11 @@ class TicketController extends Controller
                 'is_customer' => $ticket->created_by == $conversation->created_by ? true: false,
                 'created_at' => $conversation->created_at,
             ];
-        }
 
+            foreach ($conversation->files as $file) {
+                $list['conversations'][$key]['files'][] = Storage::url("ticket/$conversation->id/$file->file");
+            }
+        }
 
         return response($list);
     }
@@ -107,6 +144,27 @@ class TicketController extends Controller
             'content' => $request->get('content'),
         ]);
 
+        if ($request->has('file') && $request->get('file') != "") {
+
+            $old = 'attachment/' . $request->get('file');
+
+            $new = 'ticket/' . $result->id . '/' . $request->get('file');
+
+            $move = Storage::move($old, $new); // Move Main Image
+
+            if ($move) {
+
+                $result->files()->create([
+                    'created_by' => Auth::id(),
+                    'file' => $request->get('file'),
+                    'collection' => 0,
+                    'directory' => 'ticket',
+                ]);
+            }
+        }
+
+
+
         if ($result) {
             return response()->json(['status' => true, 'msg' => 'با موفقیت انجام شد.']);
         }
@@ -125,6 +183,15 @@ class TicketController extends Controller
         $cnv = TicketConversation::find($id);
 
         if ($cnv->ticket_id == $ticket_id) {
+
+            $directory_delete_status = Storage::deleteDirectory("ticket/$cnv->id");
+
+            if ($directory_delete_status) {
+                $cnv->files()->delete();
+            }
+
+
+
             $status = $cnv->delete();
         }
 
@@ -134,6 +201,23 @@ class TicketController extends Controller
 
         return response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
 
+    }
+
+
+
+
+    public function update($ticket_id, Request $request)
+    {
+
+        $res = Ticket::find($ticket_id)->update([
+            'category_id' => $request->get('category_id')
+        ]);
+
+        if ($res) {
+            return response()->json(['status' => true, 'msg' => 'عملیات موفقیا آمیز']);
+        }
+
+        return response()->json(['status' => true, 'msg' => 'عملیات موفقیا آمیز']);
     }
 
 }

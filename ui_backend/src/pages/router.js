@@ -29,7 +29,7 @@ import {push} from 'connected-react-router';
 import BlogCategory from './blogBundle/category/index'
 import BlogContent from './blogBundle/content/list'
 import Ticket from './ticketBundle/list'
-
+import TicketCategory from "./ticketBundle/category/index";
 import './../assets/styles/style.scss'
 import ContentCreate from "./blogBundle/content/create";
 import ContentEdit from "./blogBundle/content/edit";
@@ -87,6 +87,7 @@ class Router extends Component {
                         <Route component={BlogCategory} path='/blog/categories' exact={true}/>
 
                         <Route component={Ticket} path={'/tickets'} exact={true} />
+                        <Route component={TicketCategory} path='/tickets/categories' exact={true}/>
 
                     </ConnectedRouter>
                 }

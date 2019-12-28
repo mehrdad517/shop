@@ -35,15 +35,27 @@ import Toolbar from "@material-ui/core/Toolbar";
 import './chat.css'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import {toast} from "react-toastify";
-import moment from 'moment-jalaali'
 import FaceIcon from '@material-ui/icons/Face';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-
+import AttachmentIcon from '@material-ui/icons/Attachment';
 import PersonIcon from '@material-ui/icons/Person';
+import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+import moment from 'moment-jalaali'
+import DatePicker from "react-datepicker2";
+import List from "@material-ui/core/List";
+import Dialog from "@material-ui/core/Dialog";
+import ListItem from "@material-ui/core/ListItem";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+
 class Ticket extends Component {
 
     constructor(props) {
@@ -53,32 +65,54 @@ class Ticket extends Component {
             entities: [],
             filter: {
                 status: -1,
-                created_by: -1
+                created_by: -1,
+                from_date: '',
+                to_date: '',
+                category_id: -1
             },
             page: 1,
             limit: 10,
             sort_field: 'id',
             sort_type: 'desc',
+            categories: [],
             // For Load Conversation
-            deleteMode: false,
-            chat: false,
-            ticket_id : '',
-            content: '', // chat conversation
-            ticket: [],
+            cnv_deleteMode: '', // click delete btn to conversation and scroll to msg
+            chat: false, // show chat popup
+            ticket_id : '', // get ticket id conversation
+            ticket: [], // store ticket info
+            // form send to server
+            content: '', // chat conversation content
+            file: '', // upload file
+
+            new_ticket_form: {
+                created_by: '',
+                category_id: '',
+                title: ''
+            }
         };
 
         this.api = new Api();
         this.handleRequest = this.handleRequest.bind(this);
-        this.scrollToBottom = this.scrollToBottom.bind(this);
+        this.messagesEnd = React.createRef();
     }
 
     scrollToBottom = () => {
-        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+        if (this.state.chat && this.messagesEnd) {
+            this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+        }
     };
 
     componentDidMount() {
 
-        this.handleRequest()
+        this.api.getTicketCategories(true).then((res) => {
+            if (typeof res != "undefined") {
+                this.setState({
+                    categories: res
+                })
+            }
+        });
+
+        this.handleRequest();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -143,7 +177,14 @@ class Ticket extends Component {
     async handleRequest() {
 
         await this.api.getTickets({
-            filter: this.state.filter,
+            filter: {
+                id: this.state.filter.id,
+                status: this.state.filter.status,
+                created_by: this.state.filter.created_by,
+                from_date : this.state.filter.from_date ? this.state.filter.from_date.locale('es').format('YYYY/M/D HH:mm:ss') : '',
+                to_date : this.state.filter.to_date ? this.state.filter.to_date.locale('es').format('YYYY/M/D HH:mm:ss'): '',
+                category_id: this.state.filter.category_id
+            },
             sort_field: this.state.sort_field,
             sort_type: this.state.sort_type,
             page: this.state.page,
@@ -184,12 +225,12 @@ class Ticket extends Component {
     handleDeleteConversation(id)
     {
         this.setState({
-            deleteMode: true
+            cnv_deleteMode: id
         });
         this.api.deleteTicketConversations(this.state.ticket_id, id).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
-                    this.handleLoadTicket(this.state.ticket_id)
+                    this.handleLoadTicket(this.state.ticket_id);
                 }
             }
         }).catch((error) => {
@@ -208,13 +249,22 @@ class Ticket extends Component {
         });
         this.setState({
             ticket: form,
-            content: ''
         });
 
-        this.api.postTicketConversations(this.state.ticket_id, {'content' : this.state.content }).then((response) => {
+        this.api.postTicketConversations(this.state.ticket_id, {
+            content : this.state.content,
+            file: this.state.file,
+            directory: this.state.directory
+        }).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
-                    this.handleLoadTicket(this.state.ticket_id)
+                    this.setState({
+                        cnv_deleteMode: '',
+                        file: '',
+                        content: ''
+                    });
+                    this.handleLoadTicket(this.state.ticket_id);
+                    this.handleRequest();
                 }
             }
         }).catch((error) => {
@@ -222,215 +272,381 @@ class Ticket extends Component {
         })
     }
 
+    autoCompleteHandleSelect = (id) =>
+    {
+        let filter = this.state.filter;
+        filter.created_by = id;
+        this.setState({
+            filter
+        });
+
+        this.handleRequest();
+
+    };
+
+    async autoCompleteHandleChange(event)
+    {
+        let instance = new Api();
+        instance.autoComplete('users', {'term': event.target.value}).then((response) => {
+            if (typeof response != "undefined") {
+                this.setState({
+                    options: response
+                })
+            }
+        });
+
+    }
+
+    setSelectedDay(value, name) {
+        console.log(value);
+        let filter = this.state.filter;
+        filter[name] = value;
+        this.setState({
+            filter,
+        });
+        this.handleRequest();
+    };
+
+    handleFileUpload(event) {
+
+        const form_data = new FormData();
+        form_data.append('file', event.target.files[0]);
+
+        this.api.attachment(form_data).then((res) => {
+            if (typeof res != "undefined") {
+                if (res.status) {
+                    this.setState({
+                        file: res.file
+                    })
+                } else {
+                    toast.error(res.msg);
+                }
+            }
+        }).catch((error) => {
+            toast.error(error);
+        })
+    }
+
+    handleChangeCategory(category_id) {
+        this.setState({
+            loading: true,
+        });
+
+        this.api.putTicket(this.state.current_ticket, {category_id: category_id}).then((res) => {
+            if (typeof res != "undefined") {
+                if (res.status) {
+                    this.setState({
+                        open: false,
+                        current_ticket: '',
+                        loading: false
+                    });
+                    this.handleRequest();
+                } else {
+                    toast.error(res.msg);
+                }
+            }
+        })
+    }
+
+    // Create New Ticket
+    autoCompleteHandleSelectNewTicket = (id) =>
+    {
+        let new_ticket_form = this.state.new_ticket_form;
+        new_ticket_form['created_by'] = id;
+        this.setState({
+            new_ticket_form
+        });
+
+    };
+
+    handleChangeElementNewTicket(event) {
+        let new_ticket_form = this.state.new_ticket_form;
+        new_ticket_form[event.target.name] = event.target.value;
+        this.setState({
+            new_ticket_form
+        })
+    }
+
+    handleCreateNewTicket(event) {
+        event.preventDefault();
+
+        if (this.state.new_ticket_form.created_by === "" || this.state.new_ticket_form.category_id === "" || this.state.new_ticket_form.title === "") {
+            toast.error('فرم را با دقت پر نکرده اید.');
+            return false;
+        }
+
+        this.setState({
+            loading: true
+        });
+
+        this.api.postTicket(this.state.new_ticket_form).then((res) => {
+            if (typeof res != "undefined") {
+                if (res.status) {
+                    toast.success(res.msg);
+                    this.handleRequest();
+                    let new_ticket_form = {
+                        created_by: '',
+                        category_id: '',
+                        title: ''
+                    };
+                    this.setState({
+                        open: false,
+                        loading: false,
+                        new_ticket_form
+                    })
+                } else {
+                    toast.error(res.msg);
+                }
+            }
+        }).catch((error) => {
+            toast.error(error);
+        })
+
+    }
+
+
+
     render() {
-        console.log(this.state)
         return (
             <div className='content'>
-                <CircularProgress style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
+                <CircularProgress size={20} style={{display: (this.state.loading ? 'block' : 'none'), zIndex: '9999'}} color={"secondary"} />
                 <Container>
-                    <div className={ 'container-inner ' + (this.state.chat ? 'animated fadeIn' : '') } style={{ paddingLeft: this.state.chat ? '300px' : 0 }}>
-                        <Box style={{ margin: '10px 0 20px 0'}}>
-                            <Grid container alignItems="center">
-                                <Grid item xs={12} sm={6}>
-                                    <h2>مدیریت تیکت ها</h2>
-                                    <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کلیه تیکت ها  را مدیریت کنید.</p>
-                                </Grid>
-                                <Grid item xs={12} sm={6} >
-                                    <Link to='/' style={{ display: 'flex', justifyContent: 'flex-end'}}>
-                                        <Button variant="contained" color="default" >
-                                            <NavigationIcon />
-                                        </Button>
-                                    </Link>
-                                </Grid>
+                    <Box style={{ margin: '10px 0 20px 0'}}>
+                        <Grid container alignItems="center">
+                            <Grid item xs={12} sm={6}>
+                                <h2>مدیریت تیکت ها</h2>
+                                <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید کلیه تیکت ها  را مدیریت کنید.</p>
                             </Grid>
-                        </Box>
-                        <Box style={{ margin: '20px 0'}} boxShadow={0}>
-                            <ExpansionPanel>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1c-content"
-                                    id="panel1c-header"
-                                >
-                                    <div>
-                                        <Typography>جستجو در لیست</Typography>
-                                    </div>
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails >
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={4} md={3} >
-                                            <TextField
-                                                id="outlined-name"
-                                                label="شناسه"
-                                                variant="filled"
-                                                margin='dense'
-                                                fullWidth
-                                                name='id'
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                onChange={this.handleChangeSearchInput.bind(this)}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={4} md={3} >
-                                            <TextField
-                                                id="outlined-name"
-                                                label="عنوان"
-                                                variant="filled"
-                                                margin='dense'
-                                                fullWidth
-                                                name='title'
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                onChange={this.handleChangeSearchInput.bind(this)}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={4} md={3} >
-                                            <TextField
-                                                select
-                                                label="کاربران"
-                                                variant="filled"
-                                                value={this.state.filter.created_by}
-                                                margin='dense'
-                                                fullWidth
-                                                name='created_by'
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                onChange={this.handleChangeSearchInput.bind(this)}
-                                            >
-                                                <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                                {this.state.users && this.state.users.map((user, index) => {
-                                                    return(
-                                                        <MenuItem key={index} value={user.id}>{user.name}</MenuItem>
-                                                    );
-                                                })}
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={12} sm={4} md={3} >
-                                            <TextField
-                                                select
-                                                label="وضعیت"
-                                                variant="filled"
-                                                value={this.state.filter.status}
-                                                margin='dense'
-                                                fullWidth
-                                                name='status'
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                onChange={this.handleChangeSearchInput.bind(this)}
-                                            >
-                                                <MenuItem key={0} value={-1}>انتخاب</MenuItem>
-                                                <MenuItem key={1} value={1}>فعال</MenuItem>
-                                                <MenuItem key={2} value={0}>غیرفعال</MenuItem>
-                                            </TextField>
-                                        </Grid>
-                                    </Grid>
-                                </ExpansionPanelDetails>
-                                <Divider />
-                                <ExpansionPanelActions>
-                                    <Button color="primary">
-                                        جستجو
+                            <Grid item xs={12} sm={6} >
+                                <Link to='/' style={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                    <Button variant="contained" color="default" >
+                                        <NavigationIcon />
                                     </Button>
-                                </ExpansionPanelActions>
-                            </ExpansionPanel>
-                        </Box>
-                        <Box style={{ margin: '20px 0 0 0'}}>
-                            <Grid container alignItems="center" >
-                                <Grid item xs={4} sm={6}>
-                                    <TextField
-                                        select
-                                        value={this.state.limit}
-                                        margin='dense'
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        onChange={this.handleChangeLimit.bind(this)}
-                                    >
-                                        <MenuItem  value="10">10</MenuItem>
-                                        <MenuItem  value="20">20</MenuItem>
-                                        <MenuItem  value="30">30</MenuItem>
-                                        <MenuItem  value="50">50</MenuItem>
-                                        <MenuItem  value="100">100</MenuItem>
-                                        <MenuItem  value="200">200</MenuItem>
-                                    </TextField>
-                                </Grid>
-                                <Grid item xs={8} sm={6}>
-                                    <Pagination
-                                        activePage={this.state.page}
-                                        itemsCountPerPage={this.state.entities && this.state.entities.per_page}
-                                        totalItemsCount={this.state.entities && this.state.entities.total}
-                                        pageRangeDisplayed={5}
-                                        onChange={this.handlePageChange.bind(this)}
-                                    />
-                                </Grid>
+                                </Link>
                             </Grid>
-                        </Box>
-                        <Box>
-                            <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
-                                <Tooltip title="سینک">
-                                    <IconButton onClick={() => this.handleRequest()} >
-                                        <SyncIcon />
-                                    </IconButton>
-                                </Tooltip>
-                                {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) ?  <Tooltip title="افزودن">
-                                    <Link to={'/blog/contents/create'}>
-                                        <IconButton>
-                                            <AddCircleOutlineIcon />
-                                        </IconButton>
-                                    </Link>
-                                </Tooltip> : ''}
-                            </div>
-                            <div style={{ overflowX: 'auto'}}>
-                                <table className='table'>
-                                    <thead>
-                                    <tr>
-                                        <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                        <th onClick={() => this.handleChangeSort('title')}>عنوان&nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                        <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc' ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>) : <SortIcon/>}</th>
-                                        <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ایجاد&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                        <th onClick={() => this.handleChangeSort('created_at')}>به روز رسانی&nbsp;{this.state.sort_field === 'updated_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
-                                        <th>عملیات</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.state.entities.data  && this.state.entities.data.map((entity, index) => {
-                                        return(
-                                            <tr key={index}>
-                                                <td>{entity.id}</td>
-                                                <td>{entity.title}</td>
-                                                <td>
-                                                    <Tooltip title="وضعیت">
-                                                        <Chip size={"small"} variant={"outlined"} color={entity.status ? "primary": "secondary"}  label={entity.status ? 'فعال' : 'غیرفعال'} />
-                                                    </Tooltip>
-                                                </td>
-                                                <td>{entity.created_at}</td>
-                                                <td>{entity.updated_at}</td>
-                                                <td>
-                                                    <Tooltip title="مشاهده">
-                                                        <IconButton onClick={() => this.handleLoadTicket(entity.id)}>
-                                                            <QuestionAnswerIcon />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <Pagination
-                                activePage={this.state.page}
-                                itemsCountPerPage={this.state.entities && this.state.entities.per_page}
-                                totalItemsCount={this.state.entities && this.state.entities.total}
-                                pageRangeDisplayed={5}
-                                onChange={this.handlePageChange.bind(this)}
-                            />
-                        </Box>
-                    </div>
+                        </Grid>
+                    </Box>
+                    <Box style={{ margin: '20px 0'}} boxShadow={0}>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1c-content"
+                                id="panel1c-header"
+                            >
+                                <div>
+                                    <Typography><b>جستجو در لیست</b></Typography>
+                                </div>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails >
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            id="outlined-name"
+                                            label="شناسه"
+                                            variant="filled"
+                                            margin='dense'
+                                            fullWidth
+                                            name='id'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3}>
+                                        <Autocomplete
+                                            onChange={((event, value) => this.autoCompleteHandleSelect(value ? value.id : ''))}
+                                            options={this.state.options}
+                                            getOptionLabel={option => option.name + ' - ' + option.mobile}
+                                            renderInput={params => (
+                                                <TextField
+                                                    {...params}
+                                                    fullWidth
+                                                    margin={"dense"}
+                                                    label="کاربر"
+                                                    variant="filled"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    onChange={this.autoCompleteHandleChange.bind(this)}
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="وضعیت"
+                                            variant="filled"
+                                            value={this.state.filter.status}
+                                            margin='dense'
+                                            fullWidth
+                                            name='status'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            <MenuItem key={1} value={1}>پاسخ داده شده</MenuItem>
+                                            <MenuItem key={2} value={0}>در انتظار پاسخ</MenuItem>
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3} >
+                                        <TextField
+                                            select
+                                            label="بخش"
+                                            variant="filled"
+                                            value={this.state.filter.category_id}
+                                            margin='dense'
+                                            fullWidth
+                                            name='category_id'
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.handleChangeSearchInput.bind(this)}
+                                        >
+                                            <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                            {this.state.categories.length > 0 && this.state.categories.map((category, index) => {
+                                                return(
+                                                    <MenuItem key={index + 1} value={category.value}>{category.label}</MenuItem>
+                                                );
+                                            })}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3}>
+                                        <div className='datepicker-input-container '>
+                                            <label>از تاریخ</label>
+                                            <DatePicker
+                                                value={this.state.filter.from_date}
+                                                isGregorian={false}
+                                                onChange={(value) => this.setSelectedDay(value,'from_date')}
+                                            />
+
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} md={3}>
+                                        <div className='datepicker-input-container '>
+                                            <label>تا تاریخ</label>
+                                            <DatePicker
+                                                value={this.state.filter.to_date}
+                                                isGregorian={false}
+                                                onChange={(value) => this.setSelectedDay(value,'to_date')}
+                                            />
+
+                                        </div>
+                                    </Grid>
+                                </Grid>
+                            </ExpansionPanelDetails>
+                            <Divider />
+                            <ExpansionPanelActions>
+                                <Button color="primary">
+                                    جستجو
+                                </Button>
+                            </ExpansionPanelActions>
+                        </ExpansionPanel>
+                    </Box>
+                    <Box style={{ margin: '20px 0 0 0'}}>
+                        <Grid container alignItems="center" >
+                            <Grid item xs={4} sm={6}>
+                                <TextField
+                                    select
+                                    value={this.state.limit}
+                                    margin='dense'
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    onChange={this.handleChangeLimit.bind(this)}
+                                >
+                                    <MenuItem  value="10">10</MenuItem>
+                                    <MenuItem  value="20">20</MenuItem>
+                                    <MenuItem  value="30">30</MenuItem>
+                                    <MenuItem  value="50">50</MenuItem>
+                                    <MenuItem  value="100">100</MenuItem>
+                                    <MenuItem  value="200">200</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={8} sm={6}>
+                                <Pagination
+                                    activePage={this.state.page}
+                                    itemsCountPerPage={this.state.entities && this.state.entities.per_page}
+                                    totalItemsCount={this.state.entities && this.state.entities.total}
+                                    pageRangeDisplayed={5}
+                                    onChange={this.handlePageChange.bind(this)}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <Box>
+                        <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
+                            <Tooltip title="سینک">
+                                <IconButton onClick={() => this.handleRequest()} >
+                                    <SyncIcon />
+                                </IconButton>
+                            </Tooltip>
+                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) &&
+                            <Tooltip title="افزودن">
+                                <IconButton onClick={() => this.setState({ open: true, current_ticket: '' })}>
+                                    <AddCircleOutlineIcon />
+                                </IconButton>
+                            </Tooltip>}
+                        </div>
+                        <div style={{ overflowX: 'auto'}}>
+                            <table className='table'>
+                                <thead>
+                                <tr>
+                                    <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('created_by')}>کاربر&nbsp;{this.state.sort_field === 'created_by' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('title')}>عنوان&nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ایجاد&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('created_at')}>به روز رسانی&nbsp;{this.state.sort_field === 'updated_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('category_id')}>بخش&nbsp;{this.state.sort_field === 'category_id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc' ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>) : <SortIcon/>}</th>
+                                    <th>عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.entities.data  && this.state.entities.data.map((entity, index) => {
+                                    return(
+                                        <tr key={index}>
+                                            <td>{entity.id}</td>
+                                            <td>{entity.created_by.name}</td>
+                                            <td>{entity.title}</td>
+                                            <td style={{ direction: 'ltr'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
+                                            <td style={{ direction: 'ltr'}}>{moment(entity.updated_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
+                                            <td>
+                                                <Tooltip title='برای تغییر کلیک کنید.'>
+                                                    <Chip clickable={true} onClick={() => this.setState({ open: true, current_ticket: entity.id })} label={entity.category.label} />
+                                                </Tooltip>
+                                            </td>
+                                            <td>
+                                                <Tooltip title="وضعیت">
+                                                    <Chip size={"small"} variant={"outlined"} color={entity.status ? "primary": "secondary"}  label={entity.status ? 'پاسخ داده شده' : 'در انتظار پاسخ'} />
+                                                </Tooltip>
+                                            </td>
+                                            <td>
+                                                <Tooltip title="مشاهده">
+                                                    <IconButton onClick={() => this.handleLoadTicket(entity.id)}>
+                                                        <QuestionAnswerIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
+                        <Pagination
+                            activePage={this.state.page}
+                            itemsCountPerPage={this.state.entities && this.state.entities.per_page}
+                            totalItemsCount={this.state.entities && this.state.entities.total}
+                            pageRangeDisplayed={5}
+                            onChange={this.handlePageChange.bind(this)}
+                        />
+                    </Box>
                     {/* Chat Component Box  */}
-                    <Box style={{ display: (this.state.chat ? 'block' : 'none')}} className={ 'chat-box ' + (this.state.chat ? 'animated slideInDown' : 'animated fadeOut') }>
+                    {this.state.chat && <Box className={ 'chat-box animated bounceInUp' }>
                         {/* APP Bar Header */}
                         <AppBar position="static" color={"default"}>
                             <Toolbar style={{ display: "flex", justifyContent: 'space-between', padding: "0 10px"}}>
@@ -455,13 +671,25 @@ class Ticket extends Component {
                                         </div>
                                         {Boolean(conversation.is_customer) === true && <Avatar style={{ backgroundColor: '#00a7e2'}}><FaceIcon /></Avatar> }
                                         {Boolean(conversation.is_customer) === false &&
-                                        <IconButton onClick={() => this.handleDeleteConversation(conversation.id)} color={"secondary"}>
+                                        <IconButton onClick={() => this.handleDeleteConversation(conversation.id)} color={"secondary"} ref={(el) => {
+                                            if (this.state.cnv_deleteMode === conversation.id) {
+                                                console.log(this.state.cnv_deleteMode, conversation.id);
+                                                this.messagesEnd = el
+                                            }
+                                        }}>
                                             <HighlightOffIcon />
                                         </IconButton>}
+                                        {conversation.files && conversation.files.length > 0 && conversation.files.map((file, index) => {
+                                            return(
+                                                <a href={file} target='_blank'>
+                                                    <AttachFileIcon />
+                                                </a>
+                                            );
+                                        })}
                                     </div>
                                 );
                             })}
-                            <Divider  ref={(el) => { this.messagesEnd = el }} />
+                            {this.state.cnv_deleteMode === '' && <div  ref={(el) => { this.messagesEnd = el }} />}
                         </Paper>
                         {/* Input for Attach File And Write Text Message */}
                         <Paper className='chat-form' onSubmit={this.handleConversationSubmit.bind(this)} component="form">
@@ -472,12 +700,95 @@ class Ticket extends Component {
                             {/* Input For Write Text Message */}
                             <InputBase style={{ width: '100%'}} value={this.state.content} onChange={(event) => this.setState({content: event.target.value})} placeholder="تایپ کنید ..."/>
                             {/* Attch File Icon */}
-                            <AttachFileIcon style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
+                            <AttachFileIcon color={this.state.file != '' ? 'primary' : ''} style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
                             <label htmlFor="attach" style={{width:50,height:50, zIndex: 1}}/>
-                            <input style={{position:'absolute', right:100, zIndex:-100000, display:'none'}} id='attach' type='file'/>
+                            <input accept=".zip,.rar,.7zip,image/x-png,image/gif,image/jpeg, video/mp4" onChange={(event) => this.handleFileUpload(event)} style={{position:'absolute', right:100, zIndex:-100000, display:'none'}} id='attach' type='file'/>
                         </Paper>
-                    </Box>
+                    </Box>}
                 </Container>
+                <Dialog onClose={() => this.setState({ open: false })} aria-labelledby="simple-dialog-title" open={this.state.open}>
+                    {this.state.current_ticket ? <List>
+                        {this.state.categories.length > 0 && this.state.categories.map(category => (
+                            <ListItem button onClick={() => this.handleChangeCategory(category.value)}>
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <AccountTreeIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={category.label} />
+                            </ListItem>
+                        ))}
+                    </List> : <form onSubmit={this.handleCreateNewTicket.bind(this)}>
+                        <DialogTitle id="alert-dialog-title">ایجاد تیکت جدید</DialogTitle>
+                        <DialogContent>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <Autocomplete
+                                        onChange={((event, value) => this.autoCompleteHandleSelectNewTicket(value ? value.id : ''))}
+                                        options={this.state.options}
+                                        getOptionLabel={option => option.name + ' - ' + option.mobile}
+                                        renderInput={params => (
+                                            <TextField
+                                                {...params}
+                                                fullWidth
+                                                margin={"dense"}
+                                                label="کاربر"
+                                                variant="filled"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                onChange={this.autoCompleteHandleChange.bind(this)}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        select
+                                        label="بخش"
+                                        variant="filled"
+                                        value={this.state.new_ticket_form.category_id}
+                                        margin='dense'
+                                        fullWidth
+                                        name='category_id'
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        onChange={this.handleChangeElementNewTicket.bind(this)}
+                                    >
+                                        <MenuItem key={0} value={-1}>انتخاب</MenuItem>
+                                        {this.state.categories.length > 0 && this.state.categories.map((category, index) => {
+                                            return(
+                                                <MenuItem key={index + 1} value={category.value}>{category.label}</MenuItem>
+                                            );
+                                        })}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="عنوان"
+                                        variant="filled"
+                                        margin='dense'
+                                        fullWidth
+                                        name='title'
+                                        onChange={this.handleChangeElementNewTicket.bind(this)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button color="primary" onClick={() => this.setState({open: false})}>
+                                انصراف
+                            </Button>
+                            <Button disabled={this.state.loading} color="primary" autoFocus type='submit'>
+                                ارسال اطلاعات
+                            </Button>
+                        </DialogActions>
+                    </form>}
+                </Dialog>
             </div>
         );
     }

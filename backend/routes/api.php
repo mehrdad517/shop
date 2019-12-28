@@ -282,11 +282,109 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => '/tickets'], function() {
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\TicketCategoryController@index');
+            Route::post('/', 'Backend\TicketCategoryController@store');
+            Route::get('/{id}', 'Backend\TicketCategoryController@show');
+            Route::put('/{id}', 'Backend\TicketCategoryController@update');
+        });
+
         Route::get('/', 'Backend\TicketController@index');
+        Route::post('/', 'Backend\TicketController@store');
         Route::get('/{id}/conversations', 'Backend\TicketController@conversations');
         Route::post('/{id}/conversations', 'Backend\TicketController@storeConversations');
         Route::delete('/{ticket}/conversations/{id}', 'Backend\TicketController@deleteConversation');
+        Route::put('/{id}', 'Backend\TicketController@update');
     });
+
+
+
+    /*
+     |-------------------------------------------------------------------------
+     |  All File And Media Router
+     |--------------------------------------------------------------------------
+     |
+     | Store File In Attachment Directory
+     | This Directory Contain All Media
+     | Before Insert In DataBase
+     | Original File Save
+     | Past Parameters Are file,Directory
+     |
+     */
+    Route::group(['prefix' => 'attachment'], function () {
+
+        Route::post('/', function (Request $request) { // Get Form Data
+
+            // Check File Mime Type
+            if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
+                // Image Size Larger Than 1MB
+                if ($request->file('file')->getSize() / 1024 > 1024) {
+                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 1 مگابایت است']);
+                }
+                //Video Check Mime Type
+            }
+            elseif (in_array($request->file('file')->getMimeType(), ['video/mp4', 'video/ogv', 'video/webm'])) {
+                if ($request->file('file')->getSize() / 1024 > 3072) {
+                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
+                }
+            }
+            elseif (in_array($request->file('file')->getMimeType(), ['application/zip', 'application/x-rar'])) {
+                if ($request->file('file')->getSize() / 1024 > 3072) {
+                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
+                }
+            }
+            else { // Other Format is InValid
+                return response()->json(['status' => false, 'msg' => 'فرمت غیر مجاز است.']);
+            }
+            // With Storage Laravel File System Save File In Attachment Directory
+            $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
+
+            // Water Mark
+            if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
+                \Intervention\Image\Facades\Image::make(storage_path('app/public/' . $path))->insert(public_path('logo.png'), 'bottom-right', 30, 30)->save();
+            }
+
+            return response()->json([
+                'status' => true,
+                'msg' => 'ok',
+                'path' => Storage::url($path) ,
+                'file' => last(explode('/', $path))
+            ]);
+        });
+
+        /**
+        | Delete Files From Storage
+        | Past Parameters Are file,Directory
+         */
+        Route::delete('/', function (Request $request) {
+            // File with Address or Http etc ...
+            $file = last(explode('/', $request->get('file')));
+
+            $db_file = \App\File::where('file', $file)->first();
+
+            if ($db_file) {
+                if ($db_file->size) {
+                    foreach (json_decode($db_file->size, true) as $size) {
+                        Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $size .  '/' . $file);
+                    }
+                }
+
+                $status = Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $file);
+                if ($status) {
+                    $db_file->delete();
+                }
+
+            } else {
+                // Directory Find
+                $status = Storage::delete('attachment/' . $file);
+            }
+
+            // Status Delete File True Or False
+            return response()->json(['status' => $status]);
+        });
+    });
+
 
 
 });
@@ -458,80 +556,4 @@ Route::post('/change-profile', function (Request $request) {
 
 })->middleware('auth:api');
 
-
-/*
- |-------------------------------------------------------------------------
- |  All File And Media Router
- |--------------------------------------------------------------------------
- |
- | Store File In Attachment Directory
- | This Directory Contain All Media
- | Before Insert In DataBase
- | Original File Save
- | Past Parameters Are file,Directory
- |
- */
-Route::group(['prefix' => 'attachment'], function () {
-
-    Route::post('/', function (Request $request) {
-
-        // Check File Mime Type
-        if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
-            // Image Size Larger Than 1MB
-            if ($request->file('file')->getSize() / 1024 > 1000) {
-                return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 1 مگابایت است']);
-            }
-            //Video Check Mime Type
-        }
-        elseif (in_array($request->file('file')->getMimeType(), ['video/mp4'])) {
-            if ($request->file('file')->getSize() / 1024 > 10000) {
-                return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 10 مگابایت است']);
-            }
-        }
-        else { // Other Format is InValid
-            return response()->json(['status' => false, 'msg' => 'فرمت غیر مجاز است.']);
-        }
-        // With Storage Laravel File System Save File In Attachment Directory
-        $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
-
-        \Intervention\Image\Facades\Image::make(storage_path('app/public/' . $path))->insert(public_path('logo.png'), 'bottom-right', 30, 30)->save();
-
-        return response()->json([
-            'path' => Storage::url($path) ,
-            'file' => last(explode('/', $path))
-        ]);
-    });
-
-    /**
-     | Delete Files From Storage
-     | Past Parameters Are file,Directory
-     */
-    Route::delete('/', function (Request $request) {
-        // File with Address or Http etc ...
-        $file = last(explode('/', $request->get('file')));
-
-        $db_file = \App\File::where('file', $file)->first();
-
-
-        if ($db_file) {
-            if ($db_file->size) {
-                foreach (json_decode($db_file->size, true) as $size) {
-                    Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $size .  '/' . $file);
-                }
-            }
-
-            $status = Storage::delete($db_file->directory . '/' . $db_file->fileable_id . '/' . $file);
-            if ($status) {
-                $db_file->delete();
-            }
-
-        } else {
-            // Directory Find
-            $status = Storage::delete('attachment/' . $file);
-        }
-
-        // Status Delete File True Or False
-        return response()->json(['status' => $status]);
-    });
-});
 

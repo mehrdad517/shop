@@ -169,6 +169,12 @@ class Sidebar extends Component {
                         </ListItemIcon>
                         <ListItemText primary="امور مشتریان" />
                     </ListItem>
+                    <ListItem component={Link} onClick={this.handleClose} to='/tickets/categories'>
+                        <ListItemIcon>
+                            <AccountTreeIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="دسته بندی تیکت ها" />
+                    </ListItem>
                     <Divider />
                     {Boolean(this.props.auth.permissions.domain.update.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/setting'>
