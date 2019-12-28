@@ -109,6 +109,7 @@ header('Access-Control-Request-Method:*');
 header('Access-Control-Allow-Headers: Origin,token, Authorization, X-Requested-With, Content-Type, Accept, Content-Disposition, Content-Length');
 header('Access-Control-Allow-Credentials: true');
 
+// in group url invalid symbol is -_
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => 'filter'], function () {
@@ -122,7 +123,7 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
             return response($response);
         });
 
-        // Auto Complete User Table
+         //Auto Complete User Table
         Route::get('/users', function (Request $request) {
             $response = \App\User::select('id', 'name', 'mobile')
                 ->where('name', 'like', '%'.$request->get('term').'%')
@@ -146,172 +147,18 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
     });
 
 
-    Route::group(['prefix' => 'anbar'], function () {
-        Route::get('/', 'Backend\AnbarController@index');
-    });
-
-    Route::group(['prefix' => 'orders'], function () {
-
-        Route::get('/status', function () {
-            $list = [
-                'order_status' => \App\Order::status(),
-                'transport_status' => \App\Order::transport(),
-                'delivery_status' => \App\Order::delivery(),
-                'items_status' => \App\Order::items(),
-            ];
-            return response($list);
-        });
-
-        Route::get('/', 'Backend\OrderController@index');
-        Route::get('/{id}', 'Backend\OrderController@show');
-        Route::put('/{id}', 'Backend\OrderController@update');
-        Route::post('/{id}/fractive-request', 'Backend\OrderController@fractiveRequest');
-    });
-
-    Route::group([ 'prefix' => '/products'], function () {
-
-
-        Route::group(['prefix' => '/categories'], function () {
-            Route::get('/', 'Backend\ProductCategoryController@index');
-            Route::post('/', 'Backend\ProductCategoryController@store');
-            Route::get('/{id}', 'Backend\ProductCategoryController@show');
-            Route::put('/{id}', 'Backend\ProductCategoryController@update');
-            Route::get('/{id}/attributes', 'Backend\ProductCategoryController@getAttributes');
-            Route::post('/{id}/attributes', 'Backend\ProductCategoryController@storeAttributes');
-        });
-
-        Route::group(['prefix' => '/attributes'], function () {
-            Route::get('/', 'Backend\GroupAttributeController@index');
-            Route::post('/', 'Backend\GroupAttributeController@store');
-            Route::get('/{id}', 'Backend\GroupAttributeController@show');
-            Route::put('/{id}', 'Backend\GroupAttributeController@update');
-        });
-
-        Route::group(['prefix' => '/brands'], function () {
-            Route::get('/', 'Backend\BrandController@index');
-            Route::post('/', 'Backend\BrandController@store');
-            Route::get('/{id}', 'Backend\BrandController@show');
-            Route::put('/{id}', 'Backend\BrandController@update');
-        });
-
-
-        Route::get('/', 'Backend\ProductController@index');
-        Route::post('/', 'Backend\ProductController@store');
-        Route::get('/{id}', 'Backend\ProductController@show');
-        Route::put('/{id}', 'Backend\ProductController@update');
-        Route::get('/{id}/categories/{categories}/attributes', 'Backend\ProductController@productAttributes');
-        Route::put('/{id}/change/status', 'Backend\ProductController@changeStatus');
-        Route::get('/{id}/pins', 'Backend\ProductController@pins');
-        Route::post('/{id}/pins', 'Backend\ProductController@storePins');
-    });
-
-    Route::group(['prefix' => '/users'], function () {
-
-
-        Route::group(['prefix' => '/permissions'], function () {
-            Route::get('/initial', 'Backend\PermissionController@initial');
-            Route::get('/', 'Backend\PermissionController@index');
-        });
-
-        Route::group(['prefix' => '/roles'], function () {
-            Route::get('/{role}/permissions', 'Backend\RoleController@permissions');
-            Route::put('/{role}/permissions', 'Backend\RoleController@setPermission');
-            Route::get('/', 'Backend\RoleController@index');
-            Route::post('/', 'Backend\RoleController@store');
-        });
-
-        Route::get('/', 'Backend\UserController@index');
-        Route::post('/', 'Backend\UserController@store');
-        Route::get('/{id}', 'Backend\UserController@show');
-        Route::put('/{id}', 'Backend\UserController@update');
-        Route::put('/{id}/change-password', 'Backend\UserController@changePassword');
-        Route::put('/{id}/change-status', 'Backend\UserController@changeStatus');
-
-    });
-
-
-    Route::group(['prefix' => 'setting'], function () {
-        Route::get('/', 'Backend\DomainController@read');
-        Route::put('/', 'Backend\DomainController@update');
-        Route::get('/sticky-setting', 'Backend\DomainController@readSticky');
-        Route::put('/sticky-setting', 'Backend\DomainController@updateSticky');
-    });
-
-    Route::group(['prefix' => 'social-medias'], function () {
-        Route::get('/', function () {
-            $response = \App\SocialMedia::all();
-            return response($response);
-        });
-    });
-
-    Route::group(['prefix' => 'communication_channels'], function () {
-
-        Route::get('/', function () {
-            $response = \App\CommunicationChannel::all();
-            return response($response);
-        });
-    });
-
-
-    Route::group(['prefix' => 'reports'], function () {
-
-        Route::get('/sales-daily-report', 'Backend\ReportController@salesReport');
-        Route::get('/map-reports', 'Backend\ReportController@mapReports');
-    });
-
-
-
-    Route::group([ 'prefix' => '/blog'], function () {
-
-
-        Route::group(['prefix' => '/categories'], function () {
-            Route::get('/', 'Backend\BlogCategoryController@index');
-            Route::post('/', 'Backend\BlogCategoryController@store');
-            Route::get('/{id}', 'Backend\BlogCategoryController@show');
-            Route::put('/{id}', 'Backend\BlogCategoryController@update');
-        });
-
-
-        Route::group(['prefix' => '/contents'], function () {
-            Route::get('/', 'Backend\BlogContentController@index');
-            Route::post('/', 'Backend\BlogContentController@store');
-            Route::get('/{id}', 'Backend\BlogContentController@show');
-            Route::put('/{id}', 'Backend\BlogContentController@update');
-            Route::put('/{id}/status', 'Backend\BlogContentController@changeStatus');
-        });
-    });
-
-    Route::group(['prefix' => '/tickets'], function() {
-
-        Route::group(['prefix' => '/categories'], function () {
-            Route::get('/', 'Backend\TicketCategoryController@index');
-            Route::post('/', 'Backend\TicketCategoryController@store');
-            Route::get('/{id}', 'Backend\TicketCategoryController@show');
-            Route::put('/{id}', 'Backend\TicketCategoryController@update');
-        });
-
-        Route::get('/', 'Backend\TicketController@index');
-        Route::post('/', 'Backend\TicketController@store');
-        Route::get('/{id}/conversations', 'Backend\TicketController@conversations');
-        Route::post('/{id}/conversations', 'Backend\TicketController@storeConversations');
-        Route::delete('/{ticket}/conversations/{id}', 'Backend\TicketController@deleteConversation');
-        Route::put('/{id}', 'Backend\TicketController@update');
-    });
-
-
-
     /*
-     |-------------------------------------------------------------------------
-     |  All File And Media Router
-     |--------------------------------------------------------------------------
-     |
-     | Store File In Attachment Directory
-     | This Directory Contain All Media
-     | Before Insert In DataBase
-     | Original File Save
-     | Past Parameters Are file,Directory
-     |
-     */
+    |-------------------------------------------------------------------------
+    |  All File And Media Router
+    |--------------------------------------------------------------------------
+    |
+    | Store File In Attachment Directory
+    | This Directory Contain All Media
+    | Before Insert In DataBase
+    | Original File Save
+    | Past Parameters Are file,Directory
+    |
+    */
     Route::group(['prefix' => 'attachment'], function () {
 
         Route::post('/', function (Request $request) { // Get Form Data
@@ -385,15 +232,159 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
         });
     });
 
+    Route::group(['prefix' => 'anbar'], function () {
+        Route::get('/', 'Backend\AnbarController@index');
+    });
+
+    Route::group(['prefix' => 'orders'], function () {
+
+        Route::get('/status', function () {
+            $list = [
+                'order_status' => \App\Order::status(),
+                'transport_status' => \App\Order::transport(),
+                'delivery_status' => \App\Order::delivery(),
+                'items_status' => \App\Order::items(),
+            ];
+            return response($list);
+        });
+
+        Route::get('/', 'Backend\OrderController@index');
+        Route::get('/{id}', 'Backend\OrderController@show');
+        Route::put('/{id}', 'Backend\OrderController@update');
+        Route::post('/{id}/fractive-request', 'Backend\OrderController@fractiveRequest');
+    });
+
+    Route::group([ 'prefix' => '/products'], function () {
+
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\ProductCategoryController@index');
+            Route::post('/', 'Backend\ProductCategoryController@store');
+            Route::get('/{id}', 'Backend\ProductCategoryController@show');
+            Route::put('/{id}', 'Backend\ProductCategoryController@update');
+            Route::get('/{id}/attributes', 'Backend\ProductCategoryController@getAttributes');
+            Route::post('/{id}/attributes', 'Backend\ProductCategoryController@storeAttributes');
+        });
+
+        Route::group(['prefix' => '/attributes'], function () {
+            Route::get('/', 'Backend\GroupAttributeController@index');
+            Route::post('/', 'Backend\GroupAttributeController@store');
+            Route::get('/{id}', 'Backend\GroupAttributeController@show');
+            Route::put('/{id}', 'Backend\GroupAttributeController@update');
+        });
+
+        Route::group(['prefix' => '/brands'], function () {
+            Route::get('/', 'Backend\BrandController@index');
+            Route::post('/', 'Backend\BrandController@store');
+            Route::get('/{id}', 'Backend\BrandController@show');
+            Route::put('/{id}', 'Backend\BrandController@update');
+        });
+
+
+        Route::get('/', 'Backend\ProductController@index');
+        Route::post('/', 'Backend\ProductController@store');
+        Route::get('/{id}', 'Backend\ProductController@show');
+        Route::put('/{id}', 'Backend\ProductController@update');
+        Route::get('/{id}/categories/{categories}/attributes', 'Backend\ProductController@productAttributes');
+        Route::put('/{id}/change/status', 'Backend\ProductController@changeStatus');
+        Route::get('/{id}/pins', 'Backend\ProductController@pins');
+        Route::post('/{id}/pins', 'Backend\ProductController@storePins');
+    });
+
+    Route::group(['prefix' => '/users'], function () {
+
+
+        Route::group(['prefix' => '/permissions'], function () {
+            Route::get('/', 'Backend\PermissionController@index');
+        });
+
+        Route::group(['prefix' => '/roles'], function () {
+            Route::get('/{role}/permissions', 'Backend\RoleController@permissions');
+            Route::put('/{role}/permissions', 'Backend\RoleController@setPermission');
+            Route::get('/', 'Backend\RoleController@index');
+            Route::post('/', 'Backend\RoleController@store');
+        });
+
+        Route::get('/', 'Backend\UserController@index');
+        Route::post('/', 'Backend\UserController@store');
+        Route::get('/{id}', 'Backend\UserController@show');
+        Route::put('/{id}', 'Backend\UserController@update');
+        Route::put('/{id}/change-password', 'Backend\UserController@changePassword');
+        Route::put('/{id}/change-status', 'Backend\UserController@changeStatus');
+
+    });
+
+    Route::group(['prefix' => 'setting'], function () {
+        Route::get('/', 'Backend\DomainController@read');
+        Route::put('/', 'Backend\DomainController@update');
+        Route::get('/sticky-setting', 'Backend\DomainController@readSticky');
+        Route::put('/sticky-setting', 'Backend\DomainController@updateSticky');
+    });
+
+    Route::group(['prefix' => 'socialMedias'], function () {
+        Route::get('/', function () {
+            $response = \App\SocialMedia::all();
+            return response($response);
+        });
+    });
+
+    Route::group(['prefix' => 'communicationChannels'], function () {
+
+        Route::get('/', function () {
+            $response = \App\CommunicationChannel::all();
+            return response($response);
+        });
+    });
+
+    Route::group(['prefix' => 'reports'], function () {
+
+        Route::get('/sales-daily-report', 'Backend\ReportController@salesReport');
+        Route::get('/map-reports', 'Backend\ReportController@mapReports');
+    });
+
+    Route::group([ 'prefix' => '/blog'], function () {
+
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\BlogCategoryController@index');
+            Route::post('/', 'Backend\BlogCategoryController@store');
+            Route::get('/{id}', 'Backend\BlogCategoryController@show');
+            Route::put('/{id}', 'Backend\BlogCategoryController@update');
+        });
+
+
+        Route::group(['prefix' => '/contents'], function () {
+            Route::get('/', 'Backend\BlogContentController@index');
+            Route::post('/', 'Backend\BlogContentController@store');
+            Route::get('/{id}', 'Backend\BlogContentController@show');
+            Route::put('/{id}', 'Backend\BlogContentController@update');
+            Route::put('/{id}/status', 'Backend\BlogContentController@changeStatus');
+        });
+    });
+
+    Route::group(['prefix' => '/tickets'], function() {
+
+        Route::group(['prefix' => '/categories'], function () {
+            Route::get('/', 'Backend\TicketCategoryController@index');
+            Route::post('/', 'Backend\TicketCategoryController@store');
+            Route::get('/{id}', 'Backend\TicketCategoryController@show');
+            Route::put('/{id}', 'Backend\TicketCategoryController@update');
+        });
+
+        Route::get('/', 'Backend\TicketController@index');
+        Route::post('/', 'Backend\TicketController@store');
+        Route::get('/{id}/conversations', 'Backend\TicketController@conversations');
+        Route::post('/{id}/conversations', 'Backend\TicketController@storeConversations');
+        Route::delete('/{ticket}/conversations/{id}', 'Backend\TicketController@deleteConversation');
+        Route::put('/{id}', 'Backend\TicketController@update');
+    });
 
 
 });
 
-
-
-
-/* auth  */
-
+/*
+ * Auth Api
+ */
 Route::post('/login', 'Auth\LoginController@login');
 Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
 Route::group(['prefix' => 'validation-code'], function () {
@@ -557,3 +548,6 @@ Route::post('/change-profile', function (Request $request) {
 })->middleware('auth:api');
 
 
+
+// Permission Initail
+Route::get('/initial', 'Backend\PermissionController@initial');

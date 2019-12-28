@@ -611,7 +611,7 @@ class Ticket extends Component {
                                         <tr key={index}>
                                             <td>{entity.id}</td>
                                             <td>{entity.created_by.name}</td>
-                                            <td>{entity.title}</td>
+                                            <td>{entity.title.substring(0, 60) + '...'}</td>
                                             <td style={{ direction: 'ltr'}}>{moment(entity.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
                                             <td style={{ direction: 'ltr'}}>{moment(entity.updated_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
                                             <td>

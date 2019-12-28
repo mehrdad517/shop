@@ -375,7 +375,7 @@ class Setting extends Component {
                                     variant="contained"
                                     color={"primary"}
                                 >
-                                    {this.state.loading ? <ClipLoader size={10} color={'#36D7B7'}  /> : 'ذخیره تنظیمات'}
+                                    ذخیره تنظیمات
                                 </Button>
 
                             </Grid>

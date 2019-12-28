@@ -18,34 +18,35 @@ class PermissionController extends Controller
     public function initial(Request $request)
     {
 
-
-
         $final = [];
 
         $routeCollection = \Route::getRoutes()->get();
-
+        // Get all Routes
         foreach ($routeCollection as $key => $route) {
 
             if (preg_match('/backend/', $route->uri)) {
 
-                // get action parameter list
+                /**
+                 * contain prefix, namespace, controller
+                 */
                 $action = $route->getAction();
 
-//                dd($route->get);
-
+                // For Routes That Define In Controller
                 if (@$action['controller']) {
                     // explode action and get single controller
-                    $explodedAction = explode('@', @$action['controller']);
+                    $explodedAction = explode('@', @$action['controller']); // expload controller, App\Http\Controllers\Backend\AnbarController@index
+
+                    // check controller is valid
                     if (count($explodedAction) == 2) {
 
-                        preg_match('/(.*)Controller/',last(explode("\\", $explodedAction[0])), $matches);
+                        // expload expload action  and get last part , AnbarController => 0, Anbar => 1
+                        preg_match('/(.*)Controller/', last(explode("\\", $explodedAction[0])), $matches);
 
-                        preg_match('/(.*)Controller/', $matches[0], $controller);
+                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$matches[1],$controller_name); // create array that contain 0 index and more tha one key, ProductCategory product category or Product Category
 
+                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$explodedAction[1],$action_name); // create array that contain 0 index and more tha one key, getAttribute get Attribute or Get Attribute
 
-                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$controller[1],$controller_name);
-                        preg_match_all('/(?:^|[A-Z])[a-z]+/',$explodedAction[1],$action_name);
-
+                        // join array Product Category Or get Attribute
                         $final[mb_strtolower(join('_', $controller_name[0]))][] = [
                             'key' => mb_strtolower(join('_', $controller_name[0])) . '_' . mb_strtolower(join('_', $action_name[0])),
                             'action' => trans('permissions.' . mb_strtolower(join(' ', $action_name[0]))),
@@ -55,12 +56,23 @@ class PermissionController extends Controller
                     }
                 } else {
 
+                    preg_match('/api\/backend\/(.*)/', $route->uri, $key_name);
+
+                    preg_match_all('/(?:^|[A-Z])[a-z]+/', $key_name[1],$parent); // create array that contain 0 index and more tha one key, ProductCategory product category or Product Category
+
+                    if (count($parent[0]) > 1) {
+                        $key_name[1] = join('/', $parent[0]);
+                    }
+
+                    $final[mb_strtolower(join('_', $parent[0]))][] = [
+                        'key' => mb_strtolower(str_replace('/', '_', $key_name[1])  . '_' .  $route->methods[0]),
+                        'action' => trans('permissions.' . mb_strtolower(str_replace('/', ' ', $key_name[1])) . ' ' . mb_strtolower($route->methods[0])),
+                        'method' => $route->methods[0],
+                        'url' => '/'.$route->uri,
+                    ];
+
                 }
-
-
-
             }
-
         }
 
         foreach ($final as $key=>$value) {

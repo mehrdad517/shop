@@ -574,7 +574,7 @@ class Api {
     }
 
     async socialMedia(){
-        return axios.get(`http://localhost:8000/api/backend/social-medias`, {
+        return axios.get(`http://localhost:8000/api/backend/socialMedias`, {
             headers: this.haeders(),
 
         }).then( (response) => {
@@ -585,7 +585,7 @@ class Api {
     }
 
     async communicationChannel(){
-        return axios.get(`http://localhost:8000/api/backend/communication_channels`, {
+        return axios.get(`http://localhost:8000/api/backend/communicationChannels`, {
             headers: this.haeders(),
         }).then( (response) => {
             return this.dispatchResponse(response);

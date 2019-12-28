@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Role extends Model
 {
@@ -29,6 +30,7 @@ class Role extends Model
         $list = [];
 
         $parents = Permission::select(['parent'])->groupBy('parent')->orderBy('created_at', 'asc')->pluck('parent');
+
         foreach ($parents as $parent) {
             $actions= [];
 
@@ -54,7 +56,6 @@ class Role extends Model
                     'actions' => $actions
                 ];
             } else {
-
                 foreach ($join as $item) {
                     preg_match('/'.$parent.'_(.*)/', $item->key, $match);
                     $list[$parent][$match[1]] = [
