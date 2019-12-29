@@ -108,6 +108,11 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Request-Method:*');
 header('Access-Control-Allow-Headers: Origin,token, Authorization, X-Requested-With, Content-Type, Accept, Content-Disposition, Content-Length');
 header('Access-Control-Allow-Credentials: true');
+ini_set('upload_max_filesize', '4G');
+ini_set('post_max_size', '4G');
+ini_set('max_input_time', 300);
+ini_set('max_execution_time', 300);
+ini_set('memory_limit', '8G');
 
 // in group url invalid symbol is -_
 Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
@@ -164,28 +169,33 @@ Route::group(['prefix' => 'backend', 'middleware' => 'auth:api'], function () {
         Route::post('/', function (Request $request) { // Get Form Data
 
             // Check File Mime Type
-            if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
-                // Image Size Larger Than 1MB
-                if ($request->file('file')->getSize() / 1024 > 1024) {
-                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 1 مگابایت است']);
-                }
-                //Video Check Mime Type
-            }
-            elseif (in_array($request->file('file')->getMimeType(), ['video/mp4', 'video/ogv', 'video/webm'])) {
-                if ($request->file('file')->getSize() / 1024 > 3072) {
-                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
-                }
-            }
-            elseif (in_array($request->file('file')->getMimeType(), ['application/zip', 'application/x-rar'])) {
-                if ($request->file('file')->getSize() / 1024 > 3072) {
-                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
-                }
-            }
-            else { // Other Format is InValid
-                return response()->json(['status' => false, 'msg' => 'فرمت غیر مجاز است.']);
-            }
+//            if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {
+//                // Image Size Larger Than 1MB
+//                if ($request->file('file')->getSize() / 1024 > 1024) {
+//                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 1 مگابایت است']);
+//                }
+//                //Video Check Mime Type
+//            }
+//            elseif (in_array($request->file('file')->getMimeType(), ['video/mp4', 'video/ogv', 'video/webm'])) {
+//                if ($request->file('file')->getSize() / 1024 > 3072) {
+//                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
+//                }
+//            }
+//            elseif (in_array($request->file('file')->getMimeType(), ['application/zip', 'application/x-rar'])) {
+//                if ($request->file('file')->getSize() / 1024 > 3072) {
+//                    return response()->json(['status' => false, 'msg' => 'حداکثر حجم فایل 3 مگابایت است']);
+//                }
+//            }
+//            else { // Other Format is InValid
+//                return response()->json(['status' => false, 'msg' => 'فرمت غیر مجاز است.']);
+//            }
             // With Storage Laravel File System Save File In Attachment Directory
-            $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
+//            $path = $request->file('file')->store($request->has('directory') ? $request->get('directory') : 'attachment', 'public');
+
+
+
+            Storage::disk('s3')->put($request->file('file'), file_put_contents('attachment'));
+            dd('xxxx');
 
             // Water Mark
             if (in_array($request->file('file')->getMimeType(), ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'])) {

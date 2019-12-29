@@ -367,6 +367,7 @@ class Setting extends Component {
                                     </Grid>
                                 </Grid>
                             </Paper>
+                            {this.props.auth.permissions.domain.update.access &&
                             <Grid item xs={12}>
                                 <Button
                                     disabled={this.state.loading}
@@ -377,8 +378,8 @@ class Setting extends Component {
                                 >
                                     ذخیره تنظیمات
                                 </Button>
-
                             </Grid>
+                            }
                         </form>
                     </Box>
                 </div>

@@ -23,7 +23,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import FolderIcon from '@material-ui/icons/Folder';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import FileUploader from "../../../component/FileUploader";
+import FileUploader from "../../../component/gallery/FileUploader";
 import TextEditor from "../../../component/TextEditor/TextEditor";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";

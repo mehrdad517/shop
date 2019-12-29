@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {toast} from "react-toastify";
-import Api from "../api";
+import Api from "../../api";
 import axios from "axios";
 import Fab from '@material-ui/core/Fab';
 import CheckIcon from '@material-ui/icons/Check';
@@ -55,26 +55,26 @@ class FileUploader extends Component {
                 'directory' : 'attachment'
             };
 
-            if (validImageTypes.includes(event.target.files[i].type)) {
-                files[i + counter]['mime_type'] = 'image';
-                if ((event.target.files[i].size / 1024) > 1000) {
-                    toast.error('حداکثر حجم عکس 1 مگابایت است.');
-                    delete files[i + counter];
-                    return ;
-                }
-
-            } else if (validVideoTypes.includes(event.target.files[i].type)) {
-                files[i + counter]['mime_type'] = 'video';
-                if ((event.target.files[i].size) > 10000) {
-                    toast.error('حداکثر حجم ویدئو 10 مگابایت است.');
-                    delete files[i + counter];
-                    return ;
-                }
-            } else {
-                toast.error('فرمت فایل نامعتبر است.');
-                delete files[i + counter];
-                return false;
-            }
+            // if (validImageTypes.includes(event.target.files[i].type)) {
+            //     files[i + counter]['mime_type'] = 'image';
+            //     if ((event.target.files[i].size / 1024) > 1000) {
+            //         toast.error('حداکثر حجم عکس 1 مگابایت است.');
+            //         delete files[i + counter];
+            //         return ;
+            //     }
+            //
+            // } else if (validVideoTypes.includes(event.target.files[i].type)) {
+            //     files[i + counter]['mime_type'] = 'video';
+            //     if ((event.target.files[i].size) > 10000) {
+            //         toast.error('حداکثر حجم ویدئو 10 مگابایت است.');
+            //         delete files[i + counter];
+            //         return ;
+            //     }
+            // } else {
+            //     toast.error('فرمت فایل نامعتبر است.');
+            //     delete files[i + counter];
+            //     return false;
+            // }
 
 
             /* Preview Image Or Video File with Absolute Address */
@@ -198,7 +198,7 @@ class FileUploader extends Component {
                     })}
                     {this.state.files.length === 0 && <span>انتخاب فایل</span>}
                 </label>
-                <input accept="image/x-png,image/gif,image/jpeg" className='input-file' id='upload' type="file" onChange={(event) => this.handleSelectedFiles(event)} multiple={true}/>
+                <input  className='input-file' id='upload' type="file" onChange={(event) => this.handleSelectedFiles(event)} multiple={true}/>
                 <p>حجم عکس نباید بالاتر از 1 مگابایت باشد</p>
                 <p>ویدئو را در سرویس های ارائه دهنده های ویدئو مانند آپارات آپلود کنید و از طریق ادیتور متن در صفحه قرار دهید.</p>
                 <p>پس ار آپلود فایل با کلیک به روی علامت چک عکس اصلی را انتخاب کنید.</p>

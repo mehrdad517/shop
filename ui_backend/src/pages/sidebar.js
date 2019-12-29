@@ -93,88 +93,92 @@ class Sidebar extends Component {
                         <ListItemText primary="صفحه نخست" />
                     </ListItem>
                     <Divider />
-                    {Boolean(this.props.auth.permissions.product.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/products'>
+                    {Boolean(this.props.auth.permissions.product.index.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/products'>
                         <ListItemIcon>
                             <LocalParkingIcon />
                         </ListItemIcon>
                         <ListItemText primary="محصولات" />
-                    </ListItem>: ''}
-                    {Boolean(this.props.auth.permissions.product_category.index.access) === true ?  <ListItem component={Link} onClick={this.handleClose} to='/categories'>
+                    </ListItem>}
+                    {Boolean(this.props.auth.permissions.product_category.index.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/categories'>
                         <ListItemIcon>
                             <AccountTreeIcon />
                         </ListItemIcon>
                         <ListItemText primary="دسته بندی محصولات" />
-                    </ListItem>: ''}
+                    </ListItem>}
 
-                    {Boolean(this.props.auth.permissions.brand.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/brands'>
+                    {Boolean(this.props.auth.permissions.brand.index.access) === true &&  <ListItem component={Link} onClick={this.handleClose} to='/brands'>
                         <ListItemIcon>
                             <BrandingWatermarkIcon />
                         </ListItemIcon>
                         <ListItemText primary="برندها" />
-                    </ListItem>: ''}
+                    </ListItem>}
 
-                    {Boolean(this.props.auth.permissions.group_attribute.index.access) ?  <ListItem component={Link} onClick={this.handleClose} to='/products/attributes'>
+                    {Boolean(this.props.auth.permissions.group_attribute.index.access) === true &&  <ListItem component={Link} onClick={this.handleClose} to='/products/attributes'>
                         <ListItemIcon>
                             <EditAttributesIcon />
                         </ListItemIcon>
                         <ListItemText primary="ویژگی ها" />
-                    </ListItem>: ''}
-
+                    </ListItem>}
                     <Divider/>
-                    {Boolean(this.props.auth.permissions.order.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/orders'>
+                    {Boolean(this.props.auth.permissions.order.index.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/orders'>
                         <ListItemIcon>
                             <InboxIcon />
                         </ListItemIcon>
                         <ListItemText primary="سفارشات" />
-                    </ListItem> : ''}
+                    </ListItem>}
 
-                    {Boolean(this.props.auth.permissions.anbar.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/anbar'>
+                    {Boolean(this.props.auth.permissions.anbar.index.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/anbar'>
                         <ListItemIcon>
                             <StoreIcon />
                         </ListItemIcon>
                         <ListItemText primary="انبار" />
-                    </ListItem> : ''}
-
+                    </ListItem>}
                     <Divider/>
-                    {Boolean(this.props.auth.permissions.user.index.access) ? <ListItem component={Link} onClick={this.handleClose} to='/users'>
+                    {Boolean(this.props.auth.permissions.user.index.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/users'>
                         <ListItemIcon>
                             <GroupIcon />
                         </ListItemIcon>
                         <ListItemText primary="کاربران" />
-                    </ListItem> : ''}
-
-                    {Boolean(this.props.auth.permissions.role.set_permission.access) ? <ListItem component={Link} onClick={this.handleClose} to='/users/access/control/list'>
+                    </ListItem>}
+                    {Boolean(this.props.auth.permissions.role.set_permission.access) === true && <ListItem component={Link} onClick={this.handleClose} to='/users/access/control/list'>
                         <ListItemIcon>
                             <LockIcon />
                         </ListItemIcon>
                         <ListItemText primary="نقش ها و سطوح دسترسی" />
-                    </ListItem> : ''}
+                    </ListItem>}
                     <Divider/>
+                    {Boolean(this.props.auth.permissions.blog_content.index.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/blog/contents'>
                         <ListItemIcon>
                             <CollectionsBookmarkIcon />
                         </ListItemIcon>
                         <ListItemText primary="مدیریت محتوا" />
-                    </ListItem>
+                    </ListItem>}
+                    {Boolean(this.props.auth.permissions.blog_category.index.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/blog/categories'>
                         <ListItemIcon>
-                            <AccountTreeIcon />
+                            <AccountTreeIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="دسته بندی مطالب" />
+                        <ListItemText primary="دسته بندی مطالب"/>
                     </ListItem>
+                    }
                     <Divider />
+                    {Boolean(this.props.auth.permissions.ticket.index.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/tickets'>
                         <ListItemIcon>
-                            <ContactMailIcon />
+                            <ContactMailIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="امور مشتریان" />
+                        <ListItemText primary="امور مشتریان"/>
                     </ListItem>
+                    }
+                    {Boolean(this.props.auth.permissions.ticket_category.index.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/tickets/categories'>
                         <ListItemIcon>
-                            <AccountTreeIcon />
+                            <AccountTreeIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="دسته بندی تیکت ها" />
+                        <ListItemText primary="دسته بندی تیکت ها"/>
                     </ListItem>
+                    }
                     <Divider />
                     {Boolean(this.props.auth.permissions.domain.update.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/setting'>

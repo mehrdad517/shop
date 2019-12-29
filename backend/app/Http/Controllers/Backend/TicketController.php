@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\Ticket;
 use App\TicketCategory;
 use App\TicketConversation;
@@ -180,7 +181,14 @@ class TicketController extends Controller
     public function deleteConversation($ticket_id, $id)
     {
         $status = false;
+
         $cnv = TicketConversation::find($id);
+
+        if ( ! in_array(Auth::user()->role_key, Role::where('crud', 1)->pluck('key')->toArray())) {
+            if (Auth::id() != $cnv->created_by) {
+                return response()->json(['status' => false, 'msg' => 'دسترسی لازم برای حذف این سند را ندارید.']);
+            }
+        }
 
         if ($cnv->ticket_id == $ticket_id) {
 

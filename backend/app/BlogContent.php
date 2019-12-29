@@ -14,6 +14,13 @@ class BlogContent extends Model
 
 
 
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+
 
     public function files()
     {

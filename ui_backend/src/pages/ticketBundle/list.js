@@ -227,10 +227,13 @@ class Ticket extends Component {
         this.setState({
             cnv_deleteMode: id
         });
+
         this.api.deleteTicketConversations(this.state.ticket_id, id).then((response) => {
             if (typeof response != "undefined") {
                 if (response.status) {
                     this.handleLoadTicket(this.state.ticket_id);
+                } else {
+                    toast.error(response.msg);
                 }
             }
         }).catch((error) => {
@@ -241,6 +244,12 @@ class Ticket extends Component {
     handleConversationSubmit(event)
     {
         event.preventDefault();
+
+        if(!Boolean(this.props.auth.permissions.ticket.store_conversations.access)) {
+            toast.info('به این بخش دسترسی ندارید.');
+            return;
+        }
+
         let form = this.state.ticket;
         form['conversations'].push({
             content: this.state.content,
@@ -584,7 +593,7 @@ class Ticket extends Component {
                                     <SyncIcon />
                                 </IconButton>
                             </Tooltip>
-                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) &&
+                            {Boolean(this.props.auth.permissions.ticket.store.access) &&
                             <Tooltip title="افزودن">
                                 <IconButton onClick={() => this.setState({ open: true, current_ticket: '' })}>
                                     <AddCircleOutlineIcon />
@@ -616,7 +625,7 @@ class Ticket extends Component {
                                             <td style={{ direction: 'ltr'}}>{moment(entity.updated_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</td>
                                             <td>
                                                 <Tooltip title='برای تغییر کلیک کنید.'>
-                                                    <Chip clickable={true} onClick={() => this.setState({ open: true, current_ticket: entity.id })} label={entity.category.label} />
+                                                    <Chip clickable={true} onClick={() => Boolean(this.props.auth.permissions.ticket.update.access) ? this.setState({ open: true, current_ticket: entity.id }) : toast.info('به این بخش دسترسی ندارید.') } label={entity.category.label} />
                                                 </Tooltip>
                                             </td>
                                             <td>
@@ -626,7 +635,7 @@ class Ticket extends Component {
                                             </td>
                                             <td>
                                                 <Tooltip title="مشاهده">
-                                                    <IconButton onClick={() => this.handleLoadTicket(entity.id)}>
+                                                    <IconButton  onClick={() => Boolean(this.props.auth.permissions.ticket.conversations.access) ? this.handleLoadTicket(entity.id) : toast.info('به این بخش دسترسی ندارید.')}>
                                                         <QuestionAnswerIcon />
                                                     </IconButton>
                                                 </Tooltip>
@@ -670,10 +679,9 @@ class Ticket extends Component {
                                             <small>{moment(conversation.created_at, 'YYYY/MM/DD HH:mm:ss').locale('fa').format('jYYYY/jMM/jDD HH:mm:ss')}</small>
                                         </div>
                                         {Boolean(conversation.is_customer) === true && <Avatar style={{ backgroundColor: '#00a7e2'}}><FaceIcon /></Avatar> }
-                                        {Boolean(conversation.is_customer) === false &&
+                                        {Boolean(conversation.is_customer) === false && Boolean(this.props.auth.permissions.ticket.delete_conversation.access) &&
                                         <IconButton onClick={() => this.handleDeleteConversation(conversation.id)} color={"secondary"} ref={(el) => {
                                             if (this.state.cnv_deleteMode === conversation.id) {
-                                                console.log(this.state.cnv_deleteMode, conversation.id);
                                                 this.messagesEnd = el
                                             }
                                         }}>
@@ -700,9 +708,12 @@ class Ticket extends Component {
                             {/* Input For Write Text Message */}
                             <InputBase style={{ width: '100%'}} value={this.state.content} onChange={(event) => this.setState({content: event.target.value})} placeholder="تایپ کنید ..."/>
                             {/* Attch File Icon */}
-                            <AttachFileIcon color={this.state.file != '' ? 'primary' : ''} style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
-                            <label htmlFor="attach" style={{width:50,height:50, zIndex: 1}}/>
-                            <input accept=".zip,.rar,.7zip,image/x-png,image/gif,image/jpeg, video/mp4" onChange={(event) => this.handleFileUpload(event)} style={{position:'absolute', right:100, zIndex:-100000, display:'none'}} id='attach' type='file'/>
+                            {Boolean(this.props.auth.permissions.ticket.store_conversations.access) &&
+                            <div>
+                                <AttachFileIcon color={this.state.file != '' ? 'primary' : ''} style={{ position: "absolute", bottom: '10px', left: '10px', zIndex: 0}}/>
+                                <label htmlFor="attach" style={{width:50,height:50, zIndex: 1}}/>
+                                <input accept=".zip,.rar,.7zip,image/x-png,image/gif,image/jpeg, video/mp4" onChange={(event) => this.handleFileUpload(event)} style={{position:'absolute', right:100, zIndex:-100000, display:'none'}} id='attach' type='file'/>
+                            </div>}
                         </Paper>
                     </Box>}
                 </Container>

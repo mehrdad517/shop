@@ -287,7 +287,7 @@ class BlogContent extends Component {
                                     <SyncIcon />
                                 </IconButton>
                             </Tooltip>
-                            {this.props.auth.permissions.user && Boolean(this.props.auth.permissions.user.store.access) ?  <Tooltip title="افزودن">
+                            {Boolean(this.props.auth.permissions.blog_content.store.access) ?  <Tooltip title="افزودن">
                                 <Link to={'/blog/contents/create'}>
                                     <IconButton>
                                         <AddCircleOutlineIcon />
@@ -301,6 +301,7 @@ class BlogContent extends Component {
                                 <tr>
                                     <th onClick={() => this.handleChangeSort('id')}>#&nbsp;{ this.state.sort_field === 'id' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('title')}>عنوان&nbsp;{this.state.sort_field === 'title' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
+                                    <th onClick={() => this.handleChangeSort('created_by')}>نویسنده&nbsp;{this.state.sort_field === 'created_by' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('visitor')}>بازدید&nbsp;{this.state.sort_field === 'visitor' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
                                     <th onClick={() => this.handleChangeSort('status')}>وضعیت&nbsp;{this.state.sort_field === 'status' ? (this.state.sort_type === 'desc' ? <ArrowDownwardIcon/> : <ArrowUpwardIcon/>) : <SortIcon/>}</th>
                                     <th onClick={() => this.handleChangeSort('created_at')}>تاریخ ایجاد&nbsp;{this.state.sort_field === 'created_at' ? (this.state.sort_type === 'desc'  ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />) : <SortIcon />}</th>
@@ -313,6 +314,7 @@ class BlogContent extends Component {
                                         <tr key={index}>
                                             <td>{entity.id}</td>
                                             <td>{entity.title}</td>
+                                            <td>{entity.created_by.name}</td>
                                             <td>{entity.visitor}</td>
                                             <td>
                                                 <Tooltip title="وضعیت">
@@ -321,13 +323,14 @@ class BlogContent extends Component {
                                             </td>
                                             <td>{entity.created_at}</td>
                                             <td>
-                                                <Tooltip title="ویرایش">
+                                                {Boolean(this.props.auth.permissions.blog_content.update.access) ? <Tooltip title="ویرایش">
                                                     <Link to={`/blog/contents/${entity.id}/edit/`}>
                                                         <IconButton>
                                                             <CreateIcon />
                                                         </IconButton>
                                                     </Link>
-                                                </Tooltip>
+                                                </Tooltip> : '-' }
+
                                             </td>
                                         </tr>
                                     );

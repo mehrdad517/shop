@@ -17,7 +17,7 @@ class BlogContentController extends Controller
     public function index(Request $request)
     {
 
-        $entities = BlogContent::where(function ($q) use ($request) {
+        $entities = BlogContent::with(['createdBy'])->where(function ($q) use ($request) {
             if ($request->has('filter')) {
 
                 $filter = json_decode($request->get('filter'), true);
@@ -28,7 +28,7 @@ class BlogContentController extends Controller
 
                 if (@$filter['created_by'] != -1) {
                     $q->where('created_by', '=', $filter['created_by']);
-                } elseif (! in_array(Auth::user()->role_key, Role::where('full_access', 1)->pluck('key')->toArray())) {
+                } elseif (! in_array(Auth::user()->role_key, Role::where('crud', 1)->pluck('key')->toArray())) {
                     $q->where('created_by', '=', Auth::id());
                 }
 

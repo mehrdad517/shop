@@ -25,6 +25,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import FolderIcon from '@material-ui/icons/Folder';
 import {toast} from "react-toastify";
 import AspectRatioIcon from '@material-ui/icons/AspectRatio';
+import TicketCategoryCreate from "../../ticketBundle/category/create";
 
 class BlogCategory extends Component {
 
@@ -99,22 +100,22 @@ class BlogCategory extends Component {
                     {!this.state.loading ? <CircularProgress color={"secondary"} /> : <div>
                         <Box>
                             <div style={{ display: 'flex', direction: 'row', justifyContent: 'flex-end'}}>
-                                <BlogCategoryCreate handleRequest={this.handleRequest.bind(this)}  items={this.state.checked} />
-                                <Tooltip title="ویرایش">
+                                {Boolean(this.props.auth.permissions.blog_category.store.access) && <TicketCategoryCreate handleRequest={this.handleRequest.bind(this)}  items={this.state.checked} />}
+                                {Boolean(this.props.auth.permissions.blog_category.update.access) && <Tooltip title="ویرایش">
                                     <IconButton onClick={() => this.state.checked.length === 1 ?  this.setState({ dialog: true}) : toast.info('یگ گزینه را انتخاب نمایید.') }>
                                         <EditIcon />
                                     </IconButton>
-                                </Tooltip>
+                                </Tooltip>}
                                 <Tooltip title="باز و بسته کردن">
                                     <IconButton onClick={this.handleToggleExpand.bind(this)}>
                                         <AspectRatioIcon />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="سینک">
+                                {Boolean(this.props.auth.permissions.blog_category.index.access) && <Tooltip title="سینک">
                                     <IconButton onClick={() => this.handleRequest()} >
                                         <SyncIcon />
                                     </IconButton>
-                                </Tooltip>
+                                </Tooltip>}
                             </div>
                         </Box>
                         <Box boxShadow={2} style={{ backgroundColor: '#fff', padding: '25px', borderRadius: '7px'}}>
@@ -147,7 +148,9 @@ class BlogCategory extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        auth: state.auth
+    };
 }
 
 export default connect(
