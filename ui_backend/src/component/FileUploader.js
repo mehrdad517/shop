@@ -91,7 +91,7 @@ class FileUploader extends Component {
             form_data.append('directory', 'attachment');
 
             /* Send Post Request To Server */
-            axios.post('http://localhost:8000/api/attachment', form_data, {
+            axios.post('http://localhost:8000/api/backend/attachment', form_data, {
                 onUploadProgress: (e) => {
                     const done = e.loaded;
                     const total = e.total;
@@ -103,10 +103,8 @@ class FileUploader extends Component {
                     });
                 },
                 headers: {
-                    headers: {
-                        'Accept': 'application/json',
-                        'content-type': 'multipart/form-data',
-                    }
+                    'Accept': 'application/json',
+                    'content-type': 'multipart/form-data',
                 },
             }).then((response) => {
                 /* Get Real Address From Server */

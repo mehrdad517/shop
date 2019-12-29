@@ -383,10 +383,8 @@ class ContentCreate extends Component {
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <FileUploader
-                                        multiple={true}
-                                        width={200}
-                                        height={200}
                                         onComplete={(files) => this.setState({files})}
+                                        token={''}
                                     />
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
