@@ -1,0 +1,330 @@
+//@import "app";
+body {
+    font-size: 12px;
+    background-color: #f2f3f5;
+    font-family: 'Shabnam', sans-serif !important;
+    margin: 0;
+    padding: 0;
+}
+.sidebar .top{
+    width: calc(100% - 80px );
+    padding: 40px;
+    background-image: linear-gradient(90deg,#21254e,#232c58 19%,#232c58 0,#232c58 0,#232d5a 23%,#232d5a 0,#24305d 40%,#24305d 0,#24305d 0,#2b4a83 87%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    z-index:1;
+    margin-bottom: 50px;
+}
+.sidebar .top span.role  {
+    font-size: 14px;
+    color: #cccccc !important;
+}
+.sidebar .top span.user-name {
+    margin-bottom: -2px;
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+}
+.sidebar .top  img{
+    padding: 20px;
+    width: 50px;
+    height: 50px;
+}
+.sidebar .top .circle{
+    position: absolute;
+    width: calc(100%);
+    height: 80px;
+    background-image: linear-gradient(90deg,#21254e,#232c58 19%,#232c58 0,#232c58 0,#232d5a 23%,#232d5a 0,#24305d 40%,#24305d 0,#24305d 0,#2b4a83 87%);
+    border-radius: 50%;
+    bottom: -40px;
+}
+.sidebar-header {
+    text-align: center;
+    position: relative;
+    top: -73px;
+    width: 140%;
+    height: 205px;
+    margin-right: -20%;
+    margin-bottom: -50px;
+    padding-top: 65px;
+    border-radius: 700px/251px;
+}
+.content body{
+    font-family: 'Shabnam', sans-serif !important;
+    text-align: right;
+}
+.mce-content-body{
+    font-family: 'Shabnam', sans-serif !important;
+    direction: rtl !important;
+}
+.tox-toolbar-overlord, .tox-toolbar__primary{
+    justify-content: flex-end !important;
+}
+.rdw-dropdown-carettoopen{
+    left: 10% !important;
+    right: unset;
+}
+.public-DraftStyleDefault-ltr{
+    text-align: right;
+    direction: rtl;
+}
+.editorClassName {
+    min-height: 200px;
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+}
+span[data-text=true] {
+    //line-height: 2 ; // mui editor
+}
+.rct-collapse *, .rct-checkbox *, .rct-node-icon *{
+    width: 25px;
+}
+.fc__tooltip{
+    text-align: right;
+}
+text, .fc__tooltip {
+    font-family: 'Shabnam', sans-serif !important;
+    text-align: right;
+}
+.canvasjs-chart-canvas {
+    position: relative !important;
+}
+.canvasjs-chart-tooltip{
+    position: relative !important;
+}
+.Toastify {
+    font-family: Shabnam !important;
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+.Toastify__toast--error{
+    background-color: #ff006f;
+}
+.Toastify__toast--success{
+    background-color: #09C8B6;
+}
+.Toastify__toast--info{
+    background-color: #40ace3;
+}
+a{
+    text-decoration: none;
+    color: #3a35da;
+}
+.MuiChip-root{
+    font-family: inherit !important;
+}
+.MuiPaper-root ul li {
+    line-height: 2.5;
+}
+.MuiPaper-rounded{
+    border: 1px solid #f0f0f0;
+}
+.MuiTab-root{
+    font-family: inherit !important;
+}
+.MuiFormHelperText-root{
+    font-family: inherit !important;
+    text-align: right !important;
+}
+.Toastify__toast{
+    font-family: inherit;
+}
+.content {
+    margin-bottom: 100px;
+    min-height: 400px;
+}
+.content-inner {
+    margin: 50px 0;
+}
+.MuiAutocomplete-paper {
+    font-family: Shabnam !important;
+    font-size: 12px !important;
+}
+.MuiAutocomplete-inputRoot[class*="MuiFilledInput-root"] .MuiAutocomplete-input{
+    padding-top: 5px !important;
+    font-family: Shabnam !important;
+    font-size: 14px;
+}
+.datepicker-input-container {
+    border: 0;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #8e8e8e;
+    height: 47.5px;
+    padding: 0px 10px;
+    position: relative;
+    top: 8px;
+    font-family: Shabnam !important;
+    border-radius: 3px 3px 0 0;
+}
+.datepicker-input-container label{
+    position: relative;
+    top: 6px;
+    color: #707070;
+    transform: translate(-12px, 7px) scale(0.75);
+}
+.datepicker-input{
+    border: 0;
+    background-color: transparent;
+    margin-top: 10px;
+    width: 100% !important;
+}
+.datepicker-input:hover, .datepicker-input:focus{
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+}
+.tab-inner{
+    padding: 50px;
+    min-height: 300px;
+    margin: 25px 0;
+    background-color: #f5f5f5;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    border-radius: 5px;
+
+}
+// tree checkbox
+.react-checkbox-tree label{
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+// content
+.box{
+    background-color: #ffffff;
+    min-height: 200px;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 5px;
+}
+.MuiPaper-rounded{
+    border-radius: 0 !important;
+}
+//table
+.table-duplicate-row{
+    text-align: center;
+    //border-collapse: separate !important;
+    //border-spacing: 0 10px;
+    width: 100%;
+    margin: 50px 0;
+}
+.table-duplicate-row th, td{
+    border: 1px solid #f0f0f0;
+    padding: 5px 15px;
+}
+.table-duplicate-row .MuiInputBase-input {
+    text-align: center;
+}
+.table {
+    text-align: center;
+    border-collapse: separate !important;
+    border-spacing: 0 10px;
+    width: 100%;
+}
+.table .MuiChip-root{
+    font-family: inherit !important;
+}
+.table thead tr{
+    background-color: transparent;
+    padding: 0;
+    border: 0
+}
+.table thead tr th{
+    cursor: pointer;
+    padding: 0;
+    border: 0
+}
+.table thead tr th svg{
+    position: relative;
+    top: 7px;
+}
+.table tbody tr {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.15);
+    box-shadow: 0 1px 2.5px 0 rgba(0,0,0,.15);
+}
+.table tbody tr:hover {
+    -webkit-transition: .4s;
+    transition: .4s;
+    -webkit-box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+    cursor: pointer;
+}
+.table tbody tr:hover {
+    background-color: #ffffff;
+}
+.table  td{
+    padding: 10px 0;
+}
+.pagination {
+    display: flex;
+    list-style: none;
+    justify-content: flex-end;
+
+}
+
+.pagination li a {
+    color: black;
+    float: left;
+    padding: 3px 6px;
+    text-decoration: none;
+    transition: background-color .3s;
+    margin: 0 4px;
+}
+
+.pagination li.active {
+    background-color: #f01c49;
+    border: 1px solid #f01c49;
+    color: #ffffff !important;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+.pagination li.active a {
+    color:#ffffff;
+}
+
+
+.MuiCircularProgress-root{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    //transform: translate(-50px, -50px);
+}
+// material
+.MuiButton-root, .MuiTypography-root, .MuiInputBase-root,.MuiInputLabel-animated, .MuiMenuItem-root,.MuiTooltip-popper{
+    font-family: inherit !important;
+}
+.MuiTooltip-popper, .MuiTooltip-tooltip{
+    font-family: "Shabnam" !important;
+}
+.MuiFilledInput-root{
+    background-color: rgba(0, 0, 0, 0.04) !important;
+}
+.MuiInputLabel-filled.MuiInputLabel-shrink{
+    position: absolute;
+    //right: 10px;
+    left: unset;
+}
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 600px) {
+    .table, .table-duplicate-row{
+        width: 1000px;
+    }
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+textarea:focus {
+    font-size: 12px !important;
+}
+
+/* disable auto-zoom on iphone input field focus */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+    select:focus,
+    textarea:focus,
+    input:focus {
+        font-size: 12px !important;
+    }
+}
