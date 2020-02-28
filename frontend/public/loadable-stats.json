@@ -2,9 +2,9 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "af34e3b520f993d5c03c",
+  "hash": "255c979c258a6ebc5148",
   "publicPath": "/assets/",
-  "outputPath": "/var/www/html/shop/frontend/public/assets",
+  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
@@ -13,8 +13,7 @@
     ],
     "main": [
       "main.css",
-      "main.js",
-      "main.5f21a5e05e0a9dac90b5.hot-update.js"
+      "main.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
@@ -48,15 +47,8 @@
       "emitted": false
     },
     {
-      "name": "5f21a5e05e0a9dac90b5.hot-update.json",
-      "size": 46,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
       "name": "Home.js",
-      "size": 18013,
+      "size": 17873,
       "chunks": [
         "Home"
       ],
@@ -218,29 +210,18 @@
     },
     {
       "name": "Shop.js",
-      "size": 88966,
+      "size": 90782,
       "chunks": [
         "Shop"
       ],
       "chunkNames": [
         "Shop"
-      ],
-      "emitted": true
-    },
-    {
-      "name": "main.5f21a5e05e0a9dac90b5.hot-update.js",
-      "size": 9266,
-      "chunks": [
-        "main"
-      ],
-      "chunkNames": [
-        "main"
       ],
       "emitted": false
     },
     {
       "name": "main.css",
-      "size": 99800,
+      "size": 96127,
       "chunks": [
         "main"
       ],
@@ -251,7 +232,7 @@
     },
     {
       "name": "main.js",
-      "size": 11914138,
+      "size": 11909810,
       "chunks": [
         "main"
       ],
@@ -262,7 +243,7 @@
     },
     {
       "name": "vendors~Shop.js",
-      "size": 370549,
+      "size": 261848,
       "chunks": [
         "vendors~Shop"
       ],
@@ -280,8 +261,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.5f21a5e05e0a9dac90b5.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -294,8 +274,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.5f21a5e05e0a9dac90b5.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -331,5 +310,216 @@
       "debug": false
     }
   },
-  "children": []
+  "children": [
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--5-1!node_modules/postcss-loader/src/index.js??ref--5-2!src/static/Farsi-Digits/font-face.css"
+    },
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--5-1!node_modules/postcss-loader/src/index.js??ref--5-2!src/static/css/animate.css"
+    },
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--6-1!node_modules/postcss-loader/src/index.js??ref--6-2!node_modules/sass-loader/dist/cjs.js??ref--6-3!src/app/styles.scss"
+    },
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--6-1!node_modules/postcss-loader/src/index.js??ref--6-2!node_modules/sass-loader/dist/cjs.js??ref--6-3!src/pages/NotFound/styles.scss"
+    },
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--6-1!node_modules/postcss-loader/src/index.js??ref--6-2!node_modules/sass-loader/dist/cjs.js??ref--6-3!src/pages/Shop/style.scss"
+    }
+  ]
 }

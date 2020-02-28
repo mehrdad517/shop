@@ -262,6 +262,9 @@ Route::Group(['prefix' => '/'], function() {
             // product list
             Route::get('/filter/{category}', function ($category, Request $request) {
 
+
+                $sort = productSortItems();
+
                 if (!\Cache::has("category[$category]")) {
 
                     // get main category and fetch relations
@@ -271,6 +274,7 @@ Route::Group(['prefix' => '/'], function() {
                         }, 'brands' => function($q) {
                             $q->select('id', 'slug', 'title')->where('status', 1);
                         }])->where('slug', $category)->first();
+
 
                     if ( ! $item ) { // 404 error handle
                         return response()->json(['status' => false, 'msg' => 'not found'], 404);
@@ -288,7 +292,6 @@ Route::Group(['prefix' => '/'], function() {
                         'brands' => [],
                         'attributes' => [],
                         'sort' => [],
-                        'products' => []
                     ];
 
                     // navigation
@@ -301,8 +304,7 @@ Route::Group(['prefix' => '/'], function() {
                     $result['attributes'] = $item->attributes;
 
                     // sort items
-                    $result['sort'] = productSortItems();
-
+                    $result['sort'] = $sort;
 
                     \Cache::put("category[$category]", $result , 24 * 60 * 7);
                 }
@@ -331,9 +333,9 @@ Route::Group(['prefix' => '/'], function() {
                         }
                     })
                     ->where('status', 0) // change to true
-                    ->when($request->has('sort'), function ($q) use($request, $result) {
-                        if (isset($result['sort'][$request->get('sort')])) {
-                            $q->orderBy($result['sort'][$request->get('sort')]['field'], $result['sort'][$request->get('sort')]['type']);
+                    ->when($request->has('sort'), function ($q) use($request, $sort) {
+                        if (isset($sort[$request->get('sort')])) {
+                            $q->orderBy($sort[$request->get('sort')]['field'], $sort[$request->get('sort')]['type']);
                         } else {
                             $q->orderBy('id', 'desc');
                         }
@@ -341,16 +343,12 @@ Route::Group(['prefix' => '/'], function() {
                     ->paginate($request->get('limit') ?? 2)
                     ->toArray();
 
-                dd(\Cache::get("category[$category]"));
-
-
-                $result['products'] = $products;
-
 
                 return response()->json([
                     'status' => true,
                     'msg' => 'success',
-                    'result' => \Cache::get("category[$category]")
+                    'cached' => \Cache::get("category[$category]"),
+                    'products' => $products
                 ]);
             });
         });

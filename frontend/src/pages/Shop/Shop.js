@@ -22,8 +22,8 @@ import { shopAction } from '../../actions';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import {Link} from 'react-router-dom'
 import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
-import style from './style.scss'
-import {Helmet} from "react-helmet/es/Helmet";
+import style from './style.scss';
+import {Helmet} from "react-helmet";
 
 class Shop extends Component {
   constructor(props) {
@@ -111,11 +111,16 @@ class Shop extends Component {
   async handlePageChange(page) {
     const { params } = this.state;
     params.page = page;
+
+    let element = document.querySelector('body');
+    if(element) {
+      element.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
     await new Promise(resolve => {
       resolve(
         this.setState({
           params,
-          loading: true
         })
       );
     });
@@ -190,6 +195,11 @@ class Shop extends Component {
 
     }
 
+    let element = document.querySelector('body');
+    if(element) {
+      element.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
     await new Promise(resolve => {
       resolve(
         this.setState({
@@ -205,9 +215,9 @@ class Shop extends Component {
 
     const { fetchShopIfNeeded } = this.props;
 
-
     await fetchShopIfNeeded(this.props.match.params.categories, this.state.params);
-    //
+
+    // create url
     let url = '?';
     url += `page=${this.state.params.page}`;
     url += `&stock=${this.state.params.stock}`;
@@ -228,15 +238,16 @@ class Shop extends Component {
   }
 
   render() {
+    console.log(this.state)
     const override = `transform: translate(-50%, -50%);position: absolute;top: 50%;left: 50%;z-index: 9999999999`;
     return (
       <Master>
         {this.props.shop.readyStatus === 'success' &&
         <div className={this.props.shop.loading ? style.disclicks : ''}>
           <Helmet>
-            <title>{this.props.shop.data.result.meta_title}</title>
-            <meta name='description' content={this.props.shop.data.result.meta_description} />
-            <meta name='canonical' content={'/products/' + this.props.shop.data.result.slug} />
+            <title>{this.props.shop.data.cached.meta_title}</title>
+            <meta name='description' content={this.props.shop.data.cached.meta_description} />
+            <meta name='canonical' content={'/products/' + this.props.shop.data.cached.slug} />
           </Helmet>
           <div className={style.shop}>
             {/* navigation */}
@@ -247,7 +258,7 @@ class Shop extends Component {
                   <span>
                     دسته بندی محصولات
                   </span>
-                    {this.props.shop.data.result.navigation && this.props.shop.data.result.navigation.map((nav, index) => {
+                    {this.props.shop.data.cached.navigation && this.props.shop.data.cached.navigation.map((nav, index) => {
                       return(
                         <Link key={index} to={'/products/' + nav.slug }>
                           {nav.label}
@@ -294,7 +305,7 @@ class Shop extends Component {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                       <RadioGroup aria-label="sort" name="sort">
-                        {this.props.shop.data.result.sort && this.props.shop.data.result.sort.map((ord, index) => {
+                        {this.props.shop.data.cached.sort && this.props.shop.data.cached.sort.map((ord, index) => {
                           return (
                             <FormControlLabel
                               key={index}
@@ -310,7 +321,7 @@ class Shop extends Component {
                     </ExpansionPanelDetails>
                   </ExpansionPanel>
                   {/* category */}
-                  {this.props.shop.data.result.tree.length > 0 && <ExpansionPanel expanded>
+                  {this.props.shop.data.cached.tree.length > 0 && <ExpansionPanel expanded>
                     <ExpansionPanelSummary
                       aria-controls="panel1a-content"
                       id="panel1a-header"
@@ -319,7 +330,7 @@ class Shop extends Component {
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                       <List>
-                        {this.props.shop.data.result.tree.map((tree, index) => {
+                        {this.props.shop.data.cached.tree.map((tree, index) => {
                           return(
                             <ListItem component={Link} to={'/products/' + tree.slug} key={index}>
                               <ListItemText primary={tree.label} />
@@ -330,7 +341,7 @@ class Shop extends Component {
                     </ExpansionPanelDetails>
                   </ExpansionPanel>}
                   {/* brands filter */}
-                  {this.props.shop.data.result.brands.length > 0 && <ExpansionPanel expanded={true}>
+                  {this.props.shop.data.cached.brands.length > 0 && <ExpansionPanel expanded={true}>
                     <ExpansionPanelSummary
                       aria-controls="panel1a-content"
                       id="panel1a-header"
@@ -338,7 +349,7 @@ class Shop extends Component {
                       <b>برندها</b>
                     </ExpansionPanelSummary>
                     <List>
-                      {this.props.shop.data.result.brands.map((b, i) => {
+                      {this.props.shop.data.cached.brands.map((b, i) => {
                         return (
                           <ListItem key={i}>
                             <ListItemText primary={b.title} />
@@ -358,9 +369,9 @@ class Shop extends Component {
                     </List>
                   </ExpansionPanel>}
                   {/* attributes filter  */}
-                  {this.props.shop.data.result.attributes && this.props.shop.data.result.attributes.map((attr, index) => {
+                  {this.props.shop.data.cached.attributes && this.props.shop.data.cached.attributes.map((attr, index) => {
                     return(
-                      <div className='shop-attr'>
+                      <div key={index} className='shop-attr'>
                         {attr.tags.length > 0 && <ExpansionPanel key={index}>
                           <ExpansionPanelSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -396,7 +407,7 @@ class Shop extends Component {
               </Grid>
               <Grid item lg={10} md={10} sm={12} xs={12}>
                 <Grid item spacing={2} container>
-                  {this.props.shop.data.result.products.data.map((item, index) => {
+                  {this.props.shop.data.products && this.props.shop.data.products.data.map((item, index) => {
                     return (
                       <Grid key={index} item lg={3} md={4} sm={4} xs={12}>
                         <Box key={index} item={item} />
@@ -411,8 +422,8 @@ class Shop extends Component {
               <Grid item xs={12}>
                 <Paginator
                   activePage={parseInt(this.state.params.page)}
-                  itemsCountPerPage={this.props.shop.data.result.products.per_page}
-                  totalItemsCount={this.props.shop.data.result.products.total}
+                  itemsCountPerPage={this.props.shop.data.products.per_page}
+                  totalItemsCount={this.props.shop.data.products.total}
                   pageRangeDisplayed={5}
                   onChange={this.handlePageChange.bind(this)}
                 />
