@@ -24,6 +24,7 @@ import {Link} from 'react-router-dom'
 import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
 import style from './style.scss';
 import {Helmet} from "react-helmet";
+import Typography from '@material-ui/core/Typography';
 
 class Shop extends Component {
   constructor(props) {
@@ -90,6 +91,7 @@ class Shop extends Component {
 
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
+
     if (this.props.match.params.categories !== prevProps.match.params.categories) {
       let params = this.state.params;
 
@@ -103,7 +105,8 @@ class Shop extends Component {
 
       this.setState({
         params,
-      })
+      });
+
       await this.handleRequest();
     }
   }
@@ -111,11 +114,6 @@ class Shop extends Component {
   async handlePageChange(page) {
     const { params } = this.state;
     params.page = page;
-
-    let element = document.querySelector('body');
-    if(element) {
-      element.scrollIntoView({behavior: "smooth", block: "start"});
-    }
 
     await new Promise(resolve => {
       resolve(
@@ -154,7 +152,8 @@ class Shop extends Component {
     if (event.target.checked === true) {
       params[event.target.name].push(parseInt(event.target.value));
     } else {
-      params[event.target.name].splice(parseInt(event.target.value), 1);
+      let index = params[event.target.name].indexOf(parseInt(event.target.value));
+      params[event.target.name].splice(index, 1);
     }
 
 
@@ -195,11 +194,6 @@ class Shop extends Component {
 
     }
 
-    let element = document.querySelector('body');
-    if(element) {
-      element.scrollIntoView({behavior: "smooth", block: "start"});
-    }
-
     await new Promise(resolve => {
       resolve(
         this.setState({
@@ -216,6 +210,15 @@ class Shop extends Component {
     const { fetchShopIfNeeded } = this.props;
 
     await fetchShopIfNeeded(this.props.match.params.categories, this.state.params);
+
+    if (this.props.shop.loading) {
+      setTimeout(() => {
+        let element = document.querySelector('body');
+        if(element) {
+          element.scrollIntoView({behavior: "smooth", block: "start"});
+        }
+      }, 500)
+    }
 
     // create url
     let url = '?';
@@ -239,7 +242,7 @@ class Shop extends Component {
 
   render() {
     console.log(this.state)
-    const override = `transform: translate(-50%, -50%);position: absolute;top: 50%;left: 50%;z-index: 9999999999`;
+    const override = `transform: translate(-50%, -50%);position: fixed;top: 50%;left: 50%;z-index: 9999999999`;
     return (
       <Master>
         {this.props.shop.readyStatus === 'success' &&
@@ -407,18 +410,18 @@ class Shop extends Component {
               </Grid>
               <Grid item lg={10} md={10} sm={12} xs={12}>
                 <Grid item spacing={2} container>
-                  {this.props.shop.data.products && this.props.shop.data.products.data.map((item, index) => {
+                  {this.props.shop.data.products.data.length > 0 ? this.props.shop.data.products.data.map((item, index) => {
                     return (
                       <Grid key={index} item lg={3} md={4} sm={4} xs={12}>
                         <Box key={index} item={item} />
                       </Grid>
                     );
-                  })}
+                  }) : <Grid item={true} xs={12}><Paper><Typography className={style.notFound}>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></Paper></Grid>}
                 </Grid>
               </Grid>
             </Grid>
             {/* pagination */}
-            <Grid spacing={2} container={true}>
+            {this.props.shop.data.products.data.length > 0 && <Grid spacing={2} container={true}>
               <Grid item xs={12}>
                 <Paginator
                   activePage={parseInt(this.state.params.page)}
@@ -428,7 +431,7 @@ class Shop extends Component {
                   onChange={this.handlePageChange.bind(this)}
                 />
               </Grid>
-            </Grid>
+            </Grid>}
           </div>
         </div>
         }

@@ -311,9 +311,7 @@ Route::Group(['prefix' => '/'], function() {
                         $q->select('fileable_id', 'fileable_type',  'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
                             ->where('collection', 0)
                             ->orderBy('order', 'asc');
-                    }, 'attributes' => function($q) {
-
-                    }])->where(function ($q) use ($request) {
+                    }, 'attributes'])->where(function ($q) use ($request) {
                         // stock products
                         if ($request->has('stock')) {
                             if ($request->get('stock') == 1) {
@@ -326,15 +324,26 @@ Route::Group(['prefix' => '/'], function() {
                         }
                     })
                     ->where('status', 0) // change to true
-                    ->when($request->has('sort'), function ($q) use($request, $sort) {
-                        if (isset($sort[$request->get('sort')])) {
-                            $q->orderBy($sort[$request->get('sort')]['field'], $sort[$request->get('sort')]['type']);
+                    ->when($request->has('attributes'), function ($q) use($request) {
+                        $attributes = json_decode($request->get('attributes'), true);
+                        if (count($attributes) > 0) {
+                            $q->whereHas('attributes', function ($q) use($request, $attributes) {
+                                foreach ($attributes as $key=>$item) {
+                                    $q->where('id', substr($key, 1))->whereIn('value', $item);
+                                }
+                            });
+                        }
+                    })
+                    ->when(true, function ($q) use($request, $sort) {
+                        if ($request->has('sort')) {
+                            if (isset($sort[$request->get('sort')])) {
+                                $q->orderBy($sort[$request->get('sort')]['field'], $sort[$request->get('sort')]['type']);
+                            }
                         } else {
                             $q->orderBy('id', 'desc');
                         }
                     })
-                    ->paginate($request->get('limit') ?? 2)
-                    ->toArray();
+                    ->paginate($request->get('limit') ?? 24);
 
 
                 return response()->json([

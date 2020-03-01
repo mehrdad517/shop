@@ -4,6 +4,12 @@
 .shop {
   margin: 10px;
 }
+.not-found {
+  background-color: #fffde4 !important;
+  border: 1px solid #f6e8a1 !important;
+  color: #a37731 !important;
+  padding: 10px;
+}
 @media (min-width: 1841px) {
   .shop {
     max-width: 1500px;
