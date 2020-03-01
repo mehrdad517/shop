@@ -262,64 +262,57 @@ Route::Group(['prefix' => '/'], function() {
             // product list
             Route::get('/filter/{category}', function ($category, Request $request) {
 
+                $sort = productSortItems(); // get sort items
 
-                $sort = productSortItems();
+                $category = \App\ProductCategory::select('value', 'slug', 'label', 'heading' ,'meta_title', 'meta_description')->where('slug', $category)->first();
 
-                if (!\Cache::has("category[$category]")) {
+                if ( ! $category ) { // 404 error handle
+                    return response()->json(['status' => false, 'msg' => 'not found'], 404);
+                }
 
-                    // get main category and fetch relations
-                    $item = \App\ProductCategory::select('value', 'slug', 'label', 'heading' ,'meta_title', 'meta_description')
-                        ->with(['attributes' => function($q) {
-                            $q->select('id', 'title', 'slug', 'has_link', 'content')->with(['tags'])->where('status', 1);
-                        }, 'brands' => function($q) {
-                            $q->select('id', 'slug', 'title')->where('status', 1);
-                        }])->where('slug', $category)->first();
+                $result = [
+                    'id' => $category->value,
+                    'slug' => $category->slug,
+                    'label' => $category->label,
+                    'heading' => $category->heading ?? '',
+                    'meta_title' => $category->meta_title,
+                    'meta_description' => $category->meta_description,
+                    'navigation' => [],
+                    'tree' => [],
+                    'brands' => [],
+                    'attributes' => [],
+                    'sort' => $sort,
+                ];
 
-
-                    if ( ! $item ) { // 404 error handle
-                        return response()->json(['status' => false, 'msg' => 'not found'], 404);
-                    }
-
-                    $result = [
-                        'id' => $item->value,
-                        'slug' => $item->slug,
-                        'label' => $item->label,
-                        'heading' => $item->heading ?? '',
-                        'meta_title' => $item->meta_title,
-                        'meta_description' => $item->meta_description,
-                        'navigation' => [],
-                        'tree' => [],
-                        'brands' => [],
-                        'attributes' => [],
-                        'sort' => [],
-                    ];
+                if (!\Cache::has("category[$category->value]")) {
 
                     // navigation
-                    $result['navigation'] =  \App\ProductCategory::select('value', 'slug', 'label')->ancestorsAndSelf($item->value);
+                    $result['navigation'] =  \App\ProductCategory::select('value', 'slug', 'label')->ancestorsAndSelf($category->value);
 
                     // get children
-                    $result['tree'] = \App\ProductCategory::select('value', 'slug', 'label')->where('parent_id', $item->value)->get();
+                    $result['tree'] = \App\ProductCategory::select('value', 'slug', 'label')->where('parent_id', $category->value)->get();
 
-                    $result['brands'] = $item->brands;
-                    $result['attributes'] = $item->attributes;
+                    // get all brands
+                    $result['brands'] = $category->brands()->select('id', 'slug', 'title')->where('status', 1)->get();
 
-                    // sort items
-                    $result['sort'] = $sort;
+                    // get all attr
+                    $result['attributes'] = $category->attributes()->select('id', 'title', 'slug', 'has_link', 'content')->with(['tags'])->where('status', 1)->get();
 
-                    \Cache::put("category[$category]", $result , 24 * 60 * 7);
+                    // push result to caching
+                    \Cache::put("category[$category->value]", $result , 24 * 60 * 7);
+
                 }
 
 
-                // fetch all record
-                $products = \App\Product::select('id', 'title', 'slug', 'price', 'discount', 'count' ,'brand_id', 'package_type_id')
+                $products = $category->products()->select('id', 'title', 'slug', 'price', 'discount', 'count' ,'brand_id', 'package_type_id')
                     ->with(['brand' => function($q) {
                         $q->select('id', 'title', 'slug');
-                    }, 'packageType' => function($q) {
-                        $q->select('id', 'title');
                     }, 'files' => function($q) {
                         $q->select('fileable_id', 'fileable_type',  'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
                             ->where('collection', 0)
                             ->orderBy('order', 'asc');
+                    }, 'attributes' => function($q) {
+
                     }])->where(function ($q) use ($request) {
                         // stock products
                         if ($request->has('stock')) {
@@ -347,7 +340,7 @@ Route::Group(['prefix' => '/'], function() {
                 return response()->json([
                     'status' => true,
                     'msg' => 'success',
-                    'cached' => \Cache::get("category[$category]"),
+                    'cached' => \Cache::get("category[$category->value]"),
                     'products' => $products
                 ]);
             });
