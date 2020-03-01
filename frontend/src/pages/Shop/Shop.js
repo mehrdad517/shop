@@ -416,7 +416,7 @@ class Shop extends Component {
                         <Box key={index} item={item} />
                       </Grid>
                     );
-                  }) : <Grid item={true} xs={12}><Paper><Typography className={style.notFound}>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></Paper></Grid>}
+                  }) : <Grid item={true} xs={12}><div className={style.notFound}><Typography>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></div></Grid>}
                 </Grid>
               </Grid>
             </Grid>

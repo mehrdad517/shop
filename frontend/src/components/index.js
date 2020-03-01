@@ -4,6 +4,7 @@ import ErrorBoundary from './ErrorBoundary';
 import Loading from './Loading';
 import Master from './Layouts/master';
 import Footer from './Footer';
+import Header from './Header';
 import LastBlogPosts from './Blog/LastBlogPosts/lastBlogPosts';
 import Slider from './slider';
 import PayloadProducts from './product/payload';
@@ -16,6 +17,7 @@ export {
   Loading,
   Master,
   Footer,
+  Header,
   LastBlogPosts,
   Slider,
   PayloadProducts,

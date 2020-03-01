@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { settingAction } from '../../actions';
-import { Footer } from '../index';
+import { Footer, Header } from '../index';
+
+
 class Master extends PureComponent {
   componentDidMount() {
     const { fetchSettingIfNeeded } = this.props;
@@ -11,6 +13,7 @@ class Master extends PureComponent {
   render() {
     return (
       <div>
+        <Header />
         <div style={{ minHeight: '500px'}}>
           {this.props.children}
         </div>

@@ -2,19 +2,20 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "e2cb82211412efdafa8a",
+  "hash": "9e5acc517feee4a59edb",
   "publicPath": "/assets/",
-  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
+  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
       "Shop.css",
       "Shop.js",
-      "Shop.42e760b7fe9540de4fae.hot-update.js"
+      "Shop.9b7c90baff55e22da24d.hot-update.js"
     ],
     "main": [
       "main.css",
-      "main.js"
+      "main.js",
+      "main.9b7c90baff55e22da24d.hot-update.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
@@ -24,190 +25,190 @@
       "size": 12934,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "19.29d4f2d4.png",
       "size": 22893,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "20.6acf186d.png",
       "size": 16405,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "22.4699742a.png",
       "size": 21908,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
-      "name": "42e760b7fe9540de4fae.hot-update.json",
-      "size": 46,
+      "name": "9b7c90baff55e22da24d.hot-update.json",
+      "size": 58,
       "chunks": [],
       "chunkNames": [],
       "emitted": false
     },
     {
       "name": "Home.js",
-      "size": 18073,
+      "size": 17873,
       "chunks": [
         "Home"
       ],
       "chunkNames": [
         "Home"
       ],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Bold-FD.250d5cd7.eot",
       "size": 85578,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Bold-FD.3eaf5be1.woff2",
       "size": 36536,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Bold-FD.5894012e.woff",
       "size": 47016,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Bold-FD.6434a8c0.ttf",
       "size": 85388,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-FD.56c8715a.woff",
       "size": 45276,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-FD.61019565.woff2",
       "size": 34816,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-FD.7a43025a.ttf",
       "size": 82792,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-FD.a184890f.eot",
       "size": 82962,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Light-FD.3bfea2db.woff2",
       "size": 41132,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Light-FD.abc38bc2.woff",
       "size": 51724,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Light-FD.d75f8eca.eot",
       "size": 91386,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Light-FD.f38fd550.ttf",
       "size": 91180,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Medium-FD.1cba1393.woff",
       "size": 46652,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Medium-FD.7c1a637a.eot",
       "size": 85088,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Medium-FD.c4edea41.ttf",
       "size": 84876,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Medium-FD.ca7cf4a4.woff2",
       "size": 36228,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Thin-FD.425838e5.woff2",
       "size": 36632,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Thin-FD.4810830c.woff",
       "size": 46952,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Thin-FD.60377b61.ttf",
       "size": 85248,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Thin-FD.9a083495.eot",
       "size": 85448,
       "chunks": [],
       "chunkNames": [],
-      "emitted": false
+      "emitted": true
     },
     {
-      "name": "Shop.42e760b7fe9540de4fae.hot-update.js",
-      "size": 90977,
+      "name": "Shop.9b7c90baff55e22da24d.hot-update.js",
+      "size": 2013,
       "chunks": [
         "Shop"
       ],
@@ -218,18 +219,7 @@
     },
     {
       "name": "Shop.css",
-      "size": 355,
-      "chunks": [
-        "Shop"
-      ],
-      "chunkNames": [
-        "Shop"
-      ],
-      "emitted": true
-    },
-    {
-      "name": "Shop.js",
-      "size": 93006,
+      "size": 354,
       "chunks": [
         "Shop"
       ],
@@ -239,8 +229,30 @@
       "emitted": false
     },
     {
+      "name": "Shop.js",
+      "size": 92905,
+      "chunks": [
+        "Shop"
+      ],
+      "chunkNames": [
+        "Shop"
+      ],
+      "emitted": false
+    },
+    {
+      "name": "main.9b7c90baff55e22da24d.hot-update.js",
+      "size": 133644,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "emitted": false
+    },
+    {
       "name": "main.css",
-      "size": 99800,
+      "size": 96127,
       "chunks": [
         "main"
       ],
@@ -251,7 +263,7 @@
     },
     {
       "name": "main.js",
-      "size": 11915495,
+      "size": 11976201,
       "chunks": [
         "main"
       ],
@@ -269,7 +281,7 @@
       "chunkNames": [
         "vendors~Shop"
       ],
-      "emitted": false
+      "emitted": true
     }
   ],
   "filteredAssets": 0,
@@ -280,7 +292,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.9b7c90baff55e22da24d.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -293,7 +306,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.9b7c90baff55e22da24d.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -317,7 +331,7 @@
         "vendors~Shop.js",
         "Shop.css",
         "Shop.js",
-        "Shop.42e760b7fe9540de4fae.hot-update.js"
+        "Shop.9b7c90baff55e22da24d.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
