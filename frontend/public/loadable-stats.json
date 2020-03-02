@@ -2,9 +2,9 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "dd9ee3cdb95ec4634624",
+  "hash": "6da4befa9b4193e393df",
   "publicPath": "/assets/",
-  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
+  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
@@ -14,18 +14,11 @@
     "main": [
       "main.css",
       "main.js",
-      "main.ca544dfbb9f28f42d8d9.hot-update.js"
+      "main.7384e1bd8804f37ba9af.hot-update.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
   "assets": [
-    {
-      "name": "00675d66af7ada8216dd.hot-update.json",
-      "size": 65,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
     {
       "name": "18.017ba024.png",
       "size": 12934,
@@ -55,8 +48,15 @@
       "emitted": false
     },
     {
+      "name": "7384e1bd8804f37ba9af.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
       "name": "Home.js",
-      "size": 18073,
+      "size": 17873,
       "chunks": [
         "Home"
       ],
@@ -218,7 +218,7 @@
     },
     {
       "name": "Shop.js",
-      "size": 94177,
+      "size": 92905,
       "chunks": [
         "Shop"
       ],
@@ -228,15 +228,8 @@
       "emitted": false
     },
     {
-      "name": "ca544dfbb9f28f42d8d9.hot-update.json",
-      "size": 46,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "main.ca544dfbb9f28f42d8d9.hot-update.js",
-      "size": 1940,
+      "name": "main.7384e1bd8804f37ba9af.hot-update.js",
+      "size": 34293,
       "chunks": [
         "main"
       ],
@@ -247,7 +240,7 @@
     },
     {
       "name": "main.css",
-      "size": 100434,
+      "size": 96983,
       "chunks": [
         "main"
       ],
@@ -258,7 +251,7 @@
     },
     {
       "name": "main.js",
-      "size": 11951889,
+      "size": 11964198,
       "chunks": [
         "main"
       ],
@@ -269,7 +262,7 @@
     },
     {
       "name": "vendors~Shop.js",
-      "size": 261848,
+      "size": 253855,
       "chunks": [
         "vendors~Shop"
       ],
@@ -288,7 +281,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.ca544dfbb9f28f42d8d9.hot-update.js"
+        "main.7384e1bd8804f37ba9af.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -302,7 +295,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.ca544dfbb9f28f42d8d9.hot-update.js"
+        "main.7384e1bd8804f37ba9af.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -338,58 +331,5 @@
       "debug": false
     }
   },
-  "children": [
-    {
-      "errors": [],
-      "warnings": [],
-      "publicPath": "/assets/",
-      "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
-      "assetsByChunkName": {},
-      "assets": [
-        {
-          "name": "00675d66af7ada8216dd.hot-update.json",
-          "size": 65,
-          "chunks": [],
-          "chunkNames": [],
-          "emitted": false
-        }
-      ],
-      "filteredAssets": 0,
-      "entrypoints": {
-        "mini-css-extract-plugin": {
-          "chunks": [
-            "mini-css-extract-plugin"
-          ],
-          "assets": [
-            "*",
-            "mini-css-extract-plugin.00675d66af7ada8216dd.hot-update.js"
-          ],
-          "children": {},
-          "childAssets": {}
-        }
-      },
-      "namedChunkGroups": {
-        "mini-css-extract-plugin": {
-          "chunks": [
-            "mini-css-extract-plugin"
-          ],
-          "assets": [
-            "*",
-            "mini-css-extract-plugin.00675d66af7ada8216dd.hot-update.js"
-          ],
-          "children": {},
-          "childAssets": {}
-        }
-      },
-      "logging": {
-        "webpack.buildChunkGraph.visitModules": {
-          "entries": [],
-          "filteredEntries": 2,
-          "debug": false
-        }
-      },
-      "children": [],
-      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--6-1!node_modules/postcss-loader/src/index.js??ref--6-2!node_modules/sass-loader/dist/cjs.js??ref--6-3!src/components/Header/header.scss"
-    }
-  ]
+  "children": []
 }
