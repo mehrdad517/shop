@@ -10,3 +10,5 @@ frontend/.next/*
 frontend/.next/
 frontend/next
 forntend/public/*
+api/.env
+/api/.env

@@ -1,249 +1,94 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux';
-import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
-import StyleWrapper from './header.style';
+import {Container, Input, Paper, TextField} from "@material-ui/core";
+import style from './header.scss'
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
-class Index extends Component {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+function mapStateToProps(state) {
+  return {};
+}
+
+class Header extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
-      toggleMenue: 'none',
-      password: 'none',
-      LoginModal: 'flex',
-      phone: '',
-      enterphone: 'none',
-      allpassword: [],
-      logintoggle: 'none',
-      togglemenu: 'none',
-      security: false
-
+      open : false,
     }
-    this.allpassword = []
   }
 
   componentDidMount() {
-    let Login = document.querySelector('.Login')
-    window.addEventListener('click', (event) => {
-      if (event.target === Login) {
-        this.setState({
-          logintoggle: 'none'
-        })
-      }
-    })
-    // window.addEventListener('scroll', () => {
-    //     if (document.documentElement.scrollTop > 600) {
-    //         this.hideHeader()
-    //     }
-    //     if (document.documentElement.scrollTop < 500) {
-    //         this.showHeader()
-    //     }
-    // })
-  }
 
-  hideHeader() {
-    let headertoggle = document.querySelector('.HeaderTop')
-    headertoggle.style.top = -150 + 'px'
-  }
-
-  showHeader() {
-    let headertoggle = document.querySelector('.HeaderTop')
-    headertoggle.style.top = 0 + 'px'
-  }
-
-  nextinput(index) {
-    this[`input${index + 1}`].current.focus()
-  }
-
-  handlephone(newvalue) {
-    this.setState({
-      phone: newvalue.target.value
-    })
-  }
-
-  toggleMenue() {
-    this.props.dispatch(toggleMenue('flex'))
-    this.toggleMenuetree.current.toggleMenuetree() && this.toggleMenuetree.current.toggleMenuetree()
-  }
-
-  validation() {
-    if (this.state.phone === '') {
-      this.setState({
-        enterphone: 'flex'
-      })
-      return false
+    for (let i = 0; i<= 10; i++) {
+      this[`username_${i}`] = React.createRef();
     }
-    return true
+
   }
 
-  validationpassworld() {
-    this.setState({security: true})
-    alert('login')
-  }
 
-  gonext() {
-    if (this.validation()) {
-      this.setState({password: 'flex', LoginModal: 'none'})
-    }
-  }
+  handleChangeUsername(event, index) {
 
-  password(value, index) {
-    this.allpassword[index] = value.target.value
-    this.setState({
-      allpassword: this.allpassword
-    })
-    let check = this.state.allpassword.filter((item) => {
-      return item !== ''
-    })
-    if (check.length === 5 && this.state.security === false) {
-      this.validationpassworld()
-    }
-  }
-
-  passwordBtn() {
-    let check = this.state.allpassword.filter((item) => {
-      return item !== ''
-    })
-    if (check.length === 5) {
-      this.validationpassworld()
+    if (typeof this[`username_${index + 1}`] != "undefined") {
+      this[`username_${index + 1}`].current.disabled = false;
+      this[`username_${index + 1}`].current.focus();
     } else {
-      alert("رمز خود را وارد کنید")
-    }
+      // send request and show verify modal
+    console.log('xxxx')
   }
+
+  }
+
 
   render() {
     return (
-      <StyleWrapper>
-        <div className="Header">
-          <Grid container={true}>
-            <div style={{display: this.state.logintoggle}} className="Login">
-              <div style={{display: this.state.LoginModal}} className="LoginModal">
-                <div className="LoginOrsingup">
-                  <h4 className="LoginIsOpen ActiveTab">ورود به حساب کاربری</h4>
+      <div>
+        <Paper className={style.header}>
+          <Container>
+            <Button onClick={() =>this.setState({ open : true})} variant="outlined" color="primary">
+              Slide in alert dialog
+            </Button>
+            <Dialog
+              fullWidth={true}
+              open={this.state.open}
+              TransitionComponent={Transition}
+              keepMounted
+              aria-labelledby="alert-dialog-slide-title"
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle id="alert-dialog-slide-title">{"ثبت نام"}</DialogTitle>
+              <DialogContent>
+                <div className={style.login}>
+                  {[0,1,2,3,4,5,6,7,8,9, 10].map((value, key) => {
+                    let pattern;
+                    if (key === 0) pattern = 0; else if (key === 1) pattern = 9; else if(key === 2) pattern = 1; else if (key === 3) pattern = 2; else pattern = 0;
+                    return(<TextField disabled={key === 0 ? false : true} key={key} placeholder={`${pattern}`} variant={"outlined"}  inputRef={this[`username_${key}`]} onChange={(event) => this.handleChangeUsername(event, key)} />);
+                  })}
                 </div>
-                <div className="InputBox InputLogin">
-                  {/*<img src={require('../../res/Img/search.png')}/>*/}
-                  <input onChange={(newvalue) => {
-                    this.handlephone(newvalue)
-                  }} placeholder="شماره موبایل خود را وارد کنید"/>
-                </div>
-                <span style={{display: this.state.enterphone}} className='enterphone'>لطفا شماره موبایل خود را وارد کنید</span>
-                <div onClick={() => {
-                  this.gonext()
-                }} className="btn LoginBtn">
-                  <a onClick={(value) => {
-                    this.validation(value)
-                  }}>ورود</a>
-                </div>
-              </div>
-              <div style={{display: this.state.password}} className="password">
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                  <div className="InputBox InputLogin inpupassword">
-                    <input ref={this.input5} onChange={(value) => {
-                      this.password(value, 5)
-                    }} maxLength={1} placeholder="*"/>
-                  </div>
-                  <div className="InputBox InputLogin inpupassword">
-                    <input ref={this.input4} onChange={(value) => {
-                      this.password(value, 4);
-                      this.nextinput(4)
-                    }} maxLength={1} placeholder="*"/>
-                  </div>
-                  <div className="InputBox InputLogin inpupassword">
-                    <input ref={this.input3} onChange={(value) => {
-                      this.password(value, 3);
-                      this.nextinput(3)
-                    }} maxLength={1} placeholder="*"/>
-                  </div>
-                  <div className="InputBox InputLogin inpupassword">
-                    <input ref={this.input2} onChange={(value) => {
-                      this.password(value, 2);
-                      this.nextinput(2)
-                    }} maxLength={1} placeholder="*"/>
-                  </div>
-                  <div className="InputBox InputLogin inpupassword">
-                    <input ref={this.input1} onChange={(value) => {
-                      this.password(value, 1);
-                      this.nextinput(1)
-                    }} maxLength={1} placeholder="*"/>
-                  </div>
-                </div>
-                <div className="btn LoginBtn">
-                  <a onClick={() => {
-                    this.passwordBtn()
-                  }}>ورود</a>
-                </div>
-                <div className="replay">
-                  <a onClick={() => {
-                    this.setState({password: 'none', LoginModal: 'flex', enterphone: 'none'})
-                  }}>اصلاح شماره</a>
-                  <a>ارسال مجدد</a>
-                </div>
-              </div>
-            </div>
-
-          </Grid>
-          <div className="HeaderTop">
-            <Container>
-              <Grid container={true}>
-                <Grid item lg={5} md={5} sm={5} xs={6}>
-                  <div className="HeadMenu">
-                    <div className="Menu">
-                      <div onClick={() => {
-                        this.toggleMenue()
-                      }} className="Menubtn">
-                        <a>دسته بندی ها</a>
-                        {/*<img src={require('../../res/Img/Group 200.png')}/>*/}
-                      </div>
-                    </div>
-                  </div>
-                </Grid>
-                <Grid item lg={2} md={2} sm={2} xs={6}>
-                  <div className="HeadLogo">
-                    <Link href="Home.html">
-                      {/*<img src={require('../../res/Img/logo.jpg')}/>*/}
-                    </Link>
-                  </div>
-                </Grid>
-                <Grid item lg={5} md={5} sm={5} xs={12}>
-                  <div className="HeadProfile">
-                    <div onClick={() => {
-                      this.setState({logintoggle: 'flex'})
-                    }} className="Profile">
-                      <span className='flaticon-user'/>
-                      <a>پروفایل کاربری</a>
-                    </div>
-                    <div className="cart">
-                      <a href="CartPayment.html">
-                        <p className='flaticon-shopping-cart'/>
-                        <span>سبد خرید</span>
-                        <div className="Badge"><span>1</span></div>
-                      </a>
-                    </div>
-                  </div>
-                </Grid>
-              </Grid>
-              <Grid container={true}>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
-                  <div className="InputBox sm">
-                    <span className='flaticon-search'/>
-                    <input placeholder='جستجو' type="search"/>
-                  </div>
-                </Grid>
-              </Grid>
-            </Container>
-          </div>
-        </div>
-      </StyleWrapper>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() =>this.setState({ open : false})} color="primary">
+                  Disagree
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Container>
+        </Paper>
+      </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-  };
-};
-
-
-export default connect(mapStateToProps)(Index);
+export default connect(
+  mapStateToProps,
+)(Header);

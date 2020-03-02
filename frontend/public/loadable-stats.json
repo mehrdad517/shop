@@ -2,219 +2,207 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "9e5acc517feee4a59edb",
+  "hash": "dd9ee3cdb95ec4634624",
   "publicPath": "/assets/",
-  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
       "Shop.css",
-      "Shop.js",
-      "Shop.9b7c90baff55e22da24d.hot-update.js"
+      "Shop.js"
     ],
     "main": [
       "main.css",
       "main.js",
-      "main.9b7c90baff55e22da24d.hot-update.js"
+      "main.ca544dfbb9f28f42d8d9.hot-update.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
   "assets": [
     {
+      "name": "00675d66af7ada8216dd.hot-update.json",
+      "size": 65,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
       "name": "18.017ba024.png",
       "size": 12934,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "19.29d4f2d4.png",
       "size": 22893,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "20.6acf186d.png",
       "size": 16405,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "22.4699742a.png",
       "size": 21908,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
-    },
-    {
-      "name": "9b7c90baff55e22da24d.hot-update.json",
-      "size": 58,
-      "chunks": [],
-      "chunkNames": [],
       "emitted": false
     },
     {
       "name": "Home.js",
-      "size": 17873,
+      "size": 18073,
       "chunks": [
         "Home"
       ],
       "chunkNames": [
         "Home"
       ],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.250d5cd7.eot",
       "size": 85578,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.3eaf5be1.woff2",
       "size": 36536,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.5894012e.woff",
       "size": 47016,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.6434a8c0.ttf",
       "size": 85388,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.56c8715a.woff",
       "size": 45276,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.61019565.woff2",
       "size": 34816,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.7a43025a.ttf",
       "size": 82792,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.a184890f.eot",
       "size": 82962,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.3bfea2db.woff2",
       "size": 41132,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.abc38bc2.woff",
       "size": 51724,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.d75f8eca.eot",
       "size": 91386,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.f38fd550.ttf",
       "size": 91180,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.1cba1393.woff",
       "size": 46652,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.7c1a637a.eot",
       "size": 85088,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.c4edea41.ttf",
       "size": 84876,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.ca7cf4a4.woff2",
       "size": 36228,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.425838e5.woff2",
       "size": 36632,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.4810830c.woff",
       "size": 46952,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.60377b61.ttf",
       "size": 85248,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.9a083495.eot",
       "size": 85448,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
-    },
-    {
-      "name": "Shop.9b7c90baff55e22da24d.hot-update.js",
-      "size": 2013,
-      "chunks": [
-        "Shop"
-      ],
-      "chunkNames": [
-        "Shop"
-      ],
       "emitted": false
     },
     {
@@ -230,7 +218,7 @@
     },
     {
       "name": "Shop.js",
-      "size": 92905,
+      "size": 94177,
       "chunks": [
         "Shop"
       ],
@@ -240,8 +228,15 @@
       "emitted": false
     },
     {
-      "name": "main.9b7c90baff55e22da24d.hot-update.js",
-      "size": 133644,
+      "name": "ca544dfbb9f28f42d8d9.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
+      "name": "main.ca544dfbb9f28f42d8d9.hot-update.js",
+      "size": 1940,
       "chunks": [
         "main"
       ],
@@ -252,7 +247,7 @@
     },
     {
       "name": "main.css",
-      "size": 96127,
+      "size": 100434,
       "chunks": [
         "main"
       ],
@@ -263,7 +258,7 @@
     },
     {
       "name": "main.js",
-      "size": 11976201,
+      "size": 11951889,
       "chunks": [
         "main"
       ],
@@ -281,7 +276,7 @@
       "chunkNames": [
         "vendors~Shop"
       ],
-      "emitted": true
+      "emitted": false
     }
   ],
   "filteredAssets": 0,
@@ -293,7 +288,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.9b7c90baff55e22da24d.hot-update.js"
+        "main.ca544dfbb9f28f42d8d9.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -307,7 +302,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.9b7c90baff55e22da24d.hot-update.js"
+        "main.ca544dfbb9f28f42d8d9.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -330,8 +325,7 @@
       "assets": [
         "vendors~Shop.js",
         "Shop.css",
-        "Shop.js",
-        "Shop.9b7c90baff55e22da24d.hot-update.js"
+        "Shop.js"
       ],
       "children": {},
       "childAssets": {}
@@ -344,5 +338,58 @@
       "debug": false
     }
   },
-  "children": []
+  "children": [
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
+      "assetsByChunkName": {},
+      "assets": [
+        {
+          "name": "00675d66af7ada8216dd.hot-update.json",
+          "size": 65,
+          "chunks": [],
+          "chunkNames": [],
+          "emitted": false
+        }
+      ],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*",
+            "mini-css-extract-plugin.00675d66af7ada8216dd.hot-update.js"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*",
+            "mini-css-extract-plugin.00675d66af7ada8216dd.hot-update.js"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--6-1!node_modules/postcss-loader/src/index.js??ref--6-2!node_modules/sass-loader/dist/cjs.js??ref--6-3!src/components/Header/header.scss"
+    }
+  ]
 }
