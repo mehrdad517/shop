@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Input, Paper, TextField, Grid, CircularProgress} from "@material-ui/core";
-import style from './header.scss'
+import './header.css';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -39,6 +39,8 @@ class Header extends Component {
   }
 
   componentDidMount() {
+
+    toast.success('cccc');
 
     for (let i = 0; i<= 8; i++) {
       if (i <= 4) {
@@ -80,6 +82,7 @@ class Header extends Component {
         new Api().login({mobile : this.state.username.join('')}).then((response) => {
           if (typeof response != "undefined") {
             if (response.status) {
+              toast.success(response.msg);
               this.setState({
                 sending: true,
                 loading: false
@@ -144,7 +147,7 @@ class Header extends Component {
     console.log(this.state);
     return (
       <div>
-        <Paper className={style.header}>
+        <Paper>
           <Container>
             <Button onClick={() =>this.setState({ open : true})} variant="outlined" color="primary">
               Slide in alert dialog
@@ -155,12 +158,12 @@ class Header extends Component {
               TransitionComponent={Transition}
               keepMounted
             >
-              <div className={style.wrapper}>
+              <div>
               <DialogTitle style={{ textAlign: "center"}}>
                 {this.state.sending === true ? 'تایید حساب کاربری' : 'ورود به سایت'}
               </DialogTitle>
               <DialogContent>
-                <div className={style.login}>
+                <div>
                   {this.state.sending === false ?
                     <>
                     <TextField value={0} disabled={true} variant={"outlined"} />

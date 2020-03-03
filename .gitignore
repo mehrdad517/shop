@@ -9,6 +9,8 @@ frontend/node_modules/*
 frontend/.next/*
 frontend/.next/
 frontend/next
-forntend/public/*
+frontend/public/*
+/frontend/public/*
 api/.env
 /api/.env
+frontend/public/loadable-stats.json

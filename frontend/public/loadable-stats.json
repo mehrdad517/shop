@@ -2,9 +2,9 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "b182f413dab67a44313f",
+  "hash": "cccf424a23bf93441b2d",
   "publicPath": "/assets/",
-  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
+  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
@@ -14,7 +14,7 @@
     "main": [
       "main.css",
       "main.js",
-      "main.507c2bb0e120e77c8087.hot-update.js"
+      "main.4beb6480d71e94e29001.hot-update.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
@@ -48,7 +48,7 @@
       "emitted": false
     },
     {
-      "name": "507c2bb0e120e77c8087.hot-update.json",
+      "name": "4beb6480d71e94e29001.hot-update.json",
       "size": 46,
       "chunks": [],
       "chunkNames": [],
@@ -56,7 +56,7 @@
     },
     {
       "name": "Home.js",
-      "size": 18073,
+      "size": 17873,
       "chunks": [
         "Home"
       ],
@@ -207,7 +207,7 @@
     },
     {
       "name": "Shop.css",
-      "size": 354,
+      "size": 298,
       "chunks": [
         "Shop"
       ],
@@ -218,7 +218,7 @@
     },
     {
       "name": "Shop.js",
-      "size": 94177,
+      "size": 92671,
       "chunks": [
         "Shop"
       ],
@@ -228,8 +228,8 @@
       "emitted": false
     },
     {
-      "name": "main.507c2bb0e120e77c8087.hot-update.js",
-      "size": 38377,
+      "name": "main.4beb6480d71e94e29001.hot-update.js",
+      "size": 40038,
       "chunks": [
         "main"
       ],
@@ -240,7 +240,7 @@
     },
     {
       "name": "main.css",
-      "size": 100656,
+      "size": 114463,
       "chunks": [
         "main"
       ],
@@ -251,7 +251,7 @@
     },
     {
       "name": "main.js",
-      "size": 12099183,
+      "size": 12086431,
       "chunks": [
         "main"
       ],
@@ -281,7 +281,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.507c2bb0e120e77c8087.hot-update.js"
+        "main.4beb6480d71e94e29001.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -295,7 +295,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.507c2bb0e120e77c8087.hot-update.js"
+        "main.4beb6480d71e94e29001.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -331,5 +331,48 @@
       "debug": false
     }
   },
-  "children": []
+  "children": [
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "/assets/",
+      "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+      "assetsByChunkName": {},
+      "assets": [],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "mini-css-extract-plugin": {
+          "chunks": [
+            "mini-css-extract-plugin"
+          ],
+          "assets": [
+            "*"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "mini-css-extract-plugin node_modules/css-loader/dist/cjs.js??ref--5-1!node_modules/postcss-loader/src/index.js??ref--5-2!src/components/Header/header.css"
+    }
+  ]
 }

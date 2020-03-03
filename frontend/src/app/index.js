@@ -10,9 +10,12 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import {ToastContainer} from "react-toastify";
+
 
 import config from '../config';
 // Import your global styles here
+import '../static/css/toastify.css';
 import '../static/Farsi-Digits/font-face.css';
 import '../static/css/animate.css';
 import './styles.scss';
@@ -115,6 +118,16 @@ const App = ({ route }) => (
       <Helmet {...config.app} />
       {/* Child routes won't render without this */}
       {renderRoutes(route.routes)}
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnVisibilityChange
+        draggable={false}
+        pauseOnHover />
     </MuiThemeProvider>
   </StylesProvider>
 );
