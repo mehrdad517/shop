@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Container, Input, Paper, TextField, Grid} from "@material-ui/core";
+import {Container, Input, Paper, TextField, Grid, CircularProgress} from "@material-ui/core";
 import style from './header.scss'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,6 +10,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
+import {toast} from "react-toastify";
+import Api from "../../api";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +27,7 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       open: false,
       username: [0, 9],
       code: [],
@@ -32,6 +35,7 @@ class Header extends Component {
       sending: false,
       counter: 60
     }
+
   }
 
   componentDidMount() {
@@ -54,18 +58,38 @@ class Header extends Component {
 
       if (typeof this[`username_${index + 1}`] != "undefined") {
 
-        this[`username_${index + 1}`].current.disabled = false;
-        this[`username_${index + 1}`].current.focus();
+        let current = this[`username_${index + 1}`].current;
+        current.removeAttribute("disabled")
+        current.focus();
 
         username.push(parseInt(event.target.value));
+
+        this.setState({
+          username
+        })
 
       } else {
 
         username.push(parseInt(event.target.value));
-        // send request and show verify modal
+
         this.setState({
-          sending: true,
-          username
+          username,
+          loading: true
+        });
+
+        new Api().login({mobile : this.state.username.join('')}).then((response) => {
+          if (typeof response != "undefined") {
+            if (response.status) {
+              this.setState({
+                sending: true,
+                loading: false
+              })
+            } else {
+              toast.error(response.message);
+            }
+          }
+        }).catch((error) => {
+          toast.error(error);
         });
 
         let interval = setInterval(() => {
@@ -83,10 +107,10 @@ class Header extends Component {
             });
             clearInterval(interval);
           }
-        }, 1000)
-
+        }, 1000);
 
         // send to api
+
       }
     } else {
 
@@ -167,7 +191,8 @@ class Header extends Component {
                     })}
                   </>}
                 </div>
-                {this.state.sending === true && this.state.counter > 0 && <Typography variant={"p"}>{ 'کد دریافتی را وارد نمایید' + ' (' + this.state.counter + ')'}</Typography>}
+                {this.state.sending === true && this.state.counter > 0 && <><Typography variant={"p"}>{ 'کد دریافتی را وارد نمایید.'}</Typography><br/><Typography variant={"p"}>{this.state.counter}</Typography></>}
+                {this.state.loading && <CircularProgress color={"secondary"} size={15} />}
               </DialogContent>
               </div>
             </Dialog>

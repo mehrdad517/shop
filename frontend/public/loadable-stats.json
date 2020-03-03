@@ -2,9 +2,9 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "6da4befa9b4193e393df",
+  "hash": "b182f413dab67a44313f",
   "publicPath": "/assets/",
-  "outputPath": "/var/www/html/517/shop/frontend/public/assets",
+  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
     "Home": "Home.js",
     "Shop": [
@@ -14,7 +14,7 @@
     "main": [
       "main.css",
       "main.js",
-      "main.7384e1bd8804f37ba9af.hot-update.js"
+      "main.507c2bb0e120e77c8087.hot-update.js"
     ],
     "vendors~Shop": "vendors~Shop.js"
   },
@@ -48,7 +48,7 @@
       "emitted": false
     },
     {
-      "name": "7384e1bd8804f37ba9af.hot-update.json",
+      "name": "507c2bb0e120e77c8087.hot-update.json",
       "size": 46,
       "chunks": [],
       "chunkNames": [],
@@ -56,7 +56,7 @@
     },
     {
       "name": "Home.js",
-      "size": 17873,
+      "size": 18073,
       "chunks": [
         "Home"
       ],
@@ -218,7 +218,7 @@
     },
     {
       "name": "Shop.js",
-      "size": 92905,
+      "size": 94177,
       "chunks": [
         "Shop"
       ],
@@ -228,8 +228,8 @@
       "emitted": false
     },
     {
-      "name": "main.7384e1bd8804f37ba9af.hot-update.js",
-      "size": 34293,
+      "name": "main.507c2bb0e120e77c8087.hot-update.js",
+      "size": 38377,
       "chunks": [
         "main"
       ],
@@ -240,7 +240,7 @@
     },
     {
       "name": "main.css",
-      "size": 96983,
+      "size": 100656,
       "chunks": [
         "main"
       ],
@@ -251,7 +251,7 @@
     },
     {
       "name": "main.js",
-      "size": 11964198,
+      "size": 12099183,
       "chunks": [
         "main"
       ],
@@ -262,7 +262,7 @@
     },
     {
       "name": "vendors~Shop.js",
-      "size": 253855,
+      "size": 251118,
       "chunks": [
         "vendors~Shop"
       ],
@@ -281,7 +281,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.7384e1bd8804f37ba9af.hot-update.js"
+        "main.507c2bb0e120e77c8087.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -295,7 +295,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.7384e1bd8804f37ba9af.hot-update.js"
+        "main.507c2bb0e120e77c8087.hot-update.js"
       ],
       "children": {},
       "childAssets": {}

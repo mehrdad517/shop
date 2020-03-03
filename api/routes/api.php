@@ -27,7 +27,7 @@ Route::Group(['prefix' => '/'], function() {
     | frontend api
     |
      */
-    Route::group(['prefix' => '/'], function () {
+    Route::group(['prefix' => '/v1'], function () {
 
         Route::post('/login', function (Request $request) {
             $validator = \Validator::make($request->all(), [
@@ -41,8 +41,10 @@ Route::Group(['prefix' => '/'], function() {
             $token = quickRandom(); // render token
 
             $user = User::where('mobile', $request->get('mobile'))->first();
+
             if ($user) {
-                if (!$user->status)   return Response()->json(['status' => false, 'message' => 'کاربری شما غیرفعال است.']); // check user active
+
+                if (!$user->status) return Response()->json(['status' => false, 'message' => 'کاربری شما غیرفعال است.']); // check user active
 
                 $datetime1 = new DateTime();
                 $datetime2 = new DateTime($user->verify_datetime);
@@ -68,10 +70,11 @@ Route::Group(['prefix' => '/'], function() {
                     return response()->json(['status' => true, 'msg' => 'کد فعالسازی برای شما ارسال شد.', 'token' => $token]);
                 }
             } else { // register users
+
                 $user = User::create([
                     'mobile' => $request->get('mobile'),
                     'role_key' => User::USER_TYPE_GUEST,
-                    'password' => bcrypt(time())
+                    'password' => bcrypt($token)
                 ]);
 
                 if ($user) {
@@ -79,7 +82,6 @@ Route::Group(['prefix' => '/'], function() {
                     if ($result) {
                         $user->update([
                             'verify_code' => $result,
-                            'verify_datetime' => date('Y-m-d H:i:s'),
                             'remember_token' => $token
                         ]);
                         return response()->json(['status' => true, 'msg' => 'کد فعالسازی برای شما ارسال شد.', 'token' => $token]);
