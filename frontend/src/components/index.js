@@ -11,6 +11,7 @@ import PayloadProducts from './product/payload';
 import CarouselBox from './product/Carsoual/Carsoual';
 import Badge from './product/badge/Badge';
 import Paginator from './paginator';
+import MenuTree from './MenuTree';
 
 export {
   ErrorBoundary,
@@ -23,5 +24,6 @@ export {
   PayloadProducts,
   CarouselBox,
   Badge,
-  Paginator
+  Paginator,
+  MenuTree
 };

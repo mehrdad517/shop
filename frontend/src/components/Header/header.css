@@ -1,28 +1,28 @@
 .header {
   border-radius: 0 !important;
-  position: fixed;
+  /*position: fixed;*/
   width: 100%;
   top: 0;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
   z-index: 1;
 }
-.wrapper {
+.login-wrapper {
   text-align: center;
 }
-.wrapper h2{
+.login-wrapper h2{
   text-align: center !important;
   font-weight: bold;
   font-size : 20px !important;
 }
-.login{
+.login-form{
   display: flex !important;
   direction: ltr;
   margin-bottom: 20px;
 }
-.login > div {
+.login-form > div {
   margin: 0 1.5px;
 }
-.login input {
+.login-form input {
   text-align: center;
   font-size: 35px;
   font-weight: bold;
@@ -31,11 +31,44 @@
   font-family: inherit !important;
 
 }
-.login input[disabled] {
+.login-form input[disabled] {
   background-color: #e4e4e4;
 }
 .login p {
   text-align: center;
   font-weight: bold;
   font-size: 15px;
+  display: block;
+}
+.login-form .verify-code {
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  align-self: center;
+  flex-basis: 50%;
+
+}
+.login-form .verify-code div {
+  margin: 0 1px;
+}
+.login-form-msg b{
+  color: #d92d4b;
+}
+@media only screen and (max-width: 768px) {
+
+  .login-form input {
+    font-size: 25px;
+    padding: 2px 3px;
+  }
+
+  .login-form > div {
+    margin: 0 1px;
+  }
+
+  .login-form .verify-code {
+    flex-basis: 100%;
+
+  }
 }

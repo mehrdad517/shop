@@ -5,12 +5,13 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import Master from '../../components/Layouts/master';
 import {lastBlogPortsAction, payloadProductsAction, sliderAction} from '../../actions';
-import {LastBlogPosts, Slider, PayloadProducts} from '../../components';
+import {LastBlogPosts, Slider, PayloadProducts, MenuTree} from '../../components';
 import {Container} from "@material-ui/core";
 
 // Export this for unit testing more easily
 export class Home extends PureComponent {
   componentDidMount() {
+
     const { fetchLastBlogPostsIfNeeded, fetchSliderIfNeeded, fetchPayloadProductsIfNeeded } = this.props;
 
     fetchSliderIfNeeded();
@@ -23,6 +24,7 @@ export class Home extends PureComponent {
       <Master>
         <Helmet title="Home" />
         <Container>
+          <MenuTree />
           {this.props.slider.readyStatus === 'success' && <Slider slides={this.props.slider} />}
           {this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />}
           {this.props.lastBlogPosts.readyStatus === 'success' && <LastBlogPosts data={this.props.lastBlogPosts.data} />}

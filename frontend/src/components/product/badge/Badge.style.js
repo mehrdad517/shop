@@ -7,7 +7,6 @@ export default styled.div`
     background-color: #fb3449;
     top: 12px;
     right: -40px;
-    z-index: 1000000;
     transform: rotate(45deg);
     display: flex;
     justify-content: center;

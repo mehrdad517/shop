@@ -55,3 +55,16 @@ input:focus {
 ::placeholder {
   font-family: Shabnam;
 }
+.Toastify__toast {
+  font-family: Shabnam !important;
+  font-weight: normal;
+}
+.Toastify__toast--error{
+  background-color: #ff006f;
+}
+.Toastify__toast--success{
+  background-color: #09C8B6;
+}
+.Toastify__toast--info{
+  background-color: #40ace3;
+}

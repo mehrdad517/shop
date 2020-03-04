@@ -327,6 +327,7 @@
     "query-string": "^6.10.1",
     "react": "^16.9.0",
     "react-alice-carousel": "^1.17.3",
+    "react-checkbox-tree": "^1.6.0",
     "react-currency-format": "^1.0.0",
     "react-dev-utils": "^9.0.3",
     "react-dom": "npm:@hot-loader/react-dom",

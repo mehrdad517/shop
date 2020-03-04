@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class Role extends Model
 {
+
     protected $table = 'role';
 
     protected $primaryKey = 'key';

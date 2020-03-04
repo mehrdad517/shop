@@ -15,9 +15,10 @@ import {ToastContainer} from "react-toastify";
 
 import config from '../config';
 // Import your global styles here
-import '../static/css/toastify.css';
 import '../static/Farsi-Digits/font-face.css';
 import '../static/css/animate.css';
+import 'react-toastify/dist/ReactToastify.css'
+import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import './styles.scss';
 
 const theme = createMuiTheme({

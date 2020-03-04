@@ -22,11 +22,12 @@ import { shopAction } from '../../actions';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import {Link} from 'react-router-dom'
 import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
-import style from './style.scss';
+import './style.scss';
 import {Helmet} from "react-helmet";
 import Typography from '@material-ui/core/Typography';
 
 class Shop extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -36,6 +37,8 @@ class Shop extends Component {
         sort: 0,
         brands:[],
         attributes: {},
+        checked: [],
+        expanded: [],
       }
     };
   }
@@ -241,18 +244,17 @@ class Shop extends Component {
   }
 
   render() {
-    console.log(this.state)
     const override = `transform: translate(-50%, -50%);position: fixed;top: 50%;left: 50%;z-index: 9999999999`;
     return (
       <Master>
         {this.props.shop.readyStatus === 'success' &&
-        <div className={this.props.shop.loading ? style.disclicks : ''}>
+        <div className={this.props.shop.loading ? "disclicks" : ''}>
           <Helmet>
             <title>{this.props.shop.data.cached.meta_title}</title>
             <meta name='description' content={this.props.shop.data.cached.meta_description} />
             <meta name='canonical' content={'/products/' + this.props.shop.data.cached.slug} />
           </Helmet>
-          <div className={style.shop}>
+          <div className="shop">
             {/* navigation */}
             <Grid spacing={2} container={true}>
               <Grid item={true} xs={12}>
@@ -416,7 +418,7 @@ class Shop extends Component {
                         <Box key={index} item={item} />
                       </Grid>
                     );
-                  }) : <Grid item={true} xs={12}><div className={style.notFound}><Typography>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></div></Grid>}
+                  }) : <Grid item={true} xs={12}><div className="notFound"><Typography>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></div></Grid>}
                 </Grid>
               </Grid>
             </Grid>

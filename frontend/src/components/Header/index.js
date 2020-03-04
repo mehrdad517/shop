@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Input, Paper, TextField, Grid, CircularProgress} from "@material-ui/core";
-import './header.css';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,6 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
 import {toast} from "react-toastify";
 import Api from "../../api";
+import './header.css'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,7 +31,7 @@ class Header extends Component {
       open: false,
       username: [0, 9],
       code: [],
-      verify: false,
+      token: '',
       sending: false,
       counter: 60
     }
@@ -40,14 +40,13 @@ class Header extends Component {
 
   componentDidMount() {
 
-    toast.success('cccc');
-
     for (let i = 0; i<= 8; i++) {
       if (i <= 4) {
         this[`code_${i}`] = React.createRef();
       }
       this[`username_${i}`] = React.createRef();
     }
+
 
   }
 
@@ -60,19 +59,21 @@ class Header extends Component {
 
       if (typeof this[`username_${index + 1}`] != "undefined") {
 
+        if (event.target.value.length === 1) {
+          username[index + 2] = parseInt(event.target.value);
+
+          this.setState({
+            username
+          });
+        }
+
         let current = this[`username_${index + 1}`].current;
-        current.removeAttribute("disabled")
+        current.removeAttribute("disabled");
         current.focus();
-
-        username.push(parseInt(event.target.value));
-
-        this.setState({
-          username
-        })
 
       } else {
 
-        username.push(parseInt(event.target.value));
+        username[index + 2] = parseInt(event.target.value);
 
         this.setState({
           username,
@@ -83,36 +84,43 @@ class Header extends Component {
           if (typeof response != "undefined") {
             if (response.status) {
               toast.success(response.msg);
+
               this.setState({
                 sending: true,
-                loading: false
-              })
+                loading: false,
+                token: response.token
+              });
+
+              let interval = setInterval(() => {
+                this.setState({
+                  counter: this.state.counter - 1
+                });
+
+                if (this.state.counter === 0) {
+                  this.setState({
+                    loading: false,
+                    username: [0, 9],
+                    code: [],
+                    token: '',
+                    sending: false,
+                    counter: 60
+                  });
+                  clearInterval(interval);
+                }
+              }, 1000);
+
+              this[`code_0`].current.focus();
+
             } else {
+              this.setState({
+                loading:false
+              })
               toast.error(response.message);
             }
           }
         }).catch((error) => {
           toast.error(error);
         });
-
-        let interval = setInterval(() => {
-          this.setState({
-            counter: this.state.counter - 1
-          });
-
-          if (this.state.counter === 0) {
-            this.setState({
-              username: [0, 9],
-              code: [],
-              verify: false,
-              sending: false,
-              counter: 60
-            });
-            clearInterval(interval);
-          }
-        }, 1000);
-
-        // send to api
 
       }
     } else {
@@ -121,22 +129,54 @@ class Header extends Component {
 
       if (typeof this[`code_${index + 1}`] != "undefined") {
 
-        this[`code_${index + 1}`].current.disabled = false;
-        this[`code_${index + 1}`].current.focus();
+        if (event.target.value.length === 1) {
+          code[index] = parseInt(event.target.value);
 
-        code.push(parseInt(event.target.value));
+          this.setState({
+            code
+          });
+        }
+
+        let current = this[`code_${index + 1}`].current;
+        current.disabled = false;
+        current.focus();
 
       } else {
-        code.push(parseInt(event.target.value)); // last record
-        // send request and show verify modal
+
+        code[index] = parseInt(event.target.value);
         this.setState({
-          verify: true,
-          open: false,
-          code
+          code,
+          loading: true
         });
 
+        new Api().verify({mobile: this.state.username.join(''), token: this.state.token, code: this.state.code.join('')}).then((response) => {
+          if (typeof response != "undefined") {
+            if (response.status) {
+              toast.success(response.msg);
 
-        // send to api
+              this.setState({
+                loading: false,
+                open: false,
+                username: [0, 9],
+                code: [],
+                token: '',
+                sending: false,
+                counter: 60
+              });
+
+              //update redux
+
+            } else {
+              toast.error(response.msg);
+              this.setState({
+                loading: false
+              })
+            }
+          }
+        }).catch((error) => {
+          toast.error(error)
+        });
+
       }
     }
   }
@@ -146,62 +186,67 @@ class Header extends Component {
   render() {
     console.log(this.state);
     return (
-      <div>
-        <Paper>
-          <Container>
-            <Button onClick={() =>this.setState({ open : true})} variant="outlined" color="primary">
-              Slide in alert dialog
-            </Button>
-            <Dialog
-              fullWidth={true}
-              open={this.state.open}
-              TransitionComponent={Transition}
-              keepMounted
-            >
-              <div>
-              <DialogTitle style={{ textAlign: "center"}}>
-                {this.state.sending === true ? 'تایید حساب کاربری' : 'ورود به سایت'}
-              </DialogTitle>
-              <DialogContent>
-                <div>
-                  {this.state.sending === false ?
-                    <>
+      <Paper className="header">
+        <Container>
+          <Button onClick={() => { this.setState({ open : true});}} variant="outlined" color="primary">
+            Slide in alert dialog
+          </Button>
+          <Dialog
+            className="login-wrapper"
+            open={this.state.open}
+            TransitionComponent={Transition}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            onEscapeKeyDown={() => this.setState({ open: false})}
+            onBackdropClick={() => this.setState({ open: false})}
+            onEntered={() => this[`username_0`].current.focus()}
+          >
+            <DialogTitle>
+              {this.state.sending === true ? 'تایید حساب کاربری' : 'ورود به سایت'}
+            </DialogTitle>
+            <DialogContent>
+              <form  className="login-form">
+                {this.state.sending === false ?
+                  <>
                     <TextField value={0} disabled={true} variant={"outlined"} />
                     <TextField value={9} disabled={true} variant={"outlined"} />
                     {[0,1,2,3,4,5,6,7,8].map((value, key) => {
                       let pattern;
                       if(key === 0) pattern = 1; else if (key === 1) pattern = 2; else pattern = 0;
                       return(<TextField
-                          disabled={key === 0 ? false : true} key={key}
+                          disabled={key === 0 ? false : true}
+                          key={key}
                           placeholder={`${pattern}`}
                           variant={"outlined"}
+                          value={typeof this.state.username[key + 2] != undefined && this.state.username[key + 2]}
                           inputRef={this[`username_${value}`]}
                           onChange={(event) => this.handleChangeUsername(event, key, 'username')}
                         />
                       );
                     })}
-                  </> : <>
+                  </> : <div className="verify-code">
                     {[0,1, 2,3,4].map((value, key) => {
                       return(<TextField
                           disabled={key === 0 ? false : true}
                           key={key}
                           placeholder={'*'}
                           variant={"outlined"}
+                          value={this.state.code[key]}
                           inputRef={this[`code_${value}`]}
                           onChange={(event) => this.handleChangeUsername(event, key, 'code')}
                         />
                       );
                     })}
-                  </>}
-                </div>
-                {this.state.sending === true && this.state.counter > 0 && <><Typography variant={"p"}>{ 'کد دریافتی را وارد نمایید.'}</Typography><br/><Typography variant={"p"}>{this.state.counter}</Typography></>}
-                {this.state.loading && <CircularProgress color={"secondary"} size={15} />}
-              </DialogContent>
-              </div>
-            </Dialog>
-          </Container>
-        </Paper>
-      </div>
+                  </div>}
+              </form>
+              {this.state.sending === true && this.state.counter > 0 && <div className="login-form-msg">
+                <Typography variant={"button"}><span>کد فعال سازی به شماره</span>&nbsp;<b>{this.state.username.join('')}</b>&nbsp;<span>ارسال شد.</span></Typography><br/><Typography variant={"button"}>{this.state.counter}</Typography>
+              </div>}
+              {this.state.loading && <CircularProgress color={"secondary"} size={15} />}
+            </DialogContent>
+          </Dialog>
+        </Container>
+      </Paper>
     );
   }
 }
