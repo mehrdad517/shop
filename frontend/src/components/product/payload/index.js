@@ -19,7 +19,7 @@ class PayloadProducts extends Component {
             {this.props.data.map((list, index) => {
               return(
                 <div key={index} style={{position:'relative'}} className='alice-carousel-container'>
-                  <Line title={list.title} link="/products" />
+                  <Line title={list.title} link={list.link !== null ? list.link : ''} />
                   <CarouselBox items={list.products} />
                 </div>
               );

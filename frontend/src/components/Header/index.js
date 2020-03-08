@@ -12,6 +12,22 @@ import Typography from '@material-ui/core/Typography';
 import {toast} from "react-toastify";
 import Api from "../../api";
 import './header.css'
+import {Sidebar} from "../index";
+import Drawer from '@material-ui/core/Drawer';
+import WidgetsIcon from '@material-ui/icons/Widgets';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import Badge from '@material-ui/core/Badge';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import Divider from '@material-ui/core/Divider';
+import MenuIcon from '@material-ui/icons/Menu';
+import DirectionsIcon from '@material-ui/icons/Directions';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import SearchIcon from '@material-ui/icons/Search';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,7 +49,9 @@ class Header extends Component {
       code: [],
       token: '',
       sending: false,
-      counter: 60
+      counter: 60,
+      // drawer
+      right: false
     }
 
   }
@@ -184,13 +202,49 @@ class Header extends Component {
 
 
   render() {
-    console.log(this.state);
     return (
       <Paper className="header">
-        <Container>
-          <Button onClick={() => { this.setState({ open : true});}} variant="outlined" color="primary">
-            Slide in alert dialog
-          </Button>
+        {this.props.setting.readyStatus === 'success' && <Container>
+          <div className='header-wrapper'>
+            <div className='right'>
+              <Button endIcon={<WidgetsIcon />} onClick={() => { this.setState({ right : true }) }} variant="contained" color="primary">
+                دسته بندی ها
+              </Button>
+              <TextField
+                variant={"outlined"}
+                size={"small"}
+                placeholder={'جستجو در سایت ...'}
+                id="input-with-icon-textfield"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </div>
+            <div className='middle'>
+              <img src={require('../../static/Img/logo.jpg')}/>
+            </div>
+            <div className='left'>
+              <Button startIcon={<PermIdentityIcon />} onClick={() => { this.setState({ open : true});}} variant="text" color="default">
+                پروفایل کاربری
+              </Button>
+              <IconButton>
+                <Badge  anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }} color="secondary" overlap="circle" badgeContent="0">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </div>
+          </div>
+
+          <Drawer anchor="left" open={this.state.right} onEscapeKeyDown={() => this.setState({ right: false})} onBackdropClick={() => this.setState({ right: false })}>
+            <Sidebar setting={this.props.setting.data} />
+          </Drawer>
           <Dialog
             className="login-wrapper"
             open={this.state.open}
@@ -245,7 +299,7 @@ class Header extends Component {
               {this.state.loading && <CircularProgress color={"secondary"} size={15} />}
             </DialogContent>
           </Dialog>
-        </Container>
+        </Container>}
       </Paper>
     );
   }

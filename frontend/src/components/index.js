@@ -4,6 +4,7 @@ import ErrorBoundary from './ErrorBoundary';
 import Loading from './Loading';
 import Master from './Layouts/master';
 import Footer from './Footer';
+import FooterMenu from './Footer/Menu';
 import Header from './Header';
 import LastBlogPosts from './Blog/LastBlogPosts/lastBlogPosts';
 import Slider from './slider';
@@ -12,6 +13,7 @@ import CarouselBox from './product/Carsoual/Carsoual';
 import Badge from './product/badge/Badge';
 import Paginator from './paginator';
 import MenuTree from './MenuTree';
+import Sidebar from './Sidebar';
 
 export {
   ErrorBoundary,
@@ -25,5 +27,7 @@ export {
   CarouselBox,
   Badge,
   Paginator,
-  MenuTree
+  MenuTree,
+  Sidebar,
+  FooterMenu
 };

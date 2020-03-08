@@ -24,7 +24,6 @@ export class Home extends PureComponent {
       <Master>
         <Helmet title="Home" />
         <Container>
-          <MenuTree />
           {this.props.slider.readyStatus === 'success' && <Slider slides={this.props.slider} />}
           {this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />}
           {this.props.lastBlogPosts.readyStatus === 'success' && <LastBlogPosts data={this.props.lastBlogPosts.data} />}

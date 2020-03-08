@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import StyleWrapper from './footer.style';
+import {FooterMenu} from './../index'
 
 function Footer(props) {
   const [sub, setSub] = useState(150);
@@ -51,15 +52,7 @@ function Footer(props) {
             </Grid>
             <Grid style={{ marginTop: '5px' }} container spacing={5}>
               <Grid item lg={6} md={6} sm={12} xs={12}>
-                <div className="Guidance">
-                  {props.setting.data.footer_menu && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: props.setting.data.footer_menu
-                      }}
-                    />
-                  )}
-                </div>
+                  {props.setting.data.footer_menu && <FooterMenu nodes={props.setting.data.footer_menu} />}
               </Grid>
               <Grid item lg={3} md={3} sm={6} xs={12}>
                 <h4>پل های ارتباطی</h4>

@@ -1,0 +1,17 @@
+.tree-box {
+  margin: 0 10px 10px 0;
+}
+.tree-parent {
+  display: flex;
+  justify-content: flex-start;
+}
+.tree-box .has-no-child {
+  padding-right: 18px;
+}
+.tree-box a {
+  padding-right: 5px;
+}
+.tree-children {
+  padding-right: 10px;
+  padding-top:  5px;
+}

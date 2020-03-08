@@ -8,7 +8,7 @@ class Line extends Component {
       <StyleWrapper>
         <div className="line">
           <h3>{this.props.title}</h3>
-          <Link to={this.props.link}>مشاهده همه</Link>
+          {this.props.link !== '' && <Link to={this.props.link}>مشاهده همه</Link>}
         </div>
       </StyleWrapper>
     );

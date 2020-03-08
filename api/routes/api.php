@@ -163,33 +163,12 @@ Route::Group(['prefix' => '/'], function() {
                 $response = \DB::select('call setting');
 
                 if (is_array($response)) {
-                    // get all footer hyper links tree mode
-                    $footer_menu = '';
-                    $nodes = Menu::descendantsOf(2)->toTree(2); // get footer links
-                    if (!empty($nodes->toArray())) {
-                        $traverse = function ($menu) use (&$traverse, &$footer_menu) {
-                            $footer_menu .= '<ul>';
-                            foreach ($menu as $key => $item) {
-                                $has_child = count($item->children);
-                                if ($item->parent_id == 2) {
-                                    $footer_menu .= '<li  class="parent"><h4>' .$item->label . '</h4>';
-                                } else {
-                                    if ($has_child > 0) {
-                                        $footer_menu .= '<li><a target="'.($item->external_link ? '_blank' : 'self').'" href="'.($item->external_link ?? '#').'" class="'. (!$item->external_link ? 'nextjs-link' : '') .' has-child">' .$item->label . '</a>';
-                                    } else {
-                                        $footer_menu .= '<li><a target="'.($item->external_link ? '_blank' : 'self').'"  href="'.($item->external_link ?? '#').'" class="'.(!$item->external_link ? 'nextjs-link' : '').' child" >' .$item->label . '</a>';
-                                    }
-                                }
-                                if ($has_child > 0) {
-                                    $traverse($item->children);
-                                }
-                                $footer_menu .= '</li>';
-                            }
-                            $footer_menu .= '</ul>';
-                        };
 
-                        $traverse($nodes);
-                    }
+                    // get all footer hyper links tree mode
+
+                    $footer_menu = Menu::descendantsOf(2)->toTree(2); // get footer links
+
+                    $product_categories = \App\ProductCategory::get()->toTree();
 
                     $data = [
                         'shop' => $response[0]->shop,
@@ -207,6 +186,7 @@ Route::Group(['prefix' => '/'], function() {
                         'social' => json_decode($response[0]->social),
                         'app' => json_decode($response[0]->app),
                         'license' => json_decode($response[0]->license),
+                        'product_categories' => $product_categories,
                         'footer_menu' => $footer_menu
                     ];
                 }
@@ -249,7 +229,7 @@ Route::Group(['prefix' => '/'], function() {
         Route::group(['prefix' => 'products'], function () {
             // payload home page items
             Route::get('/payload', function (Request $request) {
-                $list = \App\ProductList::select('id', 'title')
+                $list = \App\ProductList::select('id', 'title', 'link')
                     ->with(['products' => function($q) use($request) {
                         $q->select('id', 'title', 'slug', 'price', 'discount', 'count' ,'brand_id', 'package_type_id')
                             ->with(['brand' => function($q) {

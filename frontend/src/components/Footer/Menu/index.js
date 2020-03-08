@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import CheckboxTree from 'react-checkbox-tree';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
@@ -14,51 +13,54 @@ import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import {Link} from "react-router-dom";
 import './menu.css'
-import {SETTING_CHANGE_CATEGORY_EXPANDED} from "../../types";
-
-function mapStateToProps(state) {
-  return {
-    setting: state.setting
-  };
-}
-
 
 class Index extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: [],
+    }
+  }
+
 
   handleExpand(value)
   {
 
-    let expanded = this.props.setting.categoryExpanded;
+    let expanded = this.state.expanded;
 
-    if (this.props.setting.categoryExpanded.includes(value)) {
-      let index = this.props.setting.categoryExpanded.indexOf(value);
-      this.props.setting.categoryExpanded.splice(index, 1);
+    if (this.state.expanded.includes(value)) {
+      let index = this.state.expanded.indexOf(value);
+      this.state.expanded.splice(index, 1);
     } else {
       expanded.push(value);
     }
 
-    this.props.dispatch({
-      type: SETTING_CHANGE_CATEGORY_EXPANDED,
-      payload: expanded
+    this.setState({
+      expanded
     });
-
   }
 
 
   renderTree(nodes) {
+
     // nodes mapping
     const treeNodes = nodes.map((item, key) => {
+
       // value id node
       const value = item.value;
+
       // label title node
       const label = item.label;
 
       // slug
-      const slug = item.slug;
+      const slug = item.label.replace(/\s+/g, '-');
+
+      // external link
+      const external_link = item.external_link !== null ? item.external_link : '';
 
       // check has child
       const hasChild = (item.children.length > 0) ? true : false;
-
       // check has child is true fetch children
       const children = hasChild ? this.renderTree(item.children) : '';
 
@@ -66,31 +68,31 @@ class Index extends Component {
         <li key={key} className='tree-box'>
           <span className={hasChild === true ? 'tree-parent has-child' : 'tree-parent  has-no-child'}>
             <span onClick={() => this.handleExpand(value)}>
-              {hasChild === true && (this.props.setting.categoryExpanded && this.props.setting.categoryExpanded.includes(value) ? <ExpandLessIcon color={"action"} fontSize={"small"} /> : <ExpandMoreIcon color={"action"} fontSize={"small"} />)}
+              {hasChild === true && (this.state.expanded.includes(value) ? <ExpandLessIcon color={"action"} fontSize={"small"} /> : <ExpandMoreIcon color={"action"} fontSize={"small"} />)}
             </span>
-            <Link to={'/products/' + slug }>{label}</Link>
+            {external_link !== '' ? <a target='_blank' href={external_link}>{label}</a> : <Link to={'/landing/' + slug }>{label}</Link> }
           </span>
           {hasChild === true &&
-          <ul className='tree-children' style={{  display: ( this.props.setting.categoryExpanded && this.props.setting.categoryExpanded.includes(value) ? 'block' : 'none')}}>
+          <ul className='tree-children' style={{  display: ( this.state.expanded.includes(value) ? 'block' : 'none')}}>
             {children}
           </ul>}
         </li>
       );
+
     });
+
 
     return treeNodes
   }
 
+
   render() {
     return (
-      <div>
-        {this.renderTree(this.props.setting.data.product_categories)}
-      </div>
+      <ul className="footer-menu">
+        {this.renderTree(this.props.nodes)}
+      </ul>
     );
   }
 }
 
-export default connect(
-  mapStateToProps,
-)(Index);
-
+export default Index;

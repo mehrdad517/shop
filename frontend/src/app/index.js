@@ -18,6 +18,7 @@ import config from '../config';
 import '../static/Farsi-Digits/font-face.css';
 import '../static/css/animate.css';
 import 'react-toastify/dist/ReactToastify.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import './styles.scss';
 
@@ -107,6 +108,11 @@ const theme = createMuiTheme({
           paddingTop: 0
         }
       },
+    },
+    MuiAlert: {
+      root: {
+        fontFamily: 'Shabnam !important',
+      }
     }
   },
 });

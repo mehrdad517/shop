@@ -15,7 +15,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ClipLoader from 'react-spinners/BeatLoader';
-import { Paginator } from '../../components';
+import {Paginator, Sidebar} from '../../components';
 import Master from '../../components/Layouts/master';
 import Box from '../../components/product/box/Box';
 import { shopAction } from '../../actions';
@@ -25,6 +25,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
 import './style.scss';
 import {Helmet} from "react-helmet";
 import Typography from '@material-ui/core/Typography';
+import Alert from "@material-ui/lab/Alert";
+import Drawer from "@material-ui/core/Drawer";
 
 class Shop extends Component {
 
@@ -418,7 +420,7 @@ class Shop extends Component {
                         <Box key={index} item={item} />
                       </Grid>
                     );
-                  }) : <Grid item={true} xs={12}><div className="notFound"><Typography>جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Typography></div></Grid>}
+                  }) : <Grid item={true} xs={12}><Alert severity="warning">جستجو برای این ترکیب از فیلترها با هیچ کالایی هم‌خوانی نداشت.</Alert></Grid>}
                 </Grid>
               </Grid>
             </Grid>
