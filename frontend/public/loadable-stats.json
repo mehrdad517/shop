@@ -2,21 +2,25 @@
   "errors": [],
   "warnings": [],
   "version": "4.39.3",
-  "hash": "cd1dfa2acec97e0c13d1",
+  "hash": "be24245a6a93a9af384b",
   "publicPath": "/assets/",
-  "outputPath": "D:\\html\\shop\\frontend\\public\\assets",
+  "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
+    "Blog": "Blog.js",
     "Home": "Home.js",
+    "Page": [
+      "Page.css",
+      "Page.js"
+    ],
     "Shop": [
       "Shop.css",
-      "Shop.js",
-      "Shop.731b2e2732ac8774544c.hot-update.js"
+      "Shop.js"
     ],
     "main": [
       "main.css",
-      "main.js",
-      "main.731b2e2732ac8774544c.hot-update.js"
+      "main.js"
     ],
+    "vendors~Blog~Shop": "vendors~Blog~Shop.js",
     "vendors~Shop": "vendors~Shop.js"
   },
   "assets": [
@@ -25,196 +29,218 @@
       "size": 12934,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "19.29d4f2d4.png",
       "size": 22893,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "20.6acf186d.png",
       "size": 16405,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "22.4699742a.png",
       "size": 21908,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
-      "name": "731b2e2732ac8774544c.hot-update.json",
-      "size": 58,
+      "name": "404.644d3f75.png",
+      "size": 50205,
       "chunks": [],
       "chunkNames": [],
       "emitted": false
     },
     {
+      "name": "Blog.js",
+      "size": 39361,
+      "chunks": [
+        "Blog"
+      ],
+      "chunkNames": [
+        "Blog"
+      ],
+      "emitted": true
+    },
+    {
       "name": "Home.js",
-      "size": 17933,
+      "size": 17522,
       "chunks": [
         "Home"
       ],
       "chunkNames": [
         "Home"
       ],
-      "emitted": true
+      "emitted": false
+    },
+    {
+      "name": "Page.css",
+      "size": 8289,
+      "chunks": [
+        "Page"
+      ],
+      "chunkNames": [
+        "Page"
+      ],
+      "emitted": false
+    },
+    {
+      "name": "Page.js",
+      "size": 71863,
+      "chunks": [
+        "Page"
+      ],
+      "chunkNames": [
+        "Page"
+      ],
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.250d5cd7.eot",
       "size": 85578,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.3eaf5be1.woff2",
       "size": 36536,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.5894012e.woff",
       "size": 47016,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Bold-FD.6434a8c0.ttf",
       "size": 85388,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.56c8715a.woff",
       "size": 45276,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.61019565.woff2",
       "size": 34816,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.7a43025a.ttf",
       "size": 82792,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-FD.a184890f.eot",
       "size": 82962,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.3bfea2db.woff2",
       "size": 41132,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.abc38bc2.woff",
       "size": 51724,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.d75f8eca.eot",
       "size": 91386,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Light-FD.f38fd550.ttf",
       "size": 91180,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.1cba1393.woff",
       "size": 46652,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.7c1a637a.eot",
       "size": 85088,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.c4edea41.ttf",
       "size": 84876,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Medium-FD.ca7cf4a4.woff2",
       "size": 36228,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.425838e5.woff2",
       "size": 36632,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.4810830c.woff",
       "size": 46952,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.60377b61.ttf",
       "size": 85248,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "Shabnam-Thin-FD.9a083495.eot",
       "size": 85448,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
-    },
-    {
-      "name": "Shop.731b2e2732ac8774544c.hot-update.js",
-      "size": 1767,
-      "chunks": [
-        "Shop"
-      ],
-      "chunkNames": [
-        "Shop"
-      ],
       "emitted": false
     },
     {
@@ -230,13 +256,41 @@
     },
     {
       "name": "Shop.js",
-      "size": 92858,
+      "size": 94102,
       "chunks": [
         "Shop"
       ],
       "chunkNames": [
         "Shop"
       ],
+      "emitted": false
+    },
+    {
+      "name": "d1.e1cde6e1.jpg",
+      "size": 714592,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
+      "name": "d2.71549936.jpg",
+      "size": 1475600,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
+      "name": "d3.2e458b30.jpg",
+      "size": 52939,
+      "chunks": [],
+      "chunkNames": [],
+      "emitted": false
+    },
+    {
+      "name": "d5.d2d8b563.jpg",
+      "size": 180000,
+      "chunks": [],
+      "chunkNames": [],
       "emitted": false
     },
     {
@@ -244,120 +298,109 @@
       "size": 76548,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-brands-400.57dcda6f.eot",
       "size": 133034,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-brands-400.9d67fa14.svg",
       "size": 715890,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-brands-400.9ec698d1.ttf",
       "size": 132728,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-brands-400.b564da88.woff",
       "size": 89824,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-regular-400.3351f435.eot",
       "size": 34390,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-regular-400.4165c268.woff2",
       "size": 13600,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-regular-400.5d086178.svg",
       "size": 144322,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-regular-400.73cf49a2.woff",
       "size": 16800,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-regular-400.a0e3ac82.ttf",
       "size": 34092,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-solid-900.0724bb8b.svg",
       "size": 849240,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-solid-900.55eb2a60.woff2",
       "size": 76120,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-solid-900.75f38a15.ttf",
       "size": 193792,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-solid-900.89e02bae.eot",
       "size": 194078,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
+      "emitted": false
     },
     {
       "name": "fa-solid-900.cdfec5cf.woff",
       "size": 99004,
       "chunks": [],
       "chunkNames": [],
-      "emitted": true
-    },
-    {
-      "name": "main.731b2e2732ac8774544c.hot-update.js",
-      "size": 150159,
-      "chunks": [
-        "main"
-      ],
-      "chunkNames": [
-        "main"
-      ],
       "emitted": false
     },
     {
       "name": "main.css",
-      "size": 184273,
+      "size": 208576,
       "chunks": [
         "main"
       ],
@@ -368,25 +411,36 @@
     },
     {
       "name": "main.js",
-      "size": 12428649,
+      "size": 12971355,
       "chunks": [
         "main"
       ],
       "chunkNames": [
         "main"
+      ],
+      "emitted": true
+    },
+    {
+      "name": "vendors~Blog~Shop.js",
+      "size": 48183,
+      "chunks": [
+        "vendors~Blog~Shop"
+      ],
+      "chunkNames": [
+        "vendors~Blog~Shop"
       ],
       "emitted": false
     },
     {
       "name": "vendors~Shop.js",
-      "size": 272183,
+      "size": 218368,
       "chunks": [
         "vendors~Shop"
       ],
       "chunkNames": [
         "vendors~Shop"
       ],
-      "emitted": true
+      "emitted": false
     }
   ],
   "filteredAssets": 0,
@@ -397,8 +451,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.731b2e2732ac8774544c.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -411,8 +464,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.731b2e2732ac8774544c.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -429,14 +481,38 @@
     },
     "Shop": {
       "chunks": [
+        "vendors~Blog~Shop",
         "vendors~Shop",
         "Shop"
       ],
       "assets": [
+        "vendors~Blog~Shop.js",
         "vendors~Shop.js",
         "Shop.css",
-        "Shop.js",
-        "Shop.731b2e2732ac8774544c.hot-update.js"
+        "Shop.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "Blog": {
+      "chunks": [
+        "vendors~Blog~Shop",
+        "Blog"
+      ],
+      "assets": [
+        "vendors~Blog~Shop.js",
+        "Blog.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "Page": {
+      "chunks": [
+        "Page"
+      ],
+      "assets": [
+        "Page.css",
+        "Page.js"
       ],
       "children": {},
       "childAssets": {}

@@ -154,46 +154,46 @@ Route::Group(['prefix' => '/'], function() {
             }
         });
 
-        Route::get('/setting', function () {
+        Route::get('/setting', function (Request $request) {
 
-            if (!\Cache::has('setting')) {
 
-                $data = [];
+            preg_match('/.*\/\/(.*)/', $request->header('Origin'), $match);
 
-                $response = \DB::select('call setting');
+            $domain = \App\Domain::with(['links' => function($q) {
+                $q->select('id', 'title', 'value', 'type');
+            }])->find($match[1]);
 
-                if (is_array($response)) {
+            if ($domain) {
 
-                    // get all footer hyper links tree mode
-
-                    $footer_menu = Menu::descendantsOf(2)->toTree(2); // get footer links
+                if (!\Cache::has('setting')) {
 
                     $product_categories = \App\ProductCategory::get()->toTree();
 
-                    $data = [
-                        'shop' => $response[0]->shop,
-                        'app_url' => env('APP_URL'),
-                        'title' => $response[0]->title,
-                        'meta_title' => $response[0]->meta_title,
-                        'meta_description' => $response[0]->meta_description,
-                        'introduce' => $response[0]->introduce,
-                        'copy_right' => $response[0]->copy_right,
-                        'register' => $response[0]->register,
-                        'basket' => $response[0]->basket,
-                        'active' => $response[0]->active,
-                        'maintenance_mode' => $response[0]->maintenance_mode,
-                        'contact' => json_decode($response[0]->contact),
-                        'social' => json_decode($response[0]->social),
-                        'app' => json_decode($response[0]->app),
-                        'license' => json_decode($response[0]->license),
+                    $blog_categories = \App\BlogCategory::get()->toTree();
+
+                    $menu = Menu::descendantsOf(1)->toTree(1); // get header links
+
+                    $footer_menu = Menu::descendantsOf(2)->toTree(2); // get footer links
+
+
+                    \Cache::put('setting', ['status' => true, 'result' => [
+                        'domain' => $domain,
+                        'blog_categories' => $blog_categories,
                         'product_categories' => $product_categories,
-                        'footer_menu' => $footer_menu
-                    ];
+                        'menu' => $menu,
+                        'footer_menu' => $footer_menu,
+                    ]] , 24 * 60);
+
+
                 }
-                \Cache::put('setting', $data , 24 * 60 * 7);
+
+
+                return response(\Cache::get('setting'));
             }
 
-            return response(\Cache::get('setting'));
+            return response()->json(['status' => false, 'msg' => 'دامنه نامعتبر است.', 'result' => []], 400);
+
+
 
         });
 
@@ -201,30 +201,148 @@ Route::Group(['prefix' => '/'], function() {
 
             if (!\Cache::has('slider')) {
                 $result = \Illuminate\Support\Facades\DB::select('call slider');
-                \Cache::put('slider', $result, 24 * 60 * 7);
+                \Cache::put('slider', $result, 24 * 60);
             }
             return response(\Cache::get('slider'));
         });
 
+
         Route::group(['prefix' => 'blog'], function() {
-            Route::get('/lastBlogPosts', function () {
 
-                if (!\Cache::has('lastBlogPosts')) {
+            Route::get('/', function (Request $request) {
 
-                    $result = \Illuminate\Support\Facades\DB::select('call blog_posts(?,?,?)', [4, 1, null]); // limit, page, category_id
+                $page = $request->get('page') ?? 1;
+                $sort = $request->get('sort') ?? 0;
+                $limit = $request->get('limit') ?? 10;
 
-                    foreach ($result as $key=>$item) {
-                        $result[$key]->files = json_decode($item->files);
-                        $result[$key]->tags = json_decode($item->tags);
-                    }
 
-                    \Cache::put('lastBlogPosts', $result , 24 * 60 * 7);
+                $sort_items = blogSortItems();
+
+                if (!\Cache::has("blog[$page][$sort][$limit]")) {
+
+                    $contents = \App\BlogContent::with(['files' => function ($q) {
+                        $q->select('fileable_id', 'fileable_type', 'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                            ->where('collection', 0)
+                            ->orderBy('order', 'asc');
+                    }])
+                        ->when(true, function ($q) use ($request, $sort_items, $sort) {
+                            if ($request->has('sort')) {
+                                if (isset($sort_items[$sort])) {
+                                    $q->orderBy($sort_items[$sort]['field'], $sort_items[$sort]['type']);
+                                }
+                            } else {
+                                $q->orderBy('id', 'desc');
+                            }
+                        })
+                        ->where('status', 1)
+                        ->paginate($limit);
+
+                    \Cache::put("blog[$page][$sort][$limit]", ['category' => [
+                        'label' => 'وبلاگ',
+                        'slug' => 'وبلاگ',
+                        'meta_title' => 'وبلاگ',
+                        'meta_description' => 'وبلاگ',
+                    ],'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
+
                 }
 
-                return response(\Cache::get('lastBlogPosts'));
+                return response()->json(['status' => true, 'result' => \Cache::get("blog[$page][$sort][$limit]")]);
+            });
+
+            Route::get('/{category}', function ($category, Request $request) {
+
+                $page = $request->get('page') ?? 1;
+                $sort = $request->get('sort') ?? 0;
+
+                $sort_items = blogSortItems();
+
+
+                if (!\Cache::has("blog[category][$category][$page][$sort]")) {
+
+                    $result = \App\BlogCategory::select('value', 'label', 'slug', 'meta_title', 'meta_description')->where(is_numeric($category) ? 'value' : 'slug', $category)
+                        ->where('status', 1)
+                        ->firstOrFail();
+
+                    $contents = $result->contents()
+                        ->with(['files' => function($q) {
+                            $q->select('fileable_id', 'fileable_type', 'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                                ->where('collection', 0)
+                                ->orderBy('order', 'asc');
+                        }])
+                        ->when(true, function ($q) use($request, $sort_items, $sort) {
+                            if ($request->has('sort')) {
+                                if (isset($sort_items[$sort])) {
+                                    $q->orderBy($sort_items[$sort]['field'], $sort_items[$sort]['type']);
+                                }
+                            } else {
+                                $q->orderBy('id', 'desc');
+                            }
+                        })
+                        ->where('status', 1)
+                        ->paginate();
+
+
+                    \Cache::put("blog[category][$category][$page][$sort]", ['category' => $result, 'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
+
+
+                }
+
+                return response()->json(['status' => true, 'result' => \Cache::get("blog[category][$category][$page][$sort]")]);
 
             });
+
+            Route::get('/content/{id}', function ($id, Request $request)  {
+
+                if (!\Cache::has("content[$id]")) {
+
+                    $content = \App\BlogContent::with(['files' => function($q) {
+                        $q->select('fileable_id', 'fileable_type', 'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                            ->where('collection', 0)
+                            ->orderBy('order', 'asc');
+                    }, 'products' => function($q) use($request) {
+                        $q->select('id', 'title', 'slug', 'price', 'discount', 'count' ,'brand_id')
+                            ->with(['brand' => function($q) {
+                                $q->select('id', 'title', 'id');
+                            },'files' => function($q) {
+                                $q->select('fileable_id', 'fileable_type',  'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                                    ->where('collection', 0)
+                                    ->orderBy('order', 'asc');
+                            }])
+                            ->where('status', 0) // change to true
+                            ->orderBy($request->get('sort') ?? 'id', $request->get('type') ?? 'desc')
+                            ->get();
+                    }, 'createdBy' => function($q) {
+                        $q->select('id', 'name');
+                    }, 'tags', 'categories' => function($q) use($id) {
+                        $q->select('value', 'label', 'slug')
+                            ->where('status', 1)
+                            ->with(['contents' => function($q) use($id) {
+                                $q->select('id', 'slug', 'title', 'heading', 'created_at')
+                                    ->where('status', 1)
+                                    ->where(is_numeric($id) ? 'id' : 'slug', '<>', $id)
+                                    ->take(5)
+                                    ->with(['files' => function($q) {
+                                        $q->select('fileable_id', 'fileable_type',  'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                                            ->where('collection', 0)
+                                            ->orderBy('order', 'asc');
+                                    }]);
+                            }]);
+                    }])
+                        ->where(is_numeric($id) ? 'id' : 'slug', $id)
+                        ->where('status', 1)
+                        ->firstOrFail();
+
+                    \Cache::put("content[$id]", $content , 24 * 60);
+                }
+
+
+                return response()->json(['status' => true, 'data' => \Cache::get("content[$id]")], 200);
+            });
+
+
         });
+
+
 
         Route::group(['prefix' => 'products'], function () {
             // payload home page items
@@ -261,7 +379,9 @@ Route::Group(['prefix' => '/'], function() {
 
                 $sort = productSortItems(); // get sort items
 
-                $category = \App\ProductCategory::select('value', 'slug', 'label', 'heading' ,'meta_title', 'meta_description')->where('slug', $category)->first();
+                $category = \App\ProductCategory::select('value', 'slug', 'label', 'heading' ,'meta_title', 'meta_description')
+                    ->where('slug', $category)
+                    ->first();
 
                 if ( ! $category ) { // 404 error handle
                     return response()->json(['status' => false, 'msg' => 'not found'], 404);
@@ -296,7 +416,7 @@ Route::Group(['prefix' => '/'], function() {
                     $result['attributes'] = $category->attributes()->select('id', 'title', 'slug', 'has_link', 'content')->with(['tags'])->where('status', 1)->get();
 
                     // push result to caching
-                    \Cache::put("category[$category->value]", $result , 24 * 60 * 7);
+                    \Cache::put("category[$category->value]", $result , 24 * 60);
 
                 }
 
@@ -763,7 +883,7 @@ Route::Group(['prefix' => '/'], function() {
                         if (@$res[0]->status) {
                             // to do
                             $user->update([
-                                'validation_code' => $rand,
+                                'verify_code' => $rand,
                                 'remember_token' => $token
                             ]);
 
@@ -780,6 +900,7 @@ Route::Group(['prefix' => '/'], function() {
                     return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
                 }
             });
+
             Route::post('/verify', function (Request $request) {
 
                 $validator = \Validator::make($request->all(), [
@@ -796,7 +917,7 @@ Route::Group(['prefix' => '/'], function() {
                 $user = User::where('mobile', $request->get('mobile'))
                     ->where('remember_token', $request->get('token'))
                     ->where('role_key', '<>', 'guest')
-                    ->where('validation_code', $request->get('code'))
+                    ->where('verify_code', $request->get('code'))
                     ->where('status', 1)
                 ;
 
@@ -834,7 +955,7 @@ Route::Group(['prefix' => '/'], function() {
 
                 $user = User::where('mobile', $request->get('mobile'))
                     ->where('remember_token', $request->get('token'))
-                    ->where('validation_code', $request->get('code'))
+                    ->where('verify_code', $request->get('code'))
                     ->where('status', 1)
                 ;
 
@@ -857,7 +978,6 @@ Route::Group(['prefix' => '/'], function() {
                 }
             });
         });
-
         Route::post('/change-password', function (Request $request) {
 
             $validator = \Validator::make($request->all(), [

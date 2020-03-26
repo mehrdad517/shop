@@ -4,9 +4,9 @@ export default {
   host: process.env.NODE_HOST || 'localhost', // Define your host from 'package.json'
   port: process.env.PORT || '8080',
   app: {
-    htmlAttributes: { lang: 'en' },
-    title: 'React Cool Starter',
-    titleTemplate: 'React Cool Starter - %s',
+    htmlAttributes: { lang: 'fa' },
+    title: 'فروشگاه اینترنتی لوکس آرا',
+    titleTemplate: 'فروشگاه اینترنتی لوکس آرا - %s',
     meta: [
       {
         name: 'description',

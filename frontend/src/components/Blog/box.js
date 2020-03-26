@@ -13,10 +13,10 @@ class Box extends Component {
       <StyleWrapper>
         <div className="NewsItems">
           {this.props.item.files[0] && (
-            <img src={this.props.item.files[0].address} />
+            <img src={this.props.item.files[0].prefix + '/100/' + this.props.item.files[0].file} />
           )}
           <div className="NewsItem">
-            <h4>{this.props.item.title}</h4>
+            <h4><Link to={`/blog/post/${this.props.item.id}/${this.props.item.slug}`}>{this.props.item.title}</Link></h4>
             <Grid spacing={3} container>
               <ul>
                 <li>
@@ -35,7 +35,7 @@ class Box extends Component {
             </Grid>
             <p>{this.props.item.content}</p>
             <div className="Continues">
-              <Link to={`/blog/${this.props.item.id}/${this.props.item.slug}`}>
+              <Link to={`/blog/post/${this.props.item.id}/${this.props.item.slug}`}>
                 ادامه
               </Link>
               <KeyboardReturnIcon color="primary" fontSize="small" />

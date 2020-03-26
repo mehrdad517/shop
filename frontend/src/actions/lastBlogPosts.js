@@ -3,19 +3,21 @@ import axios from 'axios';
 import {
   LAST_BLOG_POSTS_SUCCESS,
   LAST_BLOG_POSTS_FAILURE,
-  LAST_BLOG_POSTS_REQUESTING
+  LAST_BLOG_POSTS_REQUESTING, PAGE_SUCCESS, PAGE_FAILURE
 } from '../types';
-
-const API_URL = 'http://localhost:8000/api/blog/lastBlogPosts';
+import Api from "../api";
 
 export const fetchLastBlogPosts = () => async dispatch => {
   dispatch({ type: LAST_BLOG_POSTS_REQUESTING });
 
   try {
-    const { data } = await axios.get(API_URL);
 
-    /* istanbul ignore next */
-    dispatch({ type: LAST_BLOG_POSTS_SUCCESS, payload: data });
+    await new Api().blog({page: 1, limit: 6}).then((resp) => {
+      dispatch({ type: LAST_BLOG_POSTS_SUCCESS, payload: resp.result.contents.data });
+    }).catch((error) => {
+      dispatch({ type: LAST_BLOG_POSTS_FAILURE, err: error });
+    });
+
   } catch (err) {
     /* istanbul ignore next */
     dispatch({ type: LAST_BLOG_POSTS_FAILURE, err: err.message });
@@ -23,7 +25,9 @@ export const fetchLastBlogPosts = () => async dispatch => {
 };
 
 const shouldFetchLastBlogPosts = state => {
-  if (state.lastBlogPosts.readyStatus === 'success') return true;
+  if (state.lastBlogPosts.readyStatus === 'success') {
+    return false;
+  }
 
   return true;
 };

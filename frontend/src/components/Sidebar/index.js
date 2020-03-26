@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 import {MenuTree} from "../index";
 import './sidebar.css'
 import {Link} from "react-router-dom";
+import Divider from "@material-ui/core/Divider";
 
 function mapStateToProps(state) {
-  return {
-
-  };
+  return {};
 }
 
 class Index extends Component {
@@ -20,7 +19,8 @@ class Index extends Component {
               <img src={require('../../static/Img/logo.jpg')}/>
             </Link>
           </div>
-          <MenuTree nodes={this.props.setting.product_categories} />
+          <Divider />
+          <MenuTree />
         </div>
       </div>
     );

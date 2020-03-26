@@ -19,7 +19,9 @@ export const fetchPayloadProducts = () => async dispatch => {
 };
 
 const shouldFetchPayloadProducts = state => {
-  if (state.setting.readyStatus === 'success') return true;
+  if (state.payloadProducts.readyStatus === 'success') {
+    return false;
+  }
 
   return true;
 };

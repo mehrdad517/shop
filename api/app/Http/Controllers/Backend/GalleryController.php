@@ -78,11 +78,11 @@ class GalleryController extends Controller
 
                         if ($file['mime_type'] == 'image') {
 
-                            foreach ([500, 300, 200, 100, 50] as $dir) {
+                            foreach ([500] as $dir) {
                                 $copy = Storage::copy($old, 'gallery/' . $result->id . '/' . $dir . '/' . $file['file']);
                                 if ($copy) {
                                     $copy = \Intervention\Image\Facades\Image::make(storage_path('app/public/gallery/' . $result->id . '/' . $dir . '/' . $file['file']));
-                                    $copy->resize($dir, $dir);
+                                    $copy->resize(1300, $dir);
                                     $copy->save();
                                 }
                             }
@@ -99,7 +99,7 @@ class GalleryController extends Controller
                                 'file' => $file['file'],
                                 'collection' => $file['collection'],
                                 'directory' => 'gallery',
-                                'size' => $file['mime_type'] == 'image' ? json_encode([500,300,200,100,50]): NULL,
+                                'size' => $file['mime_type'] == 'image' ? json_encode([500]): NULL,
                                 'link' => $file['link'],
                                 'caption' => $file['caption'],
                                 'order' => $file['order']
@@ -213,11 +213,11 @@ class GalleryController extends Controller
 
                             if ($file['mime_type'] == 'image') {
 
-                                foreach ([500,300,200,100,50] as $dir) {
+                                foreach ([500] as $dir) {
                                     $copy = Storage::copy($old, 'gallery/' . $result->id . '/' . $dir . '/' . $file['file']);
                                     if ($copy) {
                                         $copy = \Intervention\Image\Facades\Image::make(storage_path('app/public/gallery/' . $result->id . '/' . $dir . '/' . $file['file']));
-                                        $copy->resize($dir, $dir);
+                                        $copy->resize(1300, $dir);
                                         $copy->save();
                                     }
                                 }
@@ -234,7 +234,7 @@ class GalleryController extends Controller
                                     'file' => $file['file'],
                                     'directory' => 'gallery',
                                     'collection' => $file['collection'],
-                                    'size' => json_encode([500,300,200,100,50]),
+                                    'size' => json_encode([500]),
                                     'link' => $file['link'],
                                     'caption' => $file['caption'],
                                     'order' => $file['order']

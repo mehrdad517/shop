@@ -65,7 +65,7 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "PORT": 3000
+        "PORT": 3002
       }
     },
     "start": {
@@ -339,12 +339,14 @@
     "react-router": "^5.0.1",
     "react-router-config": "^5.0.1",
     "react-router-dom": "^5.0.1",
+    "react-slick": "^0.25.2",
     "react-spinners": "^0.8.0",
     "react-toastify": "^5.5.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "serialize-javascript": "^2.1.0",
     "serve-favicon": "^2.5.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.0.0"
   },
   "devDependencies": {

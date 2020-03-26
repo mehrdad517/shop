@@ -12,6 +12,8 @@ class BlogContent extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
 
 
     public function createdBy()

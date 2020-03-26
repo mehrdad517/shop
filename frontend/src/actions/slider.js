@@ -19,7 +19,9 @@ export const fetchSlider = () => async dispatch => {
 };
 
 const shouldFetchSlider = state => {
-  if (state.setting.readyStatus === 'success') return true;
+  if (state.slider.readyStatus === 'success') {
+    return false;
+  }
 
   return true;
 };

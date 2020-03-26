@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import CheckboxTree from 'react-checkbox-tree';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
@@ -13,32 +14,35 @@ import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import {Link} from "react-router-dom";
 import './menu.css'
+import {
+  SETTING_CHANGE_blogExpanded,
+  SETTING_CHANGE_categoryExpanded, SETTING_CHANGE_footerExpanded,
+  SETTING_CHANGE_menuExpanded
+} from "../../../types";
+
+function mapStateToProps(state) {
+  return {
+    setting: state.setting
+  };
+}
 
 class Index extends Component {
+  handleExpand(value) {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      expanded: [],
-    }
-  }
+    let expanded = this.props.setting.footerExpanded;
 
-
-  handleExpand(value)
-  {
-
-    let expanded = this.state.expanded;
-
-    if (this.state.expanded.includes(value)) {
-      let index = this.state.expanded.indexOf(value);
-      this.state.expanded.splice(index, 1);
+    if (this.props.setting.footerExpanded.includes(value)) {
+      let index = this.props.setting.footerExpanded.indexOf(value);
+      this.props.setting.footerExpanded.splice(index, 1);
     } else {
       expanded.push(value);
     }
 
-    this.setState({
-      expanded
+    this.props.dispatch({
+      type: SETTING_CHANGE_footerExpanded,
+      payload: expanded
     });
+
   }
 
 
@@ -68,12 +72,12 @@ class Index extends Component {
         <li key={key} className='tree-box'>
           <span className={hasChild === true ? 'tree-parent has-child' : 'tree-parent  has-no-child'}>
             <span onClick={() => this.handleExpand(value)}>
-              {hasChild === true && (this.state.expanded.includes(value) ? <ExpandLessIcon color={"action"} fontSize={"small"} /> : <ExpandMoreIcon color={"action"} fontSize={"small"} />)}
+              {hasChild === true && (this.props.setting.footerExpanded && this.props.setting.footerExpanded.includes(value) ? <ExpandLessIcon color={"action"} fontSize={"small"} /> : <ExpandMoreIcon color={"action"} fontSize={"small"} />)}
             </span>
-            {external_link !== '' ? <a target='_blank' href={external_link}>{label}</a> : <Link to={'/landing/' + slug }>{label}</Link> }
+            {external_link !== '' ? <a target='_blank' href={external_link}>{label}</a> : <Link to={'/page/' + slug }>{label}</Link> }
           </span>
           {hasChild === true &&
-          <ul className='tree-children' style={{  display: ( this.state.expanded.includes(value) ? 'block' : 'none')}}>
+          <ul className='tree-children' style={{  display: ( this.props.setting.footerExpanded && this.props.setting.footerExpanded.includes(value) ? 'block' : 'none')}}>
             {children}
           </ul>}
         </li>
@@ -95,4 +99,7 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default connect(
+  mapStateToProps,
+)(Index);
+

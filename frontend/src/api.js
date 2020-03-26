@@ -20,6 +20,8 @@ class Api {
         toast.error('مجددا وارد شوید.');
         localStorage.removeItem('persist:root');
         window.location.reload();
+      } else if(response.status === 404) {
+        window.location.href = '/404.html';
       } else {
         toast.error(response.statusText);
       }
@@ -27,6 +29,31 @@ class Api {
       toast.error('خطای سرور');
     }
   }
+
+  /**
+   * ----------------------------------------------------------------
+   * domain api
+   * ----------------------------------------------------------------
+   */
+
+
+  async setting(object) {
+    return  axios.get( env.API[window.location.host]+ `/setting`, {
+      headers: this.headers(),
+      params: object
+    }).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      return this.dispatchResponse(error.response)
+    })
+  }
+
+
+  /**
+   * ---------------------------------------------------------------
+   *  end domain
+   * ---------------------------------------------------------------
+   */
 
   /* auth api*/
   async login(object) {
@@ -39,6 +66,7 @@ class Api {
     })
   }
 
+  // verify login
   async verify(object) {
     return  axios.post( env.API[window.location.host]+ `/verify`, object, {
       headers: this.headers()
@@ -48,6 +76,41 @@ class Api {
       return this.dispatchResponse(error.response)
     })
   }
+
+
+  /**
+   * ----------------------------------------------------------------
+   * blog api
+   * ----------------------------------------------------------------
+   */
+
+
+  async blog(object) {
+    return  axios.get( env.API[window.location.host]+ `/blog`, {
+      headers: this.headers(),
+      params: object
+    }).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      return this.dispatchResponse(error.response)
+    })
+  }
+
+  async fetchContent(id) {
+    return  axios.get( env.API[window.location.host]+ `/blog/content/${id}`, {
+      headers: this.headers()
+    }).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      return this.dispatchResponse(error.response)
+    })
+  }
+
+  /**
+   * ---------------------------------------------------------------
+   *  end blog
+   * ---------------------------------------------------------------
+   */
 
 
 }

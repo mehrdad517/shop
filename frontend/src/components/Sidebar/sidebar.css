@@ -5,9 +5,7 @@
 .sidebar .sidebar-logo {
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid var(--border);
   padding: 20px 0;
-  margin-bottom: 20px;
 }
 .sidebar ol {
   padding: 0 5px;

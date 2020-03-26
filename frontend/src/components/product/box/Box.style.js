@@ -6,10 +6,11 @@ export default styled.div`
     flex-direction: column;
     position: relative;
     background-color: white;
-    border: 1px solid var(--border_color);
+    // border: 1px solid var(--border_color);
     height: 400px;
     overflow: hidden;
-    align-items: center
+    align-items: center;
+    // margin: 5px;
 }
 .Box .MuiButton-label {
    // font-family: iranyekan-light !important;

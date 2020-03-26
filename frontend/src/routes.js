@@ -1,8 +1,8 @@
 /* @flow */
 
 import App from './app';
-import {asyncHome, asyncShop, NotFound} from './pages';
-import {lastBlogPortsAction, settingAction, shopAction, sliderAction} from './actions';
+import {asyncHome, asyncShop, NotFound, asyncSinglePage, asyncBlog} from './pages';
+import {blogAction, lastBlogPortsAction, pageAction, settingAction, shopAction, sliderAction} from './actions';
 
 export default [
   {
@@ -24,6 +24,30 @@ export default [
         component: asyncShop, // Add your route here
         loadData: () => [
           shopAction.fetchShopIfNeeded()
+        ]
+      },
+      {
+        path: '/blog',
+        exact: true,
+        component: asyncBlog, // Add your route here
+        loadData: (params) => [
+          blogAction.blogIfNeeded()
+        ]
+      },
+      {
+        path: '/blog/post/:id/:slug?',
+        exact: true,
+        component: asyncSinglePage, // Add your route here
+        loadData: (params) => [
+          pageAction.fetchPageIfNeeded(params.id)
+        ]
+      },
+      {
+        path: '/page/:id',
+        exact: true,
+        component: asyncSinglePage, // Add your route here
+        loadData: (params) => [
+          pageAction.fetchPageIfNeeded(params.id)
         ]
       },
       {

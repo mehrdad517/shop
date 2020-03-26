@@ -7,7 +7,7 @@ export default styled.div`
     justify-content: space-between;
     align-items: center;
     display: flex;
-    margin: 20px 0 20px 0;
+    margin: 20px 0 0px 0;
   }
 
   .line h3 {

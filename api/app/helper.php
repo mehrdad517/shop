@@ -1,5 +1,21 @@
 <?php
 
+
+function blogSortItems($key = null) {
+    $list = [
+        ['title' => 'جدیدترین', 'field' => 'id', 'type' => 'desc'],
+        ['title' => 'قدیمی', 'field' => 'id', 'type' => 'asc'],
+        ['title' => 'محبوبترین', 'field' => 'visitor', 'type' => 'asc'],
+        ['title' => 'عنوان', 'field' => 'title', 'type' => 'asc'],
+    ];
+
+    if ($key) {
+        return $list[$key];
+    }
+
+    return $list;
+}
+
 function productSortItems($key = null) {
     $list = [
          ['title' => 'جدیدترین', 'field' => 'id', 'type' => 'desc'],

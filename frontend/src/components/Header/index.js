@@ -28,6 +28,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
+import {Link} from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -207,8 +208,8 @@ class Header extends Component {
         {this.props.setting.readyStatus === 'success' && <Container>
           <div className='header-wrapper'>
             <div className='right'>
-              <Button endIcon={<WidgetsIcon />} onClick={() => { this.setState({ right : true }) }} variant="contained" color="primary">
-                دسته بندی ها
+              <Button size={"small"} startIcon={<WidgetsIcon />} onClick={() => { this.setState({ right : true }) }} variant="contained" color="primary">
+               <Typography variant={"body1"}>منوی سایت</Typography>
               </Button>
               <TextField
                 variant={"outlined"}
@@ -225,7 +226,9 @@ class Header extends Component {
               />
             </div>
             <div className='middle'>
-              <img src={require('../../static/Img/logo.jpg')}/>
+              <Link to={'/'}>
+                <img src={require('../../static/Img/logo.jpg')}/>
+              </Link>
             </div>
             <div className='left'>
               <Button startIcon={<PermIdentityIcon />} onClick={() => { this.setState({ open : true});}} variant="text" color="default">

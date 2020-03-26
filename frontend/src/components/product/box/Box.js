@@ -15,7 +15,7 @@ class Box extends Component {
           <Badge />
           <div className="BoxImg">
             <Link to={'/product/' + this.props.item.id + '/' + this.props.item.slug}>
-              <img src={this.props.item.files[0].prefix + '/200/' + this.props.item.files[0].file}/>
+              {/*<img src={this.props.item.files[0].prefix + '/200/' + this.props.item.files[0].file}/>*/}
             </Link>
           </div>
           <h4 className='title'>

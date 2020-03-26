@@ -8,6 +8,8 @@ class Links extends Model
 {
     protected $table = 'links';
 
+    protected $hidden = ['pivot'];
+
 
     protected static function boot()
     {

@@ -48,7 +48,7 @@ class Api {
 
     /* auth api*/
     async login(object) {
-        return axios.post( env.API[window.location.host]+ `/login`, object, {
+        return axios.post( env.API[window.location.host]+ `/auth/login`, object, {
             headers: this.haeders(),
         }).then( (response) => {
             return response.data;
@@ -58,7 +58,7 @@ class Api {
     }
 
     async logout() {
-        return axios.get( env.API[window.location.host]+ `/logout`, {
+        return axios.get( env.API[window.location.host]+ `/auth/logout`, {
             headers: this.haeders(),
         }).then( (response) => {
             return response.data;
@@ -603,7 +603,7 @@ class Api {
 
 
     async  sendValidationCode(object) {
-        return  axios.post( env.API[window.location.host]+ `/validation-code/send`, object, {
+        return  axios.post( env.API[window.location.host]+ `/auth/validation-code/send`, object, {
             headers: this.haeders()
         }).then((response) => {
             return response.data;
@@ -613,7 +613,7 @@ class Api {
     }
 
     async  verifyValidationCode(object) {
-        return  axios.post( env.API[window.location.host]+ `/validation-code/verify`, object, {
+        return  axios.post( env.API[window.location.host]+ `/auth/validation-code/verify`, object, {
             headers: this.haeders()
         }).then((response) => {
             return response.data;
@@ -623,7 +623,7 @@ class Api {
     }
 
     async  passwordValidationCode(object) {
-        return  axios.post( env.API[window.location.host]+ `/validation-code/change-password`, object, {
+        return  axios.post( env.API[window.location.host]+ `/auth/validation-code/change-password`, object, {
             headers: this.haeders()
         }).then((response) => {
             return response.data;

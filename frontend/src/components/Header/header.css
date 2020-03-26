@@ -5,6 +5,7 @@
   top: 0;
   /*margin-bottom: 20px;*/
   z-index: 1;
+  /*background-color: #f5f5f5 !important;*/
 }
 .header .header-wrapper {
   min-height: 60px;

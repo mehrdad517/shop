@@ -14,6 +14,8 @@ class Domain extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['pivot'];
+
 
     protected static function boot()
     {
@@ -32,6 +34,11 @@ class Domain extends Model
             \Cache::forget('setting');
         });
 
+    }
+
+    public function links()
+    {
+        return $this->belongsToMany(Links::class, 'domain_links')->withPivot(['value']);
     }
 
 

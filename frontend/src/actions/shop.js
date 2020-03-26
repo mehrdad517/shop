@@ -23,8 +23,6 @@ export const fetchShop = (categories,parameters) => async dispatch => {
 };
 
 const shouldFetchShop = state => {
-  if (state.shop.readyStatus === 'success') return true;
-
   return true;
 };
 

@@ -1,3 +1,14 @@
+.menu-container {
+  padding: 20px 0;
+}
+ul.menu-container li {
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: row;
+}
+ul.menu-container li a {
+  margin-left: 10px;
+}
 .tree-box {
   margin: 0 10px 10px 0;
 }

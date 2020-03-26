@@ -14,7 +14,7 @@ class Master extends PureComponent {
     return (
       <div>
         <Header setting={this.props.setting} />
-        <div style={{ minHeight: '500px'}}>
+        <div>
           {this.props.children}
         </div>
         <Footer setting={this.props.setting} />
