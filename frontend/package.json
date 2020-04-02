@@ -319,7 +319,9 @@
     "history": "^4.9.0",
     "hpp": "^0.2.2",
     "html-minifier": "^4.0.0",
+    "install": "^0.13.0",
     "jss-rtl": "^0.3.0",
+    "moment": "^2.24.0",
     "moment-jalaali": "^0.9.1",
     "morgan": "^1.9.1",
     "node-sass": "^4.13.1",
@@ -332,6 +334,7 @@
     "react-currency-format": "^1.0.0",
     "react-dev-utils": "^9.0.3",
     "react-dom": "npm:@hot-loader/react-dom",
+    "react-fancybox": "^0.2.5",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.12",
     "react-js-pagination": "^3.0.2",
@@ -347,7 +350,9 @@
     "serialize-javascript": "^2.1.0",
     "serve-favicon": "^2.5.0",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^5.0.0"
+    "styled-components": "^5.0.0",
+    "universal-cookie": "^4.0.3",
+    "validator": "^13.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

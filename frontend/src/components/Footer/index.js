@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import StyleWrapper from './footer.style';
-import {FooterMenu} from './../index'
+import { FooterMenu } from '../index';
 
 function Footer(props) {
   const [sub, setSub] = useState(150);
@@ -20,7 +20,10 @@ function Footer(props) {
                       maxHeight: sub,
                       overflow: sub === 150 && 'hidden'
                     }}
-                    dangerouslySetInnerHTML={{__html: props.setting.data.domain.introduce}} />
+                    dangerouslySetInnerHTML={{
+                      __html: props.setting.data.domain.introduce
+                    }}
+                  />
                   <span
                     className="loadMore"
                     onClick={() => setSub(sub === 150 ? 2000 : 150)}
@@ -34,11 +37,13 @@ function Footer(props) {
                   <ul>
                     {props.setting.data.domain.links &&
                       props.setting.data.domain.links.map((s, index) => {
-                        if(s.type === 'license') {
+                        if (s.type === 'license') {
                           return (
                             <li key={index}>
                               <a href={s.value} target="_blank">
-                                <img src={require(`../../static/Img/license/${s.id}.png`)}/>
+                                <img
+                                  src={require(`../../static/Img/license/${s.id}.png`)}
+                                />
                               </a>
                             </li>
                           );
@@ -50,7 +55,9 @@ function Footer(props) {
             </Grid>
             <Grid style={{ marginTop: '5px' }} container spacing={5}>
               <Grid item lg={6} md={6} sm={12} xs={12}>
-                  {props.setting.data.footer_menu && <FooterMenu nodes={props.setting.data.footer_menu} />}
+                {props.setting.data.footer_menu && (
+                  <FooterMenu nodes={props.setting.data.footer_menu} />
+                )}
               </Grid>
               <Grid item lg={3} md={3} sm={6} xs={12}>
                 <h4>پل های ارتباطی</h4>
@@ -93,7 +100,7 @@ function Footer(props) {
                   <ul className="networkImg">
                     {props.setting.data.domain.links &&
                       props.setting.data.domain.links.map((s, index) => {
-                        if(s.type === 'social') {
+                        if (s.type === 'social') {
                           return (
                             <li key={index}>
                               <a href={s.value} target="_blank">

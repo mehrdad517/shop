@@ -4,12 +4,10 @@ import { SHOP_SUCCESS, SHOP_FAILURE, SHOP_REQUESTING } from '../types';
 
 const API_URL = 'http://localhost:8000/api/products/filter/';
 
-export const fetchShop = (categories,parameters) => async dispatch => {
-
+export const fetchShop = (categories, parameters) => async dispatch => {
   dispatch({ type: SHOP_REQUESTING });
 
   try {
-
     const { data } = await axios.get(API_URL + categories, {
       params: parameters
     });
@@ -26,7 +24,11 @@ const shouldFetchShop = state => {
   return true;
 };
 
-export const fetchShopIfNeeded = (categories, parameters) => (dispatch, getState) => {
+export const fetchShopIfNeeded = (categories, parameters) => (
+  dispatch,
+  getState
+) => {
   /* istanbul ignore next */
-  if (shouldFetchShop(getState())) return dispatch(fetchShop(categories, parameters));
+  if (shouldFetchShop(getState()))
+    return dispatch(fetchShop(categories, parameters));
 };

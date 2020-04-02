@@ -1,8 +1,8 @@
 {
   "errors": [],
   "warnings": [],
-  "version": "4.39.3",
-  "hash": "be24245a6a93a9af384b",
+  "version": "4.42.1",
+  "hash": "bd3c34367822fa1ee246",
   "publicPath": "/assets/",
   "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
@@ -18,10 +18,14 @@
     ],
     "main": [
       "main.css",
-      "main.js"
+      "main.js",
+      "main.2849cb86280b0285f587.hot-update.js"
     ],
     "vendors~Blog~Shop": "vendors~Blog~Shop.js",
-    "vendors~Shop": "vendors~Shop.js"
+    "vendors~Page": [
+      "vendors~Page.css",
+      "vendors~Page.js"
+    ]
   },
   "assets": [
     {
@@ -29,6 +33,7 @@
       "size": 12934,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -36,6 +41,7 @@
       "size": 22893,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -43,6 +49,7 @@
       "size": 16405,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -50,6 +57,18 @@
       "size": 21908,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "2849cb86280b0285f587.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
       "emitted": false
     },
     {
@@ -57,50 +76,55 @@
       "size": 50205,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
       "name": "Blog.js",
-      "size": 39361,
+      "size": 50446,
       "chunks": [
         "Blog"
       ],
       "chunkNames": [
         "Blog"
       ],
-      "emitted": true
+      "info": {},
+      "emitted": false
     },
     {
       "name": "Home.js",
-      "size": 17522,
+      "size": 19238,
       "chunks": [
         "Home"
       ],
       "chunkNames": [
         "Home"
       ],
+      "info": {},
       "emitted": false
     },
     {
       "name": "Page.css",
-      "size": 8289,
+      "size": 8212,
       "chunks": [
         "Page"
       ],
       "chunkNames": [
         "Page"
       ],
+      "info": {},
       "emitted": false
     },
     {
       "name": "Page.js",
-      "size": 71863,
+      "size": 60721,
       "chunks": [
         "Page"
       ],
       "chunkNames": [
         "Page"
       ],
+      "info": {},
       "emitted": false
     },
     {
@@ -108,6 +132,7 @@
       "size": 85578,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -115,6 +140,7 @@
       "size": 36536,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -122,6 +148,7 @@
       "size": 47016,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -129,6 +156,7 @@
       "size": 85388,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -136,6 +164,7 @@
       "size": 45276,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -143,6 +172,7 @@
       "size": 34816,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -150,6 +180,7 @@
       "size": 82792,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -157,6 +188,7 @@
       "size": 82962,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -164,6 +196,7 @@
       "size": 41132,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -171,6 +204,7 @@
       "size": 51724,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -178,6 +212,7 @@
       "size": 91386,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -185,6 +220,7 @@
       "size": 91180,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -192,6 +228,7 @@
       "size": 46652,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -199,6 +236,7 @@
       "size": 85088,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -206,6 +244,7 @@
       "size": 84876,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -213,6 +252,7 @@
       "size": 36228,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -220,6 +260,7 @@
       "size": 36632,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -227,6 +268,7 @@
       "size": 46952,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -234,6 +276,7 @@
       "size": 85248,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -241,6 +284,7 @@
       "size": 85448,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
@@ -252,194 +296,214 @@
       "chunkNames": [
         "Shop"
       ],
+      "info": {},
       "emitted": false
     },
     {
       "name": "Shop.js",
-      "size": 94102,
+      "size": 111571,
       "chunks": [
         "Shop"
       ],
       "chunkNames": [
         "Shop"
       ],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "d1.e1cde6e1.jpg",
-      "size": 714592,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "d2.71549936.jpg",
-      "size": 1475600,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "d3.2e458b30.jpg",
-      "size": 52939,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "d5.d2d8b563.jpg",
-      "size": 180000,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "fa-brands-400.067595ad.woff2",
-      "size": 76548,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "fa-brands-400.57dcda6f.eot",
-      "size": 133034,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "fa-brands-400.9d67fa14.svg",
+      "name": "fa-brands-400.0cb5a5c0.svg",
       "size": 715890,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-brands-400.9ec698d1.ttf",
+      "name": "fa-brands-400.13685372.ttf",
       "size": 132728,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-brands-400.b564da88.woff",
+      "name": "fa-brands-400.a06da7f0.woff2",
+      "size": 76612,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "fa-brands-400.c1868c95.eot",
+      "size": 133034,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "fa-brands-400.ec3cfdde.woff",
       "size": 89824,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-regular-400.3351f435.eot",
+      "name": "fa-regular-400.261d666b.eot",
       "size": 34390,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-regular-400.4165c268.woff2",
-      "size": 13600,
-      "chunks": [],
-      "chunkNames": [],
-      "emitted": false
-    },
-    {
-      "name": "fa-regular-400.5d086178.svg",
+      "name": "fa-regular-400.89ffa3ab.svg",
       "size": 144322,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-regular-400.73cf49a2.woff",
-      "size": 16800,
+      "name": "fa-regular-400.c20b5b73.woff2",
+      "size": 13584,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-regular-400.a0e3ac82.ttf",
+      "name": "fa-regular-400.db78b935.ttf",
       "size": 34092,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-solid-900.0724bb8b.svg",
-      "size": 849240,
+      "name": "fa-regular-400.f89ea91e.woff",
+      "size": 16800,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-solid-900.55eb2a60.woff2",
-      "size": 76120,
+      "name": "fa-solid-900.1ab236ed.ttf",
+      "size": 202616,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-solid-900.75f38a15.ttf",
-      "size": 193792,
+      "name": "fa-solid-900.a0369ea5.eot",
+      "size": 202902,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-solid-900.89e02bae.eot",
-      "size": 194078,
+      "name": "fa-solid-900.b15db15f.woff2",
+      "size": 79444,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "fa-solid-900.cdfec5cf.woff",
-      "size": 99004,
+      "name": "fa-solid-900.bea989e8.woff",
+      "size": 103300,
       "chunks": [],
       "chunkNames": [],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "fa-solid-900.ec763292.svg",
+      "size": 897426,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "main.2849cb86280b0285f587.hot-update.js",
+      "size": 78319,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
       "emitted": false
     },
     {
       "name": "main.css",
-      "size": 208576,
+      "size": 215223,
       "chunks": [
         "main"
       ],
       "chunkNames": [
         "main"
       ],
+      "info": {},
       "emitted": false
     },
     {
       "name": "main.js",
-      "size": 12971355,
+      "size": 13456957,
       "chunks": [
         "main"
       ],
       "chunkNames": [
         "main"
       ],
-      "emitted": true
-    },
-    {
-      "name": "vendors~Blog~Shop.js",
-      "size": 48183,
-      "chunks": [
-        "vendors~Blog~Shop"
-      ],
-      "chunkNames": [
-        "vendors~Blog~Shop"
-      ],
+      "info": {},
       "emitted": false
     },
     {
-      "name": "vendors~Shop.js",
-      "size": 218368,
+      "name": "vendors~Blog~Shop.js",
+      "size": 230901,
       "chunks": [
-        "vendors~Shop"
+        "vendors~Blog~Shop"
       ],
       "chunkNames": [
-        "vendors~Shop"
+        "vendors~Blog~Shop"
       ],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "vendors~Page.css",
+      "size": 1478,
+      "chunks": [
+        "vendors~Page"
+      ],
+      "chunkNames": [
+        "vendors~Page"
+      ],
+      "info": {},
+      "emitted": false
+    },
+    {
+      "name": "vendors~Page.js",
+      "size": 145050,
+      "chunks": [
+        "vendors~Page"
+      ],
+      "chunkNames": [
+        "vendors~Page"
+      ],
+      "info": {},
       "emitted": false
     }
   ],
@@ -451,7 +515,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.2849cb86280b0285f587.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -464,7 +529,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.2849cb86280b0285f587.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -482,12 +548,10 @@
     "Shop": {
       "chunks": [
         "vendors~Blog~Shop",
-        "vendors~Shop",
         "Shop"
       ],
       "assets": [
         "vendors~Blog~Shop.js",
-        "vendors~Shop.js",
         "Shop.css",
         "Shop.js"
       ],
@@ -508,9 +572,12 @@
     },
     "Page": {
       "chunks": [
+        "vendors~Page",
         "Page"
       ],
       "assets": [
+        "vendors~Page.css",
+        "vendors~Page.js",
         "Page.css",
         "Page.js"
       ],

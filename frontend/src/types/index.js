@@ -1,3 +1,6 @@
+export const AUTH_LOGIN = 'AUTH_LOGIN';
+export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+
 export const SETTING_REQUESTING = 'SETTING_REQUESTING';
 export const SETTING_SUCCESS = 'SETTING_SUCCESS';
 export const SETTING_FAILURE = 'SETTING_FAILURE';
@@ -6,10 +9,6 @@ export const SETTING_CHANGE_categoryExpanded = 'SETTING_CHANGE_categoryExpanded'
 export const SETTING_CHANGE_footerExpanded = 'SETTING_CHANGE_footerExpanded';
 export const SETTING_CHANGE_menuExpanded = 'SETTING_CHANGE_menuExpanded';
 export const SETTING_CHANGE_blogExpanded = 'SETTING_CHANGE_blogExpanded';
-
-export const LAST_BLOG_POSTS_REQUESTING = 'LAST_BLOG_POSTS_REQUESTING';
-export const LAST_BLOG_POSTS_SUCCESS = 'LAST_BLOG_POSTS_SUCCESS';
-export const LAST_BLOG_POSTS_FAILURE = 'LAST_BLOG_POSTS_FAILURE';
 
 export const BLOG_REQUESTING = 'BLOG_REQUESTING';
 export const BLOG_SUCCESS = 'BLOG_SUCCESS';
@@ -26,7 +25,6 @@ export const PAYLOAD_PRODUCTS_FAILURE = 'PAYLOAD_PRODUCTS_POSTS_FAILURE';
 export const SHOP_REQUESTING = 'SHOP_REQUESTING';
 export const SHOP_SUCCESS = 'SHOP_SUCCESS';
 export const SHOP_FAILURE = 'SHOP_POSTS_FAILURE';
-
 
 export const PAGE_REQUESTING = 'PAGE_REQUESTING';
 export const PAGE_SUCCESS = 'PAGE_SUCCESS';

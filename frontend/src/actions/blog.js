@@ -1,24 +1,46 @@
-import axios from 'axios';
-
 import {
   BLOG_SUCCESS,
-  BLOG_FAILURE,
-  BLOG_REQUESTING, PAGE_SUCCESS, PAGE_FAILURE
+  BLOG_FAILURE, BLOG_REQUESTING,
 } from '../types';
-import Api from "../api";
+import Api from '../api';
 
-export const blog = (category, params) => async dispatch => {
+export const blog = (params, category, tag) => async dispatch => {
 
-  // dispatch({ type: BLOG_REQUESTING });
+  dispatch({ type: BLOG_REQUESTING });
 
   try {
-    await new Api().blog(params).then((resp) => {
-      if (resp.status) {
-        dispatch({ type: BLOG_SUCCESS, payload: resp.result });
-      }
-    }).catch((error) => {
-      dispatch({ type: BLOG_FAILURE, err: error });
-    });
+
+    if (category) {
+      await new Api().blogCategory(category, params)
+        .then(resp => {
+          if (resp.status) {
+            dispatch({ type: BLOG_SUCCESS, payload: resp.result });
+          }
+        })
+        .catch(error => {
+          dispatch({ type: BLOG_FAILURE, err: error });
+        });
+    } else if (tag) {
+      await new Api().blogTag(tag, params)
+        .then(resp => {
+          if (resp.status) {
+            dispatch({ type: BLOG_SUCCESS, payload: resp.result });
+          }
+        })
+        .catch(error => {
+          dispatch({ type: BLOG_FAILURE, err: error });
+        });
+    } else {
+      await new Api().blog(params)
+        .then(resp => {
+          if (resp.status) {
+            dispatch({ type: BLOG_SUCCESS, payload: resp.result });
+          }
+        })
+        .catch(error => {
+          dispatch({ type: BLOG_FAILURE, err: error });
+        });
+    }
 
   } catch (err) {
     /* istanbul ignore next */
@@ -30,9 +52,9 @@ const shouldFetchBlog = state => {
   return true;
 };
 
-export const blogIfNeeded = (category, params) => (dispatch, getState) => {
+export const blogIfNeeded = (params, category, tag) => (dispatch, getState) => {
   /* istanbul ignore next */
   if (shouldFetchBlog(getState())) {
-    return dispatch(blog(category, params));
+    return dispatch(blog(params, category, tag));
   }
 };

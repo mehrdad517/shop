@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { settingAction } from '../../actions';
 import { Footer, Header } from '../index';
 
-
 class Master extends PureComponent {
   componentDidMount() {
     const { fetchSettingIfNeeded } = this.props;
@@ -13,11 +12,9 @@ class Master extends PureComponent {
   render() {
     return (
       <div>
-        <Header setting={this.props.setting} />
-        <div>
-          {this.props.children}
-        </div>
-        <Footer setting={this.props.setting} />
+        {this.props.setting.readyStatus === 'success' && <Header setting={this.props.setting} />}
+        <div style={{ minHeight: '500px'}}>{this.props.children}</div>
+        {this.props.setting.readyStatus === 'success' && <Footer setting={this.props.setting} />}
       </div>
     );
   }

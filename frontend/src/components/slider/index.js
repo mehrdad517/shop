@@ -53,29 +53,35 @@ class Index extends Component {
   nextSlide() {
     clearInterval(this.state.Interval)
     let Images = document.querySelectorAll('.items > div')
-    let seen = document.querySelector('.seen')
-    seen.classList.remove('seen', 'animated', this.state.effect)
-    if (seen.nextElementSibling) {
-      seen.nextElementSibling.classList.add('seen', 'animated', this.state.effect)
+    let seen = document.querySelector('.seen');
+    if (seen) {
+      seen.classList.remove('seen', 'animated', this.state.effect)
+      if (seen.nextElementSibling) {
+        seen.nextElementSibling.classList.add('seen', 'animated', this.state.effect)
+      }
+      if (!seen.nextElementSibling) {
+        Images[0].classList.add('seen', 'animated', this.state.effect)
+      }
     }
-    if (!seen.nextElementSibling) {
-      Images[0].classList.add('seen', 'animated', this.state.effect)
-    }
+
     this.startloop()
   }
 
   prevSlide() {
     clearInterval(this.state.Interval)
     let Images = document.querySelectorAll('.items > div');
-    let seen = document.querySelector('.seen')
-    seen.classList.remove('seen', 'animated', this.state.effect)
-    if (seen.previousElementSibling) {
-      seen.previousElementSibling.classList.add('seen', 'animated', this.state.effect)
+    let seen = document.querySelector('.seen');
+    if (seen) {
+      seen.classList.remove('seen', 'animated', this.state.effect)
+      if (seen.previousElementSibling) {
+        seen.previousElementSibling.classList.add('seen', 'animated', this.state.effect)
+      }
+      if (!seen.previousElementSibling) {
+        console.log(Images.length)
+        Images[Images.length - 1].classList.add('seen', 'animated', this.state.effect)
+      }
     }
-    if (!seen.previousElementSibling) {
-      console.log(Images.length)
-      Images[Images.length - 1].classList.add('seen', 'animated', this.state.effect)
-    }
+
     this.startloop()
   }
 

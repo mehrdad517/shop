@@ -1,19 +1,20 @@
 import axios from 'axios';
 
-import {SETTING_SUCCESS, SETTING_FAILURE, SETTING_REQUESTING} from '../types';
-import Api from "../api";
+import { SETTING_SUCCESS, SETTING_FAILURE, SETTING_REQUESTING } from '../types';
+import Api from '../api';
 
 export const fetchSetting = () => async dispatch => {
   dispatch({ type: SETTING_REQUESTING });
 
   try {
-
-    await new Api().setting().then((resp) => {
-      dispatch({ type: SETTING_SUCCESS, payload: resp.result });
-    }).catch((error) => {
-      dispatch({ type: SETTING_FAILURE, err: error });
-    });
-
+    await new Api()
+      .setting()
+      .then(resp => {
+        dispatch({ type: SETTING_SUCCESS, payload: resp.result });
+      })
+      .catch(error => {
+        dispatch({ type: SETTING_FAILURE, err: error });
+      });
   } catch (err) {
     /* istanbul ignore next */
     dispatch({ type: SETTING_FAILURE, err: err.message });

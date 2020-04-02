@@ -4,12 +4,12 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
 import setting from './setting';
-import lastBlogPosts from './lastBlogPosts';
 import blog from './blog';
 import slider from './slider';
-import payloadProducts from "./payloadProducts";
-import shop from './shop'
-import page from './page'
+import payloadProducts from './payloadProducts';
+import shop from './shop';
+import page from './page';
+import auth from './auth';
 
 const reducers = {
   setting,
@@ -17,8 +17,8 @@ const reducers = {
   shop,
   page,
   payloadProducts,
-  lastBlogPosts,
-  blog
+  blog,
+  auth
 };
 
 export default history =>

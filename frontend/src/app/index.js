@@ -5,29 +5,33 @@ import { renderRoutes } from 'react-router-config';
 import Helmet from 'react-helmet';
 import { hot } from 'react-hot-loader';
 
-
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  StylesProvider,
+  jssPreset
+} from '@material-ui/core/styles';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
-import {ToastContainer} from "react-toastify";
 
+import { ToastContainer } from 'react-toastify';
 
 import config from '../config';
 // Import your global styles here
 import '../static/Farsi-Digits/font-face.css';
 import '../static/css/animate.css';
-import 'react-toastify/dist/ReactToastify.css'
-import '@fortawesome/fontawesome-free/css/all.min.css'
+import 'react-toastify/dist/ReactToastify.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import './styles.scss';
+import {AUTH_LOGIN} from "../types";
 
 const theme = createMuiTheme({
-  direction: "rtl",
+  direction: 'rtl',
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#294187',
+      main: '#294187'
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
@@ -35,7 +39,7 @@ const theme = createMuiTheme({
       light: '#ff1c26',
       main: '#ff0074',
       // dark: will be calculated from palette.secondary.main,
-      contrastText: '#fff',
+      contrastText: '#fff'
     },
     // Used by `getContrastText()` to maximize the contrast between
     // the background and the text.
@@ -43,7 +47,7 @@ const theme = createMuiTheme({
     // Used by the functions below to shift a color's luminance by approximately
     // two indexes within its tonal palette.
     // E.g., shift from Red 500 to Red 300 or Red 700.
-    tonalOffset: 0.2,
+    tonalOffset: 0.2
   },
   overrides: {
     MuiListItem: {
@@ -67,10 +71,9 @@ const theme = createMuiTheme({
         fontSize: '14px',
         padding: 0,
         margin: '10px 0 !important'
-      },
-
+      }
     },
-    MuiTypography:{
+    MuiTypography: {
       root: {
         fontFamily: 'Shabnam !important',
         fontSize: '13px !important'
@@ -85,17 +88,17 @@ const theme = createMuiTheme({
     MuiButton: {
       // Name of the rule
       label: {
-        fontFamily: 'Shabnam',
-      },
+        fontFamily: 'Shabnam'
+      }
     },
     MuiInputBase: {
       root: {
-        fontFamily: 'Shabnam !important',
+        fontFamily: 'Shabnam !important'
       },
       input: {
         fontSize: '14px',
-        font: 'Shabnam !important',
-      },
+        font: 'Shabnam !important'
+      }
     },
     MuiFormHelperText: {
       contained: {
@@ -103,45 +106,47 @@ const theme = createMuiTheme({
       }
     },
     MuiChip: {
-      root:{
+      root: {
         fontFamily: 'Shabnam !important',
         fontSize: '12px',
-        fontWeight:'normal'
+        fontWeight: 'normal'
       }
     },
-    MuiDialogContent : {
+    MuiDialogContent: {
       root: {
         '&:first-child': {
           paddingTop: 0
         }
-      },
+      }
     },
     MuiAlert: {
       root: {
-        fontFamily: 'Shabnam !important',
+        fontFamily: 'Shabnam !important'
       }
     }
-  },
+  }
 });
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 
+
 const App = ({ route }) => (
   <StylesProvider jss={jss}>
-    <MuiThemeProvider theme = { theme }>
+    <MuiThemeProvider theme={theme}>
       <Helmet {...config.app} />
       {/* Child routes won't render without this */}
       {renderRoutes(route.routes)}
       <ToastContainer
         position="top-left"
         autoClose={5000}
-        hideProgressBar={true}
+        hideProgressBar
         newestOnTop={false}
         closeOnClick
         rtl
         pauseOnVisibilityChange
         draggable={false}
-        pauseOnHover />
+        pauseOnHover
+      />
     </MuiThemeProvider>
   </StylesProvider>
 );

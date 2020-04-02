@@ -1,8 +1,21 @@
 /* @flow */
 
 import App from './app';
-import {asyncHome, asyncShop, NotFound, asyncSinglePage, asyncBlog} from './pages';
-import {blogAction, lastBlogPortsAction, pageAction, settingAction, shopAction, sliderAction} from './actions';
+import {
+  asyncHome,
+  asyncShop,
+  NotFound,
+  asyncSinglePage,
+  asyncBlog
+} from './pages';
+import {
+  blogAction,
+  lastBlogPortsAction,
+  pageAction,
+  settingAction,
+  shopAction,
+  sliderAction
+} from './actions';
 
 export default [
   {
@@ -13,7 +26,7 @@ export default [
         exact: true,
         component: asyncHome, // Add your route here
         loadData: () => [
-          settingAction.fetchSettingIfNeeded(),
+          settingAction.fetchSettingIfNeeded()
           // lastBlogPortsAction.fetchLastBlogPostsIfNeeded(),
           // sliderAction.fetchSliderIfNeeded()
         ]
@@ -22,33 +35,35 @@ export default [
         path: '/products/:categories',
         exact: true,
         component: asyncShop, // Add your route here
-        loadData: () => [
-          shopAction.fetchShopIfNeeded()
+        loadData: () => [shopAction.fetchShopIfNeeded()]
+      },
+      {
+        path: '/blog/:categories?',
+        exact: true,
+        component: asyncBlog, // Add your route here
+        loadData: params => [
+          blogAction.blogIfNeeded(params.categories)
         ]
       },
       {
-        path: '/blog',
+        path: '/blog/tag/:tag',
         exact: true,
         component: asyncBlog, // Add your route here
-        loadData: (params) => [
-          blogAction.blogIfNeeded()
+        loadData: params => [
+          blogAction.blogIfNeeded(params.categories)
         ]
       },
       {
         path: '/blog/post/:id/:slug?',
         exact: true,
         component: asyncSinglePage, // Add your route here
-        loadData: (params) => [
-          pageAction.fetchPageIfNeeded(params.id)
-        ]
+        loadData: params => [pageAction.fetchPageIfNeeded(params.id)]
       },
       {
         path: '/page/:id',
         exact: true,
         component: asyncSinglePage, // Add your route here
-        loadData: (params) => [
-          pageAction.fetchPageIfNeeded(params.id)
-        ]
+        loadData: params => [pageAction.fetchPageIfNeeded(params.id)]
       },
       {
         component: NotFound

@@ -5,7 +5,7 @@ import {
   SETTING_CHANGE_categoryExpanded,
   SETTING_CHANGE_menuExpanded,
   SETTING_CHANGE_footerExpanded,
-  SETTING_CHANGE_blogExpanded,
+  SETTING_CHANGE_blogExpanded
 } from '../types';
 
 // Export for unit testing

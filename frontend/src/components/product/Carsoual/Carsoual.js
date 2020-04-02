@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
-import Box from "../box/Box";
-import Fab from "@material-ui/core/Fab";
+import React, { Component } from 'react';
+import Fab from '@material-ui/core/Fab';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
+import Slider from 'react-slick';
+import Box from '../box/Box';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -14,7 +13,12 @@ function SampleNextArrow(props) {
       aria-label="save"
       color="secondary"
       onClick={onClick}
-      style={{ position:"absolute", right: '15px', top: 'calc(50% - 25px)', zIndex: '9999'}}
+      style={{
+        position: 'absolute',
+        right: '15px',
+        top: 'calc(50% - 25px)',
+        zIndex: '9999'
+      }}
     >
       <ArrowForwardIosIcon />
     </Fab>
@@ -27,10 +31,15 @@ function SamplePrevArrow(props) {
     <Fab
       aria-label="save"
       color="secondary"
-      style={{ position:"absolute", left: '15px', top: 'calc(50% - 25px)', zIndex: '9999'}}
+      style={{
+        position: 'absolute',
+        left: '15px',
+        top: 'calc(50% - 25px)',
+        zIndex: '9999'
+      }}
       onClick={onClick}
     >
-      <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }}/>
+      <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }} />
     </Fab>
   );
 }
@@ -84,8 +93,8 @@ class CarouselBox extends Component {
       <div>
         <Slider {...settings}>
           {this.props.items.map((item, index) => {
-            return(
-              <div  key={index}>
+            return (
+              <div key={index}>
                 <Box item={item} />
               </div>
             );

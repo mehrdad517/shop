@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { PAYLOAD_PRODUCTS_SUCCESS, PAYLOAD_PRODUCTS_FAILURE, PAYLOAD_PRODUCTS_REQUESTING } from '../types';
+import {
+  PAYLOAD_PRODUCTS_SUCCESS,
+  PAYLOAD_PRODUCTS_FAILURE,
+  PAYLOAD_PRODUCTS_REQUESTING
+} from '../types';
 
 const API_URL = 'http://localhost:8000/api/products/payload';
 
@@ -28,5 +32,6 @@ const shouldFetchPayloadProducts = state => {
 
 export const fetchPayloadProductsIfNeeded = () => (dispatch, getState) => {
   /* istanbul ignore next */
-  if (shouldFetchPayloadProducts(getState())) return dispatch(fetchPayloadProducts());
+  if (shouldFetchPayloadProducts(getState()))
+    return dispatch(fetchPayloadProducts());
 };

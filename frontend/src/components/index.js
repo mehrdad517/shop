@@ -14,6 +14,7 @@ import Badge from './product/badge/Badge';
 import Paginator from './paginator';
 import MenuTree from './MenuTree';
 import Sidebar from './Sidebar';
+import Search from './Search';
 
 export {
   ErrorBoundary,
@@ -29,5 +30,6 @@ export {
   Paginator,
   MenuTree,
   Sidebar,
-  FooterMenu
+  FooterMenu,
+  Search
 };

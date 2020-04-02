@@ -22,6 +22,8 @@ import configureStore from './utils/configureStore';
 import renderHtml from './utils/renderHtml';
 import routes from './routes';
 import config from './config';
+import {AUTH_LOGIN} from "./types";
+import Cookies from "universal-cookie/lib";
 
 const app = express();
 
@@ -69,6 +71,7 @@ if (!__DEV__) {
 
 // Register server-side rendering middleware
 app.get('*', (req, res) => {
+
   const { store } = configureStore({ url: req.url });
 
   // The method for loading data from server-side
@@ -92,6 +95,13 @@ app.get('*', (req, res) => {
 
   (async () => {
     try {
+
+      const cookies = new Cookies(req.headers.cookie);
+
+      if (cookies.get('auth')) {
+        store.dispatch({type: AUTH_LOGIN, payload: cookies.get('auth')});
+      }
+
       // Load data from server-side first
       await loadBranchData();
 

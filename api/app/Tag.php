@@ -16,4 +16,10 @@ class Tag extends Model
 
     protected $hidden = ['pivot'];
 
+
+    public function contents()
+    {
+        return $this->belongsToMany(BlogContent::class, 'blog_tags', 'tag_id', 'content_id');
+    }
+
 }

@@ -59,7 +59,7 @@ class Header extends Component {
                         <Link to={'/'}>
                         <Typography variant="subtitle1" className="animated zoomIn" style={{ color:'#fff', display: "flex", justifyContent:'center'}}>
                             <GrainIcon />&nbsp;
-                            <span>شرکت نوآوران دنیای زیبایی هیراد</span>
+                            <span>فروشگاه اینترنتی لوکس آرا</span>
                         </Typography>
                         </Link>
                         <IconButton id='fade-menu' aria-haspopup="true" onClick={handleClick} style={{ color: '#fff'}}>

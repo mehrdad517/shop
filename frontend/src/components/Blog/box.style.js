@@ -111,7 +111,7 @@ export default styled.div`
 
     .NewsItems > img {
       top: -50px;
-      left: 0;
+      left: -15px;
     }
     .NewsItem ul li {
       padding: 0 6px;

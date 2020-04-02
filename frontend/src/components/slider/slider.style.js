@@ -40,7 +40,7 @@ export default styled.div`
 .items{
   position: relative;
   width: calc(100%);
-  height: 400px;
+  height: 500px;
   display: flex;
   justify-content: center;
   margin: 0;
@@ -54,7 +54,7 @@ export default styled.div`
   overflow: hidden;
 }
 .items div img{
-  height: 400px;
+  height: 500px;
   width: 100%;
 }
 .items .seen{

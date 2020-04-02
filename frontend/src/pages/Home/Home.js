@@ -3,20 +3,34 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { Container } from '@material-ui/core';
 import Master from '../../components/Layouts/master';
-import {lastBlogPortsAction, payloadProductsAction, sliderAction} from '../../actions';
-import {LastBlogPosts, Slider, PayloadProducts, MenuTree} from '../../components';
-import {Container} from "@material-ui/core";
+import {
+  blogAction,
+  lastBlogPortsAction,
+  payloadProductsAction,
+  sliderAction
+} from '../../actions';
+import {
+  LastBlogPosts,
+  Slider,
+  PayloadProducts,
+  MenuTree
+} from '../../components';
 
 // Export this for unit testing more easily
 export class Home extends PureComponent {
-  componentDidMount() {
 
-    const { fetchLastBlogPostsIfNeeded, fetchSliderIfNeeded, fetchPayloadProductsIfNeeded } = this.props;
+  componentDidMount() {
+    const {
+      blogIfNeeded,
+      fetchSliderIfNeeded,
+      fetchPayloadProductsIfNeeded
+    } = this.props;
 
     fetchSliderIfNeeded();
     fetchPayloadProductsIfNeeded();
-    fetchLastBlogPostsIfNeeded();
+    blogIfNeeded();
   }
 
   render() {
@@ -24,9 +38,12 @@ export class Home extends PureComponent {
       <Master>
         <Helmet title="Home" />
         <Container>
-          {this.props.slider.readyStatus === 'success' && <Slider slides={this.props.slider} />}
-          {/*{this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />}*/}
-          {this.props.lastBlogPosts.readyStatus === 'success' && <LastBlogPosts data={this.props.lastBlogPosts.data} />}
+          {this.props.slider.readyStatus === 'success' && (
+            <Slider slides={this.props.slider} />
+          )}
+           {/*{this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />} */}
+          {this.props.blog.readyStatus === 'success' && (<LastBlogPosts data={this.props.blog.data.contents.data} />
+          )}
         </Container>
       </Master>
     );
@@ -36,15 +53,15 @@ export class Home extends PureComponent {
 function mapStateToProps(state) {
   return {
     payloadProducts: state.payloadProducts,
-    lastBlogPosts: state.lastBlogPosts,
+    blog: state.blog,
     slider: state.slider
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLastBlogPostsIfNeeded: () => {
-      dispatch(lastBlogPortsAction.fetchLastBlogPostsIfNeeded());
+    blogIfNeeded: () => {
+      dispatch(blogAction.blogIfNeeded({ page: 1, limit: 6}));
     },
     fetchSliderIfNeeded: () => {
       dispatch(sliderAction.fetchSliderIfNeeded());

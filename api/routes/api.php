@@ -29,6 +29,47 @@ Route::Group(['prefix' => '/'], function() {
      */
     Route::group(['prefix' => '/'], function () {
 
+        Route::get('/search', function (Request $request) {
+
+            $tags = \App\Tag::where('name', 'like', '%'. $request->get('q') . '%')
+                ->take(5)
+                ->get();
+
+            switch ($request->get('type')) {
+
+                case 'site':
+
+                    $products = \App\Product::select('id', 'title', 'slug')
+                        ->where('title', 'like', '%'. $request->get('q') . '%')
+                        ->take(5)
+                        ->get();
+
+                    $categories = \App\ProductCategory::select('value', 'label', 'slug')
+                        ->where('label', 'like', '%'. $request->get('q') . '%')
+                        ->take(5)
+                        ->get();
+
+                    return response()->json(['contents' => $products, 'categories' => $categories, 'tags' => $tags]);
+                    break;
+                case 'blog':
+
+                    $blog = \App\BlogContent::select('id', 'title', 'slug')
+                        ->where('title', 'like', '%'. $request->get('q') . '%')
+                        ->take(5)
+                        ->get();
+
+                    $categories = \App\BlogCategory::select('value', 'label', 'slug')
+                        ->where('label', 'like', '%'. $request->get('q') . '%')
+                        ->take(5)
+                        ->get();
+
+                    return response()->json(['contents' => $blog, 'categories' => $categories, 'tags' => $tags]);
+
+                    break;
+            }
+
+        });
+
         Route::post('/login', function (Request $request) {
             $validator = \Validator::make($request->all(), [
                 'mobile' => 'required|min:11|max:11',
@@ -46,9 +87,9 @@ Route::Group(['prefix' => '/'], function() {
 
                 if (!$user->status) return Response()->json(['status' => false, 'message' => 'کاربری شما غیرفعال است.']); // check user active
 
-                if ($user->verify_time) {
+                if ($user->verify_datetime) {
 
-                    $datetime = new DateTime($user->verify_time);
+                    $datetime = new DateTime($user->verify_datetime);
 
                     $diff = $datetime->diff(new DateTime());
 
@@ -66,13 +107,16 @@ Route::Group(['prefix' => '/'], function() {
                 }
 
                 $result = payloadRecoverySMS($request->get('mobile'));
+
                 if ($result) {
                     $user->update([
                         'verify_code' => $result,
-                        'verify_time' => date('Y-m-d H:i:s'),
+                        'verify_datetime' => date('Y-m-d H:i:s'),
                         'remember_token' => $token
                     ]);
                     return response()->json(['status' => true, 'msg' => 'کد فعالسازی برای شما ارسال شد.', 'token' => $token]);
+                } else {
+                    return response()->json(['status' => false, 'msg' => 'عدم سرویس دهی پنل پیامک']);
                 }
             } else { // register users
 
@@ -82,12 +126,13 @@ Route::Group(['prefix' => '/'], function() {
                     'password' => bcrypt($token)
                 ]);
 
+
                 if ($user) {
                     $result = payloadRecoverySMS($request->get('mobile'));
                     if ($result) {
                         $user->update([
                             'verify_code' => $result,
-                            'verify_time' => date('Y-m-d H:i:s'),
+                            'verify_datetime' => date('Y-m-d H:i:s'),
                             'remember_token' => $token
                         ]);
                         return response()->json(['status' => true, 'msg' => 'کد فعالسازی برای شما ارسال شد.', 'token' => $token]);
@@ -123,7 +168,7 @@ Route::Group(['prefix' => '/'], function() {
                 //update access token and remember token
                 $user->update([
                     'verify_account' => true,
-                    'verify_time' => date('Y-m-d H:i:s'),
+                    'verify_datetime' => date('Y-m-d H:i:s'),
                     'remember_token' => $token
                 ]);
 
@@ -132,20 +177,23 @@ Route::Group(['prefix' => '/'], function() {
                 $user = $request->user();
 
                 // create access to
-//                $access = $user->createToken('Token Name');
-//                if ($access) {
-//                    $token = $access->accessToken;
-//                }
+                $access = $user->createToken('Token Name');
+                if ($access) {
+                    $token = $access->accessToken;
+                }
 
 
                 return response()->json([
                     'status' => true,
                     'msg' => 'با موفقیت وارد سایت شدید.',
-                    'token' => $token,
-                    'user' => [
-                        'name' => $user->name ?? 'بدون نام',
-                        'mobile' => $user->mobile,
+                    'result' => [
+                        'token' => $token,
+                        'user' => [
+                            'name' => $user->name ?? '',
+                            'mobile' => $user->mobile,
+                        ],
                     ],
+
                 ]);
 
 
@@ -209,6 +257,7 @@ Route::Group(['prefix' => '/'], function() {
 
         Route::group(['prefix' => 'blog'], function() {
 
+
             Route::get('/', function (Request $request) {
 
                 $page = $request->get('page') ?? 1;
@@ -249,15 +298,62 @@ Route::Group(['prefix' => '/'], function() {
                 return response()->json(['status' => true, 'result' => \Cache::get("blog[$page][$sort][$limit]")]);
             });
 
-            Route::get('/{category}', function ($category, Request $request) {
+            Route::get('/tag/{tag}', function ($tag, Request $request) {
 
                 $page = $request->get('page') ?? 1;
                 $sort = $request->get('sort') ?? 0;
+                $limit = $request->get('limit') ?? 10;
+
+                $sort_items = blogSortItems();
+
+                if (!\Cache::has("blog[tag][$tag][$page][$sort][$limit]")) {
+
+                    $result = \App\Tag::where(is_numeric($tag) ? 'id' : 'name', trim($tag))
+                        ->firstOrFail();
+
+                    $contents = $result->contents()
+                        ->with(['files' => function($q) {
+                            $q->select('fileable_id', 'fileable_type', 'mime_type', DB::raw('fetch_file_address(id) as prefix'), 'file', 'size')
+                                ->where('collection', 0)
+                                ->orderBy('order', 'asc');
+                        }])
+                        ->when(true, function ($q) use($request, $sort_items, $sort) {
+                            if ($request->has('sort')) {
+                                if (isset($sort_items[$sort])) {
+                                    $q->orderBy($sort_items[$sort]['field'], $sort_items[$sort]['type']);
+                                }
+                            } else {
+                                $q->orderBy('id', 'desc');
+                            }
+                        })
+                        ->where('status', 1)
+                        ->paginate($limit);
+
+
+                    \Cache::put("blog[tag][$tag][$page][$sort][$limit]", ['category' => [
+                        'label' => $result->name,
+                        'slug' => $result->name,
+                        'meta_title' => $result->name,
+                        'meta_description' => $result->name,
+                    ], 'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
+
+
+                }
+
+                return response()->json(['status' => true, 'result' => \Cache::get("blog[tag][$tag][$page][$sort][$limit]")]);
+
+            });
+
+            Route::get('/category/{category}', function ($category, Request $request) {
+
+                $page = $request->get('page') ?? 1;
+                $sort = $request->get('sort') ?? 0;
+                $limit = $request->get('limit') ?? 10;
 
                 $sort_items = blogSortItems();
 
 
-                if (!\Cache::has("blog[category][$category][$page][$sort]")) {
+                if (!\Cache::has("blog[category][$category][$page][$sort][$limit]")) {
 
                     $result = \App\BlogCategory::select('value', 'label', 'slug', 'meta_title', 'meta_description')->where(is_numeric($category) ? 'value' : 'slug', $category)
                         ->where('status', 1)
@@ -279,15 +375,15 @@ Route::Group(['prefix' => '/'], function() {
                             }
                         })
                         ->where('status', 1)
-                        ->paginate();
+                        ->paginate($limit);
 
 
-                    \Cache::put("blog[category][$category][$page][$sort]", ['category' => $result, 'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
+                    \Cache::put("blog[category][$category][$page][$sort][$limit]", ['category' => $result, 'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
 
 
                 }
 
-                return response()->json(['status' => true, 'result' => \Cache::get("blog[category][$category][$page][$sort]")]);
+                return response()->json(['status' => true, 'result' => \Cache::get("blog[category][$category][$page][$sort][$limit]")]);
 
             });
 
@@ -841,147 +937,113 @@ Route::Group(['prefix' => '/'], function() {
 
 
     });
+});
 
-    /*
-     |
-     | auth api for login, register, change password and etc ...
-     |
-     */
-    Route::group(['prefix' => 'auth'], function () {
-        Route::post('/login', 'Auth\LoginController@login');
-        Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
-        Route::group(['prefix' => 'validation-code'], function () {
-            Route::post('/send', function (Request $request) {
 
-                $validator = \Validator::make($request->all(), [
-                    'mobile' => 'required',
-                ]);
+/*
+ |
+ | auth api for login, register, change password and etc ...
+ |
+ */
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/login', 'Auth\LoginController@login');
+    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth:api');
+    Route::group(['prefix' => 'validation-code'], function () {
+        Route::post('/send', function (Request $request) {
 
-                if ($validator->fails()) {
+            $validator = \Validator::make($request->all(), [
+                'mobile' => 'required',
+            ]);
 
-                    return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            if ($validator->fails()) {
+
+                return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            }
+
+            $user = User::where('mobile', $request->get('mobile'));
+
+            // check user status
+            if ($user->exists()) {
+
+                if (!$user->first()->status) {
+                    return Response()->json(['status' => false, 'msg' => 'اکانت شما غیرفعال است']);
                 }
 
-                $user = User::where('mobile', $request->get('mobile'));
+                $rand = rand(10000, 99999);
 
-                // check user status
-                if ($user->exists()) {
+                $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
+                // send sms to user
 
-                    if (!$user->first()->status) {
-                        return Response()->json(['status' => false, 'msg' => 'اکانت شما غیرفعال است']);
+                try {
+                    $verify = new \MahdiMajidzadeh\Kavenegar\KavenegarVerify();
+                    $res = $verify->lookup($request->get('mobile'), 'PasswordRecovery', $rand, null, null, 'sms');
+
+                    if (@$res[0]->status) {
+                        // to do
+                        $user->update([
+                            'verify_code' => $rand,
+                            'remember_token' => $token
+                        ]);
+
+                        return Response()->json(['status' => true, 'msg' => 'کد تایید به موبایل شما ارسال شد.', 'token' => $token]);
+
                     }
-
-                    $rand = rand(10000, 99999);
-
-                    $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
-                    // send sms to user
-
-                    try {
-                        $verify = new \MahdiMajidzadeh\Kavenegar\KavenegarVerify();
-                        $res = $verify->lookup($request->get('mobile'), 'PasswordRecovery', $rand, null, null, 'sms');
-
-                        if (@$res[0]->status) {
-                            // to do
-                            $user->update([
-                                'verify_code' => $rand,
-                                'remember_token' => $token
-                            ]);
-
-                            return Response()->json(['status' => true, 'msg' => 'کد تایید به موبایل شما ارسال شد.', 'token' => $token]);
-
-                        }
-                    } catch (Exception $exception) {
-                        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.مجددا تلاش کنید']);
-                    }
-
-                } elseif ($user->count() == 0) {
-                    return Response()->json(['status' => false, 'msg' => 'شماره موبایل در سیستم وجود ندارد.']);
-                } else {
-                    return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+                } catch (Exception $exception) {
+                    return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.مجددا تلاش کنید']);
                 }
-            });
 
-            Route::post('/verify', function (Request $request) {
+            } elseif ($user->count() == 0) {
+                return Response()->json(['status' => false, 'msg' => 'شماره موبایل در سیستم وجود ندارد.']);
+            } else {
+                return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+            }
+        });
 
-                $validator = \Validator::make($request->all(), [
-                    'token' => 'required',
-                    'mobile' => 'required',
-                    'code' => 'required',
+        Route::post('/verify', function (Request $request) {
+
+            $validator = \Validator::make($request->all(), [
+                'token' => 'required',
+                'mobile' => 'required',
+                'code' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+
+                return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+            }
+
+            $user = User::where('mobile', $request->get('mobile'))
+                ->where('remember_token', $request->get('token'))
+                ->where('role_key', '<>', 'guest')
+                ->where('verify_code', $request->get('code'))
+                ->where('status', 1)
+            ;
+
+            // check user status
+            if ($user->count() == 1) {
+
+                $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
+
+                $user->update([
+                    'verify_account' => true,
+                    'remember_token' => $token
                 ]);
 
-                if ($validator->fails()) {
+                return Response()->json(['status' => true, 'msg' => 'رمز جدید خود را وارد کنید', 'token' => $token]);
 
-                    return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
-                }
-
-                $user = User::where('mobile', $request->get('mobile'))
-                    ->where('remember_token', $request->get('token'))
-                    ->where('role_key', '<>', 'guest')
-                    ->where('verify_code', $request->get('code'))
-                    ->where('status', 1)
-                ;
-
-                // check user status
-                if ($user->count() == 1) {
-
-                    $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
-
-                    $user->update([
-                        'verify_account' => true,
-                        'remember_token' => $token
-                    ]);
-
-                    return Response()->json(['status' => true, 'msg' => 'رمز جدید خود را وارد کنید', 'token' => $token]);
-
-                } elseif ($user->count() == 0) {
-                    return Response()->json(['status' => false, 'msg' => 'کد وارد شده نادرست است.']);
-                } else {
-                    return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
-                }
-            });
-            Route::post('/change-password', function (Request $request) {
-
-                $validator = \Validator::make($request->all(), [
-                    'password' => 'required|min:6',
-                    'token' => 'required',
-                    'mobile' => 'required',
-                    'code' => 'required',
-                ]);
-
-                if ($validator->fails()) {
-
-                    return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
-                }
-
-                $user = User::where('mobile', $request->get('mobile'))
-                    ->where('remember_token', $request->get('token'))
-                    ->where('verify_code', $request->get('code'))
-                    ->where('status', 1)
-                ;
-
-                // check user status
-                if ($user->count() == 1) {
-
-                    $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
-
-                    $user->update([
-                        'remember_token' => $token,
-                        'password' => bcrypt($request->get('password'))
-                    ]);
-
-                    return Response()->json(['status' => true, 'msg' => 'رمز با موفقیت تغیر کرد.', 'token' => $token]);
-
-                } elseif ($user->count() == 0) {
-                    return Response()->json(['status' => false, 'msg' => 'به جای فرستادن اسپم کتاب بخوانید.']);
-                } else {
-                    return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
-                }
-            });
+            } elseif ($user->count() == 0) {
+                return Response()->json(['status' => false, 'msg' => 'کد وارد شده نادرست است.']);
+            } else {
+                return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+            }
         });
         Route::post('/change-password', function (Request $request) {
 
             $validator = \Validator::make($request->all(), [
                 'password' => 'required|min:6',
+                'token' => 'required',
+                'mobile' => 'required',
+                'code' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -989,50 +1051,86 @@ Route::Group(['prefix' => '/'], function() {
                 return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
             }
 
-            $model = $request->user()->update([
-                'password' => bcrypt($request->get('password'))
-            ]);
+            $user = User::where('mobile', $request->get('mobile'))
+                ->where('remember_token', $request->get('token'))
+                ->where('verify_code', $request->get('code'))
+                ->where('status', 1)
+            ;
 
-            if ($model) {
+            // check user status
+            if ($user->count() == 1) {
 
-                return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+                $token = bcrypt('@#$!~'. rand(1, 100000) .'*()+=' .time() . '@#$%^^&*((#$$$$)__45454&&^^@@@$#md54532515');
+
+                $user->update([
+                    'remember_token' => $token,
+                    'password' => bcrypt($request->get('password'))
+                ]);
+
+                return Response()->json(['status' => true, 'msg' => 'رمز با موفقیت تغیر کرد.', 'token' => $token]);
+
+            } elseif ($user->count() == 0) {
+                return Response()->json(['status' => false, 'msg' => 'به جای فرستادن اسپم کتاب بخوانید.']);
+            } else {
+                return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
             }
-            return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
-
-        })->middleware('auth:api');
-        Route::post('/change-profile', function (Request $request) {
-
-            $validator = \Validator::make($request->all(), [
-                'name' => 'required|min:3',
-            ]);
-
-            if ($validator->fails()) {
-
-                return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
-            }
-
-            $user  = $request->user();
-
-            $model = $user->update([
-                'name' => $request->get('name')
-            ]);
-
-
-            if ($model) {
-
-                return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.', 'user' => [
-                    'name' => $user->name,
-                    'mobile' => $user->mobile
-                ]]);
-            }
-            return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
-
-        })->middleware('auth:api');
+        });
     });
+    Route::post('/change-password', function (Request $request) {
 
-    // Permission Initial
-    Route::get('/initial', 'Backend\PermissionController@initial');
+        $validator = \Validator::make($request->all(), [
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $model = $request->user()->update([
+            'password' => bcrypt($request->get('password'))
+        ]);
+
+        if ($model) {
+
+            return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.']);
+        }
+        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+
+    })->middleware('auth:api');
+    Route::post('/change-profile', function (Request $request) {
+
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required|min:3',
+        ]);
+
+        if ($validator->fails()) {
+
+            return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
+        }
+
+        $user  = $request->user();
+
+        $model = $user->update([
+            'name' => $request->get('name')
+        ]);
+
+
+        if ($model) {
+
+            return Response()->json(['status' => true, 'msg' => 'عملیات موفقیت آمیز بود.', 'user' => [
+                'name' => $user->name,
+                'mobile' => $user->mobile
+            ]]);
+        }
+        return Response()->json(['status' => false, 'msg' => 'خطایی رخ داده است.']);
+
+    })->middleware('auth:api');
 });
+
+
+// Permission Initial
+Route::get('/initial', 'Backend\PermissionController@initial');
 
 /*
  * asset linker, storage file system

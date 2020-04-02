@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Line from "../../Line";
+import Fab from '@material-ui/core/Fab';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Slider from 'react-slick';
+import Line from '../../Line';
 import StyleWrapper from './index.style';
-import {CarouselBox} from "../../index";
-import Fab from "@material-ui/core/Fab";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import Slider from "react-slick";
-import Box from "../box/Box";
+import { CarouselBox } from '../../index';
+import Box from '../box/Box';
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -15,7 +15,12 @@ function SampleNextArrow(props) {
       aria-label="save"
       color="secondary"
       onClick={onClick}
-      style={{ position:"absolute", right: '15px', top: 'calc(50% - 25px)', zIndex: '9999'}}
+      style={{
+        position: 'absolute',
+        right: '15px',
+        top: 'calc(50% - 25px)',
+        zIndex: '9999'
+      }}
     >
       <ArrowForwardIosIcon />
     </Fab>
@@ -28,28 +33,26 @@ function SamplePrevArrow(props) {
     <Fab
       aria-label="save"
       color="secondary"
-      style={{ position:"absolute", left: '15px', top: 'calc(50% - 25px)', zIndex: '9999'}}
+      style={{
+        position: 'absolute',
+        left: '15px',
+        top: 'calc(50% - 25px)',
+        zIndex: '9999'
+      }}
       onClick={onClick}
     >
-      <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }}/>
+      <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }} />
     </Fab>
   );
 }
 
-
-
 class PayloadProducts extends Component {
-
   constructor(props) {
     super(props);
   }
 
-
-
-
   render() {
-
-    var settings = {
+    const settings = {
       dots: false,
       infinite: true,
       speed: 500,
@@ -89,18 +92,21 @@ class PayloadProducts extends Component {
     };
 
     return (
-      <Grid container={true}>
+      <Grid container>
         <Grid item xs={12}>
           <StyleWrapper>
             {this.props.data.map((list, index) => {
-              return(
-                <div key={index} style={{position:'relative'}} >
-                  <Line title={list.title} link={list.link !== null ? list.link : ''} />
+              return (
+                <div key={index} style={{ position: 'relative' }}>
+                  <Line
+                    title={list.title}
+                    link={list.link !== null ? list.link : ''}
+                  />
                   <div>
                     <Slider {...settings}>
                       {list.products.map((item, index) => {
-                        return(
-                          <div  key={index}>
+                        return (
+                          <div key={index}>
                             <Box item={item} />
                           </div>
                         );
