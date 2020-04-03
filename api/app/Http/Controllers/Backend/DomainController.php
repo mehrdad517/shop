@@ -15,7 +15,7 @@ class DomainController extends Controller
     public function read(Request $request)
     {
 
-        $setting = Domain::find($request->header('origin'));
+        $setting = Domain::find(domain($request->header('origin')));
 
         if ($setting) {
 
@@ -32,6 +32,9 @@ class DomainController extends Controller
                 'min_purchase' => $setting->min_purchase,
                 'default_post_cost' => $setting->default_post_cost,
                 'copy_right' => $setting->copy_right,
+                'blog_title' => $setting->blog_title,
+                'blog_description' => $setting->blog_description,
+
                 'app' => [],
                 'license' => [],
                 'social_medias' => [],
@@ -63,14 +66,6 @@ class DomainController extends Controller
         return Response(['status' => false, 'msg' => 'دامنه موجود نیست']);
     }
 
-    // read boolean data for update redux
-    public function readSticky(Request $request)
-    {
-        $setting = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'notify_order', 'notify_ticket', 'notify_register')->find($request->header('origin'));
-
-        return response($setting);
-    }
-
     public function update(Request $request)
     {
 
@@ -80,6 +75,8 @@ class DomainController extends Controller
             'meta_description' => 'required|max:255',
             'introduce' => 'required',
             'copy_right' => 'required',
+            'blog_title' => 'required',
+            'blog_description' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -87,17 +84,19 @@ class DomainController extends Controller
             return Response()->json(['status' => false, 'msg' => $validator->errors()->first()]);
         }
 
-        $setting = Domain::find($request->header('origin'));
+        $setting = Domain::find(\domain($request->header('Origin')));
 
         $setting->update([
             'name' => $request->get('name'),
             'meta_title' => $request->get('meta_title'),
             'meta_description' => $request->get('meta_description'),
             'introduce' => $request->get('introduce'),
+            'copy_right' => $request->get('copy_right'),
+            'blog_title' => $request->get('blog_title'),
+            'blog_description' => $request->get('blog_description'),
             'free_postage' => $request->get('free_postage'),
             'min_purchase' => $request->get('min_purchase'),
             'default_post_cost' => $request->get('default_post_cost'),
-            'copy_right' => $request->get('copy_right'),
         ]);
 
         try {
@@ -163,11 +162,21 @@ class DomainController extends Controller
 
     }
 
+
+    // read boolean data for update redux
+    public function readSticky(Request $request)
+    {
+        $setting = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'notify_order', 'notify_ticket', 'notify_register')
+            ->find(\domain($request->header('Origin')));
+
+        return response($setting);
+    }
+
     public function updateSticky(Request $request)
     {
 
 
-        $setting = Domain::where('key', $request->header('origin'));
+        $setting = Domain::where('key', \domain($request->header('Origin')));
 
         if ($setting->count() > 0) {
 

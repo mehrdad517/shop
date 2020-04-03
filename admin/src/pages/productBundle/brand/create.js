@@ -76,7 +76,7 @@ class BrandCreate extends Component {
                 </Tooltip>
                 <Dialog fullWidth={true} open={this.state.open} onClose={() => this.setState({ open: false })} aria-labelledby="form-dialog-title">
                     <form dir='rtl' onSubmit={this.handleSubmit.bind(this)}>
-                        <DialogTitle id="form-dialog-title">ویژگی جدید</DialogTitle>
+                        <DialogTitle id="form-dialog-title">برند جدید</DialogTitle>
                         <DialogContent>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} >

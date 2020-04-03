@@ -69,12 +69,12 @@ CREATE TABLE IF NOT EXISTS `blog_category` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_category: 4 rows
+-- Dumping data for table 517_shop.blog_category: 6 rows
 /*!40000 ALTER TABLE `blog_category` DISABLE KEYS */;
 INSERT INTO `blog_category` (`value`, `slug`, `_lft`, `_rgt`, `parent_id`, `label`, `heading`, `meta_title`, `meta_description`, `content`, `status`, `created_at`, `updated_at`) VALUES
-	(13, '1', 1, 4, NULL, 'مطالب آموزشی', NULL, NULL, NULL, NULL, 1, '2020-01-22 10:12:59', '2020-01-22 10:12:59'),
-	(14, '2', 5, 8, NULL, 'گوشی موبایل', NULL, NULL, NULL, NULL, 1, '2020-01-22 10:36:47', '2020-01-22 10:36:47'),
-	(15, NULL, 9, 10, NULL, 'علم و فناوری', NULL, NULL, NULL, NULL, 1, '2020-03-26 15:54:41', '2020-03-26 15:54:41'),
+	(13, 'اسلاگ', 1, 4, NULL, 'مطالب آموزشی', NULL, NULL, NULL, NULL, 1, '2020-01-22 10:12:59', '2020-01-22 10:12:59'),
+	(14, 'اسلاگ-2', 5, 8, NULL, 'گوشی موبایل', NULL, NULL, NULL, NULL, 1, '2020-01-22 10:36:47', '2020-01-22 10:36:47'),
+	(15, 'اسلاگ-3', 9, 10, NULL, 'علم و فناوری', NULL, NULL, NULL, NULL, 1, '2020-03-26 15:54:41', '2020-03-26 15:54:41'),
 	(16, NULL, 11, 12, NULL, 'آشپزی', NULL, NULL, NULL, NULL, 1, '2020-03-26 15:54:52', '2020-03-26 15:54:52'),
 	(17, NULL, 2, 3, 13, 'اخبار', NULL, NULL, NULL, NULL, 1, '2020-03-26 23:24:22', '2020-03-26 23:24:22'),
 	(18, NULL, 6, 7, 14, 'لوازم آرایشی', NULL, NULL, NULL, NULL, 1, '2020-03-26 23:24:30', '2020-03-26 23:24:30');
@@ -104,8 +104,8 @@ CREATE TABLE IF NOT EXISTS `blog_content` (
 INSERT INTO `blog_content` (`id`, `slug`, `created_by`, `title`, `heading`, `meta_title`, `meta_description`, `content`, `status`, `visitor`, `created_at`, `updated_at`) VALUES
 	(68, 'شسیشیشی', 1, 'شسیشیشی', 'شیشسیسشیشس', 'شسیشیشی', 'شسیشیشی', 'به گزارش" ورزش سه"، امروز یحیی گل محمدی سرمربی پرسپولیس در کنفرانس خبری پیش از بازی با تراکتور درباره حضور آنتونی استوکس گفت که با توجه به شرایط مالی که باشگاه دارد با وجود آنکه حضور این مهاجم می تواند در لیگ برتر و لیگ قهرمانان کمک بسیار خوبی باشد اما ترجیح می دهد که او را جذب نکنند.با این وجود و در حالی که گفته می شد پرسپولیس هنوز نتوانسته مبلغ پیش پرداخت استوکس را تهیه کند اما محمدحسن انصاری فرد مدیرعامل پرسپولیس در گفت و گویی که با برنامه "فرمول یک" شبکه یک داشت اعلام کرد که این مهاجم ایرلندی و سابق تراکتور امشب به تهران خواهد آمد.البته به گفته مدیر روابط عمومی پرسپولیس زمان حضور استوکس در ایران ممکن است به فردا بیفتد چرا که هنوز قرارداد طرفین نهایی نشده است.', 1, 0, '2020-01-18 21:50:24', '2020-01-26 02:54:58'),
 	(69, 'دیدار-با-نخبگان', 1, 'دیدار با نخبگان', 'شیشسیسشیشس', 'دیدار با نخبگان', 'دیدار با نخبگان', 'به گزارش" ورزش سه"، امروز یحیی گل محمدی سرمربی پرسپولیس در کنفرانس خبری پیش از بازی با تراکتور درباره حضور آنتونی استوکس گفت که با توجه به شرایط مالی که باشگاه دارد با وجود آنکه حضور این مهاجم می تواند در لیگ برتر و لیگ قهرمانان کمک بسیار خوبی باشد اما ترجیح می دهد که او را جذب نکنند.با این وجود و در حالی که گفته می شد پرسپولیس هنوز نتوانسته مبلغ پیش پرداخت استوکس را تهیه کند اما محمدحسن انصاری فرد مدیرعامل پرسپولیس در گفت و گویی که با برنامه "فرمول یک" شبکه یک داشت اعلام کرد که این مهاجم ایرلندی و سابق تراکتور امشب به تهران خواهد آمد.البته به گفته مدیر روابط عمومی پرسپولیس زمان حضور استوکس در ایران ممکن است به فردا بیفتد چرا که هنوز قرارداد طرفین نهایی نشده است.', 1, 0, '2020-01-22 10:40:33', '2020-01-26 02:54:57'),
-	(70, 'متن-تستی', 1, 'دیدار با وطن', 'یسدستبم', 'اتسیبلسابل', 'سیابمسا', 'در هر تصادف، داخل ماشین مقصر طبق ظرفیت مندرج در کارت خودرو و بیرون از اون تا 10 نفر پوشش جانی دارن.', 1, 0, '2020-01-26 02:31:21', '2020-03-26 16:27:29'),
-	(80, 'بیمه-نامه-شخص-ثالث', 1, 'بیمه نامه شخص ثالث', 'بیمه نامه شخص ثالث', 'sadadasdasd', 'asdasd', 'در هر تصادف، داخل ماشین مقصر طبق ظرفیت مندرج در کارت خودرو و بیرون از اون تا 10 نفر پوشش جانی دارن.', 1, 0, '2020-01-26 15:40:49', '2020-01-27 21:00:44');
+	(70, 'موبایل', 1, 'دیدار با وطن', 'یسدستبم', 'اتسیبلسابل', 'سیابمسا', 'در هر تصادف، داخل ماشین مقصر طبق ظرفیت مندرج در کارت خودرو و بیرون از اون تا 10 نفر پوشش جانی دارن.', 1, 0, '2020-01-26 02:31:21', '2020-03-30 18:44:38'),
+	(80, 'بیمه-نامه-شخص-ثالث', 1, 'در هر تصادف، داخل ماشین مقصر طبق ظرفیت مندرج در کارت خودرو', 'بیمه نامه شخص ثالث', 'sadadasdasd', 'asdasd', 'در هر تصادف، داخل ماشین مقصر طبق ظرفیت مندرج در کارت خودرو و بیرون از اون تا 10 نفر پوشش جانی دارن.', 1, 0, '2020-01-26 15:40:49', '2020-03-29 02:02:58');
 /*!40000 ALTER TABLE `blog_content` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.blog_content_products
@@ -158,12 +158,13 @@ CREATE TABLE IF NOT EXISTS `blog_tags` (
   PRIMARY KEY (`content_id`,`tag_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_tags: 3 rows
+-- Dumping data for table 517_shop.blog_tags: 4 rows
 /*!40000 ALTER TABLE `blog_tags` DISABLE KEYS */;
 INSERT INTO `blog_tags` (`content_id`, `tag_id`) VALUES
 	(68, 38),
 	(69, 39),
-	(69, 40);
+	(69, 40),
+	(80, 41);
 /*!40000 ALTER TABLE `blog_tags` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.brand
@@ -284,17 +285,19 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `meta_description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `introduce` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `copy_right` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `android` tinyint(1) DEFAULT 0,
-  `ios` tinyint(1) DEFAULT 0,
-  `maintenance_mode` tinyint(1) DEFAULT 0,
-  `register` tinyint(1) DEFAULT 1,
-  `basket` tinyint(1) DEFAULT 1,
-  `user_dashboard` tinyint(1) DEFAULT 1,
-  `admin_panel` tinyint(1) DEFAULT 1,
-  `notify_order` tinyint(1) DEFAULT 1,
-  `notify_ticket` tinyint(1) DEFAULT 1,
-  `notify_register` tinyint(1) DEFAULT 1,
-  `status` tinyint(1) DEFAULT 1,
+  `blog_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `blog_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `android` tinyint(1) NOT NULL DEFAULT 0,
+  `ios` tinyint(1) NOT NULL DEFAULT 0,
+  `maintenance_mode` tinyint(1) NOT NULL DEFAULT 0,
+  `register` tinyint(1) NOT NULL DEFAULT 1,
+  `basket` tinyint(1) NOT NULL DEFAULT 1,
+  `user_dashboard` tinyint(1) NOT NULL DEFAULT 1,
+  `admin_panel` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_order` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_ticket` tinyint(1) NOT NULL DEFAULT 1,
+  `notify_register` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `min_purchase` decimal(10,0) NOT NULL DEFAULT 0,
   `free_postage` decimal(10,0) NOT NULL DEFAULT 100000,
   `default_post_cost` decimal(10,0) NOT NULL DEFAULT 5000,
@@ -305,8 +308,8 @@ CREATE TABLE IF NOT EXISTS `domain` (
 
 -- Dumping data for table 517_shop.domain: ~1 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
-INSERT INTO `domain` (`key`, `backend`, `name`, `meta_title`, `meta_description`, `introduce`, `copy_right`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `notify_order`, `notify_ticket`, `notify_register`, `status`, `min_purchase`, `free_postage`, `default_post_cost`, `created_at`, `updated_at`) VALUES
-	('localhost:3002', 'http://localhost:8000', 'فروشگاه اینترنتی لوکس آرا', 'لوکس ارا انتخاب و خرید انلاین', 'لوکس ارا انتخاب و خرید انلاین', '<p>دیجی&zwnj;کالا به عنوان یکی از قدیمی&zwnj;ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با پایبندی به سه اصل، پرداخت در محل، 7 روز ضمانت بازگشت کالا و تضمین اصل&zwnj;بودن کالا موفق شده تا همگام با فروشگاه&zwnj;های معتبر جهان، به بزرگ&zwnj;ترین فروشگاه اینترنتی ایران تبدیل شود. به محض ورود به سایت دیجی&zwnj;کالا با دنیایی از کالا رو به رو می&zwnj;شوید! هر آنچه که نیاز دارید و به ذهن شما خطور می&zwnj;کند در اینجا پیدا خواهید کرد. دیجی&zwnj;کالا مثل یک ویترین پر زرق و برق است که با انواع و اقسام برندهایی نظیرسامسونگ (Samsung)، ال جی (LG)، اپل (Apple)، نوکیا (Nokia)، شیائومی (Xiaomi)، هواوی (Huawei) و همچنین محصولاتی که هر فرد در زندگی شخصی، تحصیلی و کاری خود به آنها احتیاج پیدا می&zwnj;کند، چیده شده است. اینجا مرجع متنوع&zwnj;ترین کالاهای دیجیتال از گوشی موبایل اندروید و iOS (آیفون) گرفته تا تبلت، لپ تاپ، هارد اکسترنال، اسپیکر، هدفون، هندزفری و پاور بانک است. دیجی&zwnj;کالا همچنین یک بازار آنلاین برای خرید جدیدترین و ضروری&zwnj;ترین لوازم خانگی همانند فرش، پرده، کاغذ دیواری، مبلمان، میز تلویزیون و ماشین ظرفشویی و لباسشویی است تا هر فرد بتواند مطابق با سلیقه شخصی خود، خانه رویاهایش را بسازد. حتی می&zwnj;توانید محیط کار خود را با بهترین ماشین های اداری نظیر پرینتر، اسکنر و لوازم التحریر تجهیز کنید. علاوه بر این، می&zwnj;توانید با سر زدن به شبکه های اجتماعی دیجی کالا نظیر فیس بوک و تلگرام از جدیدترین مدل&zwnj;های لباس، اکسسوری، کیف و کفش زنانه، مردانه، بچه گانه، دخترانه، پسرانه و نوزاد مطلع شوید و از مشهورترین برندهای دنیا نظیر نایکی، آدیداس، ریباک، کلمبیا، باس، گوچی و مانگو اجناس اصل و باکیفیت خریداری نمایید. همچنین با سر زدن به محصولات آرایشی و بهداشتی، لوازم شخصی برقی و انواع عطر و ادکلن اصل تجربه&zwnj;ای جدید از خرید آنلاین کسب کنید و برای خرید انواع لوازم سفر، دوچرخه و آلات موسیقی با مقایسه دقیق محصولات دیگر دچار سردرگمی نشوید. این روزها با اضافه شدن محصولات سوپرمارکت (دیجی کالا فرش)، انواع خواربار، میوه و سبزیجات، مواد پروتئینی اعم از گوشت، مرغ و ماهی و انواع نوشیدنی و تنقلات و عطاری آنلاین می توانید کلیه نیازهای خود را تنها با چند کلیک سفارش داده و در کمترین زمان ممکن درب منزل تحویل بگیرید. مناسب&zwnj;ترین جمله درباره دیجی&zwnj;کالا ،بازار بزرگ اینترنتی، است؛ چرا که با قدم گذاشتن در آن می&zwnj;توانید، یک خرید اینترنتی لذت بخش، با قیمت مناسب و ارزان به همراه تخفیف ویژه در حراج ها را تجربه کنید.</p>', 'کلیه حقوق این سایت برای فروشگاه اینترنتی لوکس آرا  محفوظ است', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10000, 100000, 5000, '2019-12-07 10:11:41', '2020-03-26 19:19:48');
+INSERT INTO `domain` (`key`, `backend`, `name`, `meta_title`, `meta_description`, `introduce`, `copy_right`, `blog_title`, `blog_description`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `notify_order`, `notify_ticket`, `notify_register`, `status`, `min_purchase`, `free_postage`, `default_post_cost`, `created_at`, `updated_at`) VALUES
+	('localhost:3000', 'http://localhost:8000', 'فروشگاه اینترنتی لوکس آرا', 'لوکس ارا انتخاب و خرید انلاین', 'لوکس ارا انتخاب و خرید انلاین', '<p style="text-align: justify;">دیجی&zwnj;کالا به عنوان یکی از قدیمی&zwnj;ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با پایبندی به سه اصل، پرداخت در محل، 7 روز ضمانت بازگشت کالا و تضمین اصل&zwnj;بودن کالا موفق شده تا همگام با فروشگاه&zwnj;های معتبر جهان، به بزرگ&zwnj;ترین فروشگاه اینترنتی ایران تبدیل شود. به محض ورود به سایت دیجی&zwnj;کالا با دنیایی از کالا رو به رو می&zwnj;شوید! هر آنچه که نیاز دارید و به ذهن شما خطور می&zwnj;کند در اینجا پیدا خواهید کرد. دیجی&zwnj;کالا مثل یک ویترین پر زرق و برق است که با انواع و اقسام برندهایی نظیرسامسونگ (Samsung)، ال جی (LG)، اپل (Apple)، نوکیا (Nokia)، شیائومی (Xiaomi)، هواوی (Huawei) و همچنین محصولاتی که هر فرد در زندگی شخصی، تحصیلی و کاری خود به آنها احتیاج پیدا می&zwnj;کند، چیده شده است. اینجا مرجع متنوع&zwnj;ترین کالاهای دیجیتال از گوشی موبایل اندروید و iOS (آیفون) گرفته تا تبلت، لپ تاپ، هارد اکسترنال، اسپیکر، هدفون، هندزفری و پاور بانک است. دیجی&zwnj;کالا همچنین یک بازار آنلاین برای خرید جدیدترین و ضروری&zwnj;ترین لوازم خانگی همانند فرش، پرده، کاغذ دیواری، مبلمان، میز تلویزیون و ماشین ظرفشویی و لباسشویی است تا هر فرد بتواند مطابق با سلیقه شخصی خود، خانه رویاهایش را بسازد. حتی می&zwnj;توانید محیط کار خود را با بهترین ماشین های اداری نظیر پرینتر، اسکنر و لوازم التحریر تجهیز کنید. علاوه بر این، می&zwnj;توانید با سر زدن به شبکه های اجتماعی دیجی کالا نظیر فیس بوک و تلگرام از جدیدترین مدل&zwnj;های لباس، اکسسوری، کیف و کفش زنانه، مردانه، بچه گانه، دخترانه، پسرانه و نوزاد مطلع شوید و از مشهورترین برندهای دنیا نظیر نایکی، آدیداس، ریباک، کلمبیا، باس، گوچی و مانگو اجناس اصل و باکیفیت خریداری نمایید. همچنین با سر زدن به محصولات آرایشی و بهداشتی، لوازم شخصی برقی و انواع عطر و ادکلن اصل تجربه&zwnj;ای جدید از خرید آنلاین کسب کنید و برای خرید انواع لوازم سفر، دوچرخه و آلات موسیقی با مقایسه دقیق محصولات دیگر دچار سردرگمی نشوید. این روزها با اضافه شدن محصولات سوپرمارکت (دیجی کالا فرش)، انواع خواربار، میوه و سبزیجات، مواد پروتئینی اعم از گوشت، مرغ و ماهی و انواع نوشیدنی و تنقلات و عطاری آنلاین می توانید کلیه نیازهای خود را تنها با چند کلیک سفارش داده و در کمترین زمان ممکن درب منزل تحویل بگیرید. مناسب&zwnj;ترین جمله درباره دیجی&zwnj;کالا ،بازار بزرگ اینترنتی، است؛ چرا که با قدم گذاشتن در آن می&zwnj;توانید، یک خرید اینترنتی لذت بخش، با قیمت مناسب و ارزان به همراه تخفیف ویژه در حراج ها را تجربه کنید.</p>', 'کلیه حقوق این سایت برای فروشگاه اینترنتی لوکس آرا  محفوظ است', 'وبلاگ لوکس آرا', 'وبلاگ لوکس آرا را دنیال کنید', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10000, 100000, 5000, '2019-12-07 10:11:41', '2020-04-03 23:46:19');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_links
@@ -321,15 +324,15 @@ CREATE TABLE IF NOT EXISTS `domain_links` (
 -- Dumping data for table 517_shop.domain_links: ~9 rows (approximately)
 /*!40000 ALTER TABLE `domain_links` DISABLE KEYS */;
 INSERT INTO `domain_links` (`domain_key`, `links_id`, `value`) VALUES
-	('localhost:3002', 2, '09398624739'),
-	('localhost:3002', 3, 'https://instagram.com'),
-	('localhost:3002', 8, 'https://instagram.com'),
-	('localhost:3002', 9, 'https://facebook.com'),
-	('localhost:3002', 13, 'https://bazzar.com'),
-	('localhost:3002', 14, 'https://appstor.com'),
-	('localhost:3002', 18, 'https://instagram.com'),
-	('localhost:3002', 19, 'https://instagram.com'),
-	('localhost:3002', 20, 'https://instagram.com');
+	('localhost:3000', 2, '09398624739'),
+	('localhost:3000', 3, 'https://instagram.com'),
+	('localhost:3000', 8, 'https://instagram.com'),
+	('localhost:3000', 9, 'https://facebook.com'),
+	('localhost:3000', 13, 'https://bazzar.com'),
+	('localhost:3000', 14, 'https://appstor.com'),
+	('localhost:3000', 18, 'https://instagram.com'),
+	('localhost:3000', 19, 'https://instagram.com'),
+	('localhost:3000', 20, 'https://instagram.com');
 /*!40000 ALTER TABLE `domain_links` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.failed_jobs
@@ -446,7 +449,7 @@ INSERT INTO `file` (`id`, `fileable_id`, `fileable_type`, `created_by`, `mime_ty
 	(340, 68, 'App\\BlogContent', 1, 'image', 'content', '7DsnhDFHwAOFJvr2fO9rPtYChcZjejihgtRXBDou.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-03-26 16:27:50', '2020-03-26 16:27:50'),
 	(339, 69, 'App\\BlogContent', 1, 'image', 'content', 'jX2gt0npj1hmgu80dJiCYvccegNaBfEbtGvWo73w.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-03-26 16:27:40', '2020-03-26 16:27:40'),
 	(338, 70, 'App\\BlogContent', 1, 'image', 'content', 'hUu1quWsrRAaEHr3UupNpWXdtdoY3mBkw8PYGgH7.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-03-26 16:27:30', '2020-03-26 16:27:30'),
-	(337, 80, 'App\\BlogContent', 1, 'image', 'content', 'Ony8J2EmVgIxgLenCeuKDixyTFjXJGJvTPYweqA7.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-03-26 16:27:17', '2020-03-26 16:27:17'),
+	(337, 80, 'App\\BlogContent', 1, 'image', 'content', 'Ony8J2EmVgIxgLenCeuKDixyTFjXJGJvTPYweqA7.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-03-26 16:27:17', '2020-04-03 22:47:51'),
 	(335, 11, 'App\\Gallery', 1, 'image', 'gallery', '4BqZr8JHcGdF0VRJc0370GqN0l5RRpZTzLiDuiTs.jpeg', 1, 3, '[500]', NULL, NULL, '2020-03-26 16:26:35', '2020-03-26 16:26:35'),
 	(336, 11, 'App\\Gallery', 1, 'image', 'gallery', 'TfqYnqenIkglCCfWjQFy00gN4PGG4TaVAaD0YVfJ.jpeg', 1, 4, '[500]', NULL, NULL, '2020-03-26 16:26:35', '2020-03-26 16:26:35'),
 	(333, 11, 'App\\Gallery', 1, 'image', 'gallery', 'gvuw5RuCOVLe7JzffWUD7O0RQNZum1hQv7RrSWLM.jpeg', 1, 1, '[500]', NULL, NULL, '2020-03-26 16:23:12', '2020-03-26 16:26:34'),
@@ -622,9 +625,9 @@ CREATE TABLE IF NOT EXISTS `links` (
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `type` enum('social','contact','app','license') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'social',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.links: 23 rows
+-- Dumping data for table 517_shop.links: 24 rows
 /*!40000 ALTER TABLE `links` DISABLE KEYS */;
 INSERT INTO `links` (`id`, `title`, `type`) VALUES
 	(1, 'فکس', 'contact'),
@@ -649,7 +652,8 @@ INSERT INTO `links` (`id`, `title`, `type`) VALUES
 	(20, 'کسب و کار اینترنتی', 'license'),
 	(21, 'بازاریابی شبکه ای', 'license'),
 	(22, 'اپارات', 'social'),
-	(23, 'یوتیوب', 'social');
+	(23, 'یوتیوب', 'social'),
+	(24, 'آدرس', 'contact');
 /*!40000 ALTER TABLE `links` ENABLE KEYS */;
 
 -- Dumping structure for procedure 517_shop.map_reports
@@ -705,24 +709,26 @@ CREATE TABLE IF NOT EXISTS `menu` (
   KEY `_lft` (`_lft`),
   KEY `_rgt` (`_rgt`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.menu: ~13 rows (approximately)
+-- Dumping data for table 517_shop.menu: ~15 rows (approximately)
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT INTO `menu` (`value`, `label`, `status`, `_lft`, `_rgt`, `parent_id`, `external_link`, `created_at`, `updated_at`) VALUES
-	(1, 'هدر', 1, 1, 2, NULL, NULL, '2020-01-26 20:21:40', '2020-01-26 20:21:40'),
-	(2, 'فوتر', 1, 3, 26, NULL, NULL, '2020-01-26 20:21:46', '2020-01-27 22:54:49'),
-	(20, 'فعالیت های سایت', 1, 4, 13, 2, NULL, '2020-01-26 21:28:37', '2020-01-27 11:41:03'),
-	(21, 'مطالب آموزشی', 1, 14, 15, 2, NULL, '2020-01-26 21:38:29', '2020-01-27 11:41:03'),
-	(22, 'قوانین و مقررات', 1, 5, 10, 20, 'http://google.com', '2020-01-26 21:40:18', '2020-01-27 14:47:51'),
-	(23, 'پل های ارتباطی', 1, 11, 12, 20, NULL, '2020-01-26 21:40:31', '2020-01-27 11:41:03'),
-	(24, 'لوازم آرایشی', 1, 6, 9, 22, NULL, '2020-01-26 22:06:24', '2020-01-27 11:41:03'),
-	(25, 'موبایل', 1, 7, 8, 24, NULL, '2020-01-27 08:11:03', '2020-01-27 08:11:03'),
-	(26, 'آذربايجان شرقي', 1, 16, 21, 2, NULL, '2020-01-27 08:11:13', '2020-01-27 11:41:26'),
-	(27, 'اخبار', 1, 17, 20, 26, NULL, '2020-01-27 08:11:20', '2020-01-27 11:41:26'),
-	(28, 'مطالب آموزشی', 1, 18, 19, 27, NULL, '2020-01-27 08:11:27', '2020-01-27 08:11:27'),
-	(29, 'مطالب آموزشی', 1, 22, 23, 2, NULL, '2020-01-27 09:48:59', '2020-01-27 09:48:59'),
-	(30, 'موبایل', 1, 24, 25, 2, NULL, '2020-01-27 19:24:49', '2020-01-27 19:24:49');
+	(1, 'هدر', 1, 1, 6, NULL, NULL, '2020-01-26 20:21:40', '2020-04-03 23:07:28'),
+	(2, 'فوتر', 1, 7, 30, NULL, NULL, '2020-01-26 20:21:46', '2020-04-03 23:07:28'),
+	(20, 'فعالیت های سایت', 1, 8, 17, 2, NULL, '2020-01-26 21:28:37', '2020-04-03 23:07:28'),
+	(21, 'مطالب آموزشی', 1, 18, 19, 2, NULL, '2020-01-26 21:38:29', '2020-04-03 23:07:28'),
+	(22, 'قوانین و مقررات', 1, 9, 14, 20, 'http://google.com', '2020-01-26 21:40:18', '2020-04-03 23:07:28'),
+	(23, 'پل های ارتباطی', 1, 15, 16, 20, NULL, '2020-01-26 21:40:31', '2020-04-03 23:07:28'),
+	(24, 'لوازم آرایشی', 1, 10, 13, 22, NULL, '2020-01-26 22:06:24', '2020-04-03 23:07:28'),
+	(25, 'موبایل', 1, 11, 12, 24, NULL, '2020-01-27 08:11:03', '2020-04-03 23:07:28'),
+	(26, 'آذربايجان شرقي', 1, 20, 25, 2, NULL, '2020-01-27 08:11:13', '2020-04-03 23:07:28'),
+	(27, 'اخبار', 1, 21, 24, 26, NULL, '2020-01-27 08:11:20', '2020-04-03 23:07:28'),
+	(28, 'مطالب آموزشی', 1, 22, 23, 27, NULL, '2020-01-27 08:11:27', '2020-04-03 23:07:28'),
+	(29, 'مطالب آموزشی', 1, 26, 27, 2, NULL, '2020-01-27 09:48:59', '2020-04-03 23:07:28'),
+	(30, 'موبایل', 1, 28, 29, 2, NULL, '2020-01-27 19:24:49', '2020-04-03 23:07:28'),
+	(31, 'منوی جدید', 1, 2, 5, 1, NULL, '2020-04-03 23:05:42', '2020-04-03 23:07:28'),
+	(32, 'sdfsdfsdf', 1, 3, 4, 31, NULL, '2020-04-03 23:07:28', '2020-04-03 23:07:28');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.migrations
@@ -752,41 +758,40 @@ CREATE TABLE IF NOT EXISTS `oauth_access_tokens` (
   KEY `oauth_access_tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_access_tokens: ~32 rows (approximately)
+-- Dumping data for table 517_shop.oauth_access_tokens: ~31 rows (approximately)
 /*!40000 ALTER TABLE `oauth_access_tokens` DISABLE KEYS */;
 INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes`, `revoked`, `created_at`, `updated_at`, `expires_at`) VALUES
-	('049d260fe016b3b825bba7619bee31799d510479bcb8fa951f5b34e713b810b99e8835c9af4665ff', 1, 4, 'Token Name', '[]', 0, '2020-01-17 11:07:33', '2020-01-17 11:07:33', '2021-01-17 11:07:33'),
-	('1896e9c3e431615c8059e12ded12c9df85a402c22ea35abe5bec6698c74222bd931d6627ea4beae2', 1, 4, 'Token Name', '[]', 1, '2020-01-15 09:17:48', '2020-01-15 09:17:48', '2021-01-15 09:17:48'),
-	('330b419e7703b2fbce8f6b290b417e0cb76d34feba215221b2ca20854295229221ad23cc72428f6d', 1, 4, 'Token Name', '[]', 1, '2020-01-15 07:36:21', '2020-01-15 07:36:21', '2021-01-15 07:36:21'),
-	('394647465743a35ba3efb92f4bdcdb5bf47f22bf423e80600b231c8d44e2fd08fae9dd8aaf4af2d8', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:27:43', '2020-01-14 19:27:43', '2021-01-14 19:27:43'),
-	('52c29d4bd0b5310ec4da17610b7dce0ca05f34cbae06660298af3a2320a93b02ec556cb5bf92ec18', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:24:17', '2020-01-14 19:24:17', '2021-01-14 19:24:17'),
-	('55935780281968469f6c49ae70942b36afc506fa979b2a2017cdd5ec219fa1c54f62a1280f029872', 1, 4, 'Token Name', '[]', 0, '2020-01-14 13:18:29', '2020-01-14 13:18:29', '2021-01-14 13:18:29'),
-	('5b112eb523fe497407dabe4711bab1a295c2d42ccbb42bbfa1555d2e1a397aa28581ef39409f3c6e', 1, 4, 'Token Name', '[]', 1, '2020-01-15 06:51:05', '2020-01-15 06:51:05', '2021-01-15 06:51:05'),
-	('5ed82df941d8dc41eb9f2a1aac46d03c27b8e46c7cdf988516ba2e6bc1dc822323cde4757c42d048', 1, 4, 'Token Name', '[]', 1, '2020-01-14 19:29:26', '2020-01-14 19:29:26', '2021-01-14 19:29:26'),
-	('678175e9cdb5e281dceb7805f53945db029731dfc226658a1fc3348515911c1f67323989b4e87bc7', 1, 4, 'Token Name', '[]', 1, '2020-01-14 19:31:50', '2020-01-14 19:31:50', '2021-01-14 19:31:50'),
-	('6c7f92e28e48253ff2c9f629f5bb5f4efd332c988bd39fa7a0427144b5d115e476f9ff44869e2701', 1, 4, 'Token Name', '[]', 0, '2020-01-14 11:03:59', '2020-01-14 11:03:59', '2021-01-14 11:03:59'),
-	('6d232567384d91bdd69463dca6c7ec443487cbfa785f908cffb14dc64f09321d31f008cf3434bc6e', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:24:20', '2020-01-14 19:24:20', '2021-01-14 19:24:20'),
-	('6e16cc77acc7039a06064d5e6a71c9a9984adb6e2a3109bf0dd52c69a1bd0a78fed1558c188b5e46', 1, 4, 'Token Name', '[]', 1, '2020-01-14 14:22:39', '2020-01-14 14:22:39', '2021-01-14 14:22:39'),
-	('6e2478cffc7d23d8e8795a8604e054d74ad97e2720559022d04ebd83a6f6aacdb2f5c4ab4f76d98f', 1, 7, NULL, '[]', 0, '2020-03-26 15:51:49', '2020-03-26 15:51:49', '2021-03-26 15:51:49'),
-	('72152d6348a9eb72aa61aa40703aafac24d4f054595d262906acdbe916cf6c0eb4f0bba7fbcf138c', 1, 7, 'Token Name', '[]', 0, '2020-03-26 15:52:08', '2020-03-26 15:52:08', '2021-03-26 15:52:08'),
-	('7d0e8e2e7131759e761a8c63f89524f8003b7afb65d4cec60ad65fc7a33800dd73b486998977a809', 1, 4, 'Token Name', '[]', 0, '2020-01-20 11:13:38', '2020-01-20 11:13:38', '2021-01-20 11:13:38'),
-	('7d4093d5465940c2683a95c9fa173996eff735fbe4a17f46bd4b518e031236a333dcf667127badb1', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:24:10', '2020-01-14 19:24:10', '2021-01-14 19:24:10'),
-	('83e1ea9f2ca47740a73e7e0cf15ecec333876060719a33bb7d0610441f8fe6ce29e3655d5f1c9691', 1, 4, 'Token Name', '[]', 0, '2020-01-15 18:07:45', '2020-01-15 18:07:45', '2021-01-15 18:07:45'),
-	('8c9b294f8137702b9fa0f57ac38cb23385bdefd8b32cecf1f082accc98eb47bc9f87101fc7274a9a', 1, 4, 'Token Name', '[]', 1, '2020-01-15 07:36:47', '2020-01-15 07:36:47', '2021-01-15 07:36:47'),
-	('98bae98ce4d2dfd831769528081ffd62a78de0b7ce213944f744bc5f1b270ff26e8fa930c12733f0', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:27:46', '2020-01-14 19:27:46', '2021-01-14 19:27:46'),
-	('9a11d225bcc64bbdcbd2b1842dcec72cf0324e0852341dab3507bb5a07b9194786a3b56d3a5a2af1', 1, 4, 'Token Name', '[]', 1, '2020-01-15 09:16:46', '2020-01-15 09:16:46', '2021-01-15 09:16:46'),
-	('a0bbfefdee0adfc11b850b70057b2ec8b9a71912d66cc3b2168ef60e6e505647915e23921617390d', 1, 4, 'Token Name', '[]', 1, '2020-01-14 19:28:36', '2020-01-14 19:28:36', '2021-01-14 19:28:36'),
-	('ac9e11f858f34a5173f2c3e970f73f481a5d51456ba1e2d8446aafdd0713ccdc8ac9ff34e3bb1836', 1, 4, 'Token Name', '[]', 0, '2020-01-14 11:03:08', '2020-01-14 11:03:08', '2021-01-14 11:03:08'),
-	('b5dac6f04e353a340211b1f1d863e7fc1159553fdf41b7f39dbcd7a42761ec589ae16cd515f72aaf', 1, 4, 'Token Name', '[]', 0, '2020-01-14 11:05:04', '2020-01-14 11:05:04', '2021-01-14 11:05:04'),
-	('c257b8348e0a48a987e1256b30d530d1ccc7ec917b793e9250f4a7c1267b1070ccc30777f9030e63', 1, 4, 'Token Name', '[]', 0, '2020-01-15 12:41:14', '2020-01-15 12:41:14', '2021-01-15 12:41:14'),
-	('c4a80d1cb153c1b157702c8faabc8b825b6fae2122e7085554715acac48c1d345bfd5a6415d0cce8', 1, 4, 'Token Name', '[]', 0, '2020-01-27 08:10:50', '2020-01-27 08:10:50', '2021-01-27 08:10:50'),
-	('c9763d6cdd1f214c4a2fcbb92a07bb7da68b7b522c7bc909f307f6640b4bc4b6e2fad2b17128ce97', 1, 4, 'Token Name', '[]', 0, '2020-01-28 08:11:06', '2020-01-28 08:11:06', '2021-01-28 08:11:06'),
-	('d447a5a1452efafb20e967fdc57cb80b203927daca84a558670c56fa1b2a618e0804b680466960ef', 1, 4, 'Token Name', '[]', 0, '2020-01-15 18:44:55', '2020-01-15 18:44:55', '2021-01-15 18:44:55'),
-	('da2db5c49dbc91f72c9050dfc8ba06b14f8da294c2d7bf50d7422793fdace90b354302466e8c836d', 1, 4, 'Token Name', '[]', 0, '2020-01-24 14:56:18', '2020-01-24 14:56:18', '2021-01-24 14:56:18'),
-	('da7ee2df23dd8dcd582884c2b74a81c03eeeb8a7b9297d4f5ef8e1b0a20ef910bf80015c65e597ca', 1, 4, 'Token Name', '[]', 0, '2020-01-14 14:19:29', '2020-01-14 14:19:29', '2021-01-14 14:19:29'),
-	('e1fa4cacffffa9e8669653c973ff8c00843de5e4d4e3a332212d73c990f9d2396c25a34f6d5b8b35', 1, 4, 'Token Name', '[]', 0, '2020-01-14 19:27:37', '2020-01-14 19:27:37', '2021-01-14 19:27:37'),
-	('f4b5eda1a3adc97621a163b51cf5634a1d5c4ca0a89a6c2a835a58c3d61621b3aec7d09052b17b76', 1, 4, 'Token Name', '[]', 0, '2020-01-20 17:18:46', '2020-01-20 17:18:46', '2021-01-20 17:18:46'),
-	('f6d80f2d831972a11a923ba7858cad0217dadb8c62decdf5298121c423eb9f9293acb023d429655f', 1, 4, 'Token Name', '[]', 0, '2020-01-14 11:06:29', '2020-01-14 11:06:29', '2021-01-14 11:06:29');
+	('05ee073d0536a0333551858ba0c696c428da6a0a00f1dc38329e7e87a0da979d3c9ce199faaee474', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:48:35', '2020-04-01 15:48:35', '2021-04-01 15:48:35'),
+	('0761b800b31fb63d4cf772651d2ef78da15b1ddc530e14b11b5a09fa46390c57869ef6625b33490e', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:41:25', '2020-04-01 15:41:25', '2021-04-01 15:41:25'),
+	('100d0aab3990e43628566dc1a57b22e544e59342ac5d86ab1b2d46778e709422ace1ceedb3254239', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:51:59', '2020-03-30 00:51:59', '2021-03-30 00:51:59'),
+	('12a1681e2356c7c3bf11d36d8070f467cfb3b3dd007a962c88afc0c0784502a7b3f75957e1fd6f14', 1, 9, 'Token Name', '[]', 1, '2020-03-30 16:35:10', '2020-03-30 16:35:10', '2021-03-30 16:35:10'),
+	('22b0e5e95b2c7bae3874cf4876deb052c23734d8f617eff90709aca987703648626a69b72f09d39f', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:32:38', '2020-03-30 01:32:38', '2021-03-30 01:32:38'),
+	('38ad3e0a25d76ea47f1f1727ebcd438040eadf6513835408dcebd190f93cfe6eeceb2944b22c687b', 1, 9, 'Token Name', '[]', 1, '2020-03-30 14:45:48', '2020-03-30 14:45:48', '2021-03-30 14:45:48'),
+	('4e742ae3fb19afa3dbc8e5463e2603c8993947a51f789e69133586d60bcfa30af29d34ac411c98cd', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:34:30', '2020-04-01 15:34:30', '2021-04-01 15:34:30'),
+	('662764abd0e1e2d825977dcc889aeaba005d5433bbf3888575d80774d646281fe5f82e57cff37c45', 1, 9, 'Token Name', '[]', 1, '2020-04-03 22:25:10', '2020-04-03 22:25:10', '2021-04-03 22:25:10'),
+	('76185afd42639bf8a7eef0ffc97264f47f8c1846022a4b07716ae9192493c10532c89879a1d7e067', 1, 9, 'Token Name', '[]', 1, '2020-04-03 22:21:42', '2020-04-03 22:21:42', '2021-04-03 22:21:42'),
+	('76279b7cdae9ef3965aea70875b249753a98b026057059dcef2b1bb8e01d4eb199e62952c0b35b12', 1, 9, 'Token Name', '[]', 1, '2020-03-30 15:40:55', '2020-03-30 15:40:55', '2021-03-30 15:40:55'),
+	('805c72704992712ef73f872c555663266553bdb082767ed6703f0a8f5598c720e0a11841ac06355f', 1, 9, 'Token Name', '[]', 0, '2020-03-29 01:51:08', '2020-03-29 01:51:08', '2021-03-29 01:51:08'),
+	('810ece8c039ca00faa5c62bb6fbeb1aeee4b11fa574630ffc3a9f166774c85da248c711fd32dc54e', 1, 9, 'Token Name', '[]', 0, '2020-03-30 14:45:04', '2020-03-30 14:45:04', '2021-03-30 14:45:04'),
+	('8a964bb9de130dc9f9809df68d20fa8f6df8d6ec6e06c27cbae3b7def0146685f2b3635f6adc8a80', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:47:07', '2020-03-30 00:47:07', '2021-03-30 00:47:07'),
+	('901a165c57b109c889a5c2d5bd1a768e9cce8ac1a145612d3161068137f17115a524d82b72dfb30a', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:21:58', '2020-03-30 01:21:58', '2021-03-30 01:21:58'),
+	('9ac5a85cec4daa270feaa0f36782595dfe07ca870e917e9357912a53e62efd941c019f87f6d29e73', 1, 9, 'Token Name', '[]', 1, '2020-03-30 15:40:07', '2020-03-30 15:40:07', '2021-03-30 15:40:07'),
+	('9b76e7cd32bbfbe51347e5a2fdc8229dd737963cf8a83f287b0426bc039b6f32760379794edd295a', 1, 9, 'Token Name', '[]', 0, '2020-03-30 14:34:54', '2020-03-30 14:34:54', '2021-03-30 14:34:54'),
+	('9efc0c1712fcbc6538f88bf68064d6eb41de14921880cbb7ee85d430a3a9ea3f4059681e36cdcaa6', 1, 9, 'Token Name', '[]', 1, '2020-03-30 15:42:07', '2020-03-30 15:42:07', '2021-03-30 15:42:07'),
+	('a669a9f2e4c7fe4a4beb3a737469a6061402b1228721f1738b22e202c0b64766c1779f5f7d1c8eac', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:53:03', '2020-04-01 15:53:03', '2021-04-01 15:53:03'),
+	('ab2f60c7befe6425430233cfa5b6fbc2cd7ba25d724ffa218f32bd9c71380c890ef46111b9342a9c', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:49:13', '2020-04-01 15:49:13', '2021-04-01 15:49:13'),
+	('b2836ad587f8c2b8016b2264836b73049c996dfc14deaa5f553dfbe1d93590f0b9388d7130cadc3e', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:29:04', '2020-03-30 01:29:04', '2021-03-30 01:29:04'),
+	('b42d6e924cd58a29a928430e3b5799208c59ad9d31edd181b79b27a6b8f453654c8b3b3638a39371', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:43:48', '2020-03-30 00:43:48', '2021-03-30 00:43:48'),
+	('d37f0d77fa7cd04173896ce65a6715de1d13387b3d031020daf2bb5d5667df3d77987af18ece3109', 1, 9, 'Token Name', '[]', 0, '2020-03-30 02:33:26', '2020-03-30 02:33:26', '2021-03-30 02:33:26'),
+	('d81b92125993f0b25056e4e2f8c25f72bdf731a7fd02bddf8d0db5e86c28b3d7760cbe55fb51a2a8', 1, 9, 'Token Name', '[]', 0, '2020-03-30 02:37:07', '2020-03-30 02:37:07', '2021-03-30 02:37:07'),
+	('dcff9a49f3c32a4443028b0a4a85f8f95990236bf4d6e643473fee529ff29059b26152347d626b1b', 1, 9, 'Token Name', '[]', 1, '2020-03-30 18:42:11', '2020-03-30 18:42:11', '2021-03-30 18:42:11'),
+	('de25692f2d16486a9111c9635df5478edc477a2423daa094b52c06f9cf27d43bc79d1118e0a3d892', 2, 9, 'Token Name', '[]', 0, '2020-03-29 01:55:12', '2020-03-29 01:55:12', '2021-03-29 01:55:12'),
+	('e546039050c43cabf65c4797ed1d54b97952c758848167730defbd1ec83ad5e9fb9667ee8087f2eb', 1, 9, 'Token Name', '[]', 0, '2020-03-29 01:51:47', '2020-03-29 01:51:47', '2021-03-29 01:51:47'),
+	('e7b29b55888a64884aee22647892d2df4143a42168d3a3bca689ca8bf99411b1a0d7231c246aafab', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:26:22', '2020-03-30 01:26:22', '2021-03-30 01:26:22'),
+	('eee67583927ed306e418680300cd959780d61389c24aca66d560409786697a6dee67c49aec9b8bec', 1, 9, 'Token Name', '[]', 0, '2020-04-03 18:47:02', '2020-04-03 18:47:02', '2021-04-03 18:47:02'),
+	('f832706fd64408e15ac0b78b880382962fbf272c8dbe853114a6cf41df86b1095ea0342e0b1c85b3', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:15:52', '2020-03-30 01:15:52', '2021-03-30 01:15:52'),
+	('fc08e640c645ee6b8a18d96d2adb7db84189e7fb89784f8f0529e7e236462f78d5aa05585c95cbf6', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:28:42', '2020-03-30 00:28:42', '2021-03-30 00:28:42'),
+	('fd24684eacb4a0683615a24c571749f671da226909124b937f0440cb4d5fe3470055b8b9305a3f43', 1, 9, 'Token Name', '[]', 0, '2020-04-03 22:26:31', '2020-04-03 22:26:31', '2021-04-03 22:26:31');
 /*!40000 ALTER TABLE `oauth_access_tokens` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_auth_codes
@@ -818,18 +823,13 @@ CREATE TABLE IF NOT EXISTS `oauth_clients` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `oauth_clients_user_id_index` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_clients: ~7 rows (approximately)
+-- Dumping data for table 517_shop.oauth_clients: ~2 rows (approximately)
 /*!40000 ALTER TABLE `oauth_clients` DISABLE KEYS */;
 INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
-	(2, NULL, 'Laravel Personal Access Client', '3ifOpdDKIvzzcRfIHJakMclRiOhAzj9B4zb98WCb', 'http://localhost', 1, 0, 0, '2019-11-30 22:41:34', '2019-11-30 22:41:34'),
-	(3, NULL, 'Laravel Password Grant Client', '0pbp2WmsP5VkpcKmrlx2xhfDu5snRwpxVQNzutOD', 'http://localhost', 0, 1, 0, '2019-11-30 22:41:34', '2019-11-30 22:41:34'),
-	(4, NULL, 'Laravel Personal Access Client', 'VLp36NhbUsGSV3t9wxKb1Ub3n6b5PEtEgOlm0OWd', 'http://localhost', 1, 0, 0, '2020-01-10 19:28:29', '2020-01-10 19:28:29'),
-	(5, NULL, 'Laravel Password Grant Client', 'ytK472tDoW5Q03rHg4FMWaFVVkLOtlGttk1LKk1W', 'http://localhost', 0, 1, 0, '2020-01-10 19:28:29', '2020-01-10 19:28:29'),
-	(6, 1, 'mehrdad', 'w1H6jXTAOuIcmJTi3TpCybLh2dyhocHb1hzaazfC', 'http://localhost:8000/auth/callback', 0, 0, 0, '2020-01-10 19:29:37', '2020-01-10 19:29:37'),
-	(7, NULL, 'Laravel Personal Access Client', 'eyz8nGJLpOkxa8b5UiPVaqVWxpMSD98sLMf1zNwr', 'http://localhost', 1, 0, 0, '2020-03-26 15:51:42', '2020-03-26 15:51:42'),
-	(8, NULL, 'Laravel Password Grant Client', 'zBS6ftUkUfGjFEOo9VnP4TOfGxhNhDqqinJh2ngm', 'http://localhost', 0, 1, 0, '2020-03-26 15:51:43', '2020-03-26 15:51:43');
+	(9, NULL, 'Laravel Personal Access Client', 'QLdAl1vrO2JV4v3dnICohRA7Rc65LcgREJYQeTgo', 'http://localhost', 1, 0, 0, '2020-03-29 01:50:39', '2020-03-29 01:50:39'),
+	(10, NULL, 'Laravel Password Grant Client', 'GJFrgLNymnk8Y63uY5CdI5nKKh6Bsa6aBfgz2m69', 'http://localhost', 0, 1, 0, '2020-03-29 01:50:39', '2020-03-29 01:50:39');
 /*!40000 ALTER TABLE `oauth_clients` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_personal_access_clients
@@ -840,13 +840,12 @@ CREATE TABLE IF NOT EXISTS `oauth_personal_access_clients` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `oauth_personal_access_clients_client_id_index` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table 517_shop.oauth_personal_access_clients: ~1 rows (approximately)
+-- Dumping data for table 517_shop.oauth_personal_access_clients: ~0 rows (approximately)
 /*!40000 ALTER TABLE `oauth_personal_access_clients` DISABLE KEYS */;
 INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
-	(2, 4, '2020-01-10 19:28:29', '2020-01-10 19:28:29'),
-	(3, 7, '2020-03-26 15:51:43', '2020-03-26 15:51:43');
+	(4, 9, '2020-03-29 01:50:39', '2020-03-29 01:50:39');
 /*!40000 ALTER TABLE `oauth_personal_access_clients` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.oauth_refresh_tokens
@@ -1141,7 +1140,7 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
   CONSTRAINT `FK_permission_role_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.permission_role: ~89 rows (approximately)
+-- Dumping data for table 517_shop.permission_role: ~195 rows (approximately)
 /*!40000 ALTER TABLE `permission_role` DISABLE KEYS */;
 INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'anbar_index'),
@@ -1184,14 +1183,24 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'orders_status_get'),
 	('programmer', 'permission_index'),
 	('programmer', 'product_category_get_all_attributes_with_checked'),
+	('programmer', 'product_category_get_all_brands_with_checked'),
+	('programmer', 'product_category_get_all_price_parameters_with_checked'),
 	('programmer', 'product_category_get_attributes'),
+	('programmer', 'product_category_get_brands'),
+	('programmer', 'product_category_get_price_parameters'),
 	('programmer', 'product_category_index'),
 	('programmer', 'product_category_show'),
 	('programmer', 'product_category_store'),
 	('programmer', 'product_category_store_attributes'),
+	('programmer', 'product_category_store_brands'),
+	('programmer', 'product_category_store_price_parameters'),
 	('programmer', 'product_category_update'),
 	('programmer', 'product_change_status'),
 	('programmer', 'product_index'),
+	('programmer', 'product_list_index'),
+	('programmer', 'product_list_show'),
+	('programmer', 'product_list_store'),
+	('programmer', 'product_list_update'),
 	('programmer', 'product_package_type_index'),
 	('programmer', 'product_package_type_show'),
 	('programmer', 'product_package_type_store'),
@@ -1232,7 +1241,103 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'user_index'),
 	('programmer', 'user_show'),
 	('programmer', 'user_store'),
-	('programmer', 'user_update');
+	('programmer', 'user_update'),
+	('super_admin', 'anbar_index'),
+	('super_admin', 'attachment_delete'),
+	('super_admin', 'attachment_post'),
+	('super_admin', 'blog_category_index'),
+	('super_admin', 'blog_category_show'),
+	('super_admin', 'blog_category_store'),
+	('super_admin', 'blog_category_update'),
+	('super_admin', 'blog_content_change_status'),
+	('super_admin', 'blog_content_index'),
+	('super_admin', 'blog_content_show'),
+	('super_admin', 'blog_content_store'),
+	('super_admin', 'blog_content_update'),
+	('super_admin', 'brand_index'),
+	('super_admin', 'brand_show'),
+	('super_admin', 'brand_store'),
+	('super_admin', 'brand_update'),
+	('super_admin', 'communication_channels_get'),
+	('super_admin', 'domain_read'),
+	('super_admin', 'domain_read_sticky'),
+	('super_admin', 'domain_update'),
+	('super_admin', 'domain_update_sticky'),
+	('super_admin', 'filter_price-parameter_get'),
+	('super_admin', 'filter_products_get'),
+	('super_admin', 'filter_tags_get'),
+	('super_admin', 'filter_users_accessible_get'),
+	('super_admin', 'filter_users_get'),
+	('super_admin', 'gallery_index'),
+	('super_admin', 'gallery_show'),
+	('super_admin', 'gallery_store'),
+	('super_admin', 'gallery_update'),
+	('super_admin', 'group_attribute_index'),
+	('super_admin', 'group_attribute_show'),
+	('super_admin', 'group_attribute_store'),
+	('super_admin', 'group_attribute_update'),
+	('super_admin', 'order_fractive_request'),
+	('super_admin', 'order_index'),
+	('super_admin', 'order_show'),
+	('super_admin', 'order_update'),
+	('super_admin', 'orders_status_get'),
+	('super_admin', 'permission_index'),
+	('super_admin', 'product_category_get_all_attributes_with_checked'),
+	('super_admin', 'product_category_get_all_brands_with_checked'),
+	('super_admin', 'product_category_get_all_price_parameters_with_checked'),
+	('super_admin', 'product_category_get_attributes'),
+	('super_admin', 'product_category_get_brands'),
+	('super_admin', 'product_category_get_price_parameters'),
+	('super_admin', 'product_category_index'),
+	('super_admin', 'product_category_show'),
+	('super_admin', 'product_category_store'),
+	('super_admin', 'product_category_store_attributes'),
+	('super_admin', 'product_category_store_brands'),
+	('super_admin', 'product_category_store_price_parameters'),
+	('super_admin', 'product_category_update'),
+	('super_admin', 'product_change_status'),
+	('super_admin', 'product_index'),
+	('super_admin', 'product_list_index'),
+	('super_admin', 'product_list_show'),
+	('super_admin', 'product_list_store'),
+	('super_admin', 'product_list_update'),
+	('super_admin', 'product_package_type_index'),
+	('super_admin', 'product_package_type_show'),
+	('super_admin', 'product_package_type_store'),
+	('super_admin', 'product_package_type_update'),
+	('super_admin', 'product_pins'),
+	('super_admin', 'product_price_parameter_index'),
+	('super_admin', 'product_price_parameter_show'),
+	('super_admin', 'product_price_parameter_store'),
+	('super_admin', 'product_price_parameter_update'),
+	('super_admin', 'product_product_attributes'),
+	('super_admin', 'product_show'),
+	('super_admin', 'product_store'),
+	('super_admin', 'product_store_pins'),
+	('super_admin', 'product_update'),
+	('super_admin', 'report_map_reports'),
+	('super_admin', 'report_sales_report'),
+	('super_admin', 'role_index'),
+	('super_admin', 'role_permissions'),
+	('super_admin', 'role_set_permission'),
+	('super_admin', 'role_store'),
+	('super_admin', 'social_medias_get'),
+	('super_admin', 'ticket_category_index'),
+	('super_admin', 'ticket_category_show'),
+	('super_admin', 'ticket_category_store'),
+	('super_admin', 'ticket_category_update'),
+	('super_admin', 'ticket_conversations'),
+	('super_admin', 'ticket_delete_conversation'),
+	('super_admin', 'ticket_index'),
+	('super_admin', 'ticket_store'),
+	('super_admin', 'ticket_store_conversations'),
+	('super_admin', 'ticket_update'),
+	('super_admin', 'user_change_password'),
+	('super_admin', 'user_change_status'),
+	('super_admin', 'user_index'),
+	('super_admin', 'user_show'),
+	('super_admin', 'user_store'),
+	('super_admin', 'user_update');
 /*!40000 ALTER TABLE `permission_role` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.price_parameter
@@ -1562,10 +1667,11 @@ CREATE TABLE IF NOT EXISTS `product_list_items` (
   PRIMARY KEY (`list_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping data for table 517_shop.product_list_items: ~7 rows (approximately)
+-- Dumping data for table 517_shop.product_list_items: ~8 rows (approximately)
 /*!40000 ALTER TABLE `product_list_items` DISABLE KEYS */;
 INSERT INTO `product_list_items` (`list_id`, `product_id`) VALUES
 	(1, 1),
+	(1, 4),
 	(2, 1),
 	(2, 2),
 	(2, 3),
@@ -2399,9 +2505,9 @@ CREATE TABLE IF NOT EXISTS `tag` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.tag: ~18 rows (approximately)
+-- Dumping data for table 517_shop.tag: ~19 rows (approximately)
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
 INSERT INTO `tag` (`id`, `name`) VALUES
 	(23, '5 اینچ'),
@@ -2417,11 +2523,12 @@ INSERT INTO `tag` (`id`, `name`) VALUES
 	(33, '4 هسته'),
 	(34, '5 هسته'),
 	(35, '6 هسته'),
-	(36, '7هسته'),
-	(37, 'فلز'),
+	(36, 'هس زرد آلو'),
+	(37, '  و موبایل فلز'),
 	(38, 'تیتانیوم'),
 	(39, 'تگ'),
-	(40, 'تگ 2');
+	(40, 'تگ 2'),
+	(41, 'تگ-جدبد2');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 
 -- Dumping structure for procedure 517_shop.test
@@ -2512,19 +2619,20 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `verify_code` int(5) DEFAULT NULL,
   `verify_account` tinyint(1) NOT NULL DEFAULT 0,
-  `varify_datetime` datetime DEFAULT NULL,
+  `verify_datetime` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `mobile` (`mobile`),
   KEY `role_key` (`role_key`),
   CONSTRAINT `FK_users_role` FOREIGN KEY (`role_key`) REFERENCES `role` (`key`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.users: ~0 rows (approximately)
+-- Dumping data for table 517_shop.users: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `mobile`, `role_key`, `name`, `status`, `password`, `remember_token`, `verify_code`, `verify_account`, `varify_datetime`, `created_at`, `updated_at`) VALUES
-	(1, '09398624739', 'programmer', 'مهرداد معصومی', 1, '$2y$10$Ndcgp8jjzHUqfHeQjQxmweEhSJ6nc//1CC2SaA4y.oXaljDJYkvdq', '$2y$10$wAv8eRTWZEJip6QG/LC4IuRqjwMaXoFUIUSCBrRx62WZrSftsdihG', 83979, 1, NULL, '2020-01-14 14:06:33', '2020-03-26 15:49:12');
+INSERT INTO `users` (`id`, `mobile`, `role_key`, `name`, `status`, `password`, `remember_token`, `verify_code`, `verify_account`, `verify_datetime`, `created_at`, `updated_at`) VALUES
+	(1, '09398624739', 'programmer', 'مهرداد معصومی', 1, '$2y$10$Ndcgp8jjzHUqfHeQjQxmweEhSJ6nc//1CC2SaA4y.oXaljDJYkvdq', '$2y$10$HFAbpupL3vHr52pIWRc1P.JbVz5/ewUg4jIZQtgpStx0tVx837mBa', 49448, 1, '2020-04-03 18:47:01', '2020-01-14 14:06:33', '2020-04-03 22:27:11'),
+	(3, '09334811034', 'super_admin', 'سمیرا میزاوند', 1, '123456789', NULL, NULL, 0, NULL, '2020-04-03 22:29:25', '2020-04-03 22:29:40');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Dumping structure for trigger 517_shop.anbar_before_delete

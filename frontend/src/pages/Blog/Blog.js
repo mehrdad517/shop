@@ -139,11 +139,14 @@ class Blog extends Component {
         {this.props.blog.readyStatus === 'success' && (
           <>
             <Helmet>
-              <title>{this.props.blog.data.category.meta_title ? this.props.blog.data.category.meta_title : this.props.blog.data.category.label}</title>
-              <meta
-                name="description"
-                content={this.props.blog.data.category.meta_description}
-              />
+              {this.props.match.params.categories && <title>{this.props.blog.data.category.meta_title ? this.props.blog.data.category.meta_title : this.props.blog.data.category.label}</title>}
+              {this.props.match.params.tag && <title>{this.props.blog.data.category.meta_title ? this.props.blog.data.category.meta_title : this.props.blog.data.category.label}</title>}
+              {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <title>{this.props.setting.data.domain.blog_title}</title>}
+
+              {this.props.match.params.categories && <meta name="description" content={this.props.blog.data.category.meta_description ? this.props.blog.data.category.meta_description : this.props.setting.data.domain.blog_description} />}
+              {this.props.match.params.tag && <meta name="description" content={this.props.blog.data.category.meta_description ? this.props.blog.data.category.meta_description : this.props.setting.data.domain.blog_description} />}
+              {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <meta name="description" content={this.props.setting.data.domain.blog_description} />}
+
               {this.props.match.params.categories && <meta name="canonical" content={ `/blog/${this.props.match.params.categories}` } />}
               {this.props.match.params.tag && <meta name="canonical" content={ `/blog/tag/${this.props.match.params.tag}` } />}
               {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <meta name="canonical" content={ `/blog` } />}

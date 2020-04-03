@@ -58,8 +58,11 @@ class LoginController extends Controller
             return Response()->json(['status' => false, 'message' => $validator->errors()->first()]);
         }
 
+
         // first time check domain active
-        $domain = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'status', 'android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'notify_order', 'notify_ticket', 'notify_register')->where('key', $request->header('origin'))->first();
+        $domain = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'status', 'android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'notify_order', 'notify_ticket', 'notify_register')
+            ->where('key', \domain($request->header('Origin')))
+            ->first();
 
         if ( ! $domain ) {
             return response()->json([
@@ -110,6 +113,7 @@ class LoginController extends Controller
             'user' => [
                 'name' => $user->name,
                 'mobile' => $user->mobile,
+                'role' => Role::find($user->role_key)->title
             ],
             'permissions' => Role::getPermissions(Auth::user()->role_key, false),
             'setting' => $domain,

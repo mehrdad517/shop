@@ -103,5 +103,12 @@ function remove_special_char($text) {
     return $t;
 }
 
+function domain($domain)
+{
+    preg_match('/.*\/\/(.*)/', $domain, $match);
+    
+    return $match[1];
+}
+
 
 ?>

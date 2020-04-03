@@ -319,6 +319,7 @@
     "history": "^4.9.0",
     "hpp": "^0.2.2",
     "html-minifier": "^4.0.0",
+    "infinite-react-carousel": "^1.2.11",
     "install": "^0.13.0",
     "jss-rtl": "^0.3.0",
     "moment": "^2.24.0",

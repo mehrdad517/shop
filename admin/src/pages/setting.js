@@ -27,22 +27,27 @@ class Setting extends Component {
         super(props);
         this.state = {
             loading: true,
+
             social_medias: [],
             domain_app: [],
             domain_license: [],
             communication_channels: [],
+
             form : {
                 name: '',
                 meta_title: '',
                 meta_description: '',
                 introduce: '',
-                free_postage: '',
-                min_purchase: '',
                 copy_right: '',
+                blog_title: '',
+                blog_description: '',
                 social_medias: [],
                 domain_app: [],
                 domain_license: [],
                 communication_channels: [],
+                free_postage: 100000,
+                min_purchase: 10000,
+                default_post_cost: 5000
             }
         };
 
@@ -60,9 +65,13 @@ class Setting extends Component {
                     form['meta_description'] = response.domain.meta_description;
                     form['introduce'] = response.domain.introduce;
                     form['copy_right'] = response.domain.copy_right;
+                    form['blog_title'] = response.domain.blog_title;
+                    form['blog_description'] = response.domain.blog_description;
+
                     form['free_postage'] = response.domain.free_postage;
                     form['min_purchase'] = response.domain.min_purchase;
                     form['default_post_cost'] = response.domain.default_post_cost;
+
                     form['domain_app'] = response.domain.app.length > 0 ? response.domain.app : [{app_id: 0, value : ''}];
                     form['domain_license'] = response.domain.license.length > 0 ? response.domain.license : [{license_id: 0, value : ''}];
                     form['social_medias'] = response.domain.social_medias.length > 0 ? response.domain.social_medias : [{social_media_id: 0, value : ''}];
@@ -76,7 +85,7 @@ class Setting extends Component {
             }
         });
 
-        await this.api.domainLinks('social').then((response) => {
+        await this.api.domainLinks().then((response) => {
             if (typeof response != "undefined") {
                 let social_medias = this.state.social_medias;
                 let domain_app = this.state.domain_app;
@@ -104,8 +113,6 @@ class Setting extends Component {
                 })
             }
         });
-
-
 
         this.setState({
             loading: false
@@ -144,7 +151,6 @@ class Setting extends Component {
         })
     }
 
-    // function for duplicate row
 
     // change state
     handleDuplicateRaw = (event, i, key) => {
@@ -290,6 +296,34 @@ class Setting extends Component {
                                             value={this.state.form.meta_description}
                                             fullWidth
                                             name='meta_description'
+                                            onChange={this.handleChangeElement.bind(this)}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}  >
+                                        <TextField
+                                            label="متا عنوان وبلاگ"
+                                            variant="filled"
+                                            margin='dense'
+                                            value={this.state.form.blog_title}
+                                            fullWidth
+                                            name='blog_title'
+                                            onChange={this.handleChangeElement.bind(this)}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}  >
+                                        <TextField
+                                            label="متا توضیحات وبلاگ"
+                                            variant="filled"
+                                            margin='dense'
+                                            value={this.state.form.blog_description}
+                                            fullWidth
+                                            name='blog_description'
                                             onChange={this.handleChangeElement.bind(this)}
                                             InputLabelProps={{
                                                 shrink: true,

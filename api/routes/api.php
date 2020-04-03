@@ -204,12 +204,9 @@ Route::Group(['prefix' => '/'], function() {
 
         Route::get('/setting', function (Request $request) {
 
-
-            preg_match('/.*\/\/(.*)/', $request->header('Origin'), $match);
-
             $domain = \App\Domain::with(['links' => function($q) {
                 $q->select('id', 'title', 'value', 'type');
-            }])->find($match[1]);
+            }])->find(domain($request->header('Origin')));
 
             if ($domain) {
 
@@ -288,9 +285,9 @@ Route::Group(['prefix' => '/'], function() {
 
                     \Cache::put("blog[$page][$sort][$limit]", ['category' => [
                         'label' => 'وبلاگ',
-                        'slug' => 'وبلاگ',
-                        'meta_title' => 'وبلاگ',
-                        'meta_description' => 'وبلاگ',
+                        'slug' => 'blog',
+                        'meta_title' => '',
+                        'meta_description' => '',
                     ],'contents' => $contents, 'sorts' => $sort_items] , 24 * 60);
 
                 }
@@ -926,10 +923,10 @@ Route::Group(['prefix' => '/'], function() {
         Route::group(['prefix' => '/menu'], function () {
 
             Route::group(['prefix' => '/hyperlinks'], function () {
-                Route::get('/', 'Backend\FooterMenuController@index');
-                Route::post('/', 'Backend\FooterMenuController@store');
-                Route::get('/{id}', 'Backend\FooterMenuController@show');
-                Route::put('/{id}', 'Backend\FooterMenuController@update');
+                Route::get('/', 'Backend\HyperlinkController@index');
+                Route::post('/', 'Backend\HyperlinkController@store');
+                Route::get('/{id}', 'Backend\HyperlinkController@show');
+                Route::put('/{id}', 'Backend\HyperlinkController@update');
             });
 
 

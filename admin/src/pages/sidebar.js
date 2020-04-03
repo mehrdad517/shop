@@ -98,8 +98,8 @@ class Sidebar extends Component {
             <div className='sidebar' style={{ width: '300px'}}>
                 <div className='top'>
                     <Avatar sizes={25}/>
-                    <span className='user-name'>مهرداد معصومی </span>
-                    <span className='role'>برنامه نویس</span>
+                    <span className='user-name'>{this.props.auth.user.name}</span>
+                    <span className='role'>{this.props.auth.user.role}</span>
                     <span className='circle'></span>
                 </div>
                 {this.props.auth.permissions ? <List component="nav" aria-label="main mailbox folders">
@@ -232,7 +232,7 @@ class Sidebar extends Component {
                         <ListItemIcon>
                             <SettingsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="هایپرلینک" />
+                        <ListItemText primary="مدیریت منو و لینک ها" />
                     </ListItem>}
                     {Boolean(this.props.auth.permissions.domain.update.access) === true &&
                     <ListItem component={Link} onClick={this.handleClose} to='/setting'>

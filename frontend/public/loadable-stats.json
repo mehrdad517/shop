@@ -2,11 +2,14 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.1",
-  "hash": "bd3c34367822fa1ee246",
+  "hash": "cdf74887a2d18458c73d",
   "publicPath": "/assets/",
   "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
-    "Blog": "Blog.js",
+    "Blog": [
+      "Blog.js",
+      "Blog.c762ad16375777787a14.hot-update.js"
+    ],
     "Home": "Home.js",
     "Page": [
       "Page.css",
@@ -18,8 +21,7 @@
     ],
     "main": [
       "main.css",
-      "main.js",
-      "main.2849cb86280b0285f587.hot-update.js"
+      "main.js"
     ],
     "vendors~Blog~Shop": "vendors~Blog~Shop.js",
     "vendors~Page": [
@@ -61,17 +63,6 @@
       "emitted": false
     },
     {
-      "name": "2849cb86280b0285f587.hot-update.json",
-      "size": 46,
-      "chunks": [],
-      "chunkNames": [],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "404.644d3f75.png",
       "size": 50205,
       "chunks": [],
@@ -80,8 +71,23 @@
       "emitted": false
     },
     {
+      "name": "Blog.c762ad16375777787a14.hot-update.js",
+      "size": 54706,
+      "chunks": [
+        "Blog"
+      ],
+      "chunkNames": [
+        "Blog"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
       "name": "Blog.js",
-      "size": 50446,
+      "size": 54783,
       "chunks": [
         "Blog"
       ],
@@ -93,7 +99,7 @@
     },
     {
       "name": "Home.js",
-      "size": 19238,
+      "size": 18887,
       "chunks": [
         "Home"
       ],
@@ -113,7 +119,7 @@
         "Page"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Page.js",
@@ -125,7 +131,7 @@
         "Page"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shabnam-Bold-FD.250d5cd7.eot",
@@ -297,7 +303,7 @@
         "Shop"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "Shop.js",
@@ -309,6 +315,17 @@
         "Shop"
       ],
       "info": {},
+      "emitted": true
+    },
+    {
+      "name": "c762ad16375777787a14.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
       "emitted": false
     },
     {
@@ -432,23 +449,8 @@
       "emitted": false
     },
     {
-      "name": "main.2849cb86280b0285f587.hot-update.js",
-      "size": 78319,
-      "chunks": [
-        "main"
-      ],
-      "chunkNames": [
-        "main"
-      ],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "main.css",
-      "size": 215223,
+      "size": 219852,
       "chunks": [
         "main"
       ],
@@ -456,11 +458,11 @@
         "main"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "main.js",
-      "size": 13456957,
+      "size": 14015209,
       "chunks": [
         "main"
       ],
@@ -492,7 +494,7 @@
         "vendors~Page"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     },
     {
       "name": "vendors~Page.js",
@@ -504,7 +506,7 @@
         "vendors~Page"
       ],
       "info": {},
-      "emitted": false
+      "emitted": true
     }
   ],
   "filteredAssets": 0,
@@ -515,8 +517,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.2849cb86280b0285f587.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -529,8 +530,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.2849cb86280b0285f587.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -565,7 +565,8 @@
       ],
       "assets": [
         "vendors~Blog~Shop.js",
-        "Blog.js"
+        "Blog.js",
+        "Blog.c762ad16375777787a14.hot-update.js"
       ],
       "children": {},
       "childAssets": {}

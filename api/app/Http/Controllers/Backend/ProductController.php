@@ -237,7 +237,7 @@ class ProductController extends Controller
                 foreach ($request->get('tags') as $tag) {
 
                     if (!is_numeric($tag)) {
-                        $tag = Tag::create(['name' => $tag])->id;
+                        $tag = Tag::create(['name' => remove_special_char($tag)])->id;
                     }
                     $result->tags()->attach($tag);
                 }
@@ -374,7 +374,7 @@ class ProductController extends Controller
                 foreach ($request->get('tags') as $tag) {
 
                     if (!is_numeric($tag)) {
-                        $tag = Tag::create(['name' => $tag])->id;
+                        $tag = Tag::create(['name' => remove_special_char($tag)])->id;
                     }
 
                     $result->tags()->attach($tag);

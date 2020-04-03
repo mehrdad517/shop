@@ -11,7 +11,7 @@ class HyperlinkHead extends Component {
             <Box style={{ margin: '10px 0 20px 0'}}>
                 <Grid container alignItems="center">
                     <Grid item xs={12} sm={6}>
-                        <h2>مدیریت منوی فوتر</h2>
+                        <h2>مدیریت منو</h2>
                         <p style={{ color: '#8e8e8e'}}>در این صفحه میتوانید لینک سازی کنید.</p>
                     </Grid>
                     <Grid item xs={12} sm={6} >

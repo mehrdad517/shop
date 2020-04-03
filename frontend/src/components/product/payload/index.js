@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Slider from 'react-slick';
+import Slider from 'infinite-react-carousel';
 import Line from '../../Line';
 import StyleWrapper from './index.style';
 import { CarouselBox } from '../../index';
 import Box from '../box/Box';
+
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -51,46 +52,10 @@ class PayloadProducts extends Component {
     super(props);
   }
 
-  render() {
-    const settings = {
-      dots: false,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      initialSlide: this.props.number,
-      autoplaySpeed: 2000,
-      rtl: true,
-      nextArrow: <SampleNextArrow />,
-      prevArrow: <SamplePrevArrow />,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
-          }
-        }
-      ]
-    };
 
+
+
+  render() {
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -103,7 +68,9 @@ class PayloadProducts extends Component {
                     link={list.link !== null ? list.link : ''}
                   />
                   <div>
-                    <Slider {...settings}>
+                    <Slider
+                      autoplay={true}
+                    >
                       {list.products.map((item, index) => {
                         return (
                           <div key={index}>

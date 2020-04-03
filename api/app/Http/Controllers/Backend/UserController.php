@@ -93,7 +93,7 @@ class UserController extends Controller
         }
 
 
-        $request->request->add(['domain' => Auth::user()->domain]);
+//        $request->request->add(['domain' => Auth::user()->domain]);
 
 
 

@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Menu;
 use Illuminate\Http\Request;
 
-class FooterMenuController extends Controller
+class HyperlinkController extends Controller
 {
     public function index(Request $request)
     {
 
-        return response(Menu::descendantsOf(2)->toTree(2)); // footer id is 2
+        return response(Menu::get()->toTree()); // footer id is 2
     }
 
     public function store(Request $request)
@@ -41,14 +41,7 @@ class FooterMenuController extends Controller
             }
             return response()->json(['status' => true, 'msg' => 'با موفقیت ایجاد شدند.']);
         } else {
-            foreach ($new_node as $new) {
-                $node = new Menu([
-                    'label' => trim($new),
-                ]);
-                $node->appendToNode(Menu::find(2));
-                $node->save();
-            }
-            return response()->json(['status' => true, 'msg' => 'با موفقیت ایجاد شد.']);
+            return response()->json(['status' => false, 'msg' => 'نمیتوانید روت جدید ایجاد کنید.']);
         }
     }
 

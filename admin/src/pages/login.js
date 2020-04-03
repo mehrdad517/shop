@@ -68,7 +68,7 @@ class Login extends Component {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        نوآفرینان دنیای زیبایی هیراد
+                        پنل مدیریت
                     </Typography>
                     <form onSubmit={this.handleSubmit.bind(this)}  noValidate style={{ marginTop: '30px'}}>
                         <TextField
