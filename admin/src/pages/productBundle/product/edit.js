@@ -281,31 +281,35 @@ class EditProduct extends Component {
 
     async autoCompleteHandleChange(event)
     {
-        this.setState({
-            loading: true
-        });
-        let instance = new Api();
-        let term = event.target.value;
-        instance.autoComplete('tags', {'term': event.target.value}).then((response) => {
-            if (typeof response != "undefined") {
-                if (response.length > 0 ) {
-                    this.setState({
-                        options: response,
-                        loading: false,
-                    })
-                } else {
-                    let options = this.state.options;
-                    options.push({
-                        id: term,
-                        name: term
-                    });
-                    this.setState({
-                        options,
-                        loading: false,
-                    })
+
+        if (event.target.value.length >= 3) {
+            this.setState({
+                loading: true
+            });
+            let instance = new Api();
+            let term = event.target.value;
+            instance.autoComplete('tags', {'term': event.target.value}).then((response) => {
+                if (typeof response != "undefined") {
+                    if (response.length > 0 ) {
+                        this.setState({
+                            options: response,
+                            loading: false,
+                        })
+                    } else {
+                        let options = this.state.options;
+                        options.push({
+                            id: term,
+                            name: term
+                        });
+                        this.setState({
+                            options,
+                            loading: false,
+                        })
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
     }
 

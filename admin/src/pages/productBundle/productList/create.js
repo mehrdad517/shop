@@ -18,6 +18,7 @@ import {connect} from "react-redux";
 import Api from "../../../api";
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import validator from "validator";
 
 class ProductListCreate extends Component {
 
@@ -31,6 +32,7 @@ class ProductListCreate extends Component {
                 title: '',
                 order: 1,
                 status: 1,
+                link: ''
             },
         };
 
@@ -93,25 +95,42 @@ class ProductListCreate extends Component {
 
     async autoCompleteHandleChange(event)
     {
-        this.setState({
-            loading: true
-        });
 
-        let instance = new Api();
-        let term = event.target.value;
-        instance.autoComplete('products', {'term': event.target.value}).then((response) => {
-            if (typeof response != "undefined") {
-                if (response.length > 0 ) {
+        if (event.target.value.length >= 3) {
+            this.setState({
+                loading: true
+            });
+
+            let instance = new Api();
+            let term = event.target.value;
+            instance.autoComplete('products', {'term': event.target.value}).then((response) => {
+                if (typeof response != "undefined") {
+                    if (response.length > 0 ) {
+                        this.setState({
+                            options: response,
+                            loading: false,
+                        })
+                    }
                     this.setState({
-                        options: response,
-                        loading: false,
+                        loading: false
                     })
                 }
+            });
+        }
+    }
+
+    checkUrlValid(event)
+    {
+        let form = this.state.form;
+        if (event.target.value !== '') {
+            if (! validator.isURL(event.target.value)) {
+                toast.error('لینک نامعتبر است.');
+                form['link'] = '';
                 this.setState({
-                    loading: false
+                    form
                 })
             }
-        });
+        }
 
     }
 
@@ -192,6 +211,23 @@ class ProductListCreate extends Component {
                                             >
                                                 <MenuItem value={1}>فعال</MenuItem>
                                                 <MenuItem value={0}>غیرفعال</MenuItem>
+                                            </TextField>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                style={{ textAlign: 'left', direction: 'ltr'}}
+                                                label="لینک"
+                                                value={this.state.form.link}
+                                                variant="filled"
+                                                margin='dense'
+                                                fullWidth
+                                                name='link'
+                                                onBlur={(event) => this.checkUrlValid(event)}
+                                                onChange={this.handleChangeElement.bind(this)}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            >
                                             </TextField>
                                         </Grid>
                                         <Grid item xs={12}>

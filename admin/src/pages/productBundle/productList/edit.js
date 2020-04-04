@@ -19,6 +19,7 @@ import Api from "../../../api";
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Chip from "@material-ui/core/Chip";
+import validator from "validator";
 
 
 class GalleryEdit extends Component {
@@ -31,6 +32,7 @@ class GalleryEdit extends Component {
             options: [],
             form: {
                 title: '',
+                link: '',
                 status: 1,
                 order: '',
             },
@@ -59,6 +61,7 @@ class GalleryEdit extends Component {
                 form.title =  response.title;
                 form.status =  response.status;
                 form.order =  response.order;
+                form.link =  response.link;
 
                 this.setState({
                     form,
@@ -126,22 +129,41 @@ class GalleryEdit extends Component {
 
     async autoCompleteHandleChange(event)
     {
-        this.setState({
-            loading: true
-        });
 
-        let instance = new Api();
-        let term = event.target.value;
-        instance.autoComplete('products', {'term': event.target.value}).then((response) => {
-            if (typeof response != "undefined") {
-                if (response.length > 0 ) {
-                    this.setState({
-                        options: response,
-                        loading: false,
-                    })
+        if (event.target.value.length >= 3) {
+            this.setState({
+                loading: true
+            });
+
+            let instance = new Api();
+            let term = event.target.value;
+            instance.autoComplete('products', {'term': event.target.value}).then((response) => {
+                if (typeof response != "undefined") {
+                    if (response.length > 0 ) {
+                        this.setState({
+                            options: response,
+                            loading: false,
+                        })
+                    }
                 }
+            });
+        }
+
+
+    }
+
+    checkUrlValid(event)
+    {
+        let form = this.state.form;
+        if (event.target.value !== '') {
+            if (! validator.isURL(event.target.value)) {
+                toast.error('لینک نامعتبر است.');
+                form['link'] = '';
+                this.setState({
+                    form
+                })
             }
-        });
+        }
 
     }
 
@@ -222,6 +244,23 @@ class GalleryEdit extends Component {
                                             >
                                                 <MenuItem value={1}>فعال</MenuItem>
                                                 <MenuItem value={0}>غیرفعال</MenuItem>
+                                            </TextField>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                style={{ textAlign: 'left', direction: 'ltr'}}
+                                                label="لینک"
+                                                value={this.state.form.link}
+                                                variant="filled"
+                                                margin='dense'
+                                                fullWidth
+                                                name='link'
+                                                onBlur={(event) => this.checkUrlValid(event)}
+                                                onChange={this.handleChangeElement.bind(this)}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            >
                                             </TextField>
                                         </Grid>
                                         <Grid item xs={12}>

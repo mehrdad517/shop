@@ -6,14 +6,14 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import ClipLoader from 'react-spinners/BeatLoader';
+import Alert from '@material-ui/lab/Alert';
 import Master from '../../components/Layouts/master';
 import { LastBlogPosts, Paginator } from '../../components';
 import Line from '../../components/Line';
 import Box from '../../components/Blog/box';
 import { blogAction, shopAction } from '../../actions';
 import { blogIfNeeded } from '../../actions/blog';
-import ClipLoader from "react-spinners/BeatLoader";
-import Alert from "@material-ui/lab/Alert";
 
 function mapStateToProps(state) {
   return {
@@ -35,13 +35,12 @@ class Blog extends Component {
     super(props);
     this.state = {
       params: {
-        page: 1,
+        page: 1
       }
     };
   }
 
   async componentDidMount() {
-
     const { params } = this.state;
 
     const queryString = require('query-string');
@@ -74,14 +73,15 @@ class Blog extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.match.params.categories !== this.props.match.params.categories) {
+    if (
+      prevProps.match.params.categories !== this.props.match.params.categories
+    ) {
       await this.handleRequest();
     }
 
     if (prevProps.match.params.tag !== this.props.match.params.tag) {
       await this.handleRequest();
     }
-
   }
 
   async handlePageChange(page) {
@@ -100,14 +100,13 @@ class Blog extends Component {
   }
 
   async handleRequest() {
-
     await this.props.blogIfNeeded(
       this.state.params,
       this.props.match.params.categories,
-      this.props.match.params.tag,
+      this.props.match.params.tag
     );
 
-    console.log(this.props.blog)
+    console.log(this.props.blog);
 
     if (this.state.params.page > 1) {
       // create url
@@ -115,21 +114,24 @@ class Blog extends Component {
       url += `page=${this.state.params.page}`;
 
       if (this.props.match.params.categories) {
-        this.props.history.push(`/blog/${this.props.match.params.categories}/${url}`);
+        this.props.history.push(
+          `/blog/${this.props.match.params.categories}/${url}`
+        );
       } else if (this.props.match.params.tag) {
-        this.props.history.push(`/blog/tag/${this.props.match.params.tag}/${url}`);
+        this.props.history.push(
+          `/blog/tag/${this.props.match.params.tag}/${url}`
+        );
       } else {
         this.props.history.push(`/blog/${url}`);
       }
-
     }
 
-      setTimeout(() => {
-        const element = document.querySelector('body');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 500);
+    setTimeout(() => {
+      const element = document.querySelector('body');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 500);
   }
 
   render() {
@@ -139,17 +141,69 @@ class Blog extends Component {
         {this.props.blog.readyStatus === 'success' && (
           <>
             <Helmet>
-              {this.props.match.params.categories && <title>{this.props.blog.data.category.meta_title ? this.props.blog.data.category.meta_title : this.props.blog.data.category.label}</title>}
-              {this.props.match.params.tag && <title>{this.props.blog.data.category.meta_title ? this.props.blog.data.category.meta_title : this.props.blog.data.category.label}</title>}
-              {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <title>{this.props.setting.data.domain.blog_title}</title>}
+              {this.props.match.params.categories && (
+                <title>
+                  {this.props.blog.data.category.meta_title
+                    ? this.props.blog.data.category.meta_title
+                    : this.props.blog.data.category.label}
+                </title>
+              )}
+              {this.props.match.params.tag && (
+                <title>
+                  {this.props.blog.data.category.meta_title
+                    ? this.props.blog.data.category.meta_title
+                    : this.props.blog.data.category.label}
+                </title>
+              )}
+              {this.props.match.params.tag === undefined &&
+                this.props.match.params.categories === undefined && (
+                  <title>{this.props.setting.data.domain.blog_title}</title>
+                )}
 
-              {this.props.match.params.categories && <meta name="description" content={this.props.blog.data.category.meta_description ? this.props.blog.data.category.meta_description : this.props.setting.data.domain.blog_description} />}
-              {this.props.match.params.tag && <meta name="description" content={this.props.blog.data.category.meta_description ? this.props.blog.data.category.meta_description : this.props.setting.data.domain.blog_description} />}
-              {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <meta name="description" content={this.props.setting.data.domain.blog_description} />}
+              {this.props.match.params.categories && (
+                <meta
+                  name="description"
+                  content={
+                    this.props.blog.data.category.meta_description
+                      ? this.props.blog.data.category.meta_description
+                      : this.props.setting.data.domain.blog_description
+                  }
+                />
+              )}
+              {this.props.match.params.tag && (
+                <meta
+                  name="description"
+                  content={
+                    this.props.blog.data.category.meta_description
+                      ? this.props.blog.data.category.meta_description
+                      : this.props.setting.data.domain.blog_description
+                  }
+                />
+              )}
+              {this.props.match.params.tag === undefined &&
+                this.props.match.params.categories === undefined && (
+                  <meta
+                    name="description"
+                    content={this.props.setting.data.domain.blog_description}
+                  />
+                )}
 
-              {this.props.match.params.categories && <meta name="canonical" content={ `/blog/${this.props.match.params.categories}` } />}
-              {this.props.match.params.tag && <meta name="canonical" content={ `/blog/tag/${this.props.match.params.tag}` } />}
-              {this.props.match.params.tag === undefined && this.props.match.params.categories === undefined && <meta name="canonical" content={ `/blog` } />}
+              {this.props.match.params.categories && (
+                <meta
+                  name="canonical"
+                  content={`/blog/${this.props.match.params.categories}`}
+                />
+              )}
+              {this.props.match.params.tag && (
+                <meta
+                  name="canonical"
+                  content={`/blog/tag/${this.props.match.params.tag}`}
+                />
+              )}
+              {this.props.match.params.tag === undefined &&
+                this.props.match.params.categories === undefined && (
+                  <meta name="canonical" content="/blog" />
+                )}
             </Helmet>
             <Container>
               <Grid item xs={12}>
@@ -158,10 +212,20 @@ class Blog extends Component {
                     separator={<NavigateNextIcon fontSize="small" />}
                     aria-label="breadcrumb"
                   >
-                    <Link to="/">{this.props.setting.data.domain && this.props.setting.data.domain.name}</Link>
+                    <Link to="/">
+                      {this.props.setting.data.domain &&
+                        this.props.setting.data.domain.name}
+                    </Link>
                     <Link to="/blog">وبلاگ</Link>
-                    {this.props.match.params.tag && <Link to={ `/blog/tag/${this.props.blog.data.category.label}`}>{this.props.blog.data.category.label}</Link>}
-                    {this.props.blog.data.category.parents && this.props.blog.data.category.parents.map(
+                    {this.props.match.params.tag && (
+                      <Link
+                        to={`/blog/tag/${this.props.blog.data.category.label}`}
+                      >
+                        {this.props.blog.data.category.label}
+                      </Link>
+                    )}
+                    {this.props.blog.data.category.parents &&
+                      this.props.blog.data.category.parents.map(
                         (nav, index) => {
                           return (
                             <Link key={index} to={`/blog/${nav.slug}`}>
@@ -174,17 +238,25 @@ class Blog extends Component {
                 </Paper>
               </Grid>
               <Grid spacing={3} container>
-                {this.props.blog.data.contents.data.length > 0 ? this.props.blog.data.contents.data.map((item, index) => {
-                  return (
-                    <Grid item key={index} xs={12} sm={6}>
-                      <Box item={item} />
-                    </Grid>
-                  );
-                }) : <Grid item={true} xs={12}><Alert severity="warning">پستی با این نتایج ثبت نشده است.</Alert></Grid>}
+                {this.props.blog.data.contents.data.length > 0 ? (
+                  this.props.blog.data.contents.data.map((item, index) => {
+                    return (
+                      <Grid item key={index} xs={12} sm={6}>
+                        <Box item={item} />
+                      </Grid>
+                    );
+                  })
+                ) : (
+                  <Grid item xs={12}>
+                    <Alert severity="warning">
+                      پستی با این نتایج ثبت نشده است.
+                    </Alert>
+                  </Grid>
+                )}
               </Grid>
               {/* pagination */}
               {this.props.blog.data.contents.data.length > 0 && (
-                <Grid spacing={2} container={true}>
+                <Grid spacing={2} container>
                   <Grid item xs={12}>
                     <Paginator
                       activePage={parseInt(this.state.params.page)}
@@ -211,7 +283,4 @@ class Blog extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Blog);
+export default connect(mapStateToProps, mapDispatchToProps)(Blog);

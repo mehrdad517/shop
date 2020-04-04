@@ -13,6 +13,7 @@ class Index extends Component {
     this.state = {
       opacity: 0,
       maxHeight: 0,
+      display:"none",
       search:"",
       contents: [],
       categories:[],
@@ -25,7 +26,8 @@ class Index extends Component {
       if(e.target === searchCurtains){
         this.setState({
           opacity: 0,
-          maxHeight: 0
+          maxHeight: 0,
+          display:"none"
         })
       }
     })
@@ -41,7 +43,8 @@ class Index extends Component {
 
       this.setState({
         opacity: 1,
-        maxHeight: 5000
+        maxHeight: 5000,
+        display:"flex"
       })
 
       new Api().search(this.state.search, (window.location.href.match('blog')  ? 'blog' : 'site')).then((resp) => {
@@ -60,7 +63,8 @@ class Index extends Component {
       setTimeout(() => {
         this.setState({
           opacity: 0,
-          maxHeight: 0
+          maxHeight: 0,
+          display:"none"
         })
       }, 100)
 
@@ -80,8 +84,8 @@ class Index extends Component {
             placeholder='جستجو'
             type="search"
           />
-          <div style={{opacity: this.state.opacity, maxHeight: this.state.maxHeight}} className="search-toggle">
-            <div onClick={()=>{this.setState({opacity: 0,maxHeight: 0, search: ''})}} className="close-modal">
+          <div style={{opacity: this.state.opacity, maxHeight: this.state.maxHeight , display:this.state.display}} className="search-toggle">
+            <div onClick={()=>{this.setState({opacity: 0,maxHeight: 0, search: '' , display:"none"})}} className="close-modal">
               <CancelOutlinedIcon fontSize={"small"} color={"default"} />
             </div>
             <div className="search-toggle-title">

@@ -219,7 +219,19 @@ class ProductController extends Controller
 
 
             $result->categories()->detach();
-            $result->categories()->attach($request->get('categories'));
+            $categories_result = [];
+
+            foreach ($request->get('categories') as $category) {
+                $ancestors = ProductCategory::ancestorsAndSelf($category);
+                foreach ($ancestors as $ancestor) {
+                    if ( ! in_array($ancestor->value, $categories_result)) {
+                        $categories_result[] = $ancestor->value;
+                    }
+                }
+            }
+
+            $result->categories()->attach($categories_result);
+
             // add attr
             if ($request->has('attributes')) {
                 foreach ($request->get('attributes') as $item) {
@@ -354,7 +366,19 @@ class ProductController extends Controller
             ]);
 
             $result->categories()->detach();
-            $result->categories()->attach($request->get('categories'));
+
+            $categories_result = [];
+
+            foreach ($request->get('categories') as $category) {
+                $ancestors = ProductCategory::ancestorsAndSelf($category);
+                foreach ($ancestors as $ancestor) {
+                    if ( ! in_array($ancestor->value, $categories_result)) {
+                        $categories_result[] = $ancestor->value;
+                    }
+                }
+            }
+
+            $result->categories()->attach($categories_result);
 
             if ($request->has('attributes')) {
                 $result->attributes()->detach();

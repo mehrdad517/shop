@@ -20,24 +20,29 @@ const effects = [
 const captionEffects = [
   // 'flip',
   // 'flipInX', 'flipInY',
-  'rotateIn'	,'rotateInDownLeft'	,'rotateInDownRight'	,'rotateInUpLeft', 'rotateInUpRight',
+  'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight',
   'lightSpeedIn'
 ];
 
 class Index extends Component {
 
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      index:1,
-      Interval:'',
-      effect : 'fadeIn',
-      captionEffect : 'flip'
+    this.state = {
+      index: 1,
+      Interval: '',
+      effect: 'fadeIn',
+      captionEffect: 'flip'
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.Interval)
+  }
+
   componentDidMount() {
+    clearInterval(this.state.Interval)
     let get = document.querySelector('.items > div');
     get.classList.add('seen', 'animated', this.state.effect)
     this.startloop()
@@ -50,6 +55,7 @@ class Index extends Component {
       }, 3000)
     })
   }
+
   nextSlide() {
     clearInterval(this.state.Interval)
     let Images = document.querySelectorAll('.items > div')
@@ -63,7 +69,6 @@ class Index extends Component {
         Images[0].classList.add('seen', 'animated', this.state.effect)
       }
     }
-
     this.startloop()
   }
 
@@ -91,21 +96,27 @@ class Index extends Component {
       <StyleWrapper>
         <Box boxShadow={3} component='div' className='slider'>
           <div className='items'>
-            {this.props.slides.data.length > 0 && this.props.slides.data.map((item, index)=>{
-              return(
+            {this.props.slides.data.length > 0 && this.props.slides.data.map((item, index) => {
+              return (
                 <div key={index}>
                   {item.link ?
                     <a href={item.link}>
-                      <img  alt={item.caption} src={item.address}/>
+                      <img alt={item.caption} src={item.address}/>
                       {item.caption &&
-                      <div style={{ right: (Math.floor(Math.random() * Math.floor(600)) + 'px'), bottom: (Math.floor(Math.random() * Math.floor(200)) + 'px') }} className={'slideTitle animated ' + this.state.captionEffect}>
+                      <div style={{
+                        right: (Math.floor(Math.random() * Math.floor(600)) + 'px'),
+                        bottom: (Math.floor(Math.random() * Math.floor(200)) + 'px')
+                      }} className={'slideTitle animated ' + this.state.captionEffect}>
                         <p>{item.caption}</p>
                       </div>}
                     </a> :
                     <div>
                       <img alt={item.caption} src={item.address}/>
                       {item.caption &&
-                      <div style={{ right: (Math.floor(Math.random() * Math.floor(600)) + 'px'), bottom: (Math.floor(Math.random() * Math.floor(200)) + 'px') }} className={'slideTitle animated ' + this.state.captionEffect}>
+                      <div style={{
+                        right: (Math.floor(Math.random() * Math.floor(600)) + 'px'),
+                        bottom: (Math.floor(Math.random() * Math.floor(200)) + 'px')
+                      }} className={'slideTitle animated ' + this.state.captionEffect}>
                         <p>{item.caption}</p>
                       </div>
                       }
@@ -115,22 +126,26 @@ class Index extends Component {
               )
             })}
           </div>
-          <Tooltip  className='nextSlider' title='next'>
+          <Tooltip className='nextSlider' title='next'>
             <Fab
               aria-label="save"
               color="secondary"
-              onClick={()=>{this.nextSlide()}}
+              onClick={() => {
+                this.nextSlide()
+              }}
             >
-              <ArrowForwardIosIcon />
+              <ArrowForwardIosIcon/>
             </Fab>
           </Tooltip>
-          <Tooltip  className='prevSlider' title='prev'>
+          <Tooltip className='prevSlider' title='prev'>
             <Fab
               aria-label="save"
               color="secondary"
-              onClick={()=>{this.prevSlide()}}
+              onClick={() => {
+                this.prevSlide()
+              }}
             >
-              <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }} />
+              <ArrowForwardIosIcon style={{transform: 'rotate(180deg)'}}/>
             </Fab>
           </Tooltip>
         </Box>

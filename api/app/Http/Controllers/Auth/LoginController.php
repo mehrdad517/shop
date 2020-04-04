@@ -61,7 +61,7 @@ class LoginController extends Controller
 
         // first time check domain active
         $domain = Domain::select('android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'status', 'android', 'ios', 'maintenance_mode', 'register', 'basket', 'user_dashboard', 'admin_panel', 'notify_order', 'notify_ticket', 'notify_register')
-            ->where('key', \domain($request->header('Origin')))
+            ->where('key', domain($request->header('Origin')))
             ->first();
 
         if ( ! $domain ) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\BlogCategory;
 use App\BlogContent;
 use App\File;
 use App\Http\Controllers\Controller;
@@ -79,7 +80,19 @@ class BlogContentController extends Controller
             ]);
 
             $result->categories()->detach();
-            $result->categories()->attach($request->get('categories'));
+
+            $categories_result = [];
+
+            foreach ($request->get('categories') as $category) {
+                $ancestors = BlogCategory::ancestorsAndSelf($category);
+                foreach ($ancestors as $ancestor) {
+                    if ( ! in_array($ancestor->value, $categories_result)) {
+                        $categories_result[] = $ancestor->value;
+                    }
+                }
+            }
+
+            $result->categories()->attach($categories_result);
 
             if ($request->has('tags')) {
                 $result->tags()->detach();
@@ -242,7 +255,19 @@ class BlogContentController extends Controller
 
 
         $result->categories()->detach();
-        $result->categories()->attach($request->get('categories'));
+
+        $categories_result = [];
+
+        foreach ($request->get('categories') as $category) {
+            $ancestors = BlogCategory::ancestorsAndSelf($category);
+            foreach ($ancestors as $ancestor) {
+                if ( ! in_array($ancestor->value, $categories_result)) {
+                    $categories_result[] = $ancestor->value;
+                }
+            }
+        }
+
+        $result->categories()->attach($categories_result);
 
         if ($request->has('tags')) {
             $result->tags()->detach();

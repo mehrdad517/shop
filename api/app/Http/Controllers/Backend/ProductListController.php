@@ -61,6 +61,7 @@ class ProductListController extends Controller
                 'title' => $request->get('title'),
                 'status' => $request->get('status'),
                 'order' => $request->get('order'),
+                'link' => $request->get('link'),
                 'created_by' => Auth::id()
             ]);
 
@@ -100,6 +101,7 @@ class ProductListController extends Controller
                 'title' => $result->title,
                 'status' => $result->status,
                 'order' => $result->order,
+                'link' => $result->link,
                 'products' => $result->products
             ]);
         }
@@ -132,6 +134,7 @@ class ProductListController extends Controller
             'title' => $request->get('title'),
             'status' => $request->get('status'),
             'order' => $request->get('order'),
+            'link' => $request->get('link'),
         ]);
 
 

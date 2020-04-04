@@ -8,7 +8,6 @@ import StyleWrapper from './index.style';
 import { CarouselBox } from '../../index';
 import Box from '../box/Box';
 
-
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -52,9 +51,6 @@ class PayloadProducts extends Component {
     super(props);
   }
 
-
-
-
   render() {
     return (
       <Grid container>
@@ -68,9 +64,7 @@ class PayloadProducts extends Component {
                     link={list.link !== null ? list.link : ''}
                   />
                   <div>
-                    <Slider
-                      autoplay={true}
-                    >
+                    <Slider autoplay>
                       {list.products.map((item, index) => {
                         return (
                           <div key={index}>

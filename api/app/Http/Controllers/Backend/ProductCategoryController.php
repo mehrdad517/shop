@@ -40,7 +40,7 @@ class ProductCategoryController extends Controller
                 foreach ($new_node as $new) {
                     $node = new ProductCategory([
                         'label' => trim($new),
-                        'slug' => str_replace(' ', '-', trim($new)),
+                        'slug' => remove_special_char($new),
                         'meta_title' => trim($new),
                         'meta_description' => trim($new),
                     ]);
@@ -53,6 +53,9 @@ class ProductCategoryController extends Controller
             foreach ($new_node as $new) {
                 ProductCategory::create([
                     'label' => $new,
+                    'slug' => remove_special_char($new),
+                    'meta_title' => trim($new),
+                    'meta_description' => trim($new),
                 ]);
             }
             return response()->json(['status' => true, 'msg' => 'با موفقیت ایجاد شد.']);
