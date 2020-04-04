@@ -37,10 +37,10 @@ export class Home extends PureComponent {
       <Master>
         <Helmet title="Home" />
         <Container>
-           {this.props.slider.readyStatus === 'success' && (
+          {this.props.slider.readyStatus === 'success' && (
             <Slider slides={this.props.slider} />
-           )}
-           {/*{this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />}*/}
+          )}
+          {/* {this.props.payloadProducts.readyStatus === 'success' && <PayloadProducts data={this.props.payloadProducts.data} />} */}
           {this.props.blog.readyStatus === 'success' && (
             <LastBlogPosts data={this.props.blog.data.contents.data} />
           )}

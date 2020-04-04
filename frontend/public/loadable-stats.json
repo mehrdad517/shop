@@ -2,7 +2,7 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.1",
-  "hash": "8d1d34c2532430b1b0f4",
+  "hash": "242dfe7988537630ed20",
   "publicPath": "/assets/",
   "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
@@ -19,7 +19,7 @@
     "main": [
       "main.css",
       "main.js",
-      "main.85296c1dc90bb43e80f2.hot-update.js"
+      "main.8d1d34c2532430b1b0f4.hot-update.js"
     ],
     "vendors~Blog~Shop": "vendors~Blog~Shop.js",
     "vendors~Page": [
@@ -69,7 +69,7 @@
       "emitted": false
     },
     {
-      "name": "85296c1dc90bb43e80f2.hot-update.json",
+      "name": "8d1d34c2532430b1b0f4.hot-update.json",
       "size": 46,
       "chunks": [],
       "chunkNames": [],
@@ -432,8 +432,8 @@
       "emitted": false
     },
     {
-      "name": "main.85296c1dc90bb43e80f2.hot-update.js",
-      "size": 31698,
+      "name": "main.8d1d34c2532430b1b0f4.hot-update.js",
+      "size": 69257,
       "chunks": [
         "main"
       ],
@@ -460,7 +460,7 @@
     },
     {
       "name": "main.js",
-      "size": 14016492,
+      "size": 14019127,
       "chunks": [
         "main"
       ],
@@ -516,7 +516,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.85296c1dc90bb43e80f2.hot-update.js"
+        "main.8d1d34c2532430b1b0f4.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -530,7 +530,7 @@
       "assets": [
         "main.css",
         "main.js",
-        "main.85296c1dc90bb43e80f2.hot-update.js"
+        "main.8d1d34c2532430b1b0f4.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
