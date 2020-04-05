@@ -2,11 +2,14 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.1",
-  "hash": "242dfe7988537630ed20",
+  "hash": "1f280f76f9f34c7b7026",
   "publicPath": "/assets/",
   "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
-    "Blog": "Blog.js",
+    "Blog": [
+      "Blog.js",
+      "Blog.67fe7a956e5787357488.hot-update.js"
+    ],
     "Home": "Home.js",
     "Page": [
       "Page.css",
@@ -14,12 +17,12 @@
     ],
     "Shop": [
       "Shop.css",
-      "Shop.js"
+      "Shop.js",
+      "Shop.67fe7a956e5787357488.hot-update.js"
     ],
     "main": [
       "main.css",
-      "main.js",
-      "main.8d1d34c2532430b1b0f4.hot-update.js"
+      "main.js"
     ],
     "vendors~Blog~Shop": "vendors~Blog~Shop.js",
     "vendors~Page": [
@@ -69,10 +72,25 @@
       "emitted": false
     },
     {
-      "name": "8d1d34c2532430b1b0f4.hot-update.json",
-      "size": 46,
+      "name": "67fe7a956e5787357488.hot-update.json",
+      "size": 58,
       "chunks": [],
       "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
+      "name": "Blog.67fe7a956e5787357488.hot-update.js",
+      "size": 56611,
+      "chunks": [
+        "Blog"
+      ],
+      "chunkNames": [
+        "Blog"
+      ],
       "info": {
         "hotModuleReplacement": true,
         "immutable": true
@@ -288,6 +306,21 @@
       "emitted": false
     },
     {
+      "name": "Shop.67fe7a956e5787357488.hot-update.js",
+      "size": 89,
+      "chunks": [
+        "Shop"
+      ],
+      "chunkNames": [
+        "Shop"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
       "name": "Shop.css",
       "size": 298,
       "chunks": [
@@ -301,7 +334,7 @@
     },
     {
       "name": "Shop.js",
-      "size": 111571,
+      "size": 110315,
       "chunks": [
         "Shop"
       ],
@@ -432,21 +465,6 @@
       "emitted": false
     },
     {
-      "name": "main.8d1d34c2532430b1b0f4.hot-update.js",
-      "size": 69257,
-      "chunks": [
-        "main"
-      ],
-      "chunkNames": [
-        "main"
-      ],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "main.css",
       "size": 219852,
       "chunks": [
@@ -460,7 +478,7 @@
     },
     {
       "name": "main.js",
-      "size": 14019127,
+      "size": 14019224,
       "chunks": [
         "main"
       ],
@@ -472,7 +490,7 @@
     },
     {
       "name": "vendors~Blog~Shop.js",
-      "size": 230901,
+      "size": 231250,
       "chunks": [
         "vendors~Blog~Shop"
       ],
@@ -515,8 +533,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.8d1d34c2532430b1b0f4.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -529,8 +546,7 @@
       ],
       "assets": [
         "main.css",
-        "main.js",
-        "main.8d1d34c2532430b1b0f4.hot-update.js"
+        "main.js"
       ],
       "children": {},
       "childAssets": {}
@@ -553,7 +569,8 @@
       "assets": [
         "vendors~Blog~Shop.js",
         "Shop.css",
-        "Shop.js"
+        "Shop.js",
+        "Shop.67fe7a956e5787357488.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -565,7 +582,8 @@
       ],
       "assets": [
         "vendors~Blog~Shop.js",
-        "Blog.js"
+        "Blog.js",
+        "Blog.67fe7a956e5787357488.hot-update.js"
       ],
       "children": {},
       "childAssets": {}

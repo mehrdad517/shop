@@ -6,7 +6,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateBefore';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import ClipLoader from 'react-spinners/BeatLoader';
+import ClipLoader from 'react-spinners/SyncLoader';
 import Alert from '@material-ui/lab/Alert';
 import Master from '../../components/Layouts/master';
 import { LastBlogPosts, Paginator } from '../../components';
@@ -274,7 +274,7 @@ class Blog extends Component {
         {/* loading */}
         <ClipLoader
           css={override}
-          size={25}
+          size={10}
           color="#36D7B7"
           loading={this.props.blog.loading}
         />

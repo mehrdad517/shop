@@ -136,6 +136,7 @@ class UserList extends Component {
     async handleRequest() {
         let roles ;
         let users ;
+
         await this.api.fetchRoles().then((response) => {
             if (typeof response != "undefined") {
                 roles = response
@@ -325,7 +326,7 @@ class UserList extends Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {this.state.users.data  && this.state.users.data.map((user, index) => {
+                                {this.state.users && typeof this.state.users.data != "undefined"  && this.state.users.data.map((user, index) => {
                                     return(
                                         <tr key={index}>
                                             <td>{user.id}</td>

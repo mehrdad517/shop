@@ -105,9 +105,17 @@ function remove_special_char($text) {
 
 function domain($domain)
 {
-    preg_match('/.*\/\/(.*)/', $domain, $match);
-    
-    return $match[1];
+
+
+    preg_match("/[^\.\/]+\.[^\.\/]+$/", parse_url($domain)['host'], $matches);
+
+    if (count($matches) == 0) {
+        preg_match('/.*\/\/(.*):.*/', $domain, $match);
+        return $match[1];
+    }
+
+    return $matches[0];
+
 }
 
 

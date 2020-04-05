@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `blog_categories` (
   PRIMARY KEY (`content_id`,`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_categories: 4 rows
+-- Dumping data for table 517_shop.blog_categories: 9 rows
 /*!40000 ALTER TABLE `blog_categories` DISABLE KEYS */;
 INSERT INTO `blog_categories` (`content_id`, `category_id`) VALUES
 	(68, 13),
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `blog_content` (
   KEY `FK_blog_content_users` (`created_by`)
 ) ENGINE=MyISAM AUTO_INCREMENT=82 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_content: 4 rows
+-- Dumping data for table 517_shop.blog_content: 5 rows
 /*!40000 ALTER TABLE `blog_content` DISABLE KEYS */;
 INSERT INTO `blog_content` (`id`, `slug`, `created_by`, `title`, `heading`, `meta_title`, `meta_description`, `content`, `status`, `visitor`, `created_at`, `updated_at`) VALUES
 	(68, 'شسیشیشی', 1, 'شسیشیشی', 'شیشسیسشیشس', 'شسیشیشی', 'شسیشیشی', 'به گزارش" ورزش سه"، امروز یحیی گل محمدی سرمربی پرسپولیس در کنفرانس خبری پیش از بازی با تراکتور درباره حضور آنتونی استوکس گفت که با توجه به شرایط مالی که باشگاه دارد با وجود آنکه حضور این مهاجم می تواند در لیگ برتر و لیگ قهرمانان کمک بسیار خوبی باشد اما ترجیح می دهد که او را جذب نکنند.با این وجود و در حالی که گفته می شد پرسپولیس هنوز نتوانسته مبلغ پیش پرداخت استوکس را تهیه کند اما محمدحسن انصاری فرد مدیرعامل پرسپولیس در گفت و گویی که با برنامه "فرمول یک" شبکه یک داشت اعلام کرد که این مهاجم ایرلندی و سابق تراکتور امشب به تهران خواهد آمد.البته به گفته مدیر روابط عمومی پرسپولیس زمان حضور استوکس در ایران ممکن است به فردا بیفتد چرا که هنوز قرارداد طرفین نهایی نشده است.', 1, 0, '2020-01-18 21:50:24', '2020-01-26 02:54:58'),
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `blog_content_products` (
   PRIMARY KEY (`content_id`,`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_content_products: 1 rows
+-- Dumping data for table 517_shop.blog_content_products: 4 rows
 /*!40000 ALTER TABLE `blog_content_products` DISABLE KEYS */;
 INSERT INTO `blog_content_products` (`content_id`, `product_id`) VALUES
 	(68, 1),
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `blog_tags` (
   PRIMARY KEY (`content_id`,`tag_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.blog_tags: 4 rows
+-- Dumping data for table 517_shop.blog_tags: 7 rows
 /*!40000 ALTER TABLE `blog_tags` DISABLE KEYS */;
 INSERT INTO `blog_tags` (`content_id`, `tag_id`) VALUES
 	(68, 38),
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
 -- Dumping data for table 517_shop.domain: ~1 rows (approximately)
 /*!40000 ALTER TABLE `domain` DISABLE KEYS */;
 INSERT INTO `domain` (`key`, `backend`, `name`, `meta_title`, `meta_description`, `introduce`, `copy_right`, `blog_title`, `blog_description`, `android`, `ios`, `maintenance_mode`, `register`, `basket`, `user_dashboard`, `admin_panel`, `notify_order`, `notify_ticket`, `notify_register`, `status`, `min_purchase`, `free_postage`, `default_post_cost`, `created_at`, `updated_at`) VALUES
-	('localhost:3000', 'http://localhost:8000', 'فروشگاه اینترنتی لوکس آرا', 'لوکس ارا انتخاب و خرید انلاین', 'لوکس ارا انتخاب و خرید انلاین', '<p style="text-align: justify;">دیجی&zwnj;کالا به عنوان یکی از قدیمی&zwnj;ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با پایبندی به سه اصل، پرداخت در محل، 7 روز ضمانت بازگشت کالا و تضمین اصل&zwnj;بودن کالا موفق شده تا همگام با فروشگاه&zwnj;های معتبر جهان، به بزرگ&zwnj;ترین فروشگاه اینترنتی ایران تبدیل شود. به محض ورود به سایت دیجی&zwnj;کالا با دنیایی از کالا رو به رو می&zwnj;شوید! هر آنچه که نیاز دارید و به ذهن شما خطور می&zwnj;کند در اینجا پیدا خواهید کرد. دیجی&zwnj;کالا مثل یک ویترین پر زرق و برق است که با انواع و اقسام برندهایی نظیرسامسونگ (Samsung)، ال جی (LG)، اپل (Apple)، نوکیا (Nokia)، شیائومی (Xiaomi)، هواوی (Huawei) و همچنین محصولاتی که هر فرد در زندگی شخصی، تحصیلی و کاری خود به آنها احتیاج پیدا می&zwnj;کند، چیده شده است. اینجا مرجع متنوع&zwnj;ترین کالاهای دیجیتال از گوشی موبایل اندروید و iOS (آیفون) گرفته تا تبلت، لپ تاپ، هارد اکسترنال، اسپیکر، هدفون، هندزفری و پاور بانک است. دیجی&zwnj;کالا همچنین یک بازار آنلاین برای خرید جدیدترین و ضروری&zwnj;ترین لوازم خانگی همانند فرش، پرده، کاغذ دیواری، مبلمان، میز تلویزیون و ماشین ظرفشویی و لباسشویی است تا هر فرد بتواند مطابق با سلیقه شخصی خود، خانه رویاهایش را بسازد. حتی می&zwnj;توانید محیط کار خود را با بهترین ماشین های اداری نظیر پرینتر، اسکنر و لوازم التحریر تجهیز کنید. علاوه بر این، می&zwnj;توانید با سر زدن به شبکه های اجتماعی دیجی کالا نظیر فیس بوک و تلگرام از جدیدترین مدل&zwnj;های لباس، اکسسوری، کیف و کفش زنانه، مردانه، بچه گانه، دخترانه، پسرانه و نوزاد مطلع شوید و از مشهورترین برندهای دنیا نظیر نایکی، آدیداس، ریباک، کلمبیا، باس، گوچی و مانگو اجناس اصل و باکیفیت خریداری نمایید. همچنین با سر زدن به محصولات آرایشی و بهداشتی، لوازم شخصی برقی و انواع عطر و ادکلن اصل تجربه&zwnj;ای جدید از خرید آنلاین کسب کنید و برای خرید انواع لوازم سفر، دوچرخه و آلات موسیقی با مقایسه دقیق محصولات دیگر دچار سردرگمی نشوید. این روزها با اضافه شدن محصولات سوپرمارکت (دیجی کالا فرش)، انواع خواربار، میوه و سبزیجات، مواد پروتئینی اعم از گوشت، مرغ و ماهی و انواع نوشیدنی و تنقلات و عطاری آنلاین می توانید کلیه نیازهای خود را تنها با چند کلیک سفارش داده و در کمترین زمان ممکن درب منزل تحویل بگیرید. مناسب&zwnj;ترین جمله درباره دیجی&zwnj;کالا ،بازار بزرگ اینترنتی، است؛ چرا که با قدم گذاشتن در آن می&zwnj;توانید، یک خرید اینترنتی لذت بخش، با قیمت مناسب و ارزان به همراه تخفیف ویژه در حراج ها را تجربه کنید.</p>', 'کلیه حقوق این سایت برای فروشگاه اینترنتی لوکس آرا  محفوظ است', 'وبلاگ لوکس آرا', 'وبلاگ لوکس آرا را دنیال کنید', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10000, 100000, 5000, '2019-12-07 10:11:41', '2020-04-04 21:42:21');
+	('localhost', 'http://localhost:8000', 'فروشگاه اینترنتی لوکس آرا', 'لوکس ارا انتخاب و خرید انلاین', 'لوکس ارا انتخاب و خرید انلاین', '<p style="text-align: justify;">دیجی&zwnj;کالا به عنوان یکی از قدیمی&zwnj;ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با پایبندی به سه اصل، پرداخت در محل، 7 روز ضمانت بازگشت کالا و تضمین اصل&zwnj;بودن کالا موفق شده تا همگام با فروشگاه&zwnj;های معتبر جهان، به بزرگ&zwnj;ترین فروشگاه اینترنتی ایران تبدیل شود. به محض ورود به سایت دیجی&zwnj;کالا با دنیایی از کالا رو به رو می&zwnj;شوید! هر آنچه که نیاز دارید و به ذهن شما خطور می&zwnj;کند در اینجا پیدا خواهید کرد. دیجی&zwnj;کالا مثل یک ویترین پر زرق و برق است که با انواع و اقسام برندهایی نظیرسامسونگ (Samsung)، ال جی (LG)، اپل (Apple)، نوکیا (Nokia)، شیائومی (Xiaomi)، هواوی (Huawei) و همچنین محصولاتی که هر فرد در زندگی شخصی، تحصیلی و کاری خود به آنها احتیاج پیدا می&zwnj;کند، چیده شده است. اینجا مرجع متنوع&zwnj;ترین کالاهای دیجیتال از گوشی موبایل اندروید و iOS (آیفون) گرفته تا تبلت، لپ تاپ، هارد اکسترنال، اسپیکر، هدفون، هندزفری و پاور بانک است. دیجی&zwnj;کالا همچنین یک بازار آنلاین برای خرید جدیدترین و ضروری&zwnj;ترین لوازم خانگی همانند فرش، پرده، کاغذ دیواری، مبلمان، میز تلویزیون و ماشین ظرفشویی و لباسشویی است تا هر فرد بتواند مطابق با سلیقه شخصی خود، خانه رویاهایش را بسازد. حتی می&zwnj;توانید محیط کار خود را با بهترین ماشین های اداری نظیر پرینتر، اسکنر و لوازم التحریر تجهیز کنید. علاوه بر این، می&zwnj;توانید با سر زدن به شبکه های اجتماعی دیجی کالا نظیر فیس بوک و تلگرام از جدیدترین مدل&zwnj;های لباس، اکسسوری، کیف و کفش زنانه، مردانه، بچه گانه، دخترانه، پسرانه و نوزاد مطلع شوید و از مشهورترین برندهای دنیا نظیر نایکی، آدیداس، ریباک، کلمبیا، باس، گوچی و مانگو اجناس اصل و باکیفیت خریداری نمایید. همچنین با سر زدن به محصولات آرایشی و بهداشتی، لوازم شخصی برقی و انواع عطر و ادکلن اصل تجربه&zwnj;ای جدید از خرید آنلاین کسب کنید و برای خرید انواع لوازم سفر، دوچرخه و آلات موسیقی با مقایسه دقیق محصولات دیگر دچار سردرگمی نشوید. این روزها با اضافه شدن محصولات سوپرمارکت (دیجی کالا فرش)، انواع خواربار، میوه و سبزیجات، مواد پروتئینی اعم از گوشت، مرغ و ماهی و انواع نوشیدنی و تنقلات و عطاری آنلاین می توانید کلیه نیازهای خود را تنها با چند کلیک سفارش داده و در کمترین زمان ممکن درب منزل تحویل بگیرید. مناسب&zwnj;ترین جمله درباره دیجی&zwnj;کالا ،بازار بزرگ اینترنتی، است؛ چرا که با قدم گذاشتن در آن می&zwnj;توانید، یک خرید اینترنتی لذت بخش، با قیمت مناسب و ارزان به همراه تخفیف ویژه در حراج ها را تجربه کنید.</p>', 'کلیه حقوق این سایت برای فروشگاه اینترنتی لوکس آرا  محفوظ است', 'وبلاگ لوکس آرا', 'وبلاگ لوکس آرا را دنیال کنید', 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 10000, 100000, 5000, '2019-12-07 10:11:41', '2020-04-05 22:18:51');
 /*!40000 ALTER TABLE `domain` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.domain_links
@@ -336,15 +336,15 @@ CREATE TABLE IF NOT EXISTS `domain_links` (
 -- Dumping data for table 517_shop.domain_links: ~9 rows (approximately)
 /*!40000 ALTER TABLE `domain_links` DISABLE KEYS */;
 INSERT INTO `domain_links` (`domain_key`, `links_id`, `value`) VALUES
-	('localhost:3000', 2, '09398624739'),
-	('localhost:3000', 3, 'https://instagram.com'),
-	('localhost:3000', 8, 'https://instagram.com'),
-	('localhost:3000', 9, 'https://facebook.com'),
-	('localhost:3000', 13, 'https://bazzar.com'),
-	('localhost:3000', 14, 'https://appstor.com'),
-	('localhost:3000', 18, 'https://instagram.com'),
-	('localhost:3000', 19, 'https://instagram.com'),
-	('localhost:3000', 20, 'https://instagram.com');
+	('localhost', 2, '09398624739'),
+	('localhost', 3, 'https://instagram.com'),
+	('localhost', 8, 'https://instagram.com'),
+	('localhost', 9, 'https://facebook.com'),
+	('localhost', 13, 'https://bazzar.com'),
+	('localhost', 14, 'https://appstor.com'),
+	('localhost', 18, 'https://instagram.com'),
+	('localhost', 19, 'https://instagram.com'),
+	('localhost', 20, 'https://instagram.com');
 /*!40000 ALTER TABLE `domain_links` ENABLE KEYS */;
 
 -- Dumping structure for table 517_shop.failed_jobs
@@ -455,7 +455,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   KEY `FK_file_users` (`created_by`)
 ) ENGINE=MyISAM AUTO_INCREMENT=342 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.file: 8 rows
+-- Dumping data for table 517_shop.file: 9 rows
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
 INSERT INTO `file` (`id`, `fileable_id`, `fileable_type`, `created_by`, `mime_type`, `directory`, `file`, `collection`, `order`, `size`, `link`, `caption`, `created_at`, `updated_at`) VALUES
 	(341, 80, 'App\\BlogContent', 1, 'image', 'content', 'JepjxKxEmsAGhvO03ma78a4XWA2yrgoUOi2VNUau.jpeg', 0, 1, '[500,300,200,100,50]', NULL, NULL, '2020-04-04 21:48:06', '2020-04-04 21:48:06'),
@@ -724,7 +724,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.menu: ~15 rows (approximately)
+-- Dumping data for table 517_shop.menu: ~2 rows (approximately)
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT INTO `menu` (`value`, `label`, `status`, `_lft`, `_rgt`, `parent_id`, `external_link`, `created_at`, `updated_at`) VALUES
 	(1, 'هدر', 1, 1, 6, NULL, NULL, '2020-01-26 20:21:40', '2020-04-03 23:07:28'),
@@ -767,6 +767,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('100d0aab3990e43628566dc1a57b22e544e59342ac5d86ab1b2d46778e709422ace1ceedb3254239', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:51:59', '2020-03-30 00:51:59', '2021-03-30 00:51:59'),
 	('12a1681e2356c7c3bf11d36d8070f467cfb3b3dd007a962c88afc0c0784502a7b3f75957e1fd6f14', 1, 9, 'Token Name', '[]', 1, '2020-03-30 16:35:10', '2020-03-30 16:35:10', '2021-03-30 16:35:10'),
 	('22b0e5e95b2c7bae3874cf4876deb052c23734d8f617eff90709aca987703648626a69b72f09d39f', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:32:38', '2020-03-30 01:32:38', '2021-03-30 01:32:38'),
+	('3000d3f60f74615d2ac52cb46aee106912995bd6fa195e6e2f49dda10c1d1649570fc62abe9f3926', 1, 9, 'Token Name', '[]', 0, '2020-04-06 00:36:13', '2020-04-06 00:36:13', '2021-04-06 00:36:13'),
 	('38ad3e0a25d76ea47f1f1727ebcd438040eadf6513835408dcebd190f93cfe6eeceb2944b22c687b', 1, 9, 'Token Name', '[]', 1, '2020-03-30 14:45:48', '2020-03-30 14:45:48', '2021-03-30 14:45:48'),
 	('4e742ae3fb19afa3dbc8e5463e2603c8993947a51f789e69133586d60bcfa30af29d34ac411c98cd', 1, 9, 'Token Name', '[]', 1, '2020-04-01 15:34:30', '2020-04-01 15:34:30', '2021-04-01 15:34:30'),
 	('662764abd0e1e2d825977dcc889aeaba005d5433bbf3888575d80774d646281fe5f82e57cff37c45', 1, 9, 'Token Name', '[]', 1, '2020-04-03 22:25:10', '2020-04-03 22:25:10', '2021-04-03 22:25:10'),
@@ -775,6 +776,7 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 	('805c72704992712ef73f872c555663266553bdb082767ed6703f0a8f5598c720e0a11841ac06355f', 1, 9, 'Token Name', '[]', 0, '2020-03-29 01:51:08', '2020-03-29 01:51:08', '2021-03-29 01:51:08'),
 	('810ece8c039ca00faa5c62bb6fbeb1aeee4b11fa574630ffc3a9f166774c85da248c711fd32dc54e', 1, 9, 'Token Name', '[]', 0, '2020-03-30 14:45:04', '2020-03-30 14:45:04', '2021-03-30 14:45:04'),
 	('8a964bb9de130dc9f9809df68d20fa8f6df8d6ec6e06c27cbae3b7def0146685f2b3635f6adc8a80', 1, 9, 'Token Name', '[]', 0, '2020-03-30 00:47:07', '2020-03-30 00:47:07', '2021-03-30 00:47:07'),
+	('8e8e30b7ff74124af798072a5a4b60f3dfe74ad319d5d2105de2a957865c8d5ec0afafe80d2bbf1e', 1, 9, 'Token Name', '[]', 1, '2020-04-05 22:02:05', '2020-04-05 22:02:05', '2021-04-05 22:02:05'),
 	('901a165c57b109c889a5c2d5bd1a768e9cce8ac1a145612d3161068137f17115a524d82b72dfb30a', 1, 9, 'Token Name', '[]', 0, '2020-03-30 01:21:58', '2020-03-30 01:21:58', '2021-03-30 01:21:58'),
 	('9ac5a85cec4daa270feaa0f36782595dfe07ca870e917e9357912a53e62efd941c019f87f6d29e73', 1, 9, 'Token Name', '[]', 1, '2020-03-30 15:40:07', '2020-03-30 15:40:07', '2021-03-30 15:40:07'),
 	('9b76e7cd32bbfbe51347e5a2fdc8229dd737963cf8a83f287b0426bc039b6f32760379794edd295a', 1, 9, 'Token Name', '[]', 0, '2020-03-30 14:34:54', '2020-03-30 14:34:54', '2021-03-30 14:34:54'),
@@ -1244,7 +1246,6 @@ INSERT INTO `permission_role` (`role_key`, `permission_key`) VALUES
 	('programmer', 'ticket_update'),
 	('programmer', 'user_change_password'),
 	('programmer', 'user_change_status'),
-	('programmer', 'user_index'),
 	('programmer', 'user_show'),
 	('programmer', 'user_store'),
 	('programmer', 'user_update'),
@@ -1490,7 +1491,7 @@ CREATE TABLE IF NOT EXISTS `product_categories` (
   PRIMARY KEY (`category_id`,`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.product_categories: 6 rows
+-- Dumping data for table 517_shop.product_categories: 11 rows
 /*!40000 ALTER TABLE `product_categories` DISABLE KEYS */;
 INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
 	(2, 12),
@@ -1526,7 +1527,7 @@ CREATE TABLE IF NOT EXISTS `product_category` (
   KEY `product_category__lft__rgt_parent_id_index` (`_lft`,`_rgt`,`parent_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.product_category: 13 rows
+-- Dumping data for table 517_shop.product_category: 14 rows
 /*!40000 ALTER TABLE `product_category` DISABLE KEYS */;
 INSERT INTO `product_category` (`value`, `slug`, `_lft`, `_rgt`, `parent_id`, `label`, `heading`, `meta_title`, `meta_description`, `content`, `status`, `created_at`, `updated_at`) VALUES
 	(12, 'کالای-دیجیتال', 1, 40, NULL, 'کالای دیجیتال', NULL, 'کالای دیجیتال', 'کالای دیجیتال', NULL, 1, '2020-01-17 11:08:12', '2020-04-04 22:19:00'),
@@ -1657,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `product_list` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table 517_shop.product_list: 2 rows
+-- Dumping data for table 517_shop.product_list: 3 rows
 /*!40000 ALTER TABLE `product_list` DISABLE KEYS */;
 INSERT INTO `product_list` (`id`, `created_by`, `title`, `status`, `order`, `link`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'محصولات جدید', 0, 10, '1', '2020-01-18 23:18:14', '2020-02-05 23:36:08'),
@@ -2407,14 +2408,14 @@ CREATE TABLE IF NOT EXISTS `role` (
 -- Dumping data for table 517_shop.role: ~9 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` (`key`, `title`, `full_access`, `crud`, `created_at`, `updated_at`) VALUES
-	('admin', 'ادمین', 1, 1, '2019-11-29 13:56:16', '2019-11-29 13:56:16'),
+	('admin', 'ادمین', 0, 1, '2019-11-29 13:56:16', '2020-04-06 00:37:51'),
 	('anbar_dar', 'انباردار', 0, 0, '2019-11-29 13:57:54', '2019-11-29 13:57:54'),
 	('content_manager', 'مدیر محتوا', 0, 1, '2019-11-29 13:56:59', '2019-11-29 13:57:24'),
 	('crm_admin', 'مدیر CRM', 0, 1, '2019-11-29 13:59:30', '2019-11-29 13:59:30'),
 	('guest', 'مهمان', 0, 0, '2019-12-10 11:39:15', '2019-12-10 11:39:15'),
 	('operator', 'اپراتور', 0, 0, '2019-11-29 13:56:30', '2019-11-29 13:56:30'),
 	('product_charger', 'مسئول شارژ محصولات', 0, 0, '2019-11-29 13:58:22', '2019-11-29 13:58:22'),
-	('programmer', 'تیم برنامه نویس', 1, 1, '2019-11-29 13:55:41', '2019-11-29 13:55:41'),
+	('programmer', 'تیم برنامه نویس', 0, 1, '2019-11-29 13:55:41', '2020-04-06 00:38:07'),
 	('super_admin', 'سوپر ادمین', 1, 1, '2019-11-29 13:55:52', '2019-11-29 13:55:52');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 

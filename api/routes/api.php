@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-
 // in group url invalid symbol is -_ do not use symbols
 Route::Group(['prefix' => '/'], function() {
 
@@ -573,7 +572,7 @@ Route::Group(['prefix' => '/'], function() {
      | admin panel routes
      |
      */
-    Route::group(['prefix' => 'backend', 'middleware' => ['auth:api']], function () {
+    Route::group(['prefix' => 'backend', 'middleware' => ['auth:api', 'admin_access']], function () {
 
         Route::group(['prefix' => 'filter'], function () {
 

@@ -14,7 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ClipLoader from 'react-spinners/BeatLoader';
+import ClipLoader from 'react-spinners/SyncLoader';
 import {Paginator, Sidebar} from '../../components';
 import Master from '../../components/Layouts/master';
 import Box from '../../components/product/box/Box';
@@ -442,7 +442,7 @@ class Shop extends Component {
         {/* loading */}
         <ClipLoader
           css={override}
-          size={25}
+          size={10}
           color="#36D7B7"
           loading={this.props.shop.loading}
         />
