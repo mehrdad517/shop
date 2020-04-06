@@ -155,28 +155,14 @@ class Index extends Component {
                 );
               })}
           </div>
-          <Tooltip className="nextSlider" title="next">
-            <Fab
-              aria-label="save"
-              color="secondary"
-              onClick={() => {
-                this.nextSlide();
-              }}
-            >
-              <ArrowForwardIosIcon />
-            </Fab>
-          </Tooltip>
-          <Tooltip className="prevSlider" title="prev">
-            <Fab
-              aria-label="save"
-              color="secondary"
-              onClick={() => {
-                this.prevSlide();
-              }}
-            >
-              <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }} />
-            </Fab>
-          </Tooltip>
+
+            <ArrowForwardIosIcon  className="nextSlider" onClick={() => {
+              this.nextSlide();
+            }} />
+
+            <ArrowForwardIosIcon className="prevSlider" onClick={() => {
+              this.prevSlide();
+            }} style={{ transform: 'rotate(180deg)' }} />
         </Box>
       </StyleWrapper>
     );

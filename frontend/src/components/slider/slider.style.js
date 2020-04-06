@@ -4,11 +4,12 @@ export default styled.div`
 .slider{
   position: relative;
   border-top: 1px solid #cccccc;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .slider .nextSlider{
+  color: #fff;
   position: absolute;
-  top: calc(50% - 40px);
+  top: calc(50% - 20px);
   z-index: 500;
   right: 20px;
   display: flex;
@@ -20,8 +21,9 @@ export default styled.div`
 }
 
 .slider .prevSlider{
+  color: #fff;
   position: absolute;
-  top: calc(50% - 40px);
+  top: calc(50% - 20px);
   z-index: 500;
   left: 20px;
   display: flex;
@@ -94,15 +96,14 @@ export default styled.div`
         right: 10px;
         // height: 40px;
         // width: 40px;
-       top: calc(50% - 20);
-
+       top: calc(50% - 20px);
     }
 
     .slider .prevSlider{
         left: 10px;
         // height: 40px;
         // width: 40px;
-        top: calc(50% - 20);
+        top: calc(50% - 20px);
     }
     .slider:hover .prevSlider{
         left: 10px;

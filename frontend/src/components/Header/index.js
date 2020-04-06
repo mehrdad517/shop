@@ -245,7 +245,7 @@ class Header extends Component {
                     </div>
                     <div className="HeadLogo">
                       <Link to={'/'}>
-                        <img src={require('../../static/Img/logo.jpg')} />
+                        <img style={{ height: '45px'}} src={require('../../static/Img/9760b8af.svg')} />
                       </Link>
                     </div>
                   </div>

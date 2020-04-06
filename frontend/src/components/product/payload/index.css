@@ -1,0 +1,6 @@
+.c-flex {
+  display: flex;
+  flex-direction: row;
+  width: 1500px;
+  overflow: hidden;
+}

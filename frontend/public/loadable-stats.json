@@ -2,14 +2,11 @@
   "errors": [],
   "warnings": [],
   "version": "4.42.1",
-  "hash": "1f280f76f9f34c7b7026",
+  "hash": "99fd447bec5ce948e0a1",
   "publicPath": "/assets/",
   "outputPath": "D:\\ws\\shop\\frontend\\public\\assets",
   "assetsByChunkName": {
-    "Blog": [
-      "Blog.js",
-      "Blog.67fe7a956e5787357488.hot-update.js"
-    ],
+    "Blog": "Blog.js",
     "Home": "Home.js",
     "Page": [
       "Page.css",
@@ -17,12 +14,12 @@
     ],
     "Shop": [
       "Shop.css",
-      "Shop.js",
-      "Shop.67fe7a956e5787357488.hot-update.js"
+      "Shop.js"
     ],
     "main": [
       "main.css",
-      "main.js"
+      "main.js",
+      "main.a066bcbe322da8975d56.hot-update.js"
     ],
     "vendors~Blog~Shop": "vendors~Blog~Shop.js",
     "vendors~Page": [
@@ -72,32 +69,6 @@
       "emitted": false
     },
     {
-      "name": "67fe7a956e5787357488.hot-update.json",
-      "size": 58,
-      "chunks": [],
-      "chunkNames": [],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
-      "name": "Blog.67fe7a956e5787357488.hot-update.js",
-      "size": 56611,
-      "chunks": [
-        "Blog"
-      ],
-      "chunkNames": [
-        "Blog"
-      ],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "Blog.js",
       "size": 56627,
       "chunks": [
@@ -111,7 +82,7 @@
     },
     {
       "name": "Home.js",
-      "size": 19242,
+      "size": 19655,
       "chunks": [
         "Home"
       ],
@@ -135,7 +106,7 @@
     },
     {
       "name": "Page.js",
-      "size": 60721,
+      "size": 62047,
       "chunks": [
         "Page"
       ],
@@ -306,21 +277,6 @@
       "emitted": false
     },
     {
-      "name": "Shop.67fe7a956e5787357488.hot-update.js",
-      "size": 89,
-      "chunks": [
-        "Shop"
-      ],
-      "chunkNames": [
-        "Shop"
-      ],
-      "info": {
-        "hotModuleReplacement": true,
-        "immutable": true
-      },
-      "emitted": false
-    },
-    {
       "name": "Shop.css",
       "size": 298,
       "chunks": [
@@ -342,6 +298,17 @@
         "Shop"
       ],
       "info": {},
+      "emitted": false
+    },
+    {
+      "name": "a066bcbe322da8975d56.hot-update.json",
+      "size": 46,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
       "emitted": false
     },
     {
@@ -465,8 +432,23 @@
       "emitted": false
     },
     {
+      "name": "main.a066bcbe322da8975d56.hot-update.js",
+      "size": 8801,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+        "hotModuleReplacement": true,
+        "immutable": true
+      },
+      "emitted": false
+    },
+    {
       "name": "main.css",
-      "size": 219852,
+      "size": 231007,
       "chunks": [
         "main"
       ],
@@ -478,7 +460,7 @@
     },
     {
       "name": "main.js",
-      "size": 14019224,
+      "size": 14279799,
       "chunks": [
         "main"
       ],
@@ -533,7 +515,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.a066bcbe322da8975d56.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -546,7 +529,8 @@
       ],
       "assets": [
         "main.css",
-        "main.js"
+        "main.js",
+        "main.a066bcbe322da8975d56.hot-update.js"
       ],
       "children": {},
       "childAssets": {}
@@ -569,8 +553,7 @@
       "assets": [
         "vendors~Blog~Shop.js",
         "Shop.css",
-        "Shop.js",
-        "Shop.67fe7a956e5787357488.hot-update.js"
+        "Shop.js"
       ],
       "children": {},
       "childAssets": {}
@@ -582,8 +565,7 @@
       ],
       "assets": [
         "vendors~Blog~Shop.js",
-        "Blog.js",
-        "Blog.67fe7a956e5787357488.hot-update.js"
+        "Blog.js"
       ],
       "children": {},
       "childAssets": {}

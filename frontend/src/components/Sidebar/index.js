@@ -16,7 +16,7 @@ class Index extends Component {
         <div className="sidebar-wrapper">
           <div className="sidebar-logo">
             <Link to="/" onClick={() => this.props.onClose()}>
-              <img src={require('../../static/Img/logo.jpg')} />
+              <img src={require('../../static/Img/9760b8af.svg')} />
             </Link>
           </div>
           <Divider />

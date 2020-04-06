@@ -1,50 +1,11 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Slider from 'infinite-react-carousel';
 import Line from '../../Line';
-import StyleWrapper from './index.style';
-import { CarouselBox } from '../../index';
 import Box from '../box/Box';
 
-function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <Fab
-      aria-label="save"
-      color="secondary"
-      onClick={onClick}
-      style={{
-        position: 'absolute',
-        right: '15px',
-        top: 'calc(50% - 25px)',
-        zIndex: '9999'
-      }}
-    >
-      <ArrowForwardIosIcon />
-    </Fab>
-  );
-}
+import Swiper from 'react-id-swiper';
+import 'swiper/css/swiper.css';
 
-function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <Fab
-      aria-label="save"
-      color="secondary"
-      style={{
-        position: 'absolute',
-        left: '15px',
-        top: 'calc(50% - 25px)',
-        zIndex: '9999'
-      }}
-      onClick={onClick}
-    >
-      <ArrowForwardIosIcon style={{ transform: 'rotate(180deg)' }} />
-    </Fab>
-  );
-}
 
 class PayloadProducts extends Component {
   constructor(props) {
@@ -52,32 +13,59 @@ class PayloadProducts extends Component {
   }
 
   render() {
+    const params = {
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      spaceBetween: 0,
+      breakpoints: {
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 15
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 5
+        }
+      },
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false
+      },
+    }
     return (
       <Grid container>
         <Grid item xs={12}>
-          <StyleWrapper>
-            {this.props.data.map((list, index) => {
-              return (
-                <div key={index} style={{ position: 'relative' }}>
-                  <Line
-                    title={list.title}
-                    link={list.link !== null ? list.link : ''}
-                  />
-                  <div>
-                    <Slider autoplay>
-                      {list.products.map((item, index) => {
-                        return (
-                          <div key={index}>
-                            <Box item={item} />
-                          </div>
-                        );
-                      })}
-                    </Slider>
-                  </div>
+          {this.props.data.map((list, index) => {
+            return (
+              <div key={index}>
+                <Line
+                  title={list.title}
+                  link={list.link !== null ? list.link : ''}
+                />
+                <div style={{ marginTop: '40px'}}>
+                  <Swiper {...params}>
+                    {list.products.map((item, index) => {
+                      return (
+                        <div>
+                          <Box item={item} />
+                        </div>
+                      );
+                    })}
+                  </Swiper>
                 </div>
-              );
-            })}
-          </StyleWrapper>
+              </div>
+            );
+          })}
         </Grid>
       </Grid>
     );

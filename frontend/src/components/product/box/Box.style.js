@@ -10,14 +10,14 @@ export default styled.div`
     height: 400px;
     overflow: hidden;
     align-items: center;
-    margin: 5px;
+    // margin: 5px;
   }
   .Box .MuiButton-label {
     // font-family: iranyekan-light !important;
     font-size: 13px;
   }
   .BoxImg img {
-    // width: 100%;
+    width: 100%;
   }
   .BoxImg a {
     margin: 0 !important;

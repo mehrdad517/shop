@@ -22,7 +22,11 @@ import Box from '../../../components/product/box/Box';
 import { pageAction } from '../../../actions';
 import Master from '../../../components/Layouts/master';
 import ReactFancyBox from 'react-fancybox'
-import 'react-fancybox/lib/fancybox.css'
+import 'react-fancybox/lib/fancybox.css';
+
+import Swiper from 'react-id-swiper';
+import 'swiper/css/swiper.css';
+
 
 function mapStateToProps(state) {
   return {
@@ -75,16 +79,19 @@ class Page extends Component {
   }
 
   render() {
-    const settings = {
-      slidesToShow: 1,
-      dots: false,
-      infinite: true,
-      autoplay: true,
-      autoplaySpeed: 5000,
-      swipeToSlide: false,
-      arrows: false
-    };
 
+    const params = {
+      effect: 'flip',
+      grabCursor: true,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false
+      },
+    }
     return (
       <Master>
         <Helmet>
@@ -169,11 +176,16 @@ class Page extends Component {
               <Grid item lg={3} md={3} sm={12} xs={12}>
                 <aside>
                   {this.props.page.data.products && this.props.page.data.products.length > 0 && (
-                    <Slider {...settings}>
+                    <Swiper {...params}>
                       {this.props.page.data.products.map((item, index) => {
-                        return <Box key={index} item={item} />;
+                        return (
+                          <div>
+                            <Box key={index} item={item} />
+                          </div>
+                          )
+                        ;
                       })}
-                    </Slider>
+                    </Swiper>
                   )}
                   {this.props.page.data.categories && this.props.page.data.categories.length > 0 && this.props.page.data.categories.map((category, index) => {
                     return (
