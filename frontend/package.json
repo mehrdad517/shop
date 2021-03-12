@@ -333,7 +333,7 @@
     "react-alice-carousel": "^1.17.3",
     "react-checkbox-tree": "^1.6.0",
     "react-currency-format": "^1.0.0",
-    "react-dev-utils": "^9.0.3",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "npm:@hot-loader/react-dom",
     "react-fancybox": "^0.2.5",
     "react-helmet": "^5.2.1",
